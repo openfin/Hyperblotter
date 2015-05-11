@@ -5,7 +5,7 @@ var React = require('react'),
 var HyperGrid = React.createClass({
 	componentDidMount: function(){
 
-        setTimeout(function(){
+        window.addEventListener('polymer-ready',function(){
             var jsonGrid = document.querySelector('#stock-example')
             var jsonModel = jsonGrid.getBehavior()
             
@@ -32,7 +32,7 @@ var HyperGrid = React.createClass({
                 jsonModel.dataModified();
             }, 100);
 
-        },500);
+        });
             
     },
   render: function() {
