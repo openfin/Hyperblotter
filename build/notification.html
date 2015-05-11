@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>OpenFin</title>
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="notification.css" />
+  </head>
+  <body>
+    <div class="notification-body">
+        <h3 id="notification-text"></h3>
+        <a style="cursor:pointer" id="symbol"></a>
+    </div>
+    <script type="text/javascript">
+        // messages received from the application creating the application
+        function onNotificationMessage(message) {
+        var date = new Date();
+            document.querySelector('#notification-text').innerHTML = message.text;
+            document.querySelector('#symbol').innerHTML = message.symbol;
+            document.querySelector('#symbol').addEventListener('click', function (){
+                fin.desktop.InterApplicationBus.publish('notification:symbol', message.symbol);
+            });
+        }
+        fin.desktop.main();
+    </script>
+  </body>
+</html>

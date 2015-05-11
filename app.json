@@ -1,0 +1,31 @@
+{
+    "startup_app": {
+        "name": "OpenfinPOC",
+        "description": "OpenFin POC",
+        "url": "http://local:5000/build/",
+        "uuid": "OpenfinPOC-to5e4lzrxrey7gb9",
+        "autoShow": true,
+        "defaultHeight": 594,
+        "defaultWidth": 960,
+        "maxWidth": 960,
+        "maxHeight": 594,
+        "defaultTop": 50,
+        "defaultLeft": 10,
+        "resizable": false,
+        "maximizable": false,
+        "frame": false,
+        "cornerRounding": {
+            "width": 5,
+            "height": 5
+        }
+    },
+    "runtime": {
+        "arguments": "",
+        "version": "alpha"
+    },
+    "shortcut": {
+        "company": "OpenFin",
+        "description": "Openfin POC",
+        "name": "Openfin POC"
+    }
+}

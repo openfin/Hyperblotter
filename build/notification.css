@@ -1,0 +1,316 @@
+/*! HTML5 Boilerplate v4.3.0 | MIT License | http://h5bp.com/ */
+
+/*
+ * What follows is the result of much research on cross-browser styling.
+ * Credit left inline and big thanks to Nicolas Gallagher, Jonathan Neal,
+ * Kroc Camen, and the H5BP dev community and team.
+ */
+
+/* ==========================================================================
+   Base styles: opinionated defaults
+   ========================================================================== */
+
+html {
+    color: #222;
+    font-size: 1em;
+    line-height: 1.4;
+    color:#4F8ABA;
+}
+
+/*
+ * A better looking default horizontal rule
+ */
+
+hr {
+    display: block;
+    height: 1px;
+    border: 0;
+    border-top: 1px solid #ccc;
+    margin: 1em 0;
+    padding: 0;
+}
+
+/*
+ * Remove the gap between images, videos, audio and canvas and the bottom of
+ * their containers: h5bp.com/i/440
+ */
+
+audio,
+canvas,
+img,
+svg,
+video {
+    vertical-align: middle;
+}
+
+/*
+ * Remove default fieldset styles.
+ */
+
+fieldset {
+    border: 0;
+    margin: 0;
+    padding: 0;
+}
+
+/*
+ * Allow only vertical resizing of textareas.
+ */
+
+textarea {
+    resize: vertical;
+}
+
+body {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    text-align: center;
+    background-color: #2D2D2D;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    overflow: hidden;
+}
+body:active {
+    cursor: -webkit-grabbing !important;
+}
+h1,h2,h3 {
+    color:#ABCBE8;
+}
+a {
+    color: #adcfed;
+    text-decoration: none;
+    -webkit-app-region: no-drag;
+}
+a:hover {
+    text-decoration: underline;
+}
+.container {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    -webkit-perspective: 1000;
+}
+.container:active {
+    cursor: -webkit-grabbing !important;
+}
+.top-description {
+    margin-top: 20px
+}
+.top-description h1 {
+    margin-bottom: -10px;
+}
+path.slice{
+    stroke-width:2px;
+}
+
+.name-open {
+    color:#ABCBE8;
+}
+
+.name-fin {
+    color:#4F8ABA;
+}
+
+polyline{
+    opacity: .3;
+    stroke: black;
+    stroke-width: 2px;
+    fill: none;
+}
+
+.chart-container {
+    height: 400px;
+    width: 100%;
+    padding-left: 7px;
+}
+.chart-container svg {
+    height: 100%;
+    width: 100%;
+}
+
+.btn {
+    padding: 5px;
+    font-size: 14px;
+    color: #2D2D2D;
+    background-color: #8D8D8D;
+    border: 1px solid #333434;
+    margin-right: 0px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all .4s ease-in
+}
+.btn:hover {
+    background-color: #CBCBCB;
+    border: 1px solid #333434;
+}
+.btn:active {
+    background-color: #CBCBCB;
+    border: 1px solid #333434;
+    box-shadow: inset 0 1px rgba(255,255,255,0.36), 0 0 0 2px #6fb5f1;
+    outline: 0;
+}
+.top-btn {
+    position: absolute;
+    border-radius: 20px;
+    margin: 0px;
+    line-height: 10px;
+    top: 5px;
+    padding: 1px 4px 3px 4px;
+    -webkit-app-region: no-drag;
+}
+
+.close {
+    left: 370px;
+}
+.cpu-close {
+    left: 500px;
+}
+.minimize {
+    left: 350px;
+}
+.cpu-minimize {
+   left: 480px;
+}
+.about {
+    left: 330px;
+}
+.minimize-bar {
+    background: #2D2D2D;
+    width: 8px;
+    height: 2px;
+    display: inline-block;
+    border-radius: 20px;
+    vertical-align: middle;
+}
+
+.notification-body span {
+    margin-top: -10px;
+    color:#4F8ABA;
+    font-weight: bold;
+}
+.notification-body h3 {
+    margin-bottom: -5px;
+}
+
+.logo {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.center-form {
+    padding: 5px 50px 35px 50px;
+    text-align: left;
+
+}
+
+.center-form button {
+    display: block;
+}
+
+.center-form label {
+    padding-bottom: 5px;
+}
+.center-form input {
+    display: block;
+}
+
+.center-form .text-box {
+    width: 290px;
+    padding: 3px;
+}
+
+.text-box {
+    border: 0;
+    color:#c6c8c8;
+    background-color: #454646;
+    border-radius: 4px;
+    font-size: 12px;
+    margin-bottom: 10px;
+    padding: 5px;
+    border: 1px solid transparent;
+}
+
+.text-box:focus {
+    background-color: #595b5b;
+    border: 1px solid #0036ff;
+    box-shadow: 0 0 0 2px #6fb5f1;
+    color: #fff;
+}
+.explanation {
+    padding: 0 50px 0 50px;
+    text-align: left;
+    color:#F0F1F1;
+}
+
+.copyright-info {
+    margin-top: 30px;
+    padding: 0 50px 0 50px;
+    text-align: left;
+    padding-bottom: 45px;
+}
+/****************************************
+* styles for cpu window ****************/
+
+.axis path, .axis line {
+    fill: none;
+    stroke: #000;
+    stroke: #fff;
+    shape-rendering: crispEdges;
+}
+
+.y, .x, .legend{
+    fill : #fff;
+  }
+
+.menu-buttons {
+    position: absolute;
+    bottom: 5%;
+    left: 5%;
+}
+/**** Styles for the add application ****/
+.two-sided-container {
+    transition: 0.8s;
+    -webkit-transform-style: preserve-3d;
+    position: relative;
+    height: 70%;
+}
+.face {
+    -webkit-backface-visibility: hidden;
+
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: inline-block;
+    min-height: 440px;
+    z-index: 1;
+}
+.face.back {
+    -webkit-transform: rotateY(180deg);
+}
+.two-sided-container.flip {
+    -webkit-transform: rotateY(180deg);
+}
+
+.face.inter-app {
+    min-height: 440px;
+}
+.face.inter-app .menu-buttons {
+    left:25%;
+    bottom: 6%;
+}
+.no-csstransforms3d .face.back {
+    visibility: hidden;
+}
+.no-csstransforms3d .flip .face {
+    visibility: hidden;
+}
+.no-csstransforms3d .flip .face.back {
+    visibility: visible;
+}

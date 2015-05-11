@@ -1,0 +1,235 @@
+$app-height: 594px
+$app-width: 960px
+$transition-time: 1s
+
+/* z-index orders */
+$front: 10
+$slider: 7
+$middle: 5
+$back: 1
+
+body
+	height: 100%
+	margin: 0
+	overflow: hidden
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif
+	color:#4C89BC
+	background-color: #2D2D2D
+
+.app
+	display: flex
+	position: absolute
+	top: 0
+	left: 0
+	flex-direction: column
+	height: $app-height
+	width: $app-width
+
+.menu-contain
+	display: flex
+	flex: 0.7
+	flex-direction: column
+
+
+.menu
+	flex: 1
+	z-index: $front
+	text-align: center
+	background-color:#242424
+	cursor:pointer
+	font-weight: bold
+	font-size: larger
+	color:white
+
+.menu-user
+	position:absolute
+	left:0
+	margin-left:9px
+
+.menu-page
+	height: $app-height
+	width: $app-width
+	background-color: #2D2D2D
+	position: absolute
+	top: -$app-height
+	transition-duration: $transition-time
+	z-index: $slider
+	display:flex
+	flex-flow: row wrap
+
+.menu-page.showing
+	transform:  translateY($app-height + 45) 
+	transition-duration: $transition-time
+
+
+.chart-iq
+	flex: 7
+	z-index: $middle
+	overflow: hidden
+	padding: 5px
+
+
+.hyper-grid
+	flex: 7
+	z-index: $middle
+	overflow:hidden
+	border-top: 1px white solid;
+	padding: 5px
+
+
+.login 
+	display: flex
+	position: absolute
+	top: 0
+	left: 0
+	width: $app-width
+	height: $app-height
+	transition-duration: $transition-time
+	background-color: #242424
+	z-index: 11
+
+.logged-in
+	transform: translateY(-$app-height)
+
+#chartContainer
+	width:$app-width
+	height:260px
+
+.false-menu
+	flex:1 100%
+
+.watchlist
+	flex:1 50%
+	background-color:#242424
+
+.watchlist-details
+	flex:1 50%
+	background-color:#242424
+
+.login-form
+	margin:auto
+
+.top-bar
+	flex: 0.5
+	background-color:#1F1F1F
+	z-index: $front
+	height:12px;
+	justify-content: right;
+
+.button
+	padding: 5px;
+	font-size: 12px;
+	color: white;
+	background-color: #2D2D2D;
+	border: 1px solid #333434;
+	margin-right: 0px;
+	font-weight: bold;
+	cursor: pointer;
+	transition: all $transition-time ease-in;
+
+.button:hover
+	background-color: #8D8D8D;
+	border: 1px solid #333434;
+
+.top-button
+	border-radius: 20px;
+	margin: 0px;
+	line-height: 10px;
+	padding: 1px 4px 3px 4px;
+	-webkit-app-region: no-drag;
+
+.close-button
+	position:absolute
+	left:930px;
+	left: 935px;
+	top: 3px;
+
+.equities-list
+	margin:0 0 0 10px;
+	padding:0
+.equities-list.team span
+	 margin-left: 5px
+.equities-list li
+	cursor:pointer
+	list-style:none
+
+.equities-list .selected
+	color:#ADCFED
+	left:930px
+
+.left-content
+	margin-left:10px
+	border-bottom: #2D2D2D 2px solid
+	color:white
+
+#q-example
+ 	position:absolute
+ 	width: 99%;
+ 	height: 44.5%;
+
+#status-indicator
+  display: inline-block;
+  height: 10px;
+  width: 10px;
+  background-color: #2C2C2C;
+  border-radius: 20px;
+
+#status-indicator.online
+	background-color: red;
+
+.equities-list
+	li 
+		background-color: #2D2D2D
+		padding: 8px 20px
+		margin: 2px 10px 2px 0
+		font-size: 20px
+		font-weight: bold
+
+.equities-list li:hover
+		color: white
+
+.story
+	overflow: hidden
+	height: 41px
+	text-overflow: ellipsis
+	color:white
+	width:95%;
+
+.story:hover 
+	color: #ADCFED
+	cursor: pointer
+
+
+.item-logo
+  height: 20px;
+  width: 20px;
+
+.text-box
+	border: 0
+	color: #c6c8c8
+	background-color: #454646
+	font-size: 12px
+	margin-bottom: 10px
+	padding: 5px
+	border: 1px solid transparent
+
+.logo
+	margin-left:15px;
+
+
+.real-chart
+	visibility: visible;
+	position: absolute!important;
+	top: 50px;
+
+.hide-chart
+	visibility: hidden
+
+.is-chart
+		display: block;
+		font-family: Arial, Helvetica, sans-serif;
+		font-size: 12px;
+		position: relative;
+		width: 960px;
+		height: 260px;
+
