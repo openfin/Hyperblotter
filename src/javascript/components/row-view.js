@@ -14,7 +14,7 @@ module.exports = React.createClass({
       displayData = jsonModel.getRow(location.search.split('=')[1]);
 
       Object.observe(displayData, () => {
-          
+          console.log(displayData);
           this.setState(prepNumbers(displayData));
       });
   },
@@ -52,22 +52,21 @@ module.exports = React.createClass({
 	render: function(){
 		return <div className="child">
 			<div className="top-bar">
-				<span className="title">{this.state.NAME}</span>
+				<span className="title">{this.state.TICKER} {this.state.Last}</span>
 				<i className="fa fa-unlock-alt unlocked"></i>
 				<i onClick={this.closeWindow} className="fa fa-times-circle"></i>
 			</div>
 			<div className="contents">
-				<RowDisplay row={this.state}/>
+        <div className="bid-ask">
+          <div className="bid">whatever</div>
+          <div className="ask">whatever</div>
+        </div>
+        <div className="quantity">
+        </div>
+        <div className="orders">
+        </div>
 			</div>
-			<div className="footer">
-				<div onClick={this.openTrade} className="trade">
-					<span className="link">Trade</span>
-				</div>
-				<div className="spacer"></div>
-				<div onClick={this.openOrder} className="order">
-					<span className="link">Order</span>
-				</div>
-			</div>
+			
 		</div>;
 	}
 });
@@ -81,3 +80,5 @@ function prepNumbers(obj){
 	}
 	return obj;
 }
+
+//<RowDisplay row={this.state}/>

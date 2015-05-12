@@ -2,7 +2,11 @@ $app-height: 594px
 $app-width: 960px
 $transition-time: 1s
 $top-bar-color: #1976D2
-$footer-bar-color: #2196F3;
+$footer-bar-color: #2196F3
+$actions-color: #FFEB3B
+$bid-color: #4CAF50
+$ask-color: #F44336
+$blue-50: #E3F2FD
 
 /* z-index orders */
 $front: 10
@@ -112,7 +116,7 @@ body
 	margin:auto
 
 .top-bar
-	flex: 2
+	flex: 1
 	display: flex
 	background-color: $top-bar-color
 	z-index: $front
@@ -131,6 +135,7 @@ body
 		color: #FFF
 		font-size: 2rem
 
+
 .grid-contain
 	flex: 10
 	padding: 8px
@@ -138,7 +143,7 @@ body
 #stock-example
 	display: block
 	width: 99.5%
-	height: 462px
+	height: 504px
 
 .button
 	padding: 5px;
@@ -266,7 +271,7 @@ body
 	.top-bar
 		display: flex
 		align-items: center
-		flex: 2
+		flex: 1
 		background-color: $top-bar-color
 		-webkit-app-region: drag
 		padding: 8px
@@ -286,42 +291,84 @@ body
 		display: flex
 		flex: 8
 		background-color: #FFF
-		justify-content: center
-		align-items: center
-		.row-display
-			table-layout: fixed
-			caption
-				text-align: left
-
-			th, td
-				padding: 5px 8px
-				border-bottom: 1px solid silver
-			th
-				text-align: left
-			td
-				text-align: right
-			.buy
-				color: #4CAF50
-			.sell
-				color: #F44336
-	.footer
-		display: flex
-		flex: 2
-		background-color: $footer-bar-color
-		.spacer
-			background-color: black
-			opacity: .12
-			flex: .2
-		.trade, .order
-			cursor: pointer
+		flex-direction: column
+		.bid-ask
 			display: flex
-			justify-content: center
-			align-items: center
-			flex: 20
-			background-color: #2196F3
-			.link
-				color: #FBC02D
-				font-size: 2rem
+			flex: 1
+			color: black
+			.bid
+				flex: 1
+				background-color: $blue-50
+			.ask
+				flex: 1
+				background-color: $blue-50
 
-		.trade:hover, .order:hover
-			color: #E3F2FD!important
+			.bid, .ask
+				display: flex
+				flex-direction: column
+				align-items: center
+				justify-content: center
+				padding: 8px
+				outline: 1px solid silver
+				font-size: 2rem
+				
+
+		.quantity
+			flex: .5
+			background-color: $blue-50
+			outline: 1px solid silver
+		.orders
+			flex: 2
+			background-color: green
+	
+
+/*		.row-display */
+/*			table-layout: fixed */
+/*			caption */
+/*				text-align: left */
+/* */
+/*			th, td */
+/*				padding: 5px 8px */
+/*				border-bottom: 1px solid silver */
+/*			th */
+/*				text-align: left */
+/*			td */
+/*				text-align: right */
+/*			.buy */
+/*				color: #4CAF50 */
+/*			.sell */
+/*				color: #F44336 */
+
+				
+/*.footer */
+/*	display: flex */
+/*	flex: 2 */
+/*	background-color: $footer-bar-color */
+/*	.spacer */
+/*		background-color: black */
+/*		opacity: .12 */
+/*		flex: .2 */
+/*	.trade, .order */
+/*		cursor: pointer */
+/*		display: flex */
+/*		justify-content: center */
+/*		align-items: center */
+/*		flex: 20 */
+/*		background-color: #2196F3 */
+/*		.link */
+/*			color: #FBC02D */
+/*			font-size: 2rem# */
+/*	.trade:hover, .order:hover */
+/*		color: #E3F2FD!important */
+
+
+.actions
+	position: absolute
+	top: 90%
+	left: 88%
+	i
+		font-size: 2rem
+		color: $actions-color
+		padding: 8px
+		cursor: pointer
+
