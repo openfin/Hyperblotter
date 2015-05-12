@@ -44,8 +44,8 @@ var HyperGrid = React.createClass({
 
             jsonModel.setData(ticker.stocks);
             jsonModel.setFixedColumnCount(1);
-            jsonModel.setHeaders(['Symbol','High','Low','Last','Change','% Change','Volume','Bid','Ask','Spread','Bid Quantity','Ask Quantity','Country','ICB','Industry','Super Sector','Sector','Sub Sector','Date','Time','Open','Cls','Previous Cls','Previous Cls Dt','Name']);
-            jsonModel.setFields(['TICKER','High','Low','Last','Change','PercentChange','Volume','Bid','Ask','Spread','BidQuantity','AskQuantity','COUNTRY','ICB','INDUS','SUP_SEC','SEC','SUB_SEC','Date','Time','Open','Close','PreviousClose','PreviousCloseDate','NAME']);
+            jsonModel.setHeaders(['Symbol','High','Low','Last','Today', 'Change','% Change','Volume','Bid Qty','Bid','Spread','Ask','Ask Qty','Country','ICB','Industry','Super Sector','Sector','Sub Sector','Date','Time','Open','Cls','Previous Cls','Previous Cls Dt','Name']);
+            jsonModel.setFields(['TICKER','High','Low','Last','Today', 'Change','PercentChange','Volume','BidQuantity','Bid','Spread','Ask','AskQuantity','COUNTRY','ICB','INDUS','SUP_SEC','SEC','SUB_SEC','Date','Time','Open','Close','PreviousClose','PreviousCloseDate','NAME']);
             
             var lnfOverrides = {
                 // backgroundColor: '#2d2d2d',
@@ -93,8 +93,12 @@ var HyperGrid = React.createClass({
                 config.halign = 'right';
                 var x = config.x;
                 var y = config.y;
+                if (x === 4) {
+                    renderer = cellProvider.cellCache.sparklineCellRenderer;
+                } else {
+                    config.value = format(config.value);
+                }
                 renderer.config = config;
-                config.value = format(config.value);
                 return renderer;
             };
 
@@ -112,7 +116,8 @@ var HyperGrid = React.createClass({
                   9,
                   10,
                   11,
-                  19
+                  12,
+                  20
                ],
                "fixedColumnIndexes":[  
 
@@ -122,39 +127,39 @@ var HyperGrid = React.createClass({
                   23,
                   22,
                   17,
-                  12,
                   14,
                   13,
                   15,
                   16,
+                  19,
                   21,
-                  20,
                   18
                ],
                "columnWidths":[  
                   null,
-                  66,
-                  64,
-                  55,
-                  55,
-                  65.306640625,
+                  49.4189453125,
+                  49.4189453125,
+                  49.4189453125,
                   80,
-                  58,
-                  64,
-                  69,
-                  75.115234375,
-                  77.1953125,
-                  101.3935546875,
+                  49.837890625,
+                  65.306640625,
+                  67.5478515625,
+                  49.4189453125,
+                  49.4189453125,
+                  46.890625,
+                  49.4189453125,
+                  50.7578125,
                   38.38671875,
                   126.8603515625,
                   175.521484375,
                   null,
                   null,
                   null,
-                  null
+                  266.775390625,
+                  86.9970703125
                ],
                "fixedColumnWidths":[  
-                  71
+                  48.630859375
                ],
                "rowHeights":{  
 
