@@ -242,15 +242,44 @@ body
 	display: flex
 	flex-direction: column
 	height: 100%
+
 	.top-bar
+		display: flex
+		align-items: center
 		flex: 2
 		background-color: #1976D2
 		-webkit-app-region: drag
-		button
+		padding: 8px
+		i
 			-webkit-app-region: no-drag
+			flex: 1
+			font-size: 1.5rem
+			color: white
+			text-align: right
+		i.unlocked
+			visibility: hidden
+		.title
+			flex: 8
+			color: white
+			font-size: 1.5rem
 	.contents
+		display: flex
 		flex: 8
-		background-color: #E3F2FD
+		background-color: #FFF
+		justify-content: center
+		align-items: center
+		.row-display
+			table-layout: fixed
+			caption
+				text-align: left
+
+			th, td
+				padding: 5px 8px
+				border-bottom: 1px solid silver
+			th
+				text-align: left
+			td
+				text-align: right
 	.footer
 		display: flex
 		flex: 2
@@ -267,7 +296,7 @@ body
 			flex: 20
 			background-color: #2196F3
 			.link
-				color: #FF5722
+				color: #FBC02D
 				font-size: 2rem
 
 		.trade:hover, .order:hover

@@ -63,6 +63,16 @@ module.exports = {
         "node-hid": "null.js"
       },
       debug: true
+    }, {
+      entries: src + '/javascript/trade.js',
+      dest: dest,
+      outputName: 'trade.js',
+      // list of externally available modules to exclude from the bundle
+      external: ['underscore'],
+      browser:{
+        "node-hid": "null.js"
+      },
+      debug: true
     }]
   },
   production: {

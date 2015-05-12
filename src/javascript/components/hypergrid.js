@@ -6,8 +6,8 @@ var HyperGrid = React.createClass({
 	componentDidMount: function(){
 
         window.addEventListener('polymer-ready',function(){
-            var jsonGrid = document.querySelector('#stock-example')
-            jsonModel = jsonGrid.getBehavior()
+            var jsonGrid = document.querySelector('#stock-example'),
+                jsonModel = jsonGrid.getBehavior()
             
             jsonModel.setData(ticker.stocks);
             jsonModel.setFixedColumnCount(1);
@@ -33,20 +33,20 @@ var HyperGrid = React.createClass({
                 jsonModel.dataModified();
             }, 100);
 
-            jsonModel.fixedColumnClicked = (grid, cellData)=>{
-                console.log(jsonModel.getRow( cellData.gridCell.y));
-                var row = jsonModel.getRow( cellData.gridCell.y)
-                
-                require('./child-window.js').createChildWindow({
-            name: row.NAME,
-            url: 'row-view.html',
-            autoShow: true,
-            width: 400,
-            height: 400,
-            maxHeight: 400,
-            maxWidth: 400,
-            frame: false
-        })
+            jsonModel.fixedColumnClicked = (grid, cellData) => {
+                    console.log(jsonModel.getRow(cellData.gridCell.y));
+                    var row = jsonModel.getRow(cellData.gridCell.y)
+
+                    require('./child-window.js').createChildWindow({
+                        name: row.NAME,
+                        url: 'row-view.html?row=' + cellData.gridCell.y,
+                        autoShow: true,
+                        width: 400,
+                        height: 400,
+                        maxHeight: 400,
+                        maxWidth: 400,
+                        frame: false
+                    })
 
 /*
 
