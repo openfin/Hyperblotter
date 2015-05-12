@@ -58,12 +58,83 @@ module.exports = React.createClass({
 			</div>
 			<div className="contents">
         <div className="bid-ask">
-          <div className="bid">whatever</div>
-          <div className="ask">whatever</div>
-        </div>
-        <div className="quantity">
+          <div className="bid">
+            Bid
+            <input placeholder="amt"/>
+            <input placeholder="qty"/>
+          </div>
+          <div className="ask">
+            Ask
+            <input placeholder="amt"/>
+            <input placeholder="qty"/>
+          </div>
         </div>
         <div className="orders">
+          
+          <table>
+            <thead>
+              <tr>
+                <th>Time</th>
+                <th>Shares</th>
+                <th>Bid</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>May</td>
+                <td>100</td>
+                <td>31.20</td>
+              </tr>
+              <tr>
+                <td>May</td>
+                <td>100</td>
+                <td>31.20</td>
+              </tr>
+              <tr>
+                <td>May</td>
+                <td>100</td>
+                <td>31.20</td>
+              </tr>
+              <tr>
+                <td>May</td>
+                <td>100</td>
+                <td>31.20</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Time</th>
+                <th>Shares</th>
+                <th>Bid</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>May</td>
+                <td>100</td>
+                <td>31.20</td>
+              </tr>
+              <tr>
+                <td>May</td>
+                <td>100</td>
+                <td>31.20</td>
+              </tr>
+              <tr>
+                <td>May</td>
+                <td>100</td>
+                <td>31.20</td>
+              </tr>
+              <tr>
+                <td>May</td>
+                <td>100</td>
+                <td>31.20</td>
+              </tr>
+            </tbody>
+          </table>
+            
         </div>
 			</div>
 			
@@ -81,4 +152,14 @@ function prepNumbers(obj){
 	return obj;
 }
 
-//<RowDisplay row={this.state}/>
+// //<RowDisplay row={this.state}/>
+// //
+// //
+// <div className="quantity">
+//           <div className="qty-bid"></div>
+//           <div className="qty-ask"></div>
+//         </div>
+// <div className="quantity">
+//           <div className="qty-bid"></div>
+//           <div className="qty-ask"></div>
+//         </div>
