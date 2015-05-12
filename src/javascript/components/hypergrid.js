@@ -48,15 +48,15 @@ var HyperGrid = React.createClass({
             jsonModel.setFields(['TICKER','High','Low','Last','Change','PercentChange','Volume','Bid','Ask','Spread','BidQuantity','AskQuantity','COUNTRY','ICB','INDUS','SUP_SEC','SEC','SUB_SEC','Date','Time','Open','Close','PreviousClose','PreviousCloseDate','NAME']);
             
             var lnfOverrides = {
-                backgroundColor: '#2d2d2d',
-                topLeftBackgroundColor: '#2d2d2d',
-                fixedColumnBackgroundColor: '#2d2d2d',
-                fixedRowBackgroundColor: '#2d2d2d',
-                color: 'lightgrey',
-                topLeftColor: 'lightgrey',
-                fixedColumnColor: 'lightgrey',
-                fixedRowColor: 'lightgrey',
-                lineColor: 'lightgrey',
+                // backgroundColor: '#2d2d2d',
+                // topLeftBackgroundColor: '#2d2d2d',
+                // fixedColumnBackgroundColor: '#2d2d2d',
+                // fixedRowBackgroundColor: '#2d2d2d',
+                // color: 'lightgrey',
+                // topLeftColor: 'lightgrey',
+                // fixedColumnColor: 'lightgrey',
+                // fixedRowColor: 'lightgrey',
+                // lineColor: 'lightgrey',
             };
 
 
