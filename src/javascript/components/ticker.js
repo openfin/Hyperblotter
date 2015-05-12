@@ -23105,7 +23105,7 @@ for (i = 0; i < count; i++) {
             Spread: data.Spread[i],
             Ask: data.Ask[i],
             AskQuantity: data.AskQuantity[i],
-            Today:[data.Last[i]]
+            Today:[0, 0, 0, 0,0, 0, 0, 0]
 	}
 }
 
@@ -23161,7 +23161,7 @@ var randomizeTick = function(stock) {
             stock.Volume = stock.Volume + stock.BidQuantity;
             stock.Change = stock.Bid - stock.Last
             stock.PercentChange = (stock.Change)/stock.Last*100;
-            stock.Today.push(Math.floor(90 * rnd()));
+            stock.Today.push(5 + Math.floor(90 * rnd()));
             if (stock.Today.length === 9) {
                   stock.Today.shift();
             }

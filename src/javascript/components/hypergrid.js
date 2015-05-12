@@ -95,6 +95,14 @@ var HyperGrid = React.createClass({
                 var y = config.y;
                 if (x === 4) {
                     renderer = cellProvider.cellCache.sparklineCellRenderer;
+                } else if (x === 5 || x === 6) {
+                    config.value = format(config.value);
+                    if (config.value.indexOf('-') === 0) {
+                      config.value = '(' + config.value.substring(1) + ')';
+                      config.fgColor = 'red';
+                    } else {
+                      config.fgColor = 'green';
+                    }
                 } else {
                     config.value = format(config.value);
                 }
@@ -123,40 +131,46 @@ var HyperGrid = React.createClass({
 
                ],
                "hiddenColumns":[  
+                  25,
                   24,
                   23,
                   22,
-                  17,
-                  14,
                   13,
                   15,
+                  14,
+                  17,
                   16,
-                  19,
+                  18,
                   21,
-                  18
+                  19
                ],
                "columnWidths":[  
                   null,
-                  49.4189453125,
-                  49.4189453125,
-                  49.4189453125,
+                  74.64453125,
+                  74.64453125,
+                  74.64453125,
                   80,
-                  49.837890625,
+                  65.173828125,
                   65.306640625,
                   67.5478515625,
                   49.4189453125,
-                  49.4189453125,
+                  74.64453125,
                   46.890625,
-                  49.4189453125,
+                  74.64453125,
                   50.7578125,
+                  101.3935546875,
                   38.38671875,
                   126.8603515625,
                   175.521484375,
-                  null,
-                  null,
-                  null,
+                  236.408203125,
+                  193.7392578125,
                   266.775390625,
-                  86.9970703125
+                  86.9970703125,
+                  49.4189453125,
+                  25.3046875,
+                  73.591796875,
+                  269.416015625,
+                  228.65771484375
                ],
                "fixedColumnWidths":[  
                   48.630859375
@@ -168,31 +182,7 @@ var HyperGrid = React.createClass({
 
                },
                "sorted":[  
-                  0,
-                  0,
-                  0,
-                  0,
-                  0,
-                  0,
-                  0,
-                  0,
-                  0,
-                  0,
-                  0,
-                  0,
-                  0,
-                  0,
-                  0,
-                  0,
-                  0,
-                  0,
-                  0,
-                  0,
-                  0,
-                  0,
-                  0,
-                  0,
-                  0
+
                ]
             };
             jsonModel.setState(state);
