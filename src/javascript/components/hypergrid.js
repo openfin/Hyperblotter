@@ -3,12 +3,13 @@ var React = require('react'),
         _ = require('underscore');
 
 var HyperGrid = React.createClass({
-	componentDidMount: function(){
+    componentDidMount: function(){
 
         window.addEventListener('polymer-ready',function(){
             var jsonGrid = document.querySelector('#stock-example')
             var jsonModel = jsonGrid.getBehavior()
-            
+            var cellProvider = jsonModel.getCellProvider();
+
             jsonModel.setData(ticker.stocks);
             jsonModel.setFixedColumnCount(1);
             jsonModel.setFields(['TICKER','High','Low','Last','Change','PercentChange','Volume','Bid','Ask','Spread','BidQuantity','AskQuantity','COUNTRY','ICB','INDUS','SUP_SEC','SEC','SUB_SEC','Date','Time','Open','Close','PreviousClose','PreviousCloseDate','NAME']);
@@ -32,12 +33,17 @@ var HyperGrid = React.createClass({
                 jsonModel.dataModified();
             }, 100);
 
+
+            jsonModel.highlightCellOnHover= function(isColumnHovered, isRowHovered) {
+                return isRowHovered;
+            };
+
         });
             
     },
-  render: function() {
-    return <fin-hypergrid id="stock-example"><fin-hypergrid-behavior-json></fin-hypergrid-behavior-json></fin-hypergrid>
-  }
+    render: function() {
+        return <fin-hypergrid id="stock-example"><fin-hypergrid-behavior-json></fin-hypergrid-behavior-json></fin-hypergrid>
+    }
 });
 // <fin-hypergrid id="q-example"></fin-hypergrid>
 
