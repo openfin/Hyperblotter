@@ -59,9 +59,10 @@ Ask: 13.155027193983155AskQuantity: 1100Bid: 13.14517905506539BidQuantity: 300CO
             
     },
   render: function() {
-    return <fin-hypergrid id="stock-example"><fin-hypergrid-behavior-json></fin-hypergrid-behavior-json></fin-hypergrid>
+    return <div className="grid-contain"><fin-hypergrid id="stock-example"><fin-hypergrid-behavior-json></fin-hypergrid-behavior-json></fin-hypergrid></div>;
   }
 });
 // <fin-hypergrid id="q-example"></fin-hypergrid>
 
 module.exports = HyperGrid;
+

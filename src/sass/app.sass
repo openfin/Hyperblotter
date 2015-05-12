@@ -1,6 +1,8 @@
 $app-height: 594px
 $app-width: 960px
 $transition-time: 1s
+$top-bar-color: #1976D2
+$footer-bar-color: #2196F3;
 
 /* z-index orders */
 $front: 10
@@ -14,7 +16,7 @@ body
 	overflow: hidden
 	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif
 	color:#4C89BC
-	background-color: #2D2D2D
+	background-color: #FFF
 
 .app
 	display: flex
@@ -24,6 +26,7 @@ body
 	flex-direction: column
 	height: $app-height
 	width: $app-width
+	padding: 0
 
 .menu-contain
 	display: flex
@@ -32,7 +35,7 @@ body
 
 
 .menu
-	flex: 1
+	flex: .1
 	z-index: $front
 	text-align: center
 	background-color:#242424
@@ -63,7 +66,6 @@ body
 
 
 .chart-iq
-	flex: 7
 	z-index: $middle
 	overflow: hidden
 	padding: 5px
@@ -110,11 +112,33 @@ body
 	margin:auto
 
 .top-bar
-	flex: 0.5
-	background-color:#1F1F1F
+	flex: 2
+	display: flex
+	background-color: $top-bar-color
 	z-index: $front
 	height:12px;
-	justify-content: right;
+	justify-content: right
+	align-items: center
+	padding: 12px
+	i
+		flex: 1
+		font-size: 2rem
+		color: white
+		text-align: right
+		-webkit-app-region: no-drag
+	.title
+		flex: 15
+		color: #FFF
+		font-size: 2rem
+
+.grid-contain
+	flex: 10
+	padding: 8px
+
+#stock-example
+	display: block
+	width: 99.5%
+	height: 462px
 
 .button
 	padding: 5px;
@@ -162,13 +186,9 @@ body
 	border-bottom: #2D2D2D 2px solid
 	color:white
 
-#stock-example
- 	position: relative;
- 	width: 100%;
- 	bottom: 0%;
- 	left: 0%;
- 	top: 0%;
- 	height: 50%;
+
+
+
 
 #status-indicator
   display: inline-block;
@@ -247,7 +267,7 @@ body
 		display: flex
 		align-items: center
 		flex: 2
-		background-color: #1976D2
+		background-color: $top-bar-color
 		-webkit-app-region: drag
 		padding: 8px
 		i
@@ -287,7 +307,7 @@ body
 	.footer
 		display: flex
 		flex: 2
-		background-color: #1976D2
+		background-color: $footer-bar-color
 		.spacer
 			background-color: black
 			opacity: .12
