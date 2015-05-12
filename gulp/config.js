@@ -73,6 +73,16 @@ module.exports = {
         "node-hid": "null.js"
       },
       debug: true
+    }, {
+      entries: src + '/javascript/order.js',
+      dest: dest,
+      outputName: 'order.js',
+      // list of externally available modules to exclude from the bundle
+      external: ['underscore'],
+      browser:{
+        "node-hid": "null.js"
+      },
+      debug: true
     }]
   },
   production: {
