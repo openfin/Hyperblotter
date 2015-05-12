@@ -18,12 +18,19 @@ var TopBar = React.createClass({
 		}
 	    fin.desktop.main(function() {
 	    	console.log('defining');
-	        fin.desktop.Window.getCurrent().defineDraggableArea(document.querySelector('.top-bar'));
+	    	try {
+	    		fin.desktop.Window.getCurrent().defineDraggableArea(document.querySelector('.top-bar'));
+	    	}
+	    	catch (e) {
+
+	    	}
+	        
 	    });
 	},
 	render: function () {
 		return <div className="top-bar">
-			<button onClick={this.closeApp} className="button top-button close-button">x</button>
+			<span className="title">OpenFin Trade Thing</span>
+			<i onClick={this.closeApp} className="fa fa-times-circle"></i>
 		</div>
 	}
 });

@@ -1,7 +1,6 @@
 var React = require('react'),
-	watchlistStream = require('../streams/watchlist.js'),
-	vestorly = require('./vestorly.js'),
-	_ = require('underscore');
+		vestorly = require('./vestorly.js'),
+		_ = require('underscore');
 
 
 var WatchListDetails = React.createClass({

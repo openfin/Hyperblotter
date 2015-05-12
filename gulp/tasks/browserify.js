@@ -32,7 +32,9 @@ var browserifyTask = function(devMode) {
       bundleConfig = _.omit(bundleConfig, ['external', 'require']);
     }
 
+    console.log('the browser bundle', bundleConfig);
     var b = browserify(bundleConfig);
+    b.transform('reactify', {es6: true});
 
     var bundle = function() {
       // Log when bundling starts

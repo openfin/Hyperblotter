@@ -4,7 +4,6 @@ var fin = require('../vendor/openfin.js'),
     socket = require('../streams/socket.js'),
 	notifications = Object.create(EventEmitter.prototype),
 	user = require('../streams/user.js'),
-	watchlistStream = require('../streams/watchlist.js'),
 	currentUser;
 
 user.on('data', function (usr) {
@@ -39,7 +38,7 @@ function sendSymbol(symbol, destName) {
 	console.log(symbol, destName);
    socket.sendSymbol(currentUser.name, symbol, destName);
 	var notification = new fin.desktop.Notification({
-		url: 'http://local:8080/build/notification.html',
+		url: location.href + 'notification.html',
 		message: {
 			text : 'Symbol sent',
 			symbol : ''

@@ -27,6 +27,7 @@ var HyperGrid = React.createClass({
                 lineColor: 'lightgrey',
             };
 
+
             //to apply to a specific table
             jsonGrid.addProperties(lnfOverrides);
             setInterval(function() {
@@ -34,6 +35,28 @@ var HyperGrid = React.createClass({
                 jsonModel.dataModified();
             }, 100);
 
+            jsonModel.fixedColumnClicked = (grid, cellData) => {
+                    console.log(jsonModel.getRow(cellData.gridCell.y));
+                    var row = jsonModel.getRow(cellData.gridCell.y)
+
+                    require('./child-window.js').createChildWindow({
+                        name: row.NAME,
+                        url: 'row-view.html?row=' + cellData.gridCell.y,
+                        autoShow: true,
+                        width: 400,
+                        height: 400,
+                        maxHeight: 400,
+                        maxWidth: 400,
+                        frame: false
+                    })
+
+/*
+
+Ask: 13.155027193983155AskQuantity: 1100Bid: 13.14517905506539BidQuantity: 300COUNTRY: "United States"Change: -0.19082777142769913Close: 0Date: Mon May 11 2015 23:10:20 GMT-0400 (Eastern Daylight Time)High: 27.485ICB: "2727"INDUS: "Industrials"Last: 13.14517905506539Low: 13.14517905506539NAME: "General Electric Co."Open: 27.21PercentChange: -1.4309213688208668PreviousClose: 27.04PreviousCloseDate: Sun May 10 2015 23:10:20 GMT-0400 (Eastern Daylight Time)SEC: "General Industrials"SUB_SEC: "Diversified Industrials"SUP_SEC: "Industrial Goods & Services"Spread: 0.009848138917766392TICKER: "GE"Time: 1431400220319Volume: 1869883
+
+
+                 */
+            };
 
             jsonModel.highlightCellOnHover= function(isColumnHovered, isRowHovered) {
                 return isRowHovered;
@@ -90,3 +113,4 @@ var HyperGrid = React.createClass({
 // <fin-hypergrid id="q-example"></fin-hypergrid>
 
 module.exports = HyperGrid;
+

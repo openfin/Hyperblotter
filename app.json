@@ -11,7 +11,7 @@
         "maxHeight": 594,
         "defaultTop": 50,
         "defaultLeft": 10,
-        "resizable": false,
+        "resizable": true,
         "maximizable": false,
         "frame": false,
         "cornerRounding": {
