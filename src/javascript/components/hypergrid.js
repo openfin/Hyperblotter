@@ -4,6 +4,19 @@ var React = require('react'),
         moment = require('moment'),
         _ = require('underscore');
 
+var countries = ['AE','AF','AG','AI','AM','AO','AS','AT','AU','AX','BA','BB','BD','BE','BF','BH','BI','BJ','BM','BN','BS','BT','BV','BY','CA','CC','CD','CG','CH','CK','CL','CM','CN','CO','CR','CU','CV','CX','CY','CZ','DE','DM','DO','DZ','EE','EH','ES','FI','FJ','FK','FM','FR','GB','GE','GI','GL','GM','GN','GP','GQ','GS','GT','GU','GW','GY','HK','HM','HN','HR','HU','ID','IE','IL','IO','IQ','IR','JO','JP','KE','KG','KH','KM','KY','KZ','LC','LI','LK','LR','LS','LT','LU','LV','LY','MD','MH','MK','MM','MO','MQ','MR','MS','MT','MU','MV','MW','MX','MY','MZ','NA','NC','NE','NF','NG','NI','NL','NO','NP','NR','NU','NZ','OM','PA','PE','PF','PH','PK','PL','PM','PN','PR','PS','PW','PY','QA','RE','RO','RS','SA','SB','SD','SE','SG','SH','SJ','SM','SN','SO','SR','ST','SV','TC','TD','TH','TJ','TK','TL','TN','TO','TR','TT','TV','TW','UM','UY','UZ','VA','VE','VI','VN','WS','ZA','ZW','KR'];
+var imageCache = {};
+
+(function() {
+    var each, img;
+    for (var i = 0; i < countries.length; i++) {
+        each = countries[i];
+        img = new Image();
+        img.src = 'src/images/famfamfam_flag_icons/png/' + each + '.png';
+        imageCache[each] = img;
+    }
+})();
+
 var typeAlignmentMap = {
     j: 'right',
     s: 'left',
@@ -44,8 +57,8 @@ var HyperGrid = React.createClass({
 
             jsonModel.setData(ticker.stocks);
             jsonModel.setFixedColumnCount(1);
-            jsonModel.setHeaders(['Symbol','High','Low','Last','Today', 'Change','% Change','Volume','Bid Qty','Bid','Spread','Ask','Ask Qty','Country','ICB','Industry','Super Sector','Sector','Sub Sector','Date','Time','Open','Cls','Previous Cls','Previous Cls Dt','Name']);
-            jsonModel.setFields(['TICKER','High','Low','Last','Today', 'Change','PercentChange','Volume','BidQuantity','Bid','Spread','Ask','AskQuantity','COUNTRY','ICB','INDUS','SUP_SEC','SEC','SUB_SEC','Date','Time','Open','Close','PreviousClose','PreviousCloseDate','NAME']);
+            jsonModel.setHeaders(['Symbol','High','Low','Last','Today', 'Change','% Change','Volume','Bid Qty','Bid','Spread','Ask','Ask Qty','Country Code','Country','ICB','Industry','Super Sector','Sector','Sub Sector','Date','Time','Open','Cls','Previous Cls','Previous Cls Dt','Name']);
+            jsonModel.setFields(['TICKER','High','Low','Last','Today', 'Change','PercentChange','Volume','BidQuantity','Bid','Spread','Ask','AskQuantity','countryCode', 'COUNTRY','ICB','INDUS','SUP_SEC','SEC','SUB_SEC','Date','Time','Open','Close','PreviousClose','PreviousCloseDate','NAME']);
             
             var lnfOverrides = {
                 // backgroundColor: '#2d2d2d',
@@ -129,6 +142,8 @@ var HyperGrid = React.createClass({
                     config.fgColor = 'white';
                     row.flash = row.flash - 1;
                   }
+                } else if (x === 13) {
+                  config.value = [imageCache[config.value],config.value,null];
                 } else {
                   config.value = format(config.value);
                 }
@@ -143,80 +158,88 @@ var HyperGrid = React.createClass({
             };
 
             var state = {  
-               "columnIndexes":[  
-                  0,
-                  1,
-                  2,
-                  3,
-                  4,
-                  5,
-                  6,
-                  7,
-                  8,
-                  9,
-                  10,
-                  11,
-                  12,
-                  20
-               ],
-               "fixedColumnIndexes":[  
+   "columnIndexes":[  
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      21,
+      27,
+      28
+   ],
+   "fixedColumnIndexes":[  
 
-               ],
-               "hiddenColumns":[  
-                  25,
-                  24,
-                  23,
-                  22,
-                  13,
-                  15,
-                  14,
-                  17,
-                  16,
-                  18,
-                  21,
-                  19
-               ],
-               "columnWidths":[  
-                  null,
-                  74.64453125,
-                  74.64453125,
-                  74.64453125,
-                  80,
-                  65.173828125,
-                  65.306640625,
-                  67.5478515625,
-                  49.4189453125,
-                  74.64453125,
-                  46.890625,
-                  74.64453125,
-                  50.7578125,
-                  101.3935546875,
-                  38.38671875,
-                  126.8603515625,
-                  175.521484375,
-                  236.408203125,
-                  193.7392578125,
-                  266.775390625,
-                  86.9970703125,
-                  49.4189453125,
-                  25.3046875,
-                  73.591796875,
-                  269.416015625,
-                  228.65771484375
-               ],
-               "fixedColumnWidths":[  
-                  48.630859375
-               ],
-               "rowHeights":{  
+   ],
+   "hiddenColumns":[  
+      26,
+      25,
+      24,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      23,
+      22
+   ],
+   "columnWidths":[  
+      null,
+      49.4189453125,
+      49.4189453125,
+      49.4189453125,
+      80,
+      49.837890625,
+      65.306640625,
+      56.515625,
+      49.4189453125,
+      49.4189453125,
+      46.890625,
+      49.4189453125,
+      50.7578125,
+      81.841796875,
+      86.5908203125,
+      38.38671875,
+      118.5322265625,
+      167.72021484375,
+      213.3408203125,
+      248.8876953125,
+      266.775390625,
+      86.9970703125,
+      49.4189453125,
+      25.3046875,
+      73.591796875,
+      269.416015625,
+      217.42236328125,
+      null,
+      null
+   ],
+   "fixedColumnWidths":[  
+      48.630859375
+   ],
+   "rowHeights":{  
 
-               },
-               "fixedRowHeights":{  
+   },
+   "fixedRowHeights":{  
 
-               },
-               "sorted":[  
+   },
+   "sorted":[  
 
-               ]
-            };
+   ]
+}
+
+;
             jsonModel.setState(state);
         });
             
