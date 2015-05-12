@@ -12,7 +12,7 @@ var OpenFin = React.createClass({
 	    <div className="app">
 	      <TopBar />
 	      <Menu />
-	      <ChartIq />
+
 	      <HyperGrid />
 	    </div>
 	    <Login />

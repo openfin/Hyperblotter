@@ -44,10 +44,19 @@ module.exports = {
     // A separate bundle will be generated for each
     // bundle config in the list below
     bundleConfigs: [ {
-      transform: 'reactify',
       entries: src + '/javascript/main.js',
       dest: dest,
       outputName: 'out.js',
+      // list of externally available modules to exclude from the bundle
+      external: ['underscore'],
+      browser:{
+        "node-hid": "null.js"
+      },
+      debug: true
+    }, {
+      entries: src + '/javascript/child.js',
+      dest: dest,
+      outputName: 'child.js',
       // list of externally available modules to exclude from the bundle
       external: ['underscore'],
       browser:{

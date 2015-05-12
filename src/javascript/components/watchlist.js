@@ -1,5 +1,5 @@
-var React = require('react'),
-	watchlistStream = require('../streams/watchlist.js');
+var React = require('react');
+	
 
 var WatchList = React.createClass({
 	getInitialState: function() {

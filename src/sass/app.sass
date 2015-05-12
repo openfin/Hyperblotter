@@ -236,3 +236,39 @@ body
 		width: 960px;
 		height: 260px;
 
+
+/*child windows*/
+.child
+	display: flex
+	flex-direction: column
+	height: 100%
+	.top-bar
+		flex: 2
+		background-color: #1976D2
+		-webkit-app-region: drag
+		button
+			-webkit-app-region: no-drag
+	.contents
+		flex: 8
+		background-color: #E3F2FD
+	.footer
+		display: flex
+		flex: 2
+		background-color: #1976D2
+		.spacer
+			background-color: black
+			opacity: .12
+			flex: .2
+		.trade, .order
+			cursor: pointer
+			display: flex
+			justify-content: center
+			align-items: center
+			flex: 20
+			background-color: #2196F3
+			.link
+				color: #FF5722
+				font-size: 2rem
+
+		.trade:hover, .order:hover
+			color: #E3F2FD!important
