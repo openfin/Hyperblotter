@@ -3,6 +3,7 @@ var countryMap = {
       "Afghanistan":'AF',
       "Antigua":'AG',
       "Anguilla":'AI',
+      "Argentina":'AR',
       "Armenia":'AM',
       "Angola":'AO',
       "Antarctica":'AQ',
@@ -10,6 +11,7 @@ var countryMap = {
       "Austria":'AT',
       "Australia":'AU',
       "Åland":'AX',
+      "Brazil":'BR',
       "Bosnia":'BA',
       "Barbados":'BB',
       "Bangladesh":'BD',
@@ -33,7 +35,7 @@ var countryMap = {
       "Chile":'CL',
       "Cameroon":'CM',
       "China":'CN',
-      "Colombia":'CO',
+      "Columbia":'CO',
       "Costa":'CR',
       "Cuba":'CU',
       "Cabo":'CV',
@@ -42,6 +44,7 @@ var countryMap = {
       "Cyprus":'CY',
       "Czech":'CZ',
       "Germany":'DE',
+      "Denmark":'DK',
       "Dominica":'DM',
       "Dominican":'DO',
       "Algeria":'DZ',
@@ -56,6 +59,7 @@ var countryMap = {
       "United Kingdom":'GB',
       "Georgia":'GE',
       "Gibraltar":'GI',
+      "Greece":'GR',
       "Greenland":'GL',
       "Gambia":'GM',
       "Guinea":'GN',
@@ -78,6 +82,8 @@ var countryMap = {
       "British":'IO',
       "Iraq":'IQ',
       "Iran":'IR',
+      "Italy":'IT',
+      "India":'IN',
       "Jersey":'JE',
       "Jordan":'JO',
       "Japan":'JP',
@@ -140,6 +146,7 @@ var countryMap = {
       "Qatar":'QA',
       "Réunion":'RE',
       "Romania":'RO',
+      "Russia":'RU',
       "Serbia":'RS',
       "Saudi":'SA',
       "Solomon":'SB',
@@ -178,7 +185,8 @@ var countryMap = {
       "Samoa":'WS',
       "South Africa":'ZA',
       "Zimbabwe":'ZW',
-      "South Korea": 'KR'
+      "South Korea": 'KR',
+      "":'UM'
 };
 
 var data = {
@@ -23358,7 +23366,8 @@ var randomizeTick = function(stock) {
                   stock.Today.shift();
             }
             stock.Last = stock.Bid;
-            stock.flash = 20;
+            stock.Time = Date.now();
+            stock.flash = 40;
             stock.flashColor = stock.Change > 0 ? 'green' : 'red';
             stock.High = Math.max(stock.High, stock.Last);
             stock.Low = Math.min(stock.Low, stock.Last);
