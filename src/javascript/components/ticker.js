@@ -23105,9 +23105,15 @@ for (i = 0; i < count; i++) {
             Spread: data.Spread[i],
             Ask: data.Ask[i],
             AskQuantity: data.AskQuantity[i],
-            Today:[0, 0, 0, 0,0, 0, 0, 0]
+            Today:[0, 0, 0, 0,0, 0, 0, 0],
+            flash: 0,
+            flashColor: 'green'
 	}
 }
+
+stocks.sort(function(a,b){
+      return a.TICKER < b.TICKER ? -1 : 1;
+});
 
 var seed = 1;
 
@@ -23166,6 +23172,8 @@ var randomizeTick = function(stock) {
                   stock.Today.shift();
             }
             stock.Last = stock.Bid;
+            stock.flash = 20;
+            stock.flashColor = stock.Change > 0 ? 'green' : 'red';
             stock.High = Math.max(stock.High, stock.Last);
             stock.Low = Math.min(stock.Low, stock.Last);
       }

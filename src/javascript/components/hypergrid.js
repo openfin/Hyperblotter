@@ -87,12 +87,31 @@ var HyperGrid = React.createClass({
             jsonModel.highlightCellOnHover= function(isColumnHovered, isRowHovered) {
                 return isRowHovered;
             };
-
+            var flashMap = {
+              red: function(v) {
+                var c = (128 + Math.floor((20-v)/20*128)).toString(16);
+                if (c.length === 1) {
+                  c = '0'+ c;
+                }
+                return '#' + c + '0000';
+              },
+              green: function(v) {
+                var c = (128 + Math.floor((20-v)/20*128)).toString(16);
+                if (c.length === 1) {
+                  c = '0'+ c;
+                }
+                return '#00' + c + '00';
+              }
+            };
             cellProvider.getCell = function(config) {
                 var renderer = cellProvider.cellCache.simpleCellRenderer;
                 config.halign = 'right';
                 var x = config.x;
                 var y = config.y;
+                var row = jsonModel.getRow(y) || {
+                  flash: 0,
+                  flashColor: 'green'
+                };
                 if (x === 4) {
                     renderer = cellProvider.cellCache.sparklineCellRenderer;
                 } else if (x === 5 || x === 6) {
@@ -103,9 +122,22 @@ var HyperGrid = React.createClass({
                     } else {
                       config.fgColor = 'green';
                     }
+                } else if (x === 3) {
+                  config.value = format(config.value);
+                  if (row.flash > 0) {
+                    config.bgColor = flashMap[row.flashColor](row.flash);
+                    config.fgColor = 'white';
+                    row.flash = row.flash - 1;
+                  }
                 } else {
-                    config.value = format(config.value);
+                  config.value = format(config.value);
                 }
+
+
+                // if (row.flash > 15) {
+                //   config.bgColor = 'yellow';
+                // }
+
                 renderer.config = config;
                 return renderer;
             };
