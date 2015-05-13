@@ -84,7 +84,8 @@ body
 
 
 .login 
-	display: flex
+	/* display: flex */
+	display:none
 	position: absolute
 	top: 0
 	left: 0
@@ -318,6 +319,7 @@ body
 					width: 100%
 					text-align: right
 					padding: 2px
+					font-size: 1.5rem
 
 		.quantity
 			flex: .5
@@ -326,15 +328,20 @@ body
 		.orders
 			flex: 2
 			display: flex
-			justify-content: center
 			background-color: $blue-50
-			outline: 1px solid silver
+			
+
 			table
 				flex: 1
-				margin: 10px 8px 0 8px
+				width: 159px
+				margin-right:8px
+				margin-left:8px
+
 				td, th
 					border:1px solid silver
 					padding: 4px
+					font-size: .7rem
+
 			ul
 				flex: 1
 				list-style: none
@@ -388,8 +395,11 @@ body
 
 .actions
 	position: absolute
-	top: 90%
-	left: 88%
+	top: 90.5%
+	left: 88.5%
+	background-color: black
+	border-radius: 5px
+	opacity: .8
 	i
 		font-size: 2rem
 		color: $actions-color

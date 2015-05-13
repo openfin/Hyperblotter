@@ -12,7 +12,7 @@ var imageCache = {};
     for (var i = 0; i < countries.length; i++) {
         each = countries[i];
         img = new Image();
-        img.src = 'src/images/famfamfam_flag_icons/png/' + each + '.png';
+        img.src = 'images/famfamfam_flag_icons/png/' + each + '.png';
         imageCache[each] = img;
     }
 })();
