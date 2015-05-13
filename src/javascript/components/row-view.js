@@ -67,7 +67,12 @@ var React = require('react'),
             userAdded: false
           }
         }),
-        bid: rndDecrement(ask[0].value).sort()
+        bid: rndDecrement(ask[0]).sort().map((item)=>{
+          return {
+            value: item,
+            userAdded: false
+          }
+        })
       };
     },
     randTime = function(){
@@ -81,10 +86,10 @@ var React = require('react'),
 
       while(len--) {
 
-        components.push(<tr>
+        components.push(<tr className={arr[len].userAdded ? 'user-added' : '' }>
                 <td>{randTime()}</td>
                 <td>{Math.floor(Math.random() * 1000)}</td>
-                <td>{arr[len].toFixed(2)}</td>
+                <td>{arr[len].value.toFixed(2)}</td>
               </tr>);
       }
 
@@ -100,20 +105,38 @@ module.exports = React.createClass({
 	getInitialState: function() {
 		return {bid:[], ask: [], rowInfo: {Last:0}};
 	},
-	componentDidMount: function() {
-    var jsonGrid = window.opener.document.querySelector('#stock-example'),
+  componentDidMount: function() {
+      var jsonGrid = window.opener.document.querySelector('#stock-example'),
           jsonModel = jsonGrid.getBehavior();
-      
-    rowInfo = jsonModel.getRow(location.search.split('=')[1]);
 
-    console.log('the fake data', genDataFromLast(rowInfo.Last));
+      rowInfo = jsonModel.getRow(location.search.split('=')[1]);
 
-    Object.observe(rowInfo, _.throttle(()=>{
+      console.log('the fake data', genDataFromLast(rowInfo.Last));
+
+      Object.observe(rowInfo, _.throttle(() => {
           // tmpState = state();
           tmpState = genDataFromLast(rowInfo.Last);
           tmpState.rowInfo = rowInfo;
+
+          tmpState.bid = tmpState.bid.filter((item) => {
+              return !item.userAdded;
+          })
+          tmpState.bid = tmpState.bid.concat(userBids);
+          tmpState.bid = tmpState.bid.sort((a, b) => {
+              if (a.value < b.value) {
+                  return -1;
+              }
+              if (a.value > b.value) {
+                  return 1;
+              }
+
+              return 0;
+          });
+          tmpState.bid = tmpState.bid.slice(0, 10);
+          tmpState.bid = tmpState.bid.reverse();
+
           this.setState(tmpState);
-        },2500));
+      }, 2500));
   },
   closeWindow: ()=>{
   	fin.desktop.main(()=>{
@@ -122,22 +145,47 @@ module.exports = React.createClass({
   },
 
   bidAmtKeyUp: function(...args){
-    var fb = this.state.fakeBid;
+    var fb = this.state.bid;
 
     if (args[0].which === 13) {
-      //fb = fb.splice(1);
-      fb.unshift(<tr>
-                <td>Im</td>
-                <td>Sooo</td>
-                <td>Added</td>
-              </tr>);
-      console.log('da state', this);
-      this.setState(this.state);
+    
+      userBids.push({
+        value: Number(this.refs.bidTextInput.getDOMNode().value),
+        userAdded: true
+      });
+
+      fb = fb.filter((item)=>{
+        return !item.userAdded;
+      });
+
+      fb = fb.concat(userBids);
+
+      fb = fb.sort((a,b)=>{
+        if (a.value < b.value) {
+          return -1;
+        }
+        if (a.value > b.value) {
+          return 1;
+        }
+
+        return 0;
+      });
+      fb = fb.slice(0,10);
+      fb = fb.reverse()
+      
+
+      this.setState({
+        ask: this.state.ask,
+        bid: fb,
+        rowInfo: this.state.rowInfo
+      });
+
+      this.refs.bidTextInput.getDOMNode().value = '';
     }
   },
 	render: function(){
 
-    console.log('this is the fake bid', this.state);
+    //console.log('this is the fake bid', this.state);
 
 		return <div className="child">
 			<div className="top-bar">
@@ -149,7 +197,7 @@ module.exports = React.createClass({
         <div className="bid-ask">
           <div className="bid">
             Bid
-            <input onKeyDown={this.bidAmtKeyUp} placeholder="amt"/>
+            <input onKeyDown={this.bidAmtKeyUp} ref="bidTextInput" placeholder="amt"/>
             <input placeholder="qty"  />
           </div>
           <div className="ask">
