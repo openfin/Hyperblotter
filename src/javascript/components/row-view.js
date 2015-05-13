@@ -61,8 +61,13 @@ var React = require('react'),
           ask = rndDecrement(seed).sort();
           
       return {
-        ask: ask.sort(),
-        bid: rndDecrement(ask[0]).sort()
+        ask: ask.sort().map((item)=>{
+          return {
+            value: item,
+            userAdded: false
+          }
+        }),
+        bid: rndDecrement(ask[0].value).sort()
       };
     },
     randTime = function(){
