@@ -111,11 +111,12 @@ module.exports = React.createClass({
       console.log('the fake data', genDataFromLast(rowInfo.Last));
 
       Object.observe(rowInfo, _.throttle(() => {
-          // tmpState = state();
           tmpState = genDataFromLast(rowInfo.Last);
           tmpState.rowInfo = rowInfo;
 
-          tmpState.bid = prepDisplayList(tmpState.bid, userBids)
+          tmpState.bid = prepDisplayList(tmpState.bid, userBids);
+          tmpState.ask = prepDisplayList(tmpState.ask, userAsks)
+
           this.setState(tmpState);
       }, 2500));
   },
@@ -126,7 +127,6 @@ module.exports = React.createClass({
   },
 
   bidAmtKeyDown: function(...args) {
-    console.log(args);
 
       if (args[0].which === 13) {
 
@@ -145,6 +145,27 @@ module.exports = React.createClass({
 
           this.refs.bidTextInput.getDOMNode().value = '';
           this.refs.bidQtyTextInput.getDOMNode().value = '';
+      }
+  },
+  askAmtKeyDown: function(...args) {
+
+      if (args[0].which === 13) {
+
+          userAsks.push({
+              value: Number(this.refs.askTextInput.getDOMNode().value),
+              userAdded: true,
+              shares: Number(this.refs.askQtyTextInput.getDOMNode().value) || 100,
+              time: new Date().toString().slice(16,24)
+          });
+
+          this.setState({
+              bid: this.state.bid,
+              ask: prepDisplayList(this.state.ask, userAsks),
+              rowInfo: this.state.rowInfo
+          });
+
+          this.refs.askTextInput.getDOMNode().value = '';
+          this.refs.askQtyTextInput.getDOMNode().value = '';
       }
   },
 	render: function(){
@@ -166,8 +187,8 @@ module.exports = React.createClass({
           </div>
           <div className="ask">
             Ask
-            <input placeholder="amt"/>
-            <input placeholder="qty"/>
+            <input onKeyDown={this.askAmtKeyDown} ref="askTextInput" placeholder="amt" />
+            <input onKeyDown={this.askAmtKeyDown} ref="askQtyTextInput" placeholder="qty" />
           </div>
         </div>
         <div className="orders">
