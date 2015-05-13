@@ -3,35 +3,7 @@ var React = require('react'),
 		RowDisplay = require('./row-display.js'),
 		fin = require('../vendor/openfin.js'),
 		rowInfo,
-    genRow = (rowClass, config)=>{
-      return <tr className={rowClass}>
-                <td>{config.date}</td>
-                <td>{config.shares}</td>
-                <td>{config.value}</td>
-              </tr>
-    },
-    fakeBidAsk = function(){
-      var i = 10,
-          data = [];
-
-      while(--i){
-        data.push(<tr>
-                <td>{Math.floor(Math.random() * 100)}</td>
-                <td>{Math.floor(Math.random() * 100)}</td>
-                <td>{Math.floor(Math.random() * 100)}</td>
-              </tr>)
-      }
-      return data;
-    },
-    state = ()=> {
-      return {
-        fakeBid: fakeBidAsk(),
-        fakeAsk: fakeBidAsk(),
-        rowInfo: {}
-      };
-    },
     tmpState,
-    intervalToClear,
     rndRange = function () {
       return Math.floor(Math.random() * 10 % 5) / 10;
     },
@@ -82,20 +54,45 @@ var React = require('react'),
     },
     rowFromArr = function(arr){
       var components = [],
-          len = arr.length;
+          len = arr.length,
+          shares, time;
 
       while(len--) {
+        shares = arr[len].shares || Math.floor(Math.random() * 1000);
+        time = arr[len].time || randTime();
 
         components.push(<tr className={arr[len].userAdded ? 'user-added' : '' }>
-                <td>{randTime()}</td>
-                <td>{Math.floor(Math.random() * 1000)}</td>
-                <td>{arr[len].value.toFixed(2)}</td>
-              </tr>);
+          <td>{time}</td>
+          <td>{shares}</td>
+          <td>{arr[len].value.toFixed(2)}</td>
+        </tr>);
       }
 
       return components;
     },
-    userBids = [];
+    sortBy = (value) => {
+        return (a, b) => {
+            if (a[value] < b[value]) {
+                return -1;
+            }
+            if (a[value] > b[value]) {
+                return 1;
+            }
+            return 0;
+        };
+    },
+    userAddedFilter = (item) => {
+        return !item.userAdded;
+    },
+    prepDisplayList = (transientList, perminateList)=>{
+      return transientList.filter(userAddedFilter)
+        .concat(perminateList)
+        .sort(sortBy('value'))
+        .slice(0, 10)
+        .reverse()
+    },
+    userBids = [],
+    userAsks = [];
 
 
 
@@ -118,23 +115,7 @@ module.exports = React.createClass({
           tmpState = genDataFromLast(rowInfo.Last);
           tmpState.rowInfo = rowInfo;
 
-          tmpState.bid = tmpState.bid.filter((item) => {
-              return !item.userAdded;
-          })
-          tmpState.bid = tmpState.bid.concat(userBids);
-          tmpState.bid = tmpState.bid.sort((a, b) => {
-              if (a.value < b.value) {
-                  return -1;
-              }
-              if (a.value > b.value) {
-                  return 1;
-              }
-
-              return 0;
-          });
-          tmpState.bid = tmpState.bid.slice(0, 10);
-          tmpState.bid = tmpState.bid.reverse();
-
+          tmpState.bid = prepDisplayList(tmpState.bid, userBids)
           this.setState(tmpState);
       }, 2500));
   },
@@ -144,44 +125,27 @@ module.exports = React.createClass({
   	});
   },
 
-  bidAmtKeyUp: function(...args){
-    var fb = this.state.bid;
+  bidAmtKeyDown: function(...args) {
+    console.log(args);
 
-    if (args[0].which === 13) {
-    
-      userBids.push({
-        value: Number(this.refs.bidTextInput.getDOMNode().value),
-        userAdded: true
-      });
+      if (args[0].which === 13) {
 
-      fb = fb.filter((item)=>{
-        return !item.userAdded;
-      });
+          userBids.push({
+              value: Number(this.refs.bidTextInput.getDOMNode().value),
+              userAdded: true,
+              shares: Number(this.refs.bidQtyTextInput.getDOMNode().value) || 100,
+              time: new Date().toString().slice(16,24)
+          });
 
-      fb = fb.concat(userBids);
+          this.setState({
+              ask: this.state.ask,
+              bid: prepDisplayList(this.state.bid, userBids),
+              rowInfo: this.state.rowInfo
+          });
 
-      fb = fb.sort((a,b)=>{
-        if (a.value < b.value) {
-          return -1;
-        }
-        if (a.value > b.value) {
-          return 1;
-        }
-
-        return 0;
-      });
-      fb = fb.slice(0,10);
-      fb = fb.reverse()
-      
-
-      this.setState({
-        ask: this.state.ask,
-        bid: fb,
-        rowInfo: this.state.rowInfo
-      });
-
-      this.refs.bidTextInput.getDOMNode().value = '';
-    }
+          this.refs.bidTextInput.getDOMNode().value = '';
+          this.refs.bidQtyTextInput.getDOMNode().value = '';
+      }
   },
 	render: function(){
 
@@ -197,8 +161,8 @@ module.exports = React.createClass({
         <div className="bid-ask">
           <div className="bid">
             Bid
-            <input onKeyDown={this.bidAmtKeyUp} ref="bidTextInput" placeholder="amt"/>
-            <input placeholder="qty"  />
+            <input onKeyDown={this.bidAmtKeyDown} ref="bidTextInput" placeholder="amt" />
+            <input onKeyDown={this.bidAmtKeyDown} ref="bidQtyTextInput" placeholder="qty" />
           </div>
           <div className="ask">
             Ask
