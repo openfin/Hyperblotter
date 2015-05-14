@@ -65,6 +65,7 @@ var HyperGrid = React.createClass({
                 topLeftFont: '12px Avenir',
                 fixedRowFont: '12px Avenir',
                 fixedColumnFont: '12px Avenir',
+                backgroundColor2: '#0d0d0d',
                 backgroundColor: '#0d0d0d',
                 topLeftBackgroundColor: '#2d2d2d',
                 fixedColumnBackgroundColor: '#2d2d2d',
