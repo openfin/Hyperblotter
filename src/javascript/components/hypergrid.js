@@ -4,7 +4,7 @@ var React = require('react'),
         moment = require('moment'),
         _ = require('underscore');
 
-var countries = ['AE','AF','AG','AI','AM','AO','AS','AT','AU','AX','BA','BB','BD','BE','BF','BH','BI','BJ','BM','BN','BS','BT','BV','BY','CA','CC','CD','CG','CH','CK','CL','CM','CN','CO','CR','CU','CV','CX','CY','CZ','DE','DM','DO','DZ','EE','EH','ES','FI','FJ','FK','FM','FR','GB','GE','GI','GL','GM','GN','GP','GQ','GS','GT','GU','GW','GY','HK','HM','HN','HR','HU','ID','IE','IL','IO','IQ','IR','JO','JP','KE','KG','KH','KM','KY','KZ','LC','LI','LK','LR','LS','LT','LU','LV','LY','MD','MH','MK','MM','MO','MQ','MR','MS','MT','MU','MV','MW','MX','MY','MZ','NA','NC','NE','NF','NG','NI','NL','NO','NP','NR','NU','NZ','OM','PA','PE','PF','PH','PK','PL','PM','PN','PR','PS','PW','PY','QA','RE','RO','RS','SA','SB','SD','SE','SG','SH','SJ','SM','SN','SO','SR','ST','SV','TC','TD','TH','TJ','TK','TL','TN','TO','TR','TT','TV','TW','UM','UY','UZ','VA','VE','VI','VN','WS','ZA','ZW','KR'];
+var countries = ['GR','DK','ZA','RU','CO','IT','IN','BR','AE','AF','AG','AI','AM','AO','AS','AR','AT','AU','AX','BA','BB','BD','BE','BF','BH','BI','BJ','BM','BN','BS','BT','BV','BY','CA','CC','CD','CG','CH','CK','CL','CM','CN','CO','CR','CU','CV','CX','CY','CZ','DE','DM','DO','DZ','EE','EH','ES','FI','FJ','FK','FM','FR','GB','GE','GI','GL','GM','GN','GP','GQ','GS','GT','GU','GW','GY','HK','HM','HN','HR','HU','ID','IE','IL','IO','IQ','IR','JO','JP','KE','KG','KH','KM','KY','KZ','LC','LI','LK','LR','LS','LT','LU','LV','LY','MD','MH','MK','MM','MO','MQ','MR','MS','MT','MU','MV','MW','MX','MY','MZ','NA','NC','NE','NF','NG','NI','NL','NO','NP','NR','NU','NZ','OM','PA','PE','PF','PH','PK','PL','PM','PN','PR','PS','PW','PY','QA','RE','RO','RS','SA','SB','SD','SE','SG','SH','SJ','SM','SN','SO','SR','ST','SV','TC','TD','TH','TJ','TK','TL','TN','TO','TR','TT','TV','TW','UM','UY','UZ','VA','VE','VI','VN','WS','ZA','ZW','KR'];
 var imageCache = {};
 
 (function() {
@@ -61,15 +61,22 @@ var HyperGrid = React.createClass({
             jsonModel.setFields(['TICKER','High','Low','Last','Today', 'Change','PercentChange','Volume','BidQuantity','Bid','Spread','Ask','AskQuantity','countryCode', 'COUNTRY','ICB','INDUS','SUP_SEC','SEC','SUB_SEC','Date','Time','Open','Close','PreviousClose','PreviousCloseDate','NAME']);
             
             var lnfOverrides = {
-                // backgroundColor: '#2d2d2d',
-                // topLeftBackgroundColor: '#2d2d2d',
-                // fixedColumnBackgroundColor: '#2d2d2d',
-                // fixedRowBackgroundColor: '#2d2d2d',
-                // color: 'lightgrey',
-                // topLeftColor: 'lightgrey',
-                // fixedColumnColor: 'lightgrey',
-                // fixedRowColor: 'lightgrey',
-                // lineColor: 'lightgrey',
+                font: '12px Avenir',
+                topLeftFont: '12px Avenir',
+                fixedRowFont: '12px Avenir',
+                fixedColumnFont: '12px Avenir',
+                backgroundColor2: '#0d0d0d',
+                backgroundColor: '#0d0d0d',
+                topLeftBackgroundColor: '#2d2d2d',
+                fixedColumnBackgroundColor: '#2d2d2d',
+                fixedRowBackgroundColor: '#2d2d2d',
+                color: 'white',
+                topLeftColor: 'white',
+                fixedColumnColor: 'white',
+                fixedRowColor: 'white',
+                lineColor: 'pink',
+                gridLinesV: false,
+                gridLinesH: false
             };
 
 
@@ -78,7 +85,7 @@ var HyperGrid = React.createClass({
             setInterval(function() {
                 ticker.randomize();
                 jsonModel.dataModified();
-            }, 100);
+            }, 10);
 
             jsonModel.fixedColumnClicked = (grid, cellData) => {
                     console.log(jsonModel.getRow(cellData.gridCell.y));
@@ -104,14 +111,23 @@ var HyperGrid = React.createClass({
             };
             var flashMap = {
               red: function(v) {
-                var c = (128 + Math.floor((20-v)/20*128)).toString(16);
+                var val = 128 + Math.floor((40-v)/40*128);
+                var c = 'ff';//val.toString(16);
+                var c1 = Math.floor(val*192/255).toString(16);
+                var c2 = Math.floor(val*203/255).toString(16);
                 if (c.length === 1) {
                   c = '0'+ c;
                 }
-                return '#' + c + '0000';
+                if (c1.length === 1) {
+                  c1 = '0'+ c1;
+                }
+                if (c2.length === 1) {
+                  c2 = '0'+ c2;
+                }
+                return '#' + c + c1 + c2;
               },
               green: function(v) {
-                var c = (128 + Math.floor((20-v)/20*128)).toString(16);
+                var c = (128 + Math.floor((40-v)/40*128)).toString(16);
                 if (c.length === 1) {
                   c = '0'+ c;
                 }
@@ -137,12 +153,16 @@ var HyperGrid = React.createClass({
                     } else {
                       config.fgColor = 'green';
                     }
+                    config.font = '14px Avenir';
                 } else if (x === 3) {
                   config.value = format(config.value);
                   if (row.flash > 0) {
                     config.bgColor = flashMap[row.flashColor](row.flash);
                     config.fgColor = 'white';
                     row.flash = row.flash - 1;
+                    // if (y === 0) {
+                    //   console.log('update flash = ' + row.flash + ' ' + Date.now());
+                    // }
                   }
                 } else if (x === 13) {
                   config.value = [imageCache[config.value],config.value,null];
@@ -150,7 +170,7 @@ var HyperGrid = React.createClass({
                   config.value = format(config.value);
                 }
 
-
+                row.lastViewedTime = Date.now();
                 // if (row.flash > 15) {
                 //   config.bgColor = 'yellow';
                 // }

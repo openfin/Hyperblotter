@@ -4172,7 +4172,7 @@ if (typeof window.Polymer === 'function') {
 })(window);
 
 /*
-	Build only script.
+  Build only script.
 
   Ensures scripts needed for basic x-platform compatibility
   will be run when platform.js is not loaded.
@@ -4180,20 +4180,20 @@ if (typeof window.Polymer === 'function') {
 if (!window.WebComponents) {
 
 /*
-	On supported platforms, platform.js is not needed. To retain compatibility
-	with the polyfills, we stub out minimal functionality.
+  On supported platforms, platform.js is not needed. To retain compatibility
+  with the polyfills, we stub out minimal functionality.
  */
 if (!window.WebComponents) {
 
   WebComponents = {
-  	flush: function() {},
+    flush: function() {},
     flags: {log: {}}
   };
 
   Platform = WebComponents;
 
   CustomElements = {
-  	useNative: true,
+    useNative: true,
     ready: true,
     takeRecords: function() {},
     instanceof: function(obj, base) {
@@ -4202,7 +4202,7 @@ if (!window.WebComponents) {
   };
   
   HTMLImports = {
-  	useNative: true
+    useNative: true
   };
 
   
@@ -4459,7 +4459,7 @@ scope.isIE = isIE;
 })(Platform);
 
 /*
-	Build only script.
+  Build only script.
 
   Ensures scripts needed for basic x-platform compatibility
   will be run when platform.js is not loaded.
@@ -23919,7 +23919,7 @@ var validIdentifierMatch = /^(?!(?:abstract|boolean|break|byte|case|catch|char|c
 
         getColumnCount: function() {
             var fields = this.getFields();
-            return fields.length - 5;
+            return fields.length;
         },
 
         setState: function(state) {
@@ -23951,9 +23951,6 @@ var validIdentifierMatch = /^(?!(?:abstract|boolean|break|byte|case|catch|char|c
                     for (i = 0; i < colIndexes.length; i++) {
                         if (colIndexes[i] === actualCol) {
                             this.toggleSort(i, 0);
-                            if (sorts[i] === 2) {
-                                this.data.reverse();
-                            }
                             return;
                         }
                     }
@@ -23986,7 +23983,7 @@ var validIdentifierMatch = /^(?!(?:abstract|boolean|break|byte|case|catch|char|c
                     newData[each.__si] = each;
                 }
                 this.data = newData;
-            } else if (sortStateIndex === 1) {
+            } else if (sortStateIndex > 0) {
                 if (this.isValidIdentifer(colName)) {
                     var theSorter = eval('(function (a, b) {' + /* jshint ignore:line  */
                         '  if (a.' + colName + ' === b.' + colName + ')' +
@@ -24007,7 +24004,9 @@ var validIdentifierMatch = /^(?!(?:abstract|boolean|break|byte|case|catch|char|c
                         return 1;
                     });
                 }
-            } else {
+            }
+            if (sortStateIndex === 2) {
+                //this is being a pain
                 this.data = this.data.reverse();
             }
             for (i = 0; i < this.data.length; i++) {
