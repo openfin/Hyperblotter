@@ -247,21 +247,24 @@ var HyperGrid = React.createClass({
             
     },
     openBidOffer: ()=>{
+        console.log('start buddy')
         require('./child-window.js').createChildWindow({
-                        name: 'trade-' + displayData.NAME,
-                        url: 'trade.html?row=' + location.search.split('=')[1],
+                        name: 'orders',
+                        url: 'order.html',
                         autoShow: true,
-                        width: 400,
+                        width: 960,
+                        maxWidth: 960,
+                        minWidth: 960,
                         height: 400,
                         maxHeight: 400,
-                        maxWidth: 400,
+                        
                         frame: false
                     });
     },
     openOrders: ()=>{
 
     },
-    render: ()=>{
+    render: function (){
         return <div className="grid-contain">
         <fin-hypergrid id="stock-example"><fin-hypergrid-behavior-json></fin-hypergrid-behavior-json></fin-hypergrid>
         <div className="actions">

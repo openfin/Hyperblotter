@@ -108,8 +108,6 @@ module.exports = React.createClass({
 
       rowInfo = jsonModel.getRow(location.search.split('=')[1]);
 
-      console.log('the fake data', genDataFromLast(rowInfo.Last));
-
       Object.observe(rowInfo, _.throttle(() => {
           tmpState = genDataFromLast(rowInfo.Last);
           tmpState.rowInfo = rowInfo;
@@ -127,46 +125,76 @@ module.exports = React.createClass({
   },
 
   bidAmtKeyDown: function(...args) {
-
       if (args[0].which === 13) {
-
-          userBids.push({
-              value: Number(this.refs.bidTextInput.getDOMNode().value),
-              userAdded: true,
-              shares: Number(this.refs.bidQtyTextInput.getDOMNode().value) || 100,
-              time: new Date().toString().slice(16,24)
-          });
-
-          this.setState({
-              ask: this.state.ask,
-              bid: prepDisplayList(this.state.bid, userBids),
-              rowInfo: this.state.rowInfo
-          });
-
-          this.refs.bidTextInput.getDOMNode().value = '';
-          this.refs.bidQtyTextInput.getDOMNode().value = '';
+          this.enterBidAsk(userBids,
+              this.refs.bidTextInput.getDOMNode(),
+              this.refs.bidQtyTextInput.getDOMNode())
       }
+
+      // if (args[0].which === 13) {
+
+      //     userBids.push({
+      //         value: Number(this.refs.bidTextInput.getDOMNode().value),
+      //         userAdded: true,
+      //         shares: Number(this.refs.bidQtyTextInput.getDOMNode().value) || 100,
+      //         time: new Date().toString().slice(16, 24)
+      //     });
+
+      //     this.setState({
+      //         ask: this.state.ask,
+      //         bid: prepDisplayList(this.state.bid, userBids),
+      //         rowInfo: this.state.rowInfo
+      //     });
+
+      //     this.refs.bidTextInput.getDOMNode().value = '';
+      //     this.refs.bidQtyTextInput.getDOMNode().value = '';
+      // }
   },
   askAmtKeyDown: function(...args) {
 
-      if (args[0].which === 13) {
+      // if (args[0].which === 13) {
 
-          userAsks.push({
-              value: Number(this.refs.askTextInput.getDOMNode().value),
+      //     userAsks.push({
+      //         value: Number(this.refs.askTextInput.getDOMNode().value),
+      //         userAdded: true,
+      //         shares: Number(this.refs.askQtyTextInput.getDOMNode().value) || 100,
+      //         time: new Date().toString().slice(16,24)
+      //     });
+
+      //     this.setState({
+      //         bid: this.state.bid,
+      //         ask: prepDisplayList(this.state.ask, userAsks),
+      //         rowInfo: this.state.rowInfo
+      //     });
+
+      //     this.refs.askTextInput.getDOMNode().value = '';
+      //     this.refs.askQtyTextInput.getDOMNode().value = '';
+      // }
+      if (args[0].which === 13) {
+        this.enterBidAsk(userAsks, 
+          this.refs.askTextInput.getDOMNode(),
+          this.refs.askQtyTextInput.getDOMNode())
+      }
+  },
+  enterBidAsk: function(userEntries, amt, qty){
+      //if (args[0].which === 13) {
+
+          userEntries.push({
+              value: Number(amt.value),
               userAdded: true,
-              shares: Number(this.refs.askQtyTextInput.getDOMNode().value) || 100,
+              shares: Number(qty.value) || 100,
               time: new Date().toString().slice(16,24)
           });
 
           this.setState({
-              bid: this.state.bid,
+              bid: prepDisplayList(this.state.bid, userBids), 
               ask: prepDisplayList(this.state.ask, userAsks),
               rowInfo: this.state.rowInfo
           });
 
-          this.refs.askTextInput.getDOMNode().value = '';
-          this.refs.askQtyTextInput.getDOMNode().value = '';
-      }
+          amt.value = '';
+          amt.value = '';
+      //}
   },
 	render: function(){
 

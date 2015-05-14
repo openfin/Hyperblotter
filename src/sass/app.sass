@@ -303,14 +303,12 @@ body
 			.ask
 				flex: 1
 				background-color: $blue-50
-
 			.bid, .ask
 				display: flex
 				flex-direction: column
 				align-items: center
 				justify-content: center
 				padding: 8px
-
 				font-size: 2rem
 				.label
 					flex: 1
@@ -320,6 +318,12 @@ body
 					text-align: right
 					padding: 2px
 					font-size: 1.5rem
+			.order-book
+				flex: 1
+				display: flex
+
+
+
 
 		.quantity
 			flex: .5
@@ -400,6 +404,7 @@ body
 	background-color: $top-bar-color
 	border-radius: 5px
 	opacity: .8
+	z-index: 50
 	i
 		font-size: 2rem
 		color: $actions-color
@@ -409,3 +414,6 @@ body
 .user-added
 	td
 		background-color: pink
+
+.order-table
+	width: 100%

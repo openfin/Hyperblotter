@@ -10,54 +10,46 @@ module.exports = React.createClass({
 	render: function(){
 		return <div className="child">
 			<div className="top-bar">
-				<span className="title">Order </span>
+				<span className="title">Orders </span>
 				<i className="fa fa-unlock-alt unlocked"></i>
 				<i onClick={this.closeWindow} className="fa fa-times-circle"></i>
 			</div>
 			<div className="contents">
-				<table className="row-display">
+				<div className="order-book"><table className="order-table">
 		
 	<thead>
 	<tr>
-			<th>Company</th>
-			<th>Buy</th>
-			<th>Sell</th>
+			<th>Action</th>
+			<th>Side</th>
+			<th>Quantity</th>
+			<th>Symbol</th>
+			<th>Price</th>
+			<th>Account</th>
+			<th>Options</th>
+			<th>Status</th>
+			<th>Portfolio</th>
 		</tr>
 	</thead>
 	<tbody>
+
+	<tr>
+			<td>Action</td>
+			<td>Side</td>
+			<td>Quantity</td>
+			<td>Symbol</td>
+			<td>Price</td>
+			<td>Account</td>
+			<td>Options</td>
+			<td>Status</td>
+			<td>Portfolio</td>
+		</tr>
 		
-		<tr>
-			<td>This is some Company </td>
-			<td> <span className="buy"> Buy </span> </td>
-			<td> <span className="sell">Sell </span> </td>
-		</tr>
-		<tr>
-			<td>This is some Company </td>
-			<td> <span className="buy"> Buy </span> </td>
-			<td> <span className="sell">Sell </span> </td>
-		</tr>
-		<tr>
-			<td>This is some Company </td>
-			<td> <span className="buy"> Buy </span> </td>
-			<td> <span className="sell">Sell </span> </td>
-		</tr>
-		<tr>
-			<td>This is some Company </td>
-			<td> <span className="buy"> Buy </span> </td>
-			<td> <span className="sell">Sell </span> </td>
-		</tr>
-		<tr>
-			<td>This is some Company </td>
-			<td> <span className="buy"> Buy </span> </td>
-			<td> <span className="sell">Sell </span> </td>
-		</tr>
+
 	</tbody>
-</table>
+</table></div>
 			</div>
 <div className="footer"></div>
 		</div>;
 
-
-		;
 	}
 });
