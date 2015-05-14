@@ -64,7 +64,7 @@ module.exports = React.createClass({
 			<td>{curr.rowInfo.TICKER}</td>
 			<td>{curr.bidAsk.amt}</td>
 			<td>OpenFin</td>
-			<td>WTF</td>
+			<td>ABC</td>
 			<td className="order-status">Imported</td>
 			<td>PTFO2015</td>
 		</tr>)

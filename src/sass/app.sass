@@ -7,6 +7,11 @@ $actions-color: #FFEB3B
 $bid-color: #4CAF50
 $ask-color: #F44336
 $blue-50: #E3F2FD
+$table-header-bg: #2d2d2d
+$close-icon-size: 1.1rem
+$child-top-bar-flex: .37
+$top-bar-flex: .08
+
 
 /* z-index orders */
 $front: 10
@@ -18,9 +23,9 @@ body
 	height: 100%
 	margin: 0
 	overflow: hidden
-	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif
+	font-family: Verdana
 	color:#4C89BC
-	background-color: #FFF
+	background-color: #000
 
 .app
 	display: flex
@@ -117,11 +122,11 @@ body
 	margin:auto
 
 .top-bar
-	flex: 1
+	flex: $top-bar-flex
 	display: flex
 	background-color: $top-bar-color
 	color: $actions-color
-	background: url('http://www.jackson-pollock.org/images/paintings/convergence.jpg')
+	/* background: url('http://www.jackson-pollock.org/images/paintings/convergence.jpg') */
 	z-index: $front
 	height:12px;
 	justify-content: right
@@ -130,14 +135,14 @@ body
 	-webkit-app-region: drag
 	i
 		flex: 1
-		font-size: 2rem
+		font-size: $close-icon-size
 		color: white
 		text-align: right
 		-webkit-app-region: no-drag
 	.title
 		flex: 15
 		color: #FFF
-		font-size: 2rem
+		font-size: 1rem
 
 
 .grid-contain
@@ -147,7 +152,7 @@ body
 #stock-example
 	display: block
 	width: 99.5%
-	height: 504px
+	height: 550px
 
 .button
 	padding: 5px;
@@ -275,14 +280,14 @@ body
 	.top-bar
 		display: flex
 		align-items: center
-		flex: 1
+		flex: $child-top-bar-flex
 		background-color: $top-bar-color
 		-webkit-app-region: drag
 		padding: 8px
 		i
 			-webkit-app-region: no-drag
 			flex: 1
-			font-size: 1.5rem
+			font-size: $close-icon-size
 			color: white
 			text-align: right
 		i.unlocked
@@ -290,22 +295,20 @@ body
 		.title
 			flex: 8
 			color: white
-			font-size: 1.5rem
+			font-size: 1rem
 	.contents
 		display: flex
 		flex: 8
-		background-color: #FFF
+		
 		flex-direction: column
 		.bid-ask
 			display: flex
-			flex: 1
+			flex: .5
 			color: black
 			.bid
 				flex: 1
-				background-color: $blue-50
 			.ask
 				flex: 1
-				background-color: $blue-50
 			.bid, .ask
 				display: flex
 				flex-direction: column
@@ -319,8 +322,8 @@ body
 					flex: 1
 					width: 100%
 					text-align: right
-					padding: 2px
-					font-size: 1.5rem
+					padding: 1px
+					font-size: 12px
 			.order-book
 				flex: 1
 				display: flex
@@ -330,12 +333,10 @@ body
 
 		.quantity
 			flex: .5
-			background-color: $blue-50
 
 		.orders
 			flex: 2
 			display: flex
-			background-color: $blue-50
 			
 
 			table
@@ -343,12 +344,14 @@ body
 				width: 159px
 				margin-right:8px
 				margin-left:8px
-
+				background-color: black
+				color: white
+				th
+					background-color: $table-header-bg
 				td, th
-					border:1px solid silver
+
 					padding: 4px
 					font-size: .7rem
-
 			ul
 				flex: 1
 				list-style: none
@@ -420,3 +423,14 @@ body
 
 .order-table
 	width: 100%
+	font-size: 12px
+	th
+		background-color: $table-header-bg
+		font-size: 12px
+	th, td
+		color: white
+		font-size: 12px
+	td, th
+		text-align: right
+		padding-right: 10px
+

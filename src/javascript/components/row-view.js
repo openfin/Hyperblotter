@@ -48,7 +48,7 @@ var React = require('react'),
           new Date(Date.now() - (Math.floor(Math.random() * 3000)))
         ).toString().slice(16,24);
     },
-    rowFromArr = function(arr){
+    rowFromArr = function(arr, isAsk){
       var components = [],
           len = arr.length,
           shares, time;
@@ -57,11 +57,22 @@ var React = require('react'),
         shares = arr[len].shares || Math.floor(Math.random() * 1000);
         time = arr[len].time || randTime();
 
-        components.push(<tr className={arr[len].userAdded ? 'user-added' : '' }>
-          <td>{time}</td>
-          <td>{shares}</td>
-          <td>{arr[len].value.toFixed(2)}</td>
-        </tr>);
+        if (isAsk){
+          components.push(<tr className={arr[len].userAdded ? 'user-added' : '' }>
+            <td>{arr[len].value.toFixed(2)}</td>
+            <td>{shares}</td>
+            <td>{time}</td>
+            
+          </tr>);
+        }
+        else {
+          components.push(<tr className={arr[len].userAdded ? 'user-added' : '' }>
+            <td>{time}</td>
+            <td>{shares}</td>
+            <td>{arr[len].value.toFixed(2)}</td>
+          </tr>);
+        }
+          
       }
 
       return components;
@@ -85,7 +96,7 @@ var React = require('react'),
         .filter(userAddedFilter)
         .concat(perminateList)
         .sort(sortBy('value'))
-        .slice(0, 10)
+        .slice(0, 9)
         .reverse()
     },
     // add filter by row
@@ -159,7 +170,7 @@ module.exports = React.createClass({
           window.opener.orderBook.push({
               type: 'bid',
               amt: Number(this.refs.bidTextInput.getDOMNode().value),
-              qty: Number(this.refs.bidQtyTextInput.getDOMNode().value),
+              qty: Number(this.refs.bidQtyTextInput.getDOMNode().value) || 100,
               rowNum: Number(location.search.split('=')[1]),
               timeKey: timeKey
 
@@ -182,7 +193,7 @@ module.exports = React.createClass({
           window.opener.orderBook.push({
               type: 'ask',
               amt: Number(this.refs.askTextInput.getDOMNode().value),
-              qty: Number(this.refs.askQtyTextInput.getDOMNode().value),
+              qty: Number(this.refs.askQtyTextInput.getDOMNode().value) || 100,
               rowNum: Number(location.search.split('=')[1]),
               timeKey:timeKey
               //timeKey: new Date().toString().slice(16, 24)
@@ -227,13 +238,11 @@ module.exports = React.createClass({
 			<div className="contents">
         <div className="bid-ask">
           <div className="bid">
-            Bid
-            <input onKeyDown={this.bidAmtKeyDown} ref="bidTextInput" placeholder="amt" />
+            <input onKeyDown={this.bidAmtKeyDown} ref="bidTextInput" placeholder="bid" />
             <input onKeyDown={this.bidAmtKeyDown} ref="bidQtyTextInput" placeholder="qty" />
           </div>
           <div className="ask">
-            Ask
-            <input onKeyDown={this.askAmtKeyDown} ref="askTextInput" placeholder="amt" />
+            <input onKeyDown={this.askAmtKeyDown} ref="askTextInput" placeholder="ask" />
             <input onKeyDown={this.askAmtKeyDown} ref="askQtyTextInput" placeholder="qty" />
           </div>
         </div>
@@ -255,13 +264,13 @@ module.exports = React.createClass({
           <table>
             <thead>
               <tr>
-                <th>Time</th>
-                <th>Shares</th>
                 <th>Ask</th>
+                <th>Shares</th>
+                <th>Time</th>
               </tr>
             </thead>
             <tbody>
-              { rowFromArr(this.state.ask)}
+              { rowFromArr(this.state.ask, true)}
             </tbody>
           </table>
             

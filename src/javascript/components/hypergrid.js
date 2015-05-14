@@ -61,10 +61,10 @@ var HyperGrid = React.createClass({
             jsonModel.setFields(['TICKER','High','Low','Last','Today', 'Change','PercentChange','Volume','BidQuantity','Bid','Spread','Ask','AskQuantity','countryCode', 'COUNTRY','ICB','INDUS','SUP_SEC','SEC','SUB_SEC','Date','Time','Open','Close','PreviousClose','PreviousCloseDate','NAME']);
             
             var lnfOverrides = {
-                font: '12px Avenir',
-                topLeftFont: '12px Avenir',
-                fixedRowFont: '12px Avenir',
-                fixedColumnFont: '12px Avenir',
+                font: '12px Verdana',
+                topLeftFont: '12px Verdana',
+                fixedRowFont: '12px Verdana',
+                fixedColumnFont: '12px Verdana',
                 backgroundColor2: '#0d0d0d',
                 backgroundColor: '#0d0d0d',
                 topLeftBackgroundColor: '#2d2d2d',
@@ -97,11 +97,13 @@ var HyperGrid = React.createClass({
                         autoShow: true,
 
                         width: 350,
-                        height: 450,
-                        maxHeight: 450,
                         maxWidth: 350,
                         frame: false,
-                        maximizable: false
+                        maximizable: false,
+
+                        height: 594 / 2,
+                        maxHeight: 594 / 2,
+                        minHeight: 594 / 2,
                     })
 
             };
@@ -153,7 +155,7 @@ var HyperGrid = React.createClass({
                     } else {
                       config.fgColor = 'green';
                     }
-                    config.font = '14px Avenir';
+                    config.font = '14px Verdana';
                 } else if (x === 3) {
                   config.value = format(config.value);
                   if (row.flash > 0) {
@@ -275,8 +277,10 @@ var HyperGrid = React.createClass({
                         width: 960,
                         maxWidth: 960,
                         minWidth: 960,
-                        height: 400,
-                        maxHeight: 400,
+                        height: 594 / 2,
+                        maxHeight: 594 / 2,
+                        minHeight: 594 / 2,
+
                         
                         frame: false
                     });
@@ -288,8 +292,8 @@ var HyperGrid = React.createClass({
         return <div className="grid-contain">
         <fin-hypergrid id="stock-example"><fin-hypergrid-behavior-json></fin-hypergrid-behavior-json></fin-hypergrid>
         <div className="actions">
-            <i onClick={this.openBidOffer} className="fa fa-diamond"></i>
-            <i onClick={this.openOrders} className="fa fa-bars"></i>
+            <i onClick={this.openBidOffer} className="fa fa-plus-square"></i>
+            <i onClick={this.openOrders} className="fa fa-file-text"></i>
         </div>
         </div>
     }
