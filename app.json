@@ -3,7 +3,7 @@
         "name": "OpenfinPOC",
         "description": "OpenFin POC",
         "__url": "http://local:5000/build/",
-        "url": "https://raw.githubusercontent.com/openfin/fin-trader/master/build/index.html",
+        "url": "build/index.html",
         "uuid": "OpenfinPOC-to5e4lzrxrey7gb9",
         "autoShow": true,
         "defaultHeight": 594,
