@@ -2,7 +2,16 @@ $app-height: 594px
 $app-width: 960px
 $transition-time: 1s
 $top-bar-color: #1976D2
-$footer-bar-color: #2196F3;
+$footer-bar-color: #2196F3
+$actions-color: #FFEB3B
+$bid-color: #4CAF50
+$ask-color: #F44336
+$blue-50: #E3F2FD
+$table-header-bg: #2d2d2d
+$close-icon-size: 1.1rem
+$child-top-bar-flex: .37
+$top-bar-flex: .08
+
 
 /* z-index orders */
 $front: 10
@@ -14,9 +23,9 @@ body
 	height: 100%
 	margin: 0
 	overflow: hidden
-	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif
+	font-family: Verdana
 	color:#4C89BC
-	background-color: #FFF
+	background-color: #000
 
 .app
 	display: flex
@@ -80,7 +89,8 @@ body
 
 
 .login 
-	display: flex
+	/* display: flex */
+	display:none
 	position: absolute
 	top: 0
 	left: 0
@@ -112,24 +122,28 @@ body
 	margin:auto
 
 .top-bar
-	flex: 2
+	flex: $top-bar-flex
 	display: flex
 	background-color: $top-bar-color
+	color: $actions-color
+	/* background: url('http://www.jackson-pollock.org/images/paintings/convergence.jpg') */
 	z-index: $front
 	height:12px;
 	justify-content: right
 	align-items: center
 	padding: 12px
+	-webkit-app-region: drag
 	i
 		flex: 1
-		font-size: 2rem
+		font-size: $close-icon-size
 		color: white
 		text-align: right
 		-webkit-app-region: no-drag
 	.title
 		flex: 15
 		color: #FFF
-		font-size: 2rem
+		font-size: 1rem
+
 
 .grid-contain
 	flex: 10
@@ -138,7 +152,7 @@ body
 #stock-example
 	display: block
 	width: 99.5%
-	height: 462px
+	height: 550px
 
 .button
 	padding: 5px;
@@ -266,14 +280,14 @@ body
 	.top-bar
 		display: flex
 		align-items: center
-		flex: 2
+		flex: $child-top-bar-flex
 		background-color: $top-bar-color
 		-webkit-app-region: drag
 		padding: 8px
 		i
 			-webkit-app-region: no-drag
 			flex: 1
-			font-size: 1.5rem
+			font-size: $close-icon-size
 			color: white
 			text-align: right
 		i.unlocked
@@ -281,47 +295,142 @@ body
 		.title
 			flex: 8
 			color: white
-			font-size: 1.5rem
+			font-size: 1rem
 	.contents
 		display: flex
 		flex: 8
-		background-color: #FFF
-		justify-content: center
-		align-items: center
-		.row-display
-			table-layout: fixed
-			caption
-				text-align: left
-
-			th, td
-				padding: 5px 8px
-				border-bottom: 1px solid silver
-			th
-				text-align: left
-			td
-				text-align: right
-			.buy
-				color: #4CAF50
-			.sell
-				color: #F44336
-	.footer
-		display: flex
-		flex: 2
-		background-color: $footer-bar-color
-		.spacer
-			background-color: black
-			opacity: .12
-			flex: .2
-		.trade, .order
-			cursor: pointer
+		
+		flex-direction: column
+		.bid-ask
 			display: flex
-			justify-content: center
-			align-items: center
-			flex: 20
-			background-color: #2196F3
-			.link
-				color: #FBC02D
+			flex: .5
+			color: black
+			.bid
+				flex: 1
+			.ask
+				flex: 1
+			.bid, .ask
+				display: flex
+				flex-direction: column
+				align-items: center
+				justify-content: center
+				padding: 8px
 				font-size: 2rem
+				.label
+					flex: 1
+				input
+					flex: 1
+					width: 100%
+					text-align: right
+					padding: 1px
+					font-size: 12px
+			.order-book
+				flex: 1
+				display: flex
 
-		.trade:hover, .order:hover
-			color: #E3F2FD!important
+
+
+
+		.quantity
+			flex: .5
+
+		.orders
+			flex: 2
+			display: flex
+			
+
+			table
+				flex: 1
+				width: 159px
+				margin-right:8px
+				margin-left:8px
+				background-color: black
+				color: white
+				th
+					background-color: $table-header-bg
+				td, th
+
+					padding: 4px
+					font-size: .7rem
+			ul
+				flex: 1
+				list-style: none
+				padding: 10px 8px 0 8px
+				margin: 0
+				li
+					border-bottom: 1px solid silver
+					margin: 4px
+					padding: 4px
+	
+
+/*		.row-display */
+/*			table-layout: fixed */
+/*			caption */
+/*				text-align: left */
+/* */
+/*			th, td */
+/*				padding: 5px 8px */
+/*				border-bottom: 1px solid silver */
+/*			th */
+/*				text-align: left */
+/*			td */
+/*				text-align: right */
+/*			.buy */
+/*				color: #4CAF50 */
+/*			.sell */
+/*				color: #F44336 */
+
+				
+/*.footer */
+/*	display: flex */
+/*	flex: 2 */
+/*	background-color: $footer-bar-color */
+/*	.spacer */
+/*		background-color: black */
+/*		opacity: .12 */
+/*		flex: .2 */
+/*	.trade, .order */
+/*		cursor: pointer */
+/*		display: flex */
+/*		justify-content: center */
+/*		align-items: center */
+/*		flex: 20 */
+/*		background-color: #2196F3 */
+/*		.link */
+/*			color: #FBC02D */
+/*			font-size: 2rem# */
+/*	.trade:hover, .order:hover */
+/*		color: #E3F2FD!important */
+
+
+.actions
+	position: absolute
+	top: 90.5%
+	left: 88.5%
+	background-color: $top-bar-color
+	border-radius: 5px
+	opacity: .8
+	z-index: 50
+	i
+		font-size: 2rem
+		color: $actions-color
+		padding: 8px
+		cursor: pointer
+
+.user-added
+	td
+		background-color: pink
+
+.order-table
+	width: 100%
+	font-size: 12px
+	th
+		background-color: $table-header-bg
+		font-size: 12px
+	th, td
+		color: white
+		font-size: 12px
+	td, th
+		text-align: right
+		padding-right: 10px
+

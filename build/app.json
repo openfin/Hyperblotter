@@ -2,8 +2,8 @@
     "startup_app": {
         "name": "OpenfinPOC",
         "description": "OpenFin POC",
+        "__url": "http://cdn.openfin.co/bloomdemo/",
         "url": "http://local:5000/build/",
-        "__url": "https://raw.githubusercontent.com/datamadic/fin-trader/feature/userbids/build/index.html",
         "uuid": "OpenfinPOC-to5e4lzrxrey7gb9",
         "autoShow": true,
         "defaultHeight": 594,

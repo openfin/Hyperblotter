@@ -12,7 +12,7 @@ var imageCache = {};
     for (var i = 0; i < countries.length; i++) {
         each = countries[i];
         img = new Image();
-        img.src = 'src/images/famfamfam_flag_icons/png/' + each + '.png';
+        img.src = 'images/famfamfam_flag_icons/png/' + each.toLowerCase() + '.png';
         imageCache[each] = img;
     }
 })();
@@ -52,7 +52,7 @@ var HyperGrid = React.createClass({
 
         window.addEventListener('polymer-ready',function(){
             var jsonGrid = document.querySelector('#stock-example')
-            var jsonModel = jsonGrid.getBehavior()
+            jsonModel = jsonGrid.getBehavior()
             var cellProvider = jsonModel.getCellProvider();
 
             jsonModel.setData(ticker.stocks);
@@ -61,10 +61,10 @@ var HyperGrid = React.createClass({
             jsonModel.setFields(['TICKER','High','Low','Last','Today', 'Change','PercentChange','Volume','BidQuantity','Bid','Spread','Ask','AskQuantity','countryCode', 'COUNTRY','ICB','INDUS','SUP_SEC','SEC','SUB_SEC','Date','Time','Open','Close','PreviousClose','PreviousCloseDate','NAME']);
             
             var lnfOverrides = {
-                font: '12px Avenir',
-                topLeftFont: '12px Avenir',
-                fixedRowFont: '12px Avenir',
-                fixedColumnFont: '12px Avenir',
+                font: '12px Verdana',
+                topLeftFont: '12px Verdana',
+                fixedRowFont: '12px Verdana',
+                fixedColumnFont: '12px Verdana',
                 backgroundColor2: '#0d0d0d',
                 backgroundColor: '#0d0d0d',
                 topLeftBackgroundColor: '#2d2d2d',
@@ -95,11 +95,15 @@ var HyperGrid = React.createClass({
                         name: row.NAME,
                         url: 'row-view.html?row=' + cellData.gridCell.y,
                         autoShow: true,
-                        width: 400,
-                        height: 400,
-                        maxHeight: 400,
-                        maxWidth: 400,
-                        frame: false
+
+                        width: 350,
+                        maxWidth: 350,
+                        frame: false,
+                        maximizable: false,
+
+                        height: 594 / 2,
+                        maxHeight: 594 / 2,
+                        minHeight: 594 / 2,
                     })
 
             };
@@ -151,7 +155,7 @@ var HyperGrid = React.createClass({
                     } else {
                       config.fgColor = 'green';
                     }
-                    config.font = '14px Avenir';
+                    config.font = '14px Verdana';
                 } else if (x === 3) {
                   config.value = format(config.value);
                   if (row.flash > 0) {
@@ -264,8 +268,34 @@ var HyperGrid = React.createClass({
         });
             
     },
-    render: function() {
-        return <fin-hypergrid id="stock-example"><fin-hypergrid-behavior-json></fin-hypergrid-behavior-json></fin-hypergrid>
+    openBidOffer: ()=>{
+        console.log('start buddy')
+        require('./child-window.js').createChildWindow({
+                        name: 'orders',
+                        url: 'order.html',
+                        autoShow: true,
+                        width: 960,
+                        maxWidth: 960,
+                        minWidth: 960,
+                        height: 594 / 2,
+                        maxHeight: 594 / 2,
+                        minHeight: 594 / 2,
+
+                        
+                        frame: false
+                    });
+    },
+    openOrders: ()=>{
+
+    },
+    render: function (){
+        return <div className="grid-contain">
+        <fin-hypergrid id="stock-example"><fin-hypergrid-behavior-json></fin-hypergrid-behavior-json></fin-hypergrid>
+        <div className="actions">
+            <i onClick={this.openBidOffer} className="fa fa-plus-square"></i>
+            <i onClick={this.openOrders} className="fa fa-file-text"></i>
+        </div>
+        </div>
     }
 });
 // <fin-hypergrid id="q-example"></fin-hypergrid>
