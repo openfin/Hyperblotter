@@ -113,27 +113,10 @@ var HyperGrid = React.createClass({
             };
             var flashMap = {
               red: function(v) {
-                var val = 128 + Math.floor((40-v)/40*128);
-                var c = 'ff';//val.toString(16);
-                var c1 = Math.floor(val*192/255).toString(16);
-                var c2 = Math.floor(val*203/255).toString(16);
-                if (c.length === 1) {
-                  c = '0'+ c;
-                }
-                if (c1.length === 1) {
-                  c1 = '0'+ c1;
-                }
-                if (c2.length === 1) {
-                  c2 = '0'+ c2;
-                }
-                return '#' + c + c1 + c2;
+                return 'rgba(255, 0, 0, '+ (1.0-(40-v)/40) +')';
               },
               green: function(v) {
-                var c = (128 + Math.floor((40-v)/40*128)).toString(16);
-                if (c.length === 1) {
-                  c = '0'+ c;
-                }
-                return '#00' + c + '00';
+                return 'rgba(0, 255, 0, '+ (1.0-(40-v)/40) +')';
               }
             };
             cellProvider.getCell = function(config) {
