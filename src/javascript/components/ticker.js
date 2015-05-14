@@ -23344,7 +23344,7 @@ var randomizeTicks = function() {
             toPickFrom = stocks.slice(0);
             shuffle(toPickFrom);
       }
-      for (i = 0; i < 100; i++) {
+      for (i = 0; i < 20; i++) {
             var each = toPickFrom.shift();
             randomizeTick(each);
       }
@@ -23366,11 +23366,14 @@ var randomizeTick = function(stock) {
                   stock.Today.shift();
             }
             stock.Last = stock.Bid;
-            stock.Time = Date.now();
-            stock.flash = 40;
             stock.flashColor = stock.Change > 0 ? 'green' : 'red';
             stock.High = Math.max(stock.High, stock.Last);
             stock.Low = Math.min(stock.Low, stock.Last);
+            stock.Time = Date.now();
+
+            if (stock.Time - stock.lastViewedTime < 100) {
+                  stock.flash = 40;
+            }
       }
 }
  

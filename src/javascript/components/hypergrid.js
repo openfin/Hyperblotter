@@ -85,7 +85,7 @@ var HyperGrid = React.createClass({
             setInterval(function() {
                 ticker.randomize();
                 jsonModel.dataModified();
-            }, 100);
+            }, 10);
 
             jsonModel.fixedColumnClicked = (grid, cellData) => {
                     console.log(jsonModel.getRow(cellData.gridCell.y));
@@ -158,6 +158,9 @@ var HyperGrid = React.createClass({
                     config.bgColor = flashMap[row.flashColor](row.flash);
                     config.fgColor = 'white';
                     row.flash = row.flash - 1;
+                    // if (y === 0) {
+                    //   console.log('update flash = ' + row.flash + ' ' + Date.now());
+                    // }
                   }
                 } else if (x === 13) {
                   config.value = [imageCache[config.value],config.value,null];
@@ -165,7 +168,7 @@ var HyperGrid = React.createClass({
                   config.value = format(config.value);
                 }
 
-
+                row.lastViewedTime = Date.now();
                 // if (row.flash > 15) {
                 //   config.bgColor = 'yellow';
                 // }
