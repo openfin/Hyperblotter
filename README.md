@@ -1,2 +1,2 @@
-## FinTech Hack-a-thon 2015
+## Trader Demo
 
