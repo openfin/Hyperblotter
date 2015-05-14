@@ -3,6 +3,8 @@
 var _ = require('underscore'),
 		React = require('react'),
 		OfApp = require('./components/openfin.js');
+
+require('./components/orders.js');
 		// child = require('./components/child-window.js').createChildWindow({
 		// 	name: 'kiddo',
 		// 	url: 'row-view.html',

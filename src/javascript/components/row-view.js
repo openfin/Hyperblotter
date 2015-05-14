@@ -28,23 +28,19 @@ var React = require('react'),
     plusMinus = function(base, op){
       return parseInt(Math.random() * 10) % 2 ? add(base, op) : sub(base, op);
     },
+    genItemFromBidAskValue = (item)=>{
+      return {
+        value: item,
+        userAdded: false
+      }
+    },
     genDataFromLast = function(last){
       var seed = plusMinus(last, rndRange()),
           ask = rndDecrement(seed).sort();
           
       return {
-        ask: ask.sort().map((item)=>{
-          return {
-            value: item,
-            userAdded: false
-          }
-        }),
-        bid: rndDecrement(ask[0]).sort().map((item)=>{
-          return {
-            value: item,
-            userAdded: false
-          }
-        })
+        ask: ask.sort().map(genItemFromBidAskValue),
+        bid: rndDecrement(_.last(ask) - 0.1).sort().map(genItemFromBidAskValue)
       };
     },
     randTime = function(){
@@ -85,16 +81,16 @@ var React = require('react'),
         return !item.userAdded;
     },
     prepDisplayList = (transientList, perminateList)=>{
-      return transientList.filter(userAddedFilter)
+      return transientList
+        .filter(userAddedFilter)
         .concat(perminateList)
         .sort(sortBy('value'))
         .slice(0, 10)
         .reverse()
     },
+    // add filter by row
     userBids = [],
     userAsks = [];
-
-
 
 
 
@@ -109,92 +105,114 @@ module.exports = React.createClass({
       rowInfo = jsonModel.getRow(location.search.split('=')[1]);
 
       Object.observe(rowInfo, _.throttle(() => {
+          /**
+           * @todo refactor this out
+           */
           tmpState = genDataFromLast(rowInfo.Last);
           tmpState.rowInfo = rowInfo;
-
           tmpState.bid = prepDisplayList(tmpState.bid, userBids);
           tmpState.ask = prepDisplayList(tmpState.ask, userAsks)
-
           this.setState(tmpState);
       }, 2500));
+
+      Object.observe(window.opener.orderBook, ()=>{
+        
+        // wtf... 
+        var bidList = window.opener.orderBook.filter((item) => {
+            return item.rowNum === Number(location.search.split('=')[1]) && item.type === 'bid';
+        }).map((item)=>{
+          return item.timeKey
+        });
+
+        userBids = userBids.filter((item)=>{
+          return bidList.indexOf(item.timeKey) !== -1;
+        });
+
+
+        var askList = window.opener.orderBook.filter((item) => {
+            return item.rowNum === Number(location.search.split('=')[1]) && item.type === 'ask';
+        }).map((item)=>{
+          return item.timeKey
+        });
+
+        userAsks = userAsks.filter((item)=>{
+          return askList.indexOf(item.timeKey) !== -1;
+        });
+
+        tmpState = genDataFromLast(rowInfo.Last);
+          tmpState.rowInfo = rowInfo;
+          tmpState.bid = prepDisplayList(tmpState.bid, userBids);
+          tmpState.ask = prepDisplayList(tmpState.ask, userAsks)
+          this.setState(tmpState);
+
+      });
   },
   closeWindow: ()=>{
   	fin.desktop.main(()=>{
   		fin.desktop.Window.getCurrent().close();
   	});
   },
-
   bidAmtKeyDown: function(...args) {
+
       if (args[0].which === 13) {
+          var timeKey = Date.now();
+          window.opener.orderBook.push({
+              type: 'bid',
+              amt: Number(this.refs.bidTextInput.getDOMNode().value),
+              qty: Number(this.refs.bidQtyTextInput.getDOMNode().value),
+              rowNum: Number(location.search.split('=')[1]),
+              timeKey: timeKey
+
+          });
+
           this.enterBidAsk(userBids,
               this.refs.bidTextInput.getDOMNode(),
-              this.refs.bidQtyTextInput.getDOMNode())
+              this.refs.bidQtyTextInput.getDOMNode(),
+              timeKey)
+
       }
-
-      // if (args[0].which === 13) {
-
-      //     userBids.push({
-      //         value: Number(this.refs.bidTextInput.getDOMNode().value),
-      //         userAdded: true,
-      //         shares: Number(this.refs.bidQtyTextInput.getDOMNode().value) || 100,
-      //         time: new Date().toString().slice(16, 24)
-      //     });
-
-      //     this.setState({
-      //         ask: this.state.ask,
-      //         bid: prepDisplayList(this.state.bid, userBids),
-      //         rowInfo: this.state.rowInfo
-      //     });
-
-      //     this.refs.bidTextInput.getDOMNode().value = '';
-      //     this.refs.bidQtyTextInput.getDOMNode().value = '';
-      // }
   },
   askAmtKeyDown: function(...args) {
 
-      // if (args[0].which === 13) {
 
-      //     userAsks.push({
-      //         value: Number(this.refs.askTextInput.getDOMNode().value),
-      //         userAdded: true,
-      //         shares: Number(this.refs.askQtyTextInput.getDOMNode().value) || 100,
-      //         time: new Date().toString().slice(16,24)
-      //     });
-
-      //     this.setState({
-      //         bid: this.state.bid,
-      //         ask: prepDisplayList(this.state.ask, userAsks),
-      //         rowInfo: this.state.rowInfo
-      //     });
-
-      //     this.refs.askTextInput.getDOMNode().value = '';
-      //     this.refs.askQtyTextInput.getDOMNode().value = '';
-      // }
       if (args[0].which === 13) {
-        this.enterBidAsk(userAsks, 
-          this.refs.askTextInput.getDOMNode(),
-          this.refs.askQtyTextInput.getDOMNode())
+        var timeKey = Date.now();
+        /** @todo refactor this out  */
+
+          window.opener.orderBook.push({
+              type: 'ask',
+              amt: Number(this.refs.askTextInput.getDOMNode().value),
+              qty: Number(this.refs.askQtyTextInput.getDOMNode().value),
+              rowNum: Number(location.search.split('=')[1]),
+              timeKey:timeKey
+              //timeKey: new Date().toString().slice(16, 24)
+          });
+
+
+          this.enterBidAsk(userAsks,
+              this.refs.askTextInput.getDOMNode(),
+              this.refs.askQtyTextInput.getDOMNode(),
+              timeKey)
       }
   },
-  enterBidAsk: function(userEntries, amt, qty){
-      //if (args[0].which === 13) {
+  enterBidAsk: function(userEntries, amt, qty, timeKey) {
 
-          userEntries.push({
-              value: Number(amt.value),
-              userAdded: true,
-              shares: Number(qty.value) || 100,
-              time: new Date().toString().slice(16,24)
-          });
+      userEntries.push({
+          value: Number(amt.value),
+          userAdded: true,
+          shares: Number(qty.value) || 100,
+          timeKey: timeKey,
+          time: new Date().toString().slice(16, 24) 
+      });
 
-          this.setState({
-              bid: prepDisplayList(this.state.bid, userBids), 
-              ask: prepDisplayList(this.state.ask, userAsks),
-              rowInfo: this.state.rowInfo
-          });
+      this.setState({
+          bid: prepDisplayList(this.state.bid, userBids),
+          ask: prepDisplayList(this.state.ask, userAsks),
+          rowInfo: this.state.rowInfo
+      });
 
-          amt.value = '';
-          amt.value = '';
-      //}
+      amt.value = '';
+      qty.value = '';
   },
 	render: function(){
 
