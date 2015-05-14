@@ -151,6 +151,7 @@ var HyperGrid = React.createClass({
                     } else {
                       config.fgColor = 'green';
                     }
+                    config.font = '14px Avenir';
                 } else if (x === 3) {
                   config.value = format(config.value);
                   if (row.flash > 0) {
