@@ -1,15 +1,15 @@
 /**
  * Created by haseebriaz on 14/05/15.
  */
-fin.desktop.main(function(){
-    fin.desktop.main(function() {
-        fin.desktop.System.launchExternalProcess('excel', '', function(e) {
-            console.log('external process excel launched');
-        }, function(e) {
-            console.log('external process excel launch failed');
-        });
-    });
-});
+// fin.desktop.main(function(){
+//     fin.desktop.main(function() {
+//         fin.desktop.System.launchExternalProcess('excel', '', function(e) {
+//             console.log('external process excel launched');
+//         }, function(e) {
+//             console.log('external process excel launch failed');
+//         });
+//     });
+// });
     // workbooksSelect = document.getElementById("workbooks");
     // workbooksSelect.onchange = function(event){
 

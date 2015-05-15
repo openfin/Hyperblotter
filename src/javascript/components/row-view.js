@@ -10,7 +10,7 @@ var React = require('react'),
     rndDecrement = function (base, len) {
       var lst = [];
 
-      len = len || 10;
+      len = len || 3;
 
       while(len--) {
         base -= rndRange();
@@ -61,13 +61,11 @@ var React = require('react'),
           components.push(<tr className={arr[len].userAdded ? 'user-added' : '' }>
             <td>{arr[len].value.toFixed(2)}</td>
             <td>{shares}</td>
-            <td>{time}</td>
             
           </tr>);
         }
         else {
           components.push(<tr className={arr[len].userAdded ? 'user-added' : '' }>
-            <td>{time}</td>
             <td>{shares}</td>
             <td>{arr[len].value.toFixed(2)}</td>
           </tr>);
@@ -116,7 +114,7 @@ var React = require('react'),
         .filter(userAddedFilter)
         .concat(perminateList)
         .sort(sortBy('value', desc))
-        .slice(0, 9)
+        .slice(0, 3)
         .reverse()
     },
     // add filter by row
@@ -139,112 +137,39 @@ module.exports = React.createClass({
           /**
            * @todo refactor this out
            */
+          //rndDecrement
           tmpState = genDataFromLast(rowInfo.Last);
           tmpState.rowInfo = rowInfo;
-          tmpState.bid = prepDisplayList(tmpState.bid, userBids, true);
-          tmpState.ask = prepDisplayList(tmpState.ask, userAsks)
+          tmpState.bid = prepDisplayList([
+            rowInfo.Bid - rndRange(),
+            rowInfo.Bid - rndRange() - .7,
+            rowInfo.Bid - rndRange() - 1.7,
+            ].map((item)=>{
+            return {
+              value : item,
+              shares: Math.floor(Math.random() * 10000)
+            }
+          }), [], true);
+          tmpState.ask = prepDisplayList([
+            rowInfo.Ask + rndRange(),
+            rowInfo.Ask + rndRange() + .7,
+            rowInfo.Ask + rndRange() + 1.7,
+            ].map((item)=>{
+            return {
+              value : item,
+              shares: Math.floor(Math.random() * 10000)
+            }
+          }), [])
           this.setState(tmpState);
       }, 2500));
 
-      Object.observe(window.opener.orderBook, ()=>{
-        
-        // wtf... 
-        var bidList = window.opener.orderBook.filter((item) => {
-            return item.rowNum === Number(location.search.split('=')[1]) && item.type === 'bid';
-        }).map((item)=>{
-          return item.timeKey
-        });
-
-        userBids = userBids.filter((item)=>{
-          return bidList.indexOf(item.timeKey) !== -1;
-        });
-
-
-        var askList = window.opener.orderBook.filter((item) => {
-            return item.rowNum === Number(location.search.split('=')[1]) && item.type === 'ask';
-        }).map((item)=>{
-          return item.timeKey
-        });
-
-        userAsks = userAsks.filter((item)=>{
-          return askList.indexOf(item.timeKey) !== -1;
-        });
-
-        tmpState = genDataFromLast(rowInfo.Last);
-          tmpState.rowInfo = rowInfo;
-          tmpState.bid = prepDisplayList(tmpState.bid, userBids, true);
-          tmpState.ask = prepDisplayList(tmpState.ask, userAsks)
-          this.setState(tmpState);
-
-      });
   },
   closeWindow: ()=>{
   	fin.desktop.main(()=>{
   		fin.desktop.Window.getCurrent().close();
   	});
   },
-  bidAmtKeyDown: function(...args) {
 
-      if (args[0].which === 13) {
-          var timeKey = Date.now();
-          window.opener.orderBook.push({
-              type: 'bid',
-              amt: Number(this.refs.bidTextInput.getDOMNode().value),
-              qty: Number(this.refs.bidQtyTextInput.getDOMNode().value) || 100,
-              rowNum: Number(location.search.split('=')[1]),
-              timeKey: timeKey
-
-          });
-
-          this.enterBidAsk(userBids,
-              this.refs.bidTextInput.getDOMNode(),
-              this.refs.bidQtyTextInput.getDOMNode(),
-              timeKey)
-
-      }
-  },
-  askAmtKeyDown: function(...args) {
-
-
-      if (args[0].which === 13) {
-        var timeKey = Date.now();
-        /** @todo refactor this out  */
-
-          window.opener.orderBook.push({
-              type: 'ask',
-              amt: Number(this.refs.askTextInput.getDOMNode().value),
-              qty: Number(this.refs.askQtyTextInput.getDOMNode().value) || 100,
-              rowNum: Number(location.search.split('=')[1]),
-              timeKey:timeKey
-              //timeKey: new Date().toString().slice(16, 24)
-          });
-
-
-          this.enterBidAsk(userAsks,
-              this.refs.askTextInput.getDOMNode(),
-              this.refs.askQtyTextInput.getDOMNode(),
-              timeKey)
-      }
-  },
-  enterBidAsk: function(userEntries, amt, qty, timeKey) {
-
-      userEntries.push({
-          value: Number(amt.value),
-          userAdded: true,
-          shares: Number(qty.value) || 100,
-          timeKey: timeKey,
-          time: new Date().toString().slice(16, 24) 
-      });
-
-      this.setState({
-          bid: prepDisplayList(this.state.bid, userBids, true),
-          ask: prepDisplayList(this.state.ask, userAsks),
-          rowInfo: this.state.rowInfo
-      });
-
-      amt.value = '';
-      qty.value = '';
-  },
 	render: function(){
 
     //console.log('this is the fake bid', this.state);
@@ -257,18 +182,11 @@ module.exports = React.createClass({
 			</div>
 			<div className="contents">
         <div className="bid-ask">
-          <div className="bid">
-            <input onKeyDown={this.bidAmtKeyDown} ref="bidTextInput" placeholder="bid" />
-            <input onKeyDown={this.bidAmtKeyDown} ref="bidQtyTextInput" placeholder="qty" />
-          </div>
+
           <div className="last"> 
             <div className="tkr">{this.state.rowInfo.TICKER}</div>
             <div className="transaction">{this.state.rowInfo.Last.toFixed(2)}</div>
              
-          </div>
-          <div className="ask">
-            <input onKeyDown={this.askAmtKeyDown} ref="askTextInput" placeholder="ask" />
-            <input onKeyDown={this.askAmtKeyDown} ref="askQtyTextInput" placeholder="qty" />
           </div>
         </div>
         <div className="orders">
@@ -276,7 +194,6 @@ module.exports = React.createClass({
           <table>
             <thead>
               <tr>
-                <th>Time</th>
                 <th>Shares</th>
                 <th>Bid</th>
               </tr>
@@ -291,7 +208,6 @@ module.exports = React.createClass({
               <tr>
                 <th>Ask</th>
                 <th>Shares</th>
-                <th>Time</th>
               </tr>
             </thead>
             <tbody>

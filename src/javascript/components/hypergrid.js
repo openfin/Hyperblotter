@@ -102,9 +102,9 @@ var HyperGrid = React.createClass({
                             maxWidth: 350,
                             frame: false,
                             maximizable: false,
-                            height: 594 / 2,
-                            maxHeight: 594 / 2,
-                            minHeight: 594 / 2,
+                            height: 594 / 3,
+                            maxHeight: 594 / 3,
+                            minHeight: 594 / 3,
                         })
 
             };
@@ -261,9 +261,9 @@ var HyperGrid = React.createClass({
                     width: 960,
                     maxWidth: 960,
                     minWidth: 960,
-                    height: 594 / 2,
-                    maxHeight: 594 / 2,
-                    minHeight: 594 / 2,
+                    height: 594 / 3,
+                    maxHeight: 594 / 3,
+                    minHeight: 594 / 3,
                     frame: false
                 });
             },
@@ -284,9 +284,9 @@ var HyperGrid = React.createClass({
                     maxWidth: 350,
                     frame: false,
                     maximizable: false,
-                    height: 594 / 2,
-                    maxHeight: 594 / 2,
-                    minHeight: 594 / 2,
+                    height: 594 / 3,
+                    maxHeight: 594 / 3,
+                    minHeight: 594 / 3,
                 })
             },
     render: function (){
