@@ -305,6 +305,18 @@ body
 			display: flex
 			flex: .5
 			color: black
+			.last
+				flex: 1
+				display: flex
+				flex-direction: column
+				align-items: center
+				color: $top-bar-color
+				.tkr
+					flex: 1
+				.transaction
+					flex: 3
+					font-size: 1.7rem
+
 			.bid
 				flex: 1
 			.ask
@@ -403,13 +415,23 @@ body
 /*		color: #E3F2FD!important */
 
 
+.actions-bg
+	position: absolute
+	top: 90.5%
+	left: 88.5%
+	width: 86px
+	height: 48px
+	background-color: $top-bar-color
+	border-radius: 5px
+	opacity: .8
+	z-index: 49
+
 .actions
 	position: absolute
 	top: 90.5%
 	left: 88.5%
-	background-color: $top-bar-color
+	
 	border-radius: 5px
-	opacity: .8
 	z-index: 50
 	i
 		font-size: 2rem
@@ -423,13 +445,13 @@ body
 
 .order-table
 	width: 100%
-	font-size: 12px
+	font-size: .7rem
+	
 	th
 		background-color: $table-header-bg
-		font-size: 12px
+		padding: 4px
 	th, td
 		color: white
-		font-size: 12px
 	td, th
 		text-align: right
 		padding-right: 10px

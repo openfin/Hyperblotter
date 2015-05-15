@@ -40,7 +40,7 @@ var React = require('react'),
           
       return {
         ask: ask.sort().map(genItemFromBidAskValue),
-        bid: rndDecrement(_.last(ask) - 0.1).sort().map(genItemFromBidAskValue)
+        bid: rndDecrement(ask[0]).sort().reverse().map(genItemFromBidAskValue)
       };
     },
     randTime = function(){
@@ -77,7 +77,26 @@ var React = require('react'),
 
       return components;
     },
-    sortBy = (value) => {
+    lt = (a,b)=>{
+      return a < b;
+    },
+    gt = (a,b)=>{
+      return a > b;
+    },
+    /** refactor this, reverse... */
+    sortBy = (value, desc) => {
+        if (desc) {
+            return (a, b) => {
+                if (a[value] > b[value]) {
+                    return -1;
+                }
+                if (a[value] < b[value]) {
+                    return 1;
+                }
+                return 0;
+            };
+        }
+
         return (a, b) => {
             if (a[value] < b[value]) {
                 return -1;
@@ -91,11 +110,12 @@ var React = require('react'),
     userAddedFilter = (item) => {
         return !item.userAdded;
     },
-    prepDisplayList = (transientList, perminateList)=>{
+    prepDisplayList = (transientList, perminateList, desc)=>{
+
       return transientList
         .filter(userAddedFilter)
         .concat(perminateList)
-        .sort(sortBy('value'))
+        .sort(sortBy('value', desc))
         .slice(0, 9)
         .reverse()
     },
@@ -121,7 +141,7 @@ module.exports = React.createClass({
            */
           tmpState = genDataFromLast(rowInfo.Last);
           tmpState.rowInfo = rowInfo;
-          tmpState.bid = prepDisplayList(tmpState.bid, userBids);
+          tmpState.bid = prepDisplayList(tmpState.bid, userBids, true);
           tmpState.ask = prepDisplayList(tmpState.ask, userAsks)
           this.setState(tmpState);
       }, 2500));
@@ -152,7 +172,7 @@ module.exports = React.createClass({
 
         tmpState = genDataFromLast(rowInfo.Last);
           tmpState.rowInfo = rowInfo;
-          tmpState.bid = prepDisplayList(tmpState.bid, userBids);
+          tmpState.bid = prepDisplayList(tmpState.bid, userBids, true);
           tmpState.ask = prepDisplayList(tmpState.ask, userAsks)
           this.setState(tmpState);
 
@@ -217,7 +237,7 @@ module.exports = React.createClass({
       });
 
       this.setState({
-          bid: prepDisplayList(this.state.bid, userBids),
+          bid: prepDisplayList(this.state.bid, userBids, true),
           ask: prepDisplayList(this.state.ask, userAsks),
           rowInfo: this.state.rowInfo
       });
@@ -231,7 +251,7 @@ module.exports = React.createClass({
 
 		return <div className="child">
 			<div className="top-bar">
-				<span className="title">{this.state.rowInfo.TICKER} {this.state.rowInfo.Last.toFixed(2)}</span>
+				<span className="title">{this.state.rowInfo.NAME}</span>
 				<i className="fa fa-unlock-alt unlocked"></i>
 				<i onClick={this.closeWindow} className="fa fa-times-circle"></i>
 			</div>
@@ -240,6 +260,11 @@ module.exports = React.createClass({
           <div className="bid">
             <input onKeyDown={this.bidAmtKeyDown} ref="bidTextInput" placeholder="bid" />
             <input onKeyDown={this.bidAmtKeyDown} ref="bidQtyTextInput" placeholder="qty" />
+          </div>
+          <div className="last"> 
+            <div className="tkr">{this.state.rowInfo.TICKER}</div>
+            <div className="transaction">{this.state.rowInfo.Last.toFixed(2)}</div>
+             
           </div>
           <div className="ask">
             <input onKeyDown={this.askAmtKeyDown} ref="askTextInput" placeholder="ask" />

@@ -29,7 +29,7 @@ var TopBar = React.createClass({
 	},
 	render: function () {
 		return <div className="top-bar">
-			<span className="title">OpenFin Trade Thing</span>
+			<span className="title">Blotter</span>
 			<i onClick={this.closeApp} className="fa fa-times-circle"></i>
 		</div>
 	}

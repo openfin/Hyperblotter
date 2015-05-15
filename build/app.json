@@ -22,11 +22,12 @@
     },
     "runtime": {
         "arguments": "",
-        "version": "alpha"
+        "version": "stable"
     },
     "shortcut": {
         "company": "OpenFin",
-        "description": "Openfin POC",
-        "name": "Openfin POC"
+        "description": "OpenFin Demo Blotter",
+        "icon": "http://demoappdirectory.openf.in/desktop/config/apps/OpenFin/HelloOpenFin/img/openfin.ico",
+        "name": "OpenFin Demo Blotter"
     }
 }
