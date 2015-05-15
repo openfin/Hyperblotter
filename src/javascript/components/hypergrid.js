@@ -2,7 +2,6 @@ var React = require('react'),
 		ticker = require('../components/ticker.js'),
         numeral = require('numeral'),
         moment = require('moment'),
-        excel = require('../components/excel.js'),
         _ = require('underscore'),
         lastSelectedRow;
 
@@ -62,25 +61,33 @@ var HyperGrid = React.createClass({
             jsonModel.setHeaders(['Symbol','High','Low','Last','Today', 'Change','% Change','Volume','Bid Qty','Bid','Spread','Ask','Ask Qty','Country Code','Country','ICB','Industry','Super Sector','Sector','Sub Sector','Date','Time','Open','Cls','Previous Cls','Previous Cls Dt','Name']);
             jsonModel.setFields(['TICKER','High','Low','Last','Today', 'Change','PercentChange','Volume','BidQuantity','Bid','Spread','Ask','AskQuantity','countryCode', 'COUNTRY','ICB','INDUS','SUP_SEC','SEC','SUB_SEC','Date','Time','Open','Close','PreviousClose','PreviousCloseDate','NAME']);
             
-            var lnfOverrides = {
-                font: '12px Verdana',
-                topLeftFont: '12px Verdana',
-                fixedRowFont: '12px Verdana',
-                fixedColumnFont: '12px Verdana',
-                backgroundColor2: '#0d0d0d',
-                backgroundColor: '#0d0d0d',
-                topLeftBackgroundColor: '#2d2d2d',
-                fixedColumnBackgroundColor: '#2d2d2d',
-                fixedRowBackgroundColor: '#2d2d2d',
-                color: 'white',
-                topLeftColor: 'white',
-                fixedColumnColor: 'white',
-                fixedRowColor: 'white',
-                lineColor: 'pink',
-                gridLinesV: false,
-                gridLinesH: false
-            };
+            var bgColor = '#07071E';
+            var fixedAreasBGColor = bgColor;
 
+            var font = "24px Roboto Condensed";
+            var headingFont = "12px Roboto Condensed";
+            var headingFGColor = '#414655';
+
+            var lnfOverrides = {
+                font: font,
+                topLeftFont: headingFont,
+                fixedRowFont: headingFont,
+                fixedColumnFont: font,
+                backgroundColor2: bgColor,
+                backgroundColor: bgColor,
+                topLeftBackgroundColor: fixedAreasBGColor,
+                fixedColumnBackgroundColor: fixedAreasBGColor,
+                fixedRowBackgroundColor: fixedAreasBGColor,
+                color: 'white',
+                topLeftColor: headingFGColor,
+                fixedColumnColor: 'white',
+                fixedRowColor: headingFGColor,
+                lineColor: '#131C23',
+                gridLinesV: false,
+                gridLinesH: true,
+                defaultFixedRowHeight: 20
+            };
+            jsonModel.defaultRowHeight = 57,
 
             //to apply to a specific table
             jsonGrid.addProperties(lnfOverrides);
@@ -88,18 +95,6 @@ var HyperGrid = React.createClass({
                 ticker.randomize();
                 jsonModel.dataModified();
             }, 10);
-
-            setInterval(function() {
-              if (!fin.desktop.Excel.sheet) {
-                return;
-              }
-              var i;
-              var data = [];
-              for (i = 0; i < 20; i++) {
-                data[i] = [jsonModel.getValue(0,i),jsonModel.getValue(1,i),jsonModel.getValue(2,i),jsonModel.getValue(3,i)];
-              }
-              fin.desktop.Excel.sheet.setCells(data);
-            }, 1000);
 
             jsonModel.fixedColumnClicked = (grid, cellData) => {
                     lastSelectedRow =  cellData.gridCell.y;
@@ -151,7 +146,7 @@ var HyperGrid = React.createClass({
                     } else {
                       config.fgColor = 'green';
                     }
-                    config.font = '14px Verdana';
+                    config.font = '24px Verdana';
                 } else if (x === 3) {
                   config.value = format(config.value);
                   if (row.flash > 0) {
@@ -180,20 +175,10 @@ var HyperGrid = React.createClass({
             var state = {  
    "columnIndexes":[  
       0,
-      1,
-      2,
       3,
-      4,
+      1,
       5,
-      6,
       7,
-      8,
-      9,
-      10,
-      11,
-      12,
-      13,
-      21,
       27,
       28
    ],
@@ -205,6 +190,16 @@ var HyperGrid = React.createClass({
       25,
       24,
       14,
+      4,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      21,
+      6,
+      2,
       15,
       16,
       17,
@@ -216,19 +211,19 @@ var HyperGrid = React.createClass({
    ],
    "columnWidths":[  
       null,
-      49.4189453125,
-      49.4189453125,
-      49.4189453125,
-      80,
-      49.837890625,
-      65.306640625,
-      56.515625,
-      49.4189453125,
-      49.4189453125,
-      46.890625,
-      49.4189453125,
-      50.7578125,
-      81.841796875,
+      109,
+      95.01953125,
+      95.01953125,
+      160,
+      101,
+      86.30078125,
+      123,
+      95.01953125,
+      95.01953125,
+      64.50390625,
+      95.01953125,
+      79.76171875,
+      92.306640625,
       86.5908203125,
       38.38671875,
       118.5322265625,
@@ -236,17 +231,17 @@ var HyperGrid = React.createClass({
       213.3408203125,
       248.8876953125,
       266.775390625,
-      86.9970703125,
+      177.84765625,
       49.4189453125,
       25.3046875,
       73.591796875,
       269.416015625,
       217.42236328125,
-      null,
-      null
+      86.30078125,
+      86.30078125
    ],
    "fixedColumnWidths":[  
-      48.630859375
+      92
    ],
    "rowHeights":{  
 
@@ -303,7 +298,12 @@ var HyperGrid = React.createClass({
             },
     render: function (){
         return <div className="grid-contain">
-        <fin-hypergrid id="stock-example"><fin-hypergrid-behavior-json></fin-hypergrid-behavior-json></fin-hypergrid>
+        
+        <fin-hypergrid id="stock-example">
+            <fin-hypergrid-behavior-json></fin-hypergrid-behavior-json>
+            <fin-hypergrid-excel></fin-hypergrid-excel>
+        </fin-hypergrid>
+
         <div className="actions-bg"></div>
         <div className="actions">
             <i onClick={this.openOrders} className="fa fa-plus-square"></i>
