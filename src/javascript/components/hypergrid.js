@@ -110,12 +110,20 @@ var HyperGrid = React.createClass({
                 lineColor: '#131C23',
                 gridLinesV: false,
                 gridLinesH: true,
+
+                fixedColumnFGSelColor: 'white',
+                fixedColumnBGSelColor: '#3D77FE',
+                fixedRowFGSelColor: 'white',
+                fixedRowBGSelColor: '#3D77FE',
+
                 defaultFixedRowHeight: 40
             };
             jsonModel.defaultRowHeight = 57,
 
             //to apply to a specific table
             jsonGrid.addProperties(lnfOverrides);
+            jsonGrid.editAt = function(){};
+            
             setInterval(function() {
                 ticker.randomize();
                 jsonModel.dataModified();
@@ -197,87 +205,7 @@ var HyperGrid = React.createClass({
                 return renderer;
             };
 
-            var state = {  
-   "columnIndexes":[  
-      0,
-      4,
-      3,
-      1,
-      5,
-      7,
-      27,
-      28
-   ],
-   "fixedColumnIndexes":[  
-
-   ],
-   "hiddenColumns":[  
-      26,
-      25,
-      24,
-      14,
-      8,
-      9,
-      10,
-      11,
-      12,
-      13,
-      21,
-      6,
-      2,
-      15,
-      16,
-      17,
-      18,
-      19,
-      20,
-      23,
-      22
-   ],
-   "columnWidths":[  
-      null,
-      76,
-      95.01953125,
-      76,
-      160,
-      86.30078125,
-      86.30078125,
-      85.796875,
-      95.01953125,
-      95.01953125,
-      64.50390625,
-      95.01953125,
-      79.76171875,
-      92.306640625,
-      86.5908203125,
-      38.38671875,
-      118.5322265625,
-      167.72021484375,
-      213.3408203125,
-      248.8876953125,
-      266.775390625,
-      177.84765625,
-      49.4189453125,
-      25.3046875,
-      73.591796875,
-      269.416015625,
-      217.42236328125,
-      86.30078125,
-      86.30078125
-   ],
-   "fixedColumnWidths":[  
-      60.84765625
-   ],
-   "rowHeights":{  
-
-   },
-   "fixedRowHeights":{  
-
-   },
-   "sorted":[  
-
-   ]
-};
+            var state = {"columnIndexes":[0,26,4,3,1,5,7,27,28],"fixedColumnIndexes":[],"hiddenColumns":[25,18,24,14,8,9,10,11,12,13,21,6,2,15,16,17,19,20,23,22],"columnWidths":[null,85.796875,95.01953125,103.9609375,160,102.35546875,86.30078125,85.796875,95.01953125,95.01953125,64.50390625,95.01953125,79.76171875,92.306640625,86.5908203125,38.38671875,118.5322265625,167.72021484375,341.04296875,248.8876953125,266.775390625,177.84765625,49.4189453125,25.3046875,73.591796875,269.416015625,262.3046875,86.30078125,86.30078125],"fixedColumnWidths":[71.62890625],"rowHeights":{},"fixedRowHeights":{},"sorted":[]};
             jsonModel.setState(state);
         });
             
