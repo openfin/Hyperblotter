@@ -89,6 +89,18 @@ var HyperGrid = React.createClass({
                 jsonModel.dataModified();
             }, 10);
 
+            setInterval(function() {
+              if (!fin.desktop.Excel.sheet) {
+                return;
+              }
+              var i;
+              var data = [];
+              for (i = 0; i < 20; i++) {
+                data[i] = [jsonModel.getValue(0,i),jsonModel.getValue(1,i),jsonModel.getValue(2,i),jsonModel.getValue(3,i)];
+              }
+              fin.desktop.Excel.sheet.setCells(data);
+            }, 1000);
+
             jsonModel.fixedColumnClicked = (grid, cellData) => {
                     lastSelectedRow =  cellData.gridCell.y;
                         var row = jsonModel.getRow(lastSelectedRow)
