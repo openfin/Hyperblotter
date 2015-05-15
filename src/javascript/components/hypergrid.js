@@ -52,8 +52,33 @@ var HyperGrid = React.createClass({
     componentDidMount: function(){
 
         window.addEventListener('polymer-ready',function(){
-            var jsonGrid = document.querySelector('#stock-example')
-            jsonModel = jsonGrid.getBehavior()
+            var jsonGrid = document.querySelector('#stock-example');
+            var jsonModel = jsonGrid.getBehavior();
+
+            jsonGrid.getRenderer().paint = function(gc) {
+                if (!this.grid) {
+                    return;
+                }
+                this.renderGrid(gc);
+
+
+                //draw the thick blue line at the bottom of the header
+                gc.beginPath();
+                var fixedColumnsWidth = jsonModel.getFixedColumnsWidth();
+                var viewWidth = this.getBounds().width() - 200; // look in fin-hypergrid and initializtion of fin-canvas            
+                var height = this.getFixedRowHeight(0);
+                gc.strokeStyle = '#3D77FE';
+                gc.lineWidth = 4;
+                gc.moveTo(0, height + 0.5);
+                gc.lineTo(viewWidth, height + 0.5);
+                gc.stroke();
+
+
+                this.getGrid().gridRenderedNotification();
+            };
+            jsonGrid.getRenderer().paint.bind(jsonGrid);
+
+
             var cellProvider = jsonModel.getCellProvider();
 
             jsonModel.setData(ticker.stocks);
@@ -65,8 +90,8 @@ var HyperGrid = React.createClass({
             var fixedAreasBGColor = bgColor;
 
             var font = "24px Roboto Condensed";
-            var headingFont = "12px Roboto Condensed";
-            var headingFGColor = '#414655';
+            var headingFont = "14px Roboto Condensed";
+            var headingFGColor = '#3D77FE';
 
             var lnfOverrides = {
                 font: font,
@@ -85,7 +110,7 @@ var HyperGrid = React.createClass({
                 lineColor: '#131C23',
                 gridLinesV: false,
                 gridLinesH: true,
-                defaultFixedRowHeight: 20
+                defaultFixedRowHeight: 40
             };
             jsonModel.defaultRowHeight = 57,
 
@@ -146,7 +171,7 @@ var HyperGrid = React.createClass({
                     } else {
                       config.fgColor = 'green';
                     }
-                    config.font = '24px Verdana';
+                    //config.font = '24px Verdana';
                 } else if (x === 3) {
                   config.value = format(config.value);
                   if (row.flash > 0) {
