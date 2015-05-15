@@ -175,6 +175,7 @@ var HyperGrid = React.createClass({
             var state = {  
    "columnIndexes":[  
       0,
+      4,
       3,
       1,
       5,
@@ -190,7 +191,6 @@ var HyperGrid = React.createClass({
       25,
       24,
       14,
-      4,
       8,
       9,
       10,
@@ -211,13 +211,13 @@ var HyperGrid = React.createClass({
    ],
    "columnWidths":[  
       null,
-      109,
+      76,
       95.01953125,
-      95.01953125,
+      76,
       160,
-      101,
       86.30078125,
-      123,
+      86.30078125,
+      85.796875,
       95.01953125,
       95.01953125,
       64.50390625,
@@ -241,7 +241,7 @@ var HyperGrid = React.createClass({
       86.30078125
    ],
    "fixedColumnWidths":[  
-      92
+      60.84765625
    ],
    "rowHeights":{  
 
@@ -252,9 +252,7 @@ var HyperGrid = React.createClass({
    "sorted":[  
 
    ]
-}
-
-;
+};
             jsonModel.setState(state);
         });
             
