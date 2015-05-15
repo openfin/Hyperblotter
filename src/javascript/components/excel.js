@@ -2,9 +2,18 @@
  * Created by haseebriaz on 14/05/15.
  */
 fin.desktop.main(function(){
-    fin.desktop.main(function() {
+    fin.desktop.main(function(e) {
         fin.desktop.System.launchExternalProcess('excel', '', function(e) {
-            console.log('external process excel launched');
+            var mainWindow = fin.desktop.Window.getCurrent();
+            mainWindow.addEventListener('close-requested', function() {
+                fin.desktop.System.terminateExternalProcess(e.uuid, 4000,
+                    function (info) {
+                            console.log("Termination result " + info.result);
+                    }, function (reason) {
+                            console.log("failure: " + reason);
+                    });
+                mainWindow.close(true);
+            });
         }, function(e) {
             console.log('external process excel launch failed');
         });

@@ -2,7 +2,7 @@
     "startup_app": {
         "name": "OpenfinPOC",
         "description": "OpenFin POC",
-        "url": "http://local:5000/build/",
+        "url": "http://10.9.105.24:5000/build/index.html",
         "__url": "https://raw.githubusercontent.com/datamadic/fin-trader/feature/userbids/build/index.html",
         "uuid": "OpenfinPOC-to5e4lzrxrey7gb9",
         "autoShow": true,
