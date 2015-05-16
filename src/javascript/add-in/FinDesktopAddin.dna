@@ -1,6 +1,0 @@
-﻿<DnaLibrary RuntimeVersion="v4.0">
-  <ExternalLibrary Path="Newtonsoft.Json.dll" Pack="true" />
-  <ExternalLibrary Path="WebSocket4Net.dll" Pack="true" />
-  <ExternalLibrary Path="OpenfinDesktop.dll" Pack="true" />
-  <ExternalLibrary Path="FinDesktopAddin.dll" Pack="true" />
-</DnaLibrary>

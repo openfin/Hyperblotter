@@ -23298,7 +23298,7 @@ for (i = 0; i < count; i++) {
             Spread: data.Spread[i],
             Ask: data.Ask[i],
             AskQuantity: data.AskQuantity[i],
-            Today:[0, 0, 0, 0,0, 0, 0, 0],
+            Today:[0, 0, 0, 0,0, 0, 0, 0, 0, 0, 0, 0,0, 0, 0, 0],
             flash: 0,
             flashColor: 'green',
             countryCode: countryMap[data.COUNTRY[i]]
@@ -23340,11 +23340,11 @@ var toPickFrom = stocks.slice(0);
 shuffle(toPickFrom);
 
 var randomizeTicks = function() {
-      if (toPickFrom.length < 100) {
+      if (toPickFrom.length < 200) {
             toPickFrom = stocks.slice(0);
             shuffle(toPickFrom);
       }
-      for (i = 0; i < 20; i++) {
+      for (i = 0; i < 200; i++) {
             var each = toPickFrom.shift();
             randomizeTick(each);
       }
@@ -23362,7 +23362,7 @@ var randomizeTick = function(stock) {
             stock.Change = stock.Bid - stock.Last
             stock.PercentChange = (stock.Change)/stock.Last*100;
             stock.Today.push(5 + Math.floor(90 * rnd()));
-            if (stock.Today.length === 9) {
+            if (stock.Today.length === 17) {
                   stock.Today.shift();
             }
             stock.Last = stock.Bid;

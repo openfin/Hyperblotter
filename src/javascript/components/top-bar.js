@@ -24,7 +24,7 @@ var TopBar = React.createClass({
 	},
 	closeApp: function(){
 		fin.desktop.main(function(){
-		  fin.desktop.Application.getCurrent().hide();
+		  fin.desktop.Window.getCurrent().hide();
 		});
 	},
 	componentDidMount: function() {

@@ -2,7 +2,6 @@ var React = require('react'),
 		ticker = require('../components/ticker.js'),
         numeral = require('numeral'),
         moment = require('moment'),
-        excel = require('../components/excel.js'),
         _ = require('underscore'),
         lastSelectedRow;
 
@@ -17,6 +16,15 @@ var imageCache = {};
         img.src = 'images/famfamfam_flag_icons/png/' + each.toLowerCase() + '.png';
         imageCache[each] = img;
     }
+
+    img = new Image();
+    img.src = 'images/up-arrow.png';
+    imageCache['up-arrow'] = img;
+
+    img = new Image();
+    img.src = 'images/down-arrow.png';
+    imageCache['down-arrow'] = img;
+
 })();
 
 var typeAlignmentMap = {
@@ -53,8 +61,33 @@ var HyperGrid = React.createClass({
     componentDidMount: function(){
 
         window.addEventListener('polymer-ready',function(){
-            var jsonGrid = document.querySelector('#stock-example')
-            jsonModel = jsonGrid.getBehavior()
+            var jsonGrid = document.querySelector('#stock-example');
+            var jsonModel = jsonGrid.getBehavior();
+
+            jsonGrid.getRenderer().paint = function(gc) {
+                if (!this.grid) {
+                    return;
+                }
+                this.renderGrid(gc);
+
+
+                //draw the thick blue line at the bottom of the header
+                gc.beginPath();
+                var fixedColumnsWidth = jsonModel.getFixedColumnsWidth();
+                var viewWidth = this.getBounds().width() - 200; // look in fin-hypergrid and initializtion of fin-canvas            
+                var height = this.getFixedRowHeight(0);
+                gc.strokeStyle = '#3D77FE';//61,119,254
+                gc.lineWidth = 4;
+                gc.moveTo(0, height + 0.5);
+                gc.lineTo(viewWidth, height + 0.5);
+                gc.stroke();
+
+
+                this.getGrid().gridRenderedNotification();
+            };
+            jsonGrid.getRenderer().paint.bind(jsonGrid);
+
+
             var cellProvider = jsonModel.getCellProvider();
 
             jsonModel.setData(ticker.stocks);
@@ -62,28 +95,44 @@ var HyperGrid = React.createClass({
             jsonModel.setHeaders(['Symbol','High','Low','Last','Today', 'Change','% Change','Volume','Bid Qty','Bid','Spread','Ask','Ask Qty','Country Code','Country','ICB','Industry','Super Sector','Sector','Sub Sector','Date','Time','Open','Cls','Previous Cls','Previous Cls Dt','Name']);
             jsonModel.setFields(['TICKER','High','Low','Last','Today', 'Change','PercentChange','Volume','BidQuantity','Bid','Spread','Ask','AskQuantity','countryCode', 'COUNTRY','ICB','INDUS','SUP_SEC','SEC','SUB_SEC','Date','Time','Open','Close','PreviousClose','PreviousCloseDate','NAME']);
             
-            var lnfOverrides = {
-                font: '12px Verdana',
-                topLeftFont: '12px Verdana',
-                fixedRowFont: '12px Verdana',
-                fixedColumnFont: '12px Verdana',
-                backgroundColor2: '#0d0d0d',
-                backgroundColor: '#0d0d0d',
-                topLeftBackgroundColor: '#2d2d2d',
-                fixedColumnBackgroundColor: '#2d2d2d',
-                fixedRowBackgroundColor: '#2d2d2d',
-                color: 'white',
-                topLeftColor: 'white',
-                fixedColumnColor: 'white',
-                fixedRowColor: 'white',
-                lineColor: 'pink',
-                gridLinesV: false,
-                gridLinesH: false
-            };
+            var bgColor = '#07071E';
+            var fixedAreasBGColor = bgColor;
 
+            var font = "24px Roboto Condensed";
+            var headingFont = "14px Roboto Condensed";
+            var headingFGColor = '#3D77FE';
+
+            var lnfOverrides = {
+                font: font,
+                topLeftFont: headingFont,
+                fixedRowFont: headingFont,
+                fixedColumnFont: font,
+                backgroundColor2: bgColor,
+                backgroundColor: bgColor,
+                topLeftBackgroundColor: fixedAreasBGColor,
+                fixedColumnBackgroundColor: fixedAreasBGColor,
+                fixedRowBackgroundColor: fixedAreasBGColor,
+                color: 'white',
+                topLeftColor: headingFGColor,
+                fixedColumnColor: 'white',
+                fixedRowColor: headingFGColor,
+                lineColor: '#131C23',
+                gridLinesV: false,
+                gridLinesH: true,
+
+                fixedColumnFGSelColor: 'white',
+                fixedColumnBGSelColor: '#3D77FE',
+                fixedRowFGSelColor: 'white',
+                fixedRowBGSelColor: '#3D77FE',
+
+                defaultFixedRowHeight: 40
+            };
+            jsonModel.defaultRowHeight = 57,
 
             //to apply to a specific table
             jsonGrid.addProperties(lnfOverrides);
+            jsonGrid.editAt = function(){};
+            
             setInterval(function() {
                 ticker.randomize();
                 jsonModel.dataModified();
@@ -139,7 +188,7 @@ var HyperGrid = React.createClass({
                     } else {
                       config.fgColor = 'green';
                     }
-                    config.font = '14px Verdana';
+                    //config.font = '24px Verdana';
                 } else if (x === 3) {
                   config.value = format(config.value);
                   if (row.flash > 0) {
@@ -165,90 +214,29 @@ var HyperGrid = React.createClass({
                 return renderer;
             };
 
-            var state = {  
-   "columnIndexes":[  
-      0,
-      1,
-      2,
-      3,
-      4,
-      5,
-      6,
-      7,
-      8,
-      9,
-      10,
-      11,
-      12,
-      13,
-      21,
-      27,
-      28
-   ],
-   "fixedColumnIndexes":[  
-
-   ],
-   "hiddenColumns":[  
-      26,
-      25,
-      24,
-      14,
-      15,
-      16,
-      17,
-      18,
-      19,
-      20,
-      23,
-      22
-   ],
-   "columnWidths":[  
-      null,
-      49.4189453125,
-      49.4189453125,
-      49.4189453125,
-      80,
-      49.837890625,
-      65.306640625,
-      56.515625,
-      49.4189453125,
-      49.4189453125,
-      46.890625,
-      49.4189453125,
-      50.7578125,
-      81.841796875,
-      86.5908203125,
-      38.38671875,
-      118.5322265625,
-      167.72021484375,
-      213.3408203125,
-      248.8876953125,
-      266.775390625,
-      86.9970703125,
-      49.4189453125,
-      25.3046875,
-      73.591796875,
-      269.416015625,
-      217.42236328125,
-      null,
-      null
-   ],
-   "fixedColumnWidths":[  
-      48.630859375
-   ],
-   "rowHeights":{  
-
-   },
-   "fixedRowHeights":{  
-
-   },
-   "sorted":[  
-
-   ]
-}
-
-;
+            var state = {"columnIndexes":[0,26,4,3,5,7,27,28],"fixedColumnIndexes":[],"hiddenColumns":[25,1,18,24,14,8,9,10,11,12,13,21,6,2,15,16,17,19,20,23,22],"columnWidths":[null,115.80859375,95.01953125,103.9609375,160,107.2890625,86.30078125,114.203125,95.01953125,95.01953125,64.50390625,95.01953125,79.76171875,92.306640625,86.5908203125,38.38671875,118.5322265625,167.72021484375,341.04296875,248.8876953125,266.775390625,177.84765625,49.4189453125,25.3046875,73.591796875,269.416015625,467.5234375,102.35546875,86.30078125],"fixedColumnWidths":[79.4453125],"rowHeights":{},"fixedRowHeights":{},"sorted":[]}
             jsonModel.setState(state);
+
+            jsonModel.setImage('up-arrow', imageCache['up-arrow']);
+            jsonModel.setImage('down-arrow', imageCache['down-arrow']);
+
+            setTimeout(function() {
+                jsonGrid.resetTextWidthCache();
+                jsonModel.changed();
+            }, 100);
+            setTimeout(function() {
+                jsonGrid.resetTextWidthCache();
+                jsonModel.changed();
+            }, 400);
+            setTimeout(function() {
+                jsonGrid.resetTextWidthCache();
+                jsonModel.changed();
+            }, 500);
+            setTimeout(function() {
+                jsonGrid.resetTextWidthCache();
+                jsonModel.changed();
+            }, 1000);
+
         });
             
     },
@@ -291,7 +279,12 @@ var HyperGrid = React.createClass({
             },
     render: function (){
         return <div className="grid-contain">
-        <fin-hypergrid id="stock-example"><fin-hypergrid-behavior-json></fin-hypergrid-behavior-json></fin-hypergrid>
+        
+        <fin-hypergrid id="stock-example">
+            <fin-hypergrid-behavior-json></fin-hypergrid-behavior-json>
+            <fin-hypergrid-excel></fin-hypergrid-excel>
+        </fin-hypergrid>
+
         <div className="actions-bg"></div>
         <div className="actions">
             <i onClick={this.openOrders} className="fa fa-plus-square"></i>
