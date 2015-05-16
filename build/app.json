@@ -7,10 +7,15 @@
         "linkURL":"https://dl.openfin.co/services/download?fileName=fin-trader-poc&config=http://10.9.105.24:5000/build/app.json",
         "uuid": "OpenfinPOC-to5e4lzrxrey7gb9",
         "autoShow": true,
-        "defaultHeight": 594,
-        "defaultWidth": 960,
-        "maxWidth": 960,
-        "maxHeight": 594,
+        
+        "defaultWidth": 480,
+        "maxWidth": 480,
+        "minWidth": 480,
+
+        "maxHeight": 50,
+        "defaultHeight": 50,
+        "minHeight": 50,
+
         "defaultTop": 50,
         "defaultLeft": 10,
         "resizable": true,

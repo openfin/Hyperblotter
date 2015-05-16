@@ -169,6 +169,11 @@ module.exports = React.createClass({
   		fin.desktop.Window.getCurrent().close();
   	});
   },
+  min: ()=>{
+    fin.desktop.main(()=>{
+      fin.desktop.Window.getCurrent().minimize();
+    });
+  },
 
 	render: function(){
 
@@ -178,6 +183,7 @@ module.exports = React.createClass({
 			<div className="top-bar">
 				<span className="title">{this.state.rowInfo.NAME}</span>
 				<i className="fa fa-unlock-alt unlocked"></i>
+        <i onClick={this.min} className="fa fa-minus"></i>
 				<i onClick={this.closeWindow} className="fa fa-times-circle"></i>
 			</div>
 			<div className="contents">

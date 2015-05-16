@@ -1,0 +1,56 @@
+$bar-height: 50px
+$background-color: #030a28;
+
+body
+	background-color: $background-color
+	height: 100%
+	width: 100%
+	overflow: hidden
+	font-size: 12pt
+
+.main-bar
+	display: flex;
+	height: $bar-height
+	padding-right: 5px
+	.drag-area
+		flex: 1
+		-webkit-app-region: drag;
+		background-color: #FFF;
+		opacity: .2
+	.content-area
+		display: flex
+		justify-content: space-around
+		flex: 10
+		padding: 10px;
+		color: steelblue;
+		text-align: center
+		i 
+			font-size: 2rem
+			padding: 0 8px
+	.window-control
+		display: flex
+		flex: 1.5
+		
+		justify-content: space-between
+		align-items: flex-start
+		i 
+			font-size: 1.5rem
+			color: gray
+
+.tile
+	-webkit-app-region: drag;
+	display: flex
+	flex-direction: column
+	background-color: $background-color
+	height: 100%
+	.banner
+		display: flex
+		flex: 1
+		background-color: #fff;
+	.content
+		display: flex
+		background-color: steelblue;
+		flex: 3
+.none 
+	display: none
+

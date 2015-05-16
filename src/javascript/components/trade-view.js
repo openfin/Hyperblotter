@@ -8,76 +8,19 @@ module.exports = React.createClass({
   	});
   },
 	render: function(){
-		return <div className="child">
-			<div className="top-bar">
-				<span className="title">Trade </span>
-				<i className="fa fa-unlock-alt unlocked"></i>
-				<i onClick={this.closeWindow} className="fa fa-times-circle"></i>
-			</div>
-			<div className="contents">
-				<table className="row-display">
-		
-	<thead>
-	<tr>
-			<th>Some</th>
-			<th>Data</th>
-			<th>Will</th>
-			<th>Go</th>
-			<th>Here</th>
-		</tr>
-	</thead>
-	<tbody>
-		
-		<tr>
-			<td>12</td>
-			<td>32</td>
-			<td>34</td>
-			<td>54</td>
-			<td>23</td>
-		</tr>
-		<tr>
-			<td>12</td>
-			<td>32</td>
-			<td>34</td>
-			<td>54</td>
-			<td>23</td>
-		</tr>
-		<tr>
-			<td>12</td>
-			<td>32</td>
-			<td>34</td>
-			<td>54</td>
-			<td>23</td>
-		</tr>
-		<tr>
-			<td>12</td>
-			<td>32</td>
-			<td>34</td>
-			<td>54</td>
-			<td>23</td>
-		</tr>
-		<tr>
-			<td>12</td>
-			<td>32</td>
-			<td>34</td>
-			<td>54</td>
-			<td>23</td>
-		</tr>
-		<tr>
-			<td>12</td>
-			<td>32</td>
-			<td>34</td>
-			<td>54</td>
-			<td>23</td>
-		</tr>
-
-	</tbody>
-</table>
-			</div>
-<div className="footer"></div>
-		</div>;
-
-
-		;
+		return	<div className="tile">
+							<div className="banner">
+								<div className="title"></div>
+								<div className="window-control"></div>
+							</div>
+							<div className="content">
+								<div className="main"></div>
+								<div className="pricing">
+									<div className="open"></div>
+									<div className="high"></div>
+									<div className="low"></div>
+								</div>
+							</div>
+						</div>
 	}
 });

@@ -8,7 +8,12 @@ module.exports = {
 
 			if (!fin.desktop.mock){
 				fin.desktop.main(()=>{
-					resolve( new fin.desktop.Window(config));	
+					var win =  new fin.desktop.Window(config, ()=>{
+						resolve(win);
+					},
+					(reason)=>{
+						reject(reason)
+					});	
 				});
 			}
 			else {
