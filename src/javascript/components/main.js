@@ -9,7 +9,7 @@ var animationWindows = [],
 
 fin.desktop.main(()=>{
 
-	var top = 0, left = 0, i = 1;
+	var top = 5, left = 5, i = 1;
 
 	for (; i < 13; i++){
 		animationWindows.push(new fin.desktop.Window({
@@ -33,7 +33,7 @@ fin.desktop.main(()=>{
 		left += cubeSize + 5;
 
 		if (i && !(i % 4)) {
-			left = 0;
+			left = 5;
 			top += cubeSize + 5
 		}
 	}
@@ -84,6 +84,18 @@ function animateAsPromise (wnd, animations ,opts) {
 	});
 }
 
+function getBoundsAsPromise(wnd){
+	return new Promise((resolve, reject)=>{
+		fin.desktop.main(()=>{
+			wnd.getBounds((bounds)=>{
+				resolve(bounds);
+			},(reason)=>{
+				reject(reason);
+			});
+		});
+	});
+}
+
 
 
 
@@ -129,7 +141,27 @@ module.exports = React.createClass({
 		});
 	},
 	animateWindows: function(){
-
+		Promise.all([
+				getBoundsAsPromise(animationWindows[0]),
+				getBoundsAsPromise(animationWindows[6])
+			])
+			.then((bounds)=>{
+				console.log('bounds', bounds);
+				animationWindows[0].animate({
+					position: {
+						top: bounds[1].top,
+						left: bounds[1].left,
+						duration: 2000
+					}
+				});
+				animationWindows[6].animate({
+					position: {
+						top: bounds[0].top,
+						left: bounds[0].left,
+						duration: 2000
+					}
+				});
+			});
 	},
 	openBlotter: function(){
 		blotter.show();
