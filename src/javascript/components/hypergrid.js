@@ -220,6 +220,23 @@ var HyperGrid = React.createClass({
             jsonModel.setImage('up-arrow', imageCache['up-arrow']);
             jsonModel.setImage('down-arrow', imageCache['down-arrow']);
 
+            setTimeout(function() {
+                jsonGrid.resetTextWidthCache();
+                jsonModel.changed();
+            }, 100);
+            setTimeout(function() {
+                jsonGrid.resetTextWidthCache();
+                jsonModel.changed();
+            }, 400);
+            setTimeout(function() {
+                jsonGrid.resetTextWidthCache();
+                jsonModel.changed();
+            }, 500);
+            setTimeout(function() {
+                jsonGrid.resetTextWidthCache();
+                jsonModel.changed();
+            }, 1000);
+
         });
             
     },
