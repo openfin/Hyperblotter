@@ -5,7 +5,8 @@ var React = require('react'),
 var animationWindows = [],
 		blotter,
 		initialDisplayState = true,
-		cubeSize = 185;
+		cubeSize = 185,
+		locations = [];;
 
 fin.desktop.main(()=>{
 
@@ -29,6 +30,12 @@ fin.desktop.main(()=>{
 			defaultTop: top,
 			defaultLeft: left
 		}));
+
+		locations.push({
+			top: top,
+			left: left,
+			duration: 1000
+		});
 
 		left += cubeSize + 5;
 
@@ -97,7 +104,92 @@ function getBoundsAsPromise(wnd){
 }
 
 
+// function getRandNoReplace(arr) {
+//     if (!arr.length) {
+//         return null;
+//     }
+//     return arr.splice(Math.floor((Math.random() * arr.length)), 1)[0];
+// }
 
+// var gr = [ 'a', 'b', 'c', 'd', 'e', 'f' ];
+
+// gr.reduce(function(m, itm, idx, a){
+// 	//console.log(arguments);
+// 	m[0].push(m[1].splice(Math.floor((Math.random() * m[1].length)), 1)[0]);
+// 	return m
+// }, [[],gr.slice()]);
+
+// [1,2,3,4,5].sort(function(a,b){
+// 	return 1 - Math.floor((Math.random() * 10 ) %  3)
+// })
+
+var floor = Math.floor;
+var random = Math.random;
+
+// var locations = [];
+
+// var cubeSize = 185;
+
+// var top = 5, left = 5, i = 1;
+
+// for (; i < 13; i++){
+
+// 	locations.push({
+// 		top: top,
+// 		left: left
+// 	});
+
+// 	left += cubeSize + 5;
+
+// 	if (i && !(i % 4)) {
+// 		left = 5;
+// 		top += cubeSize + 5
+// 	}
+// }
+
+
+
+function genPairs(arr) {
+    return arr.reduce(function(m, itm, idx, a) {
+	        m[0].push(m[1].splice(floor((random() * m[1].length)), 1)[0]);
+	        return m
+	    }, [[], arr.slice()])[0].reduce(function(m, itm, idx, a) {
+
+	        if (!(idx % 2)) {
+	            m.push([itm, a[idx + 1]]);
+	        }
+	        return m
+	    }, [])
+}
+
+// function generatePairs(arr) {
+//     var pairs = [],
+//         base = arr.slice(),
+//         item = getRandNoReplace(base);
+
+//     while (item) {
+//         pairs.push(item);
+//         item = getRandNoReplace(base);
+//     }
+
+//     //memo, item, index, array
+//     return pairs.reduce(function(m, itm, idx, a) {
+
+// 	        if (!(idx % 2)) {
+// 	            m.push([itm, a[idx + 1]]);
+// 	        }
+// 	        return m
+// 	    }, [])
+// }
+
+// //memo, item, index, array
+// [ 'a', 'b', 'c', 'd', 'e', 'f' ].reduce(function(m, itm, idx, a){
+// 	//console.log(arguments);
+// 	if (!(idx % 2)){
+// 		m.push([itm, a[idx + 1]]);
+// 	}
+// 	return m
+// }, [])
 
 module.exports = React.createClass({
 	closeApp: function(){
@@ -141,30 +233,64 @@ module.exports = React.createClass({
 		});
 	},
 	animateWindows: function(){
-		Promise.all([
-				getBoundsAsPromise(animationWindows[0]),
-				getBoundsAsPromise(animationWindows[6])
-			])
-			.then((bounds)=>{
-				console.log('bounds', bounds);
-				animationWindows[0].animate({
-					position: {
-						top: bounds[1].top,
-						left: bounds[1].left,
-						duration: 2000
-					}
-				});
-				animationWindows[6].animate({
-					position: {
-						top: bounds[0].top,
-						left: bounds[0].left,
-						duration: 2000
-					}
-				});
-			});
+
+		console.log(genPairs(animationWindows));
+		var animationQ = [];
+
+		animationWindows.reduce(function(m, itm, idx, a) {
+	        m[0].push(m[1].splice(floor((random() * m[1].length)), 1)[0]);
+	        return m
+	    }, [[], animationWindows.slice()])[0].forEach((item, index)=>{
+	    	console.log('item %o goes to %o', item, locations[index]);
+	    	animationQ.push(new Promise((resolve, reject)=>{
+	    		item.animate({
+	    			position: locations[index]
+	    		},{},()=>{
+	    			resolve()
+	    		})
+	    	}));
+	    });
+
+	   Promise.all(animationQ).then(()=>{
+	   	console.log('it so happned')
+	   });
+		// var available = [0,1,2,3,4,5,6,7,8,9,10,11],
+		// 		rand12 = Math.floor(Math.random() * 100) % 12;
+
+		// setInterval(()=>{
+		// 	var first = rand12 = Math.floor(Math.random() * 100) % 12,
+		// 			second = rand12 = Math.floor(Math.random() * 100) % 12;
+		// 	Promise.all([
+		// 			getBoundsAsPromise(animationWindows[first]),
+		// 			getBoundsAsPromise(animationWindows[second])
+		// 		])
+		// 		.then((bounds)=>{
+		// 			console.log('bounds', bounds);
+		// 			animationWindows[first].animate({
+		// 				position: {
+		// 					top: bounds[1].top,
+		// 					left: bounds[1].left,
+		// 					duration: 300
+		// 				}
+		// 			});
+		// 			animationWindows[second].animate({
+		// 				position: {
+		// 					top: bounds[0].top,
+		// 					left: bounds[0].left,
+		// 					duration: 300
+		// 				}
+		// 			});
+		// 		});
+		// }, 400);
+
+			
 	},
 	openBlotter: function(){
 		blotter.show();
+	},
+	componentDidMount: function(){
+		this.showWindows();
+		console.log('called hommie');
 	},
 	getInitialState: function(){
 		return {
