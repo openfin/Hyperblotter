@@ -4,14 +4,21 @@ var React = require('react'),
 
 var animationWindows = [],
 		blotter,
-		initialDisplayState = true,
-		cubeSize = 185;
+		inLoop = false,
+		cubeSize = 185,
+		locations = [],
+		numColumns = 6,
+		numRows = 3
+		numTiles = numRows * numColumns + 1;
+
+var floor = Math.floor;
+var random = Math.random;
 
 fin.desktop.main(()=>{
 
-	var top = 0, left = 0, i = 1;
+	var top = 5, left = 5, i = 1;
 
-	for (; i < 13; i++){
+	for (; i < numTiles; i++){
 		animationWindows.push(new fin.desktop.Window({
 			name: 'tile' + Math.random(),
 			url: 'trade.html',
@@ -30,10 +37,16 @@ fin.desktop.main(()=>{
 			defaultLeft: left
 		}));
 
+		locations.push({
+			top: top,
+			left: left,
+			duration: 1000
+		});
+
 		left += cubeSize + 5;
 
-		if (i && !(i % 4)) {
-			left = 0;
+		if (i && !(i % numColumns)) {
+			left = 5;
 			top += cubeSize + 5
 		}
 	}
@@ -70,21 +83,6 @@ function showAsPromise (wnd) {
 		})
 	})
 }
-
-function animateAsPromise (wnd, animations ,opts) {
-	return new Promise((resolve, reject)=>{
-		fin.desktop.main(()=>{
-			wnd.animate(animations, opts, ()=>{
-				resolve();	
-			},
-			(reason)=>{
-				reject(reason);
-			})
-		})
-	});
-}
-
-
 
 
 module.exports = React.createClass({
@@ -128,11 +126,42 @@ module.exports = React.createClass({
 			wnd.close();
 		});
 	},
-	animateWindows: function(){
-
+	toggleAnimateLoop: function () {
+		inLoop = !inLoop;
+		if (inLoop) {
+			this.animateWindows(animationWindows);
+		}
+	},
+	animateWindows: function(animationWindows){
+	   Promise.all(
+	       animationWindows
+		       .reduce(function(m, itm, idx, a) {
+		           m[0].push(m[1].splice(floor((random() * m[1].length)), 1)[0]);
+		           return m
+		       }, [
+		           [], animationWindows.slice()
+		       ])[0]
+		       .map((item, index) => {
+		           return new Promise((resolve, reject) => {
+		               item.animate({
+		                   position: locations[index]
+		               }, {}, () => {
+		                   resolve()
+		               })
+		           });
+		       })
+	   ).then(() => {
+	       if (inLoop) {
+	       	this.animateWindows(animationWindows)
+	       }
+	   });
 	},
 	openBlotter: function(){
 		blotter.show();
+	},
+	componentDidMount: function(){
+		this.showWindows();
+		console.log('called hommie');
 	},
 	getInitialState: function(){
 		return {
@@ -145,7 +174,7 @@ module.exports = React.createClass({
 							<div className="drag-area"></div>
 							<div className="content-area">
 									<i onClick={this.showWindows} className="fa fa-plus-square"></i>
-									<i onClick={this.animateWindows} className="fa fa-arrows"></i>
+									<i onClick={this.toggleAnimateLoop} className="fa fa-arrows"></i>
 									<i className="fa fa-area-chart"></i>
 									<i onClick={this.minWindows} className={this.state.desc}></i>
 									<i onClick={this.restoreWindows} className={this.state.asc}></i>
@@ -159,3 +188,45 @@ module.exports = React.createClass({
 						</div>
 	}
 });
+
+
+
+// var floor = Math.floor;
+// var random = Math.random;
+
+// function genPairs(arr) {
+//     return arr.reduce(function(m, itm, idx, a) {
+// 	        m[0].push(m[1].splice(floor((random() * m[1].length)), 1)[0]);
+// 	        return m
+// 	    }, [[], arr.slice()])[0].reduce(function(m, itm, idx, a) {
+
+// 	        if (!(idx % 2)) {
+// 	            m.push([itm, a[idx + 1]]);
+// 	        }
+// 	        return m
+// 	    }, [])
+// }
+// function animateAsPromise (wnd, animations ,opts) {
+// 	return new Promise((resolve, reject)=>{
+// 		fin.desktop.main(()=>{
+// 			wnd.animate(animations, opts, ()=>{
+// 				resolve();	
+// 			},
+// 			(reason)=>{
+// 				reject(reason);
+// 			})
+// 		})
+// 	});
+// }
+
+// function getBoundsAsPromise(wnd){
+// 	return new Promise((resolve, reject)=>{
+// 		fin.desktop.main(()=>{
+// 			wnd.getBounds((bounds)=>{
+// 				resolve(bounds);
+// 			},(reason)=>{
+// 				reject(reason);
+// 			});
+// 		});
+// 	});
+// }

@@ -38,19 +38,82 @@ body
 			color: gray
 
 .tile
-	-webkit-app-region: drag;
 	display: flex
 	flex-direction: column
-	background-color: $background-color
 	height: 100%
+	padding: 10px
+	color: white
 	.banner
 		display: flex
 		flex: 1
-		background-color: #fff;
+		.title
+			flex: 5
+		.window-control
+			flex: 2
+			display:flex
+			justify-content: flex-end
+			i 
+				padding-left: 10px
 	.content
 		display: flex
-		background-color: steelblue;
-		flex: 3
+		flex: 4	
+		.main
+			flex: 1
+			display: flex
+			flex-direction: column
+			.last
+				flex:1
+				font-size: 2rem
+				border-bottom: 1px solid white
+			.percent-change
+				flex: 2
+				display: flex
+				padding-top: 10px
+		.pricing
+			display: flex
+			flex: 1
+			flex-direction: column
+			.price
+				display: flex
+				flex: 1
+				flex-direction: column
+				text-align: right
+				.label
+					font-size: .7rem
+					font-weight: lighter
+
+
+
+
+
+
 .none 
 	display: none
+
+
+.start-color-change
+	animation-duration: 3s;
+	animation-name: slidein;
+	animation-iteration-count: infinite;
+
+
+@keyframes slidein 
+  from
+    background-color: rgb(127,255,7)
+    color: white
+  45%
+  	background-color: rgb(127,255,7)
+    color: white
+  50%
+  	background-color: $background-color 
+  	background-color: white
+  	color: black
+  55%
+  	background-color: rgb(251,7,7)
+    color: white
+  to 
+    background-color: rgb(251,7,7)
+    color: white
+  
+
 
