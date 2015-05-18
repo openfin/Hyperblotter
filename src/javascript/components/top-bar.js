@@ -119,12 +119,14 @@ var TopBar = React.createClass({
 	render: function () {
 		return <div className="top-bar">
 			<span className="title">Blotter</span>
-			<i onClick={this.startWindowDemo} className="fa fa-arrows"></i>
+			
 			<i onClick={this.closeApp} className="fa fa-times-circle"></i>
 
 		</div>
 	}
 });
+
+//<i onClick={this.startWindowDemo} className="fa fa-arrows"></i>
 
 module.exports = TopBar;
 

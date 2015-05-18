@@ -8,7 +8,8 @@ var animationWindows = [],
 		cubeSize = 185,
 		locations = [],
 		numColumns = 6,
-		numRows = 3
+		numRows = 3,
+		demoTiles = {},
 		numTiles = numRows * numColumns + 1;
 
 var floor = Math.floor;
@@ -20,7 +21,7 @@ fin.desktop.main(()=>{
 
 	for (; i < numTiles; i++){
 		animationWindows.push(new fin.desktop.Window({
-			name: 'tile' + Math.random(),
+			name: 'tile' + random(),
 			url: 'trade.html',
 			autoShow: false,
 			defaultHeight: cubeSize,
@@ -65,11 +66,10 @@ fin.desktop.main(()=>{
 				resizable:false,
 				frame: false,
 				maximizable: false,
-				saveWindowState: false,
-				defaultTop: top,
-				defaultLeft: left
-			})
+				saveWindowState: false
+			}, ()=>{
 
+			})
 });
 
 function showAsPromise (wnd) {
@@ -82,6 +82,25 @@ function showAsPromise (wnd) {
 			});
 		})
 	})
+}
+
+function setTranspatentAsPromise(arr, opacity) {
+	return new Promise((transparentFinished, transparentFailed)=>{
+		Promise.all(arr.map((item)=>{
+			return new Promise((resolve, reject)=>{
+				item.updateOptions({opacity: opacity}, ()=>{
+					resolve();
+				}, ()=>{
+					reject()
+				});
+			});
+		}))
+		.then(()=>{
+			transparentFinished();
+		}, ()=>{
+			transparentFailed();
+		});
+	});
 }
 
 
@@ -133,28 +152,34 @@ module.exports = React.createClass({
 		}
 	},
 	animateWindows: function(animationWindows){
-	   Promise.all(
-	       animationWindows
-		       .reduce(function(m, itm, idx, a) {
-		           m[0].push(m[1].splice(floor((random() * m[1].length)), 1)[0]);
-		           return m
-		       }, [
-		           [], animationWindows.slice()
-		       ])[0]
-		       .map((item, index) => {
-		           return new Promise((resolve, reject) => {
-		               item.animate({
-		                   position: locations[index]
-		               }, {}, () => {
-		                   resolve()
-		               })
-		           });
-		       })
-	   ).then(() => {
-	       if (inLoop) {
-	       	this.animateWindows(animationWindows)
-	       }
-	   });
+		setTranspatentAsPromise(animationWindows, 0.5).then(()=>{
+		   Promise.all(
+		       animationWindows
+			       .reduce(function(m, itm, idx, a) {
+			           m[0].push(m[1].splice(floor((random() * m[1].length)), 1)[0]);
+			           return m
+			       }, [
+			           [], animationWindows.slice()
+			       ])[0]
+			       .map((item, index) => {
+			           return new Promise((resolve, reject) => {
+			               item.animate({
+			                   position: locations[index]
+			               }, {}, () => {
+			                   resolve()
+			               })
+			           });
+			       })
+		   ).then(() => {
+		   		setTranspatentAsPromise(animationWindows, 1).then(() => {
+		   		    if (inLoop) {
+		   		        setTimeout(() => {
+		   		            this.animateWindows(animationWindows)
+		   		        }, 700);
+		   		    }
+		   		})
+		   });
+	  });
 	},
 	openBlotter: function(){
 		blotter.show();
