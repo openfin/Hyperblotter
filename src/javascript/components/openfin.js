@@ -10,18 +10,11 @@ var OpenFin = React.createClass({
   render: function() {
     return <div>
 	    <div className="app">
-	      <TopBar />
-
-
+	    	<TopBar />
 	      <HyperGrid />
 	    </div>
-	    <Login />
 	  </div>;
   }
 });
 
 module.exports = OpenFin;
-
-// <div className="settings"></div>
-//React.render(<HelloMessage name="John" />, document.body);
-//	      <Menu />

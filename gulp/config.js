@@ -54,9 +54,9 @@ module.exports = {
       },
       debug: true
     }, {
-      entries: src + '/javascript/child.js',
+      entries: src + '/javascript/hypergrid.js',
       dest: dest,
-      outputName: 'child.js',
+      outputName: 'hypergrid.js',
       // list of externally available modules to exclude from the bundle
       external: ['underscore'],
       browser:{

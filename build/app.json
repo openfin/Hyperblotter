@@ -4,13 +4,19 @@
         "description": "OpenFin POC",
         "__url": "http://cdn.openfin.co/bloomdemo/",
         "url": "http://10.9.105.24:5000/build/index.html",
+        "url": "http://local:5000/build",
         "linkURL":"https://dl.openfin.co/services/download?fileName=fin-trader-poc&config=http://10.9.105.24:5000/build/app.json",
         "uuid": "OpenfinPOC",
         "autoShow": true,
-        "defaultHeight": 594,
-        "defaultWidth": 960,
-        "maxWidth": 960,
-        "maxHeight": 594,
+        
+        "defaultWidth": 480,
+        "maxWidth": 480,
+        "minWidth": 480,
+
+        "maxHeight": 50,
+        "defaultHeight": 50,
+        "minHeight": 50,
+
         "defaultTop": 50,
         "defaultLeft": 10,
         "resizable": true,

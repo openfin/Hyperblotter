@@ -7,77 +7,60 @@ module.exports = React.createClass({
   		fin.desktop.Window.getCurrent().close();
   	});
   },
+  closeApp: function(){
+		fin.desktop.main(function(){
+		  fin.desktop.Application.getCurrent().close();
+		});
+	},
+	minApp: function(){
+		fin.desktop.main(function(){
+		  fin.desktop.Window.getCurrent().minimize();
+		});
+	},
+  getInitialState: function () {
+  	return {
+  		class: 'tile'
+  	}
+  },
+  componentDidMount: function(){
+  	setTimeout(()=>{
+  		this.setState({
+  			class: 'tile start-color-change'
+  		});
+  	}, Math.floor(Math.random() * 1000) );
+  },
 	render: function(){
-		return <div className="child">
-			<div className="top-bar">
-				<span className="title">Trade </span>
-				<i className="fa fa-unlock-alt unlocked"></i>
-				<i onClick={this.closeWindow} className="fa fa-times-circle"></i>
-			</div>
-			<div className="contents">
-				<table className="row-display">
-		
-	<thead>
-	<tr>
-			<th>Some</th>
-			<th>Data</th>
-			<th>Will</th>
-			<th>Go</th>
-			<th>Here</th>
-		</tr>
-	</thead>
-	<tbody>
-		
-		<tr>
-			<td>12</td>
-			<td>32</td>
-			<td>34</td>
-			<td>54</td>
-			<td>23</td>
-		</tr>
-		<tr>
-			<td>12</td>
-			<td>32</td>
-			<td>34</td>
-			<td>54</td>
-			<td>23</td>
-		</tr>
-		<tr>
-			<td>12</td>
-			<td>32</td>
-			<td>34</td>
-			<td>54</td>
-			<td>23</td>
-		</tr>
-		<tr>
-			<td>12</td>
-			<td>32</td>
-			<td>34</td>
-			<td>54</td>
-			<td>23</td>
-		</tr>
-		<tr>
-			<td>12</td>
-			<td>32</td>
-			<td>34</td>
-			<td>54</td>
-			<td>23</td>
-		</tr>
-		<tr>
-			<td>12</td>
-			<td>32</td>
-			<td>34</td>
-			<td>54</td>
-			<td>23</td>
-		</tr>
+		return	<div className={this.state.class}>
+							<div className="banner">
+								<div className="title">
+									AAPL
+								</div>
+								<div className="window-control">
+									<i onClick={this.minApp} className="fa fa-minus"></i>
+									<i onClick={this.closeApp} className="fa fa-times"></i>
+								</div>
+							</div>
+							<div className="content">
+								<div className="main">
+									<span className="last" >129.07</span>
+									<span className="percent-change" >+%0.01</span>
 
-	</tbody>
-</table>
-			</div>
-<div className="footer"></div>
-		</div>;
-
-
-		;
+								</div>
+								<div className="pricing">
+									<div className="price open">
+										<div className="label">OPEN</div>
+										<span className="value">129.05</span>
+									</div>
+									<div className="price high">
+										<div className="label">HIGH</div>
+										<span className="value">129.05</span>
+									</div>
+									<div className="price low">
+										<div className="label">LOW</div>
+										<span className="value">129.05</span>
+									</div>
+								</div>
+							</div>
+						</div>
 	}
 });
