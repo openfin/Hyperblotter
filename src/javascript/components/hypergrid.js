@@ -237,6 +237,37 @@ var HyperGrid = React.createClass({
                 jsonModel.changed();
             }, 1000);
 
+
+      function launchRuntimeAsset(subPath, args, callback, errorCallback) {
+        fin.desktop.System.getEnvironmentVariable(['LOCALAPPDATA', 'USERNAME'], function(result) {
+           var localAppData = result['LOCALAPPDATA'];
+           var userName = result['USERNAME'];
+
+           // Assuming on Windows XP when LOCALAPPDATA fails to expand. Using default location. Anything with registry setting for installDir will fail.
+           if(typeof localAppData !== 'string' || localAppData === 'LOCALAPPDATA') {
+           // Assuming on XP
+           localAppData = 'C:\\Documents and Settings\\' + userName + '\\Local Settings\\Application Data';
+           }
+
+           var runtimePath = localAppData + '\\OpenFin\\runtime\\' + fin.desktop.getVersion() + '\\OpenFin\\';
+
+           fin.desktop.System.launchExternalProcess(subPath, runtimePath + args, callback, errorCallback);
+           }, errorCallback);
+       }
+       document.addEventListener('DOMContentLoaded', function() {
+           fin.desktop.main(function() {
+               launchRuntimeAsset('excel', 'hypergrid.xlsx', function(){
+                   console.log('YAY IT LAUNCHED!');
+               },
+               function(err) {
+                   console.error("Oh no it failed!");
+               });
+           });
+       });
+
+
+
+
         });
             
     },
