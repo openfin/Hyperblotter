@@ -188,6 +188,17 @@ module.exports = React.createClass({
 		this.showWindows();
 		console.log('called hommie');
 	},
+	openExcel: function() {
+	    fin.desktop.main(function() {
+	        fin.desktop.main(function() {
+	            fin.desktop.System.launchExternalProcess('excel', '', function(e) {
+	                console.log('external process excel launched');
+	            }, function(e) {
+	                console.log('external process excel launch failed');
+	            });
+	        });
+	    });
+	},
 	getInitialState: function(){
 		return {
 			desc: 'fa fa-sort-amount-desc',
@@ -203,7 +214,7 @@ module.exports = React.createClass({
 									<i className="fa fa-area-chart"></i>
 									<i onClick={this.minWindows} className={this.state.desc}></i>
 									<i onClick={this.restoreWindows} className={this.state.asc}></i>
-									<i className="fa fa-file-excel-o"></i>
+									<i onClick={this.openExcel} className="fa fa-file-excel-o"></i>
 									<i onClick={this.openBlotter} className="fa fa-tasks"></i>
 							</div>
 							<div className="window-control">
@@ -219,18 +230,18 @@ module.exports = React.createClass({
 // var floor = Math.floor;
 // var random = Math.random;
 
-// function genPairs(arr) {
-//     return arr.reduce(function(m, itm, idx, a) {
-// 	        m[0].push(m[1].splice(floor((random() * m[1].length)), 1)[0]);
-// 	        return m
-// 	    }, [[], arr.slice()])[0].reduce(function(m, itm, idx, a) {
+function genPairs(arr) {
+    return arr.reduce(function(m, itm, idx, a) {
+	        m[0].push(m[1].splice(floor((random() * m[1].length)), 1)[0]);
+	        return m
+	    }, [[], arr.slice()])[0].reduce(function(m, itm, idx, a) {
 
-// 	        if (!(idx % 2)) {
-// 	            m.push([itm, a[idx + 1]]);
-// 	        }
-// 	        return m
-// 	    }, [])
-// }
+	        if (!(idx % 2)) {
+	            m.push([itm, a[idx + 1]]);
+	        }
+	        return m
+	    }, [])
+}
 // function animateAsPromise (wnd, animations ,opts) {
 // 	return new Promise((resolve, reject)=>{
 // 		fin.desktop.main(()=>{
