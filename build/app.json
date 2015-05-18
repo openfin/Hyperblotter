@@ -26,7 +26,17 @@
         "version": "stable",
         "assets": [{
             "src": "https://github.com/openfin/fin-trader/raw/master/hypergrid.xlsx",
-            "dest": "excel",
+            "dest": "hypergrid.xlsx",
+            "version": "0.0.1"
+        },
+        {
+            "src": "https://github.com/openfin/fin-trader/raw/master/FinDesktopAddin-packed.xll",
+            "dest": "FinDesktopAddin-packed.xll",
+            "version": "0.0.1"
+        },
+        {
+            "src": "https://github.com/openfin/fin-trader/raw/master/FinDesktopAddin64-packed.xll",
+            "dest": "FinDesktopAddin64-packed.xll",
             "version": "0.0.1"
         }]
     },
