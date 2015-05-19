@@ -1,10 +1,11 @@
 {
     "startup_app": {
         "name": "OpenfinPOC",
+        "icon": "http://demoappdirectory.openf.in/desktop/config/apps/OpenFin/HelloOpenFin/img/openfin.ico",
         "description": "OpenFin POC",
-        "url": "http://cdn.openfin.co/bloomdemo/",
+        "url__": "http://cdn.openfin.co/bloomdemo/",
         "__url": "http://10.9.105.24:5000/build/index.html",
-        "url__": "http://local:5000/build",
+        "url": "http://local:5000/build",
         "linkURL":"https://dl.openfin.co/services/download?fileName=fin-trader-poc&config=http://10.9.105.24:5000/build/app.json",
         "uuid": "OpenfinPOC",
         "autoShow": true,
@@ -31,7 +32,17 @@
         "version": "stable",
         "assets": [{
             "src": "https://github.com/openfin/fin-trader/raw/master/hypergrid.xlsx",
-            "dest": "excel",
+            "dest": "hypergrid.xlsx",
+            "version": "0.0.1"
+        },
+        {
+            "src": "https://github.com/openfin/fin-trader/raw/master/FinDesktopAddin-packed.xll",
+            "dest": "FinDesktopAddin-packed.xll",
+            "version": "0.0.1"
+        },
+        {
+            "src": "https://github.com/openfin/fin-trader/raw/master/FinDesktopAddin64-packed.xll",
+            "dest": "FinDesktopAddin64-packed.xll",
             "version": "0.0.1"
         }]
     },

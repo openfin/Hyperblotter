@@ -27,6 +27,8 @@ body
 		i 
 			font-size: 2rem
 			padding: 0 8px
+		i:hover
+			color: white
 	.window-control
 		display: flex
 		flex: 1.5
@@ -43,6 +45,7 @@ body
 	height: 100%
 	padding: 10px
 	color: white
+	background-color: $background-color
 	.banner
 		display: flex
 		flex: 1
@@ -92,7 +95,7 @@ body
 
 
 .start-color-change
-	animation-duration: 3s;
+	animation-duration: 3.5s;
 	animation-name: slidein;
 	animation-iteration-count: infinite;
 
@@ -102,14 +105,13 @@ body
     background-color: rgb(127,255,7)
     color: white
   45%
-  	background-color: rgb(127,255,7)
+  	background-color: $background-color 
     color: white
   50%
   	background-color: $background-color 
-  	background-color: white
-  	color: black
+  	color: white
   55%
-  	background-color: rgb(251,7,7)
+  	background-color: $background-color 
     color: white
   to 
     background-color: rgb(251,7,7)

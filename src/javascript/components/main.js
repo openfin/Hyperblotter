@@ -12,6 +12,29 @@ var animationWindows = [],
 		demoTiles = {},
 		numTiles = numRows * numColumns + 1;
 
+
+var rndData = [
+{ticker: "PCL", last: 21.251049070187836},
+{ticker: "SWI", last: 24.835458631124418},
+{ticker: "TCK", last: 6.235665990223004},
+{ticker: "DBD", last: 17.01733357355432},
+{ticker: "FHN", last: 6.624939800309766},
+{ticker: "EXR", last: 33.96528484183794},
+{ticker: "BP", last: 21.19160933461151},
+{ticker: "WCN", last: 23.501467942817747},
+{ticker: "PRE", last: 53.67873008625956},
+{ticker: "ITT", last: 22.803668802786465},
+{ticker: "BIN", last: 12.594969339431945},
+{ticker: "WTM", last: 348.8851038882928},
+{ticker: "FHN", last: 6.624939800309766},
+{ticker: "CYH", last: 19.131071861657016},
+{ticker: "SWK", last: 52.198226722926165},
+{ticker: "AMG", last: 127.23849660464248},
+{ticker: "BCE", last: 22.765628088640174},
+{ticker: "ACC", last: 14.787034222549517},
+{ticker: "AA", last: 13.787034222549517}]
+
+
 var floor = Math.floor;
 var random = Math.random;
 
@@ -22,7 +45,7 @@ fin.desktop.main(()=>{
 	for (; i < numTiles; i++){
 		animationWindows.push(new fin.desktop.Window({
 			name: 'tile' + random(),
-			url: 'trade.html',
+			url: 'trade.html?t=' + rndData[i].ticker + '&l=' + rndData[i].last,
 			autoShow: false,
 			defaultHeight: cubeSize,
 			minHeight: cubeSize,
@@ -35,7 +58,8 @@ fin.desktop.main(()=>{
 			maximizable: false,
 			saveWindowState: false,
 			defaultTop: top,
-			defaultLeft: left
+			defaultLeft: left,
+			icon: "http://demoappdirectory.openf.in/desktop/config/apps/OpenFin/HelloOpenFin/img/openfin.ico"
 		}));
 
 		locations.push({
@@ -66,7 +90,7 @@ fin.desktop.main(()=>{
 				resizable:false,
 				frame: false,
 				maximizable: false,
-				saveWindowState: false
+				"icon": "http://demoappdirectory.openf.in/desktop/config/apps/OpenFin/HelloOpenFin/img/openfin.ico"
 			}, ()=>{
 
 			})
@@ -145,11 +169,14 @@ module.exports = React.createClass({
 			wnd.close();
 		});
 	},
-	toggleAnimateLoop: function () {
-		inLoop = !inLoop;
+	toggleAnimateLoopStart: function () {
+		inLoop = true;
 		if (inLoop) {
 			this.animateWindows(animationWindows);
 		}
+	},
+	toggleAnimateLoopStop: function () {
+		inLoop = false;
 	},
 	animateWindows: function(animationWindows){
 		setTranspatentAsPromise(animationWindows, 0.5).then(()=>{
@@ -189,15 +216,16 @@ module.exports = React.createClass({
 		console.log('called hommie');
 	},
 	openExcel: function() {
+
 	    fin.desktop.main(function() {
-	        fin.desktop.main(function() {
-	            fin.desktop.System.launchExternalProcess('excel', '', function(e) {
-	                console.log('external process excel launched');
-	            }, function(e) {
-	                console.log('external process excel launch failed');
+	        launchRuntimeAsset('excel', 'hypergrid.xlsx', function() {
+	                console.log('YAY IT LAUNCHED!');
+	            },
+	            function(err) {
+	                console.error("Oh no it failed!");
 	            });
-	        });
 	    });
+
 	},
 	getInitialState: function(){
 		return {
@@ -210,12 +238,12 @@ module.exports = React.createClass({
 							<div className="drag-area"></div>
 							<div className="content-area">
 									<i onClick={this.showWindows} className="fa fa-plus-square"></i>
-									<i onClick={this.toggleAnimateLoop} className="fa fa-arrows"></i>
-									<i className="fa fa-area-chart"></i>
+									<i onClick={this.toggleAnimateLoopStart} className="fa fa-arrows"></i>
+									<i onClick={this.toggleAnimateLoopStop} className="fa fa-ban"></i>
 									<i onClick={this.minWindows} className={this.state.desc}></i>
 									<i onClick={this.restoreWindows} className={this.state.asc}></i>
+									<i onClick={this.openBlotter} className="fa fa-table"></i>
 									<i onClick={this.openExcel} className="fa fa-file-excel-o"></i>
-									<i onClick={this.openBlotter} className="fa fa-tasks"></i>
 							</div>
 							<div className="window-control">
 								<i onClick={this.minApp} className="fa fa-minus"></i>
@@ -242,6 +270,28 @@ function genPairs(arr) {
 	        return m
 	    }, [])
 }
+
+
+
+function launchRuntimeAsset(subPath, args, callback, errorCallback) {
+  fin.desktop.System.getEnvironmentVariable(['LOCALAPPDATA', 'USERNAME'], function(result) {
+     var localAppData = result['LOCALAPPDATA'];
+     var userName = result['USERNAME'];
+
+     // Assuming on Windows XP when LOCALAPPDATA fails to expand. Using default location. Anything with registry setting for installDir will fail.
+     if(typeof localAppData !== 'string' || localAppData === 'LOCALAPPDATA') {
+     // Assuming on XP
+     localAppData = 'C:\\Documents and Settings\\' + userName + '\\Local Settings\\Application Data';
+     }
+
+     var runtimePath = localAppData + '\\OpenFin\\runtime\\' + fin.desktop.getVersion() + '\\OpenFin\\';
+
+     fin.desktop.System.launchExternalProcess(subPath, runtimePath + args, callback, errorCallback);
+     }, errorCallback);
+ }
+
+
+
 // function animateAsPromise (wnd, animations ,opts) {
 // 	return new Promise((resolve, reject)=>{
 // 		fin.desktop.main(()=>{
