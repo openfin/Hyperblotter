@@ -145,15 +145,18 @@ var HyperGrid = React.createClass({
 
                         require('./child-window.js').createChildWindow({
                             name: row.NAME,
-                            url: 'row-view.html?row=' + lastSelectedRow,
+                            url: 'chartiq/stx-advanced.html?row=' + lastSelectedRow,
                             autoShow: true,
-                            width: 350,
-                            maxWidth: 350,
-                            frame: false,
+                            defaultWidth: 960,
+                            maxWidth: 960,
+                            minWidth: 960,
+                            maxHeight: 594,
+                            defaultHeight: 594,
+                            minHeight: 594,
+                            resizable:false,
+                            frame: true,
                             maximizable: false,
-                            height: 594 / 3,
-                            maxHeight: 594 / 3,
-                            minHeight: 594 / 3,
+                            saveWindowState: false
                         })
 
             };
@@ -283,14 +286,7 @@ var HyperGrid = React.createClass({
         <fin-hypergrid id="stock-example">
             <fin-hypergrid-behavior-json></fin-hypergrid-behavior-json>
             <fin-hypergrid-excel></fin-hypergrid-excel>
-        </fin-hypergrid>
-
-        <div className="actions-bg"></div>
-        <div className="actions">
-            <i onClick={this.openOrders} className="fa fa-plus-square"></i>
-            <i onClick={this.openBidOffer} className="fa fa-file-text"></i>
-        </div>
-        
+        </fin-hypergrid>        
         </div>
     }
 });

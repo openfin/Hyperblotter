@@ -48,7 +48,7 @@ module.exports = {
       dest: dest,
       outputName: 'out.js',
       // list of externally available modules to exclude from the bundle
-      external: ['underscore'],
+      //external: ['underscore'],
       browser:{
         "node-hid": "null.js"
       },
@@ -58,7 +58,7 @@ module.exports = {
       dest: dest,
       outputName: 'hypergrid.js',
       // list of externally available modules to exclude from the bundle
-      external: ['underscore'],
+      //external: ['underscore'],
       browser:{
         "node-hid": "null.js"
       },
@@ -68,7 +68,7 @@ module.exports = {
       dest: dest,
       outputName: 'trade.js',
       // list of externally available modules to exclude from the bundle
-      external: ['underscore'],
+      //external: ['underscore'],
       browser:{
         "node-hid": "null.js"
       },
@@ -78,7 +78,7 @@ module.exports = {
       dest: dest,
       outputName: 'order.js',
       // list of externally available modules to exclude from the bundle
-      external: ['underscore'],
+      //external: ['underscore'],
       browser:{
         "node-hid": "null.js"
       },

@@ -9,3 +9,10 @@ gulp.task('uglifyJs', ['browserify'], function() {
     .pipe(gulp.dest(config.dest))
     .pipe(size());
 });
+
+gulp.task('postbuild', ['browserify'], function() {
+  return gulp.src('./build/**/*.js')
+    .pipe(uglify())
+    .pipe(gulp.dest('./build'))
+    .pipe(size());
+});
