@@ -1,11 +1,11 @@
 {
     "startup_app": {
-        "name": "OpenfinPOC",
-        "icon": "http://demoappdirectory.openf.in/desktop/config/apps/OpenFin/HelloOpenFin/img/openfin.ico",
-        "description": "OpenFin POC",
-        "url__": "http://cdn.openfin.co/bloomdemo/",
+        "name": "Hyperblotter",
+        "icon": "http://cdn.openfin.co/bloomdemo/favicon.ico",
+        "description": "Hyperblotter",
+        "url": "http://cdn.openfin.co/bloomdemo/",
         "__url": "http://10.9.105.24:5000/build/index.html",
-        "url": "http://local:5000/build",
+        "__url": "http://local:5000/build",
         "linkURL":"https://dl.openfin.co/services/download?fileName=fin-trader-poc&config=http://10.9.105.24:5000/build/app.json",
         "uuid": "OpenfinPOC",
         "autoShow": true,
@@ -48,8 +48,8 @@
     },
     "shortcut": {
         "company": "OpenFin",
-        "description": "OpenFin Demo Blotter",
-        "icon": "http://demoappdirectory.openf.in/desktop/config/apps/OpenFin/HelloOpenFin/img/openfin.ico",
-        "name": "OpenFin Demo Blotter"
+        "description": "Hyperblotter",
+        "icon": "http://cdn.openfin.co/bloomdemo/favicon.ico",
+        "name": "Hyperblotter"
     }
 }

@@ -59,7 +59,7 @@ fin.desktop.main(()=>{
 			saveWindowState: false,
 			defaultTop: top,
 			defaultLeft: left,
-			icon: "http://demoappdirectory.openf.in/desktop/config/apps/OpenFin/HelloOpenFin/img/openfin.ico"
+			showTaskbarIcon: false
 		}));
 
 		locations.push({
@@ -90,7 +90,7 @@ fin.desktop.main(()=>{
 				resizable:false,
 				frame: false,
 				maximizable: false,
-				"icon": "http://demoappdirectory.openf.in/desktop/config/apps/OpenFin/HelloOpenFin/img/openfin.ico"
+				"icon": "http://cdn.openfin.co/bloomdemo/favicon.ico"
 			}, ()=>{
 
 			})
@@ -146,7 +146,7 @@ module.exports = React.createClass({
 	},
 	minWindows: function() {
 		animationWindows.forEach((wnd)=>{
-			wnd.minimize();
+			wnd.hide();
 		});
 
 		this.setState({
@@ -156,7 +156,7 @@ module.exports = React.createClass({
 	},
 	restoreWindows: function () {
 		animationWindows.forEach((wnd)=>{
-			wnd.restore();
+			wnd.show();
 		});
 
 		this.setState({

@@ -286,14 +286,7 @@ var HyperGrid = React.createClass({
         <fin-hypergrid id="stock-example">
             <fin-hypergrid-behavior-json></fin-hypergrid-behavior-json>
             <fin-hypergrid-excel></fin-hypergrid-excel>
-        </fin-hypergrid>
-
-        <div className="actions-bg"></div>
-        <div className="actions">
-            <i onClick={this.openOrders} className="fa fa-plus-square"></i>
-            <i onClick={this.openBidOffer} className="fa fa-file-text"></i>
-        </div>
-        
+        </fin-hypergrid>        
         </div>
     }
 });

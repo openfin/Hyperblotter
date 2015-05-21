@@ -23,7 +23,7 @@ module.exports = React.createClass({
   },
   closeApp: function(){
 		fin.desktop.main(function(){
-		  fin.desktop.Application.getCurrent().close();
+		  fin.desktop.Window.getCurrent().close();
 		});
 	},
 	minApp: function(){
@@ -85,7 +85,7 @@ module.exports = React.createClass({
 									</div>
 									<div className="price low">
 										<div className="label">LOW</div>
-										<span className="value">{ (this.state.last - rndRange()).toFixed(2) - 1 }</span>
+										<span className="value">{ (this.state.last - rndRange() - 1).toFixed(2)  }</span>
 									</div>
 								</div>
 							</div>
