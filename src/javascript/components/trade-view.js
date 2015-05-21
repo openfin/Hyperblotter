@@ -16,14 +16,10 @@ var React = require('react'),
 var urlData = location.search.split('&').map((i)=>{return i.split('=')[1]})
 
 module.exports = React.createClass({
-	closeWindow: ()=>{
-  	fin.desktop.main(()=>{
-  		fin.desktop.Window.getCurrent().close();
-  	});
-  },
   closeApp: function(){
 		fin.desktop.main(function(){
-		  fin.desktop.Window.getCurrent().close();
+			// really its just hidden :)
+		  fin.desktop.Window.getCurrent().hide();
 		});
 	},
 	minApp: function(){
@@ -54,7 +50,7 @@ module.exports = React.createClass({
   			ticker: urlData[0],
   			last: Number(plusMinus(Number(urlData[1]), rndRange()))
   		});
-  	}, 1000);
+  	}, 2500);
 
   },
 	render: function(){
@@ -64,8 +60,7 @@ module.exports = React.createClass({
 									{this.state.ticker}
 								</div>
 								<div className="window-control">
-									<i onClick={this.minApp} className="fa fa-minus"></i>
-									<i onClick={this.closeApp} className="fa fa-times"></i>
+									
 								</div>
 							</div>
 							<div className="content">
