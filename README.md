@@ -4,7 +4,7 @@ The Hyperblotter demonstrates OpenFin’s ability to manage native window events
 ###Installer
 Use this installer to download the demo:
 
-https://dl.openfin.co/services/download?fileName=Hyperblotter&config=http://cdn.openfin.co/hyperblotter/app.json
+[Hyperblotter Installer](https://dl.openfin.co/services/download?fileName=Hyperblotter&config=http://cdn.openfin.co/hyperblotter/app.json)
 
 ###Excel Add-in
 Follow these steps for Excel to work with Hyperblotter
