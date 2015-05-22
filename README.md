@@ -14,7 +14,7 @@ Follow these steps for Excel to work with Hyperblotter
 * Click Ok and Close Excel
 * In Hyperblotter, select XLS icon and then highlight rows in Hyperblotter
 
-###Web Version
-The Hyperblotter can also be viewed in a browser via this url:
+###Browser Version
+The Hyperblotter can also be viewed in a browser:
 
-http://cdn.openfin.co/hyperblotter/
+[Hyperblotter Browser](http://cdn.openfin.co/hyperblotter/)
