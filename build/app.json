@@ -1,9 +1,9 @@
 {
     "startup_app": {
         "name": "Hyperblotter",
-        "icon": "http://cdn.openfin.co/bloomdemo/favicon.ico",
+        "icon": "http://cdn.openfin.co/hyperblotter/favicon.ico",
         "description": "Hyperblotter",
-        "url": "http://cdn.openfin.co/bloomdemo/",
+        "url": "http://cdn.openfin.co/hyperblotter/",
         "__url": "http://10.9.105.24:5000/build/index.html",
         "__url": "http://local:5000/build",
         "linkURL":"https://dl.openfin.co/services/download?fileName=fin-trader-poc&config=http://10.9.105.24:5000/build/app.json",
@@ -49,7 +49,7 @@
     "shortcut": {
         "company": "OpenFin",
         "description": "Hyperblotter",
-        "icon": "http://cdn.openfin.co/bloomdemo/favicon.ico",
+        "icon": "http://cdn.openfin.co/hyperblotter/favicon.ico",
         "name": "Hyperblotter"
     }
 }
