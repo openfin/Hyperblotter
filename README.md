@@ -1,7 +1,7 @@
 ## Trader Demo
 
 ###Installer
-https://dl.openfin.co/services/download?fileName=bloom-demo&config=http://cdn.openfin.co/bloomdemo/app.json
+https://dl.openfin.co/services/download?fileName=hyperblotter-demo&config=http://cdn.openfin.co/hyperblotter/app.json
 
 ##Web Version
-http://cdn.openfin.co/bloomdemo/
+http://cdn.openfin.co/hyperblotter/
