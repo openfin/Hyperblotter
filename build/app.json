@@ -5,7 +5,7 @@
         "description": "OpenFin POC",
         "url__": "http://cdn.openfin.co/bloomdemo/",
         "__url": "http://10.9.105.24:5000/build/index.html",
-        "url": "http://local:5000/build",
+        "url": "http://localhost:5000",
         "linkURL":"https://dl.openfin.co/services/download?fileName=fin-trader-poc&config=http://10.9.105.24:5000/build/app.json",
         "uuid": "OpenfinPOC",
         "autoShow": true,
