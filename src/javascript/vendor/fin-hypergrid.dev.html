@@ -12193,11 +12193,15 @@ window.WebComponents = window.WebComponents || {};
       }
     }
     if (flags.log) {
-      var parts = flags.log.split(",");
-      flags.log = {};
-      parts.forEach(function(f) {
-        flags.log[f] = true;
-      });
+      try {
+        var parts = flags.log.split(",");
+        flags.log = {};
+        parts.forEach(function (f) {
+          flags.log[f] = true;
+        });
+      }catch(err){
+        //-----
+      }
     } else {
       flags.log = {};
     }
@@ -18968,11 +18972,21 @@ div.container {
      */
     var canvases = [];
     var paintLoopFunction = function(now) {
-        for (var i = 0; i < canvases.length; i++) {
-            try {
-                canvases[i](now);
-            } catch (e) {}
+//        for (var i = 0; i < canvases.length; i++) {
+//            try {
+//                canvases[i](now);
+//            } catch (e) {}
+//        }
+
+      canvases.map(function(d,i){
+        try {
+          d(now);
+        } catch (e) {
+          //---
         }
+      });
+
+
         requestAnimationFrame(paintLoopFunction);
     };
     requestAnimationFrame(paintLoopFunction);

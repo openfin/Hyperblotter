@@ -2,7 +2,7 @@ var React = require('react'),
     fin = require('../vendor/openfin.js'),
     configureDisplayState = function() {
         var book = window.opener.orderBook,
-            len = book.length,
+            len = book.length || 0,
             row, 
             state = [];
 
