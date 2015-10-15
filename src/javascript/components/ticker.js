@@ -23344,9 +23344,9 @@ var shuffle = function(arr){
         var _p1 = arr.splice(Math.floor(Math.random() * arr.length), 1)
         var _arr = _p1.concat(arr.reverse());
         return count <= arr.length ? scrambleRecursive(_arr, count) : _arr;
-    }
+    };
     return 	scrambleRecursive(arr, 0)
-}
+};
 
 var toPickFrom = stocks.slice(0);
 shuffle(toPickFrom);
