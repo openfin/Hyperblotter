@@ -1,0 +1,121 @@
+$bar-height: 50px
+$background-color: #030a28;
+
+body
+	background-color: $background-color
+	height: 100%
+	width: 100%
+	overflow: hidden
+	font-size: 12pt
+
+.main-bar
+	display: flex;
+	height: $bar-height
+	padding-right: 5px
+	.drag-area
+		flex: 1
+		-webkit-app-region: drag;
+		background-color: #FFF;
+		opacity: .2
+	.content-area
+		display: flex
+		justify-content: space-around
+		flex: 10
+		padding: 10px;
+		color: steelblue;
+		text-align: center
+		i 
+			font-size: 2rem
+			padding: 0 8px
+		i:hover
+			color: white
+	.window-control
+		display: flex
+		flex: 1.5
+		
+		justify-content: space-between
+		align-items: flex-start
+		i 
+			font-size: 1.5rem
+			color: gray
+
+.tile
+	display: flex
+	flex-direction: column
+	height: 100%
+	padding: 10px
+	color: white
+	background-color: $background-color
+	.banner
+		display: flex
+		flex: 1
+		.title
+			flex: 5
+		.window-control
+			flex: 2
+			display:flex
+			justify-content: flex-end
+			i 
+				padding-left: 10px
+	.content
+		display: flex
+		flex: 4	
+		.main
+			flex: 1
+			display: flex
+			flex-direction: column
+			.last
+				flex:1
+				font-size: 2rem
+				border-bottom: 1px solid white
+			.percent-change
+				flex: 2
+				display: flex
+				padding-top: 10px
+		.pricing
+			display: flex
+			flex: 1
+			flex-direction: column
+			.price
+				display: flex
+				flex: 1
+				flex-direction: column
+				text-align: right
+				.label
+					font-size: .7rem
+					font-weight: lighter
+
+
+
+
+
+
+.none 
+	display: none
+
+
+.start-color-change
+	animation-duration: 3.5s;
+	animation-name: slidein;
+	animation-iteration-count: infinite;
+
+
+@keyframes slidein 
+  from
+    background-color: rgb(127,255,7)
+    color: white
+  45%
+  	background-color: $background-color 
+    color: white
+  50%
+  	background-color: $background-color 
+  	color: white
+  55%
+  	background-color: $background-color 
+    color: white
+  to 
+    background-color: rgb(251,7,7)
+    color: white
+  
+
+
