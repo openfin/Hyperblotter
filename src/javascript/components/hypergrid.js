@@ -135,6 +135,7 @@ var HyperGrid = React.createClass({
             
             setInterval(function() {
                 ticker.randomize();
+                console.log("ticker.stocks ", JSON.stringify(ticker.stocks[0]));
                 jsonModel.dataModified();
             }, 2000);
 
