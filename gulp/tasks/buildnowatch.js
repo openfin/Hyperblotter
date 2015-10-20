@@ -3,4 +3,4 @@
  */
 var gulp = require('gulp');
 
-gulp.task('buildnowatch', ['sass', 'images', 'markup', 'vendor', 'browserSync']);
+gulp.task('buildnowatch', ['sass', 'images', 'markup', 'vendor', 'browserify','browserSync']);

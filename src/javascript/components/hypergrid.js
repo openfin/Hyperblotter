@@ -136,7 +136,7 @@ var HyperGrid = React.createClass({
             setInterval(function() {
                 ticker.randomize();
                 jsonModel.dataModified();
-            }, 10);
+            }, 2000);
 
             jsonModel.fixedColumnClicked = (grid, cellData) => {
                     lastSelectedRow =  cellData.gridCell.y;
