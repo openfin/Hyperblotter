@@ -2,7 +2,6 @@
     "startup_app": {
         "name": "OpenfinPOC",
         "description": "OpenFin POC",
-        "__url": "http://cdn.openfin.co/bloomdemo/",
         "url": "http://localhost:5000/index.html",
         "linkURL":"https://dl.openfin.co/services/download?fileName=fin-trader-poc&config=http://localhost:5000/app.json",
         "uuid": "OpenfinPOC",
