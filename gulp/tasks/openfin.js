@@ -4,13 +4,9 @@ var  gulp   = require('gulp')
     ,q = require('q')
     ,openfinLauncher = require('openfin-launcher')
     //,openfinConfigBuilder = require('openfin-config-builder')
-    ,nodemon = require('nodemon');
-
-
-var src  = require('../config').js;
-
-//var openfinLauncher = require('openfin-launcher'),
-    path = require('path');
+    ,nodemon = require('nodemon')
+    ,src  = require('../config').js
+    ,path = require('path');
  
 //gulp.task('openfin', function() {
 //  openfinLauncher.launchOpenFin({

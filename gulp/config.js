@@ -25,6 +25,10 @@ module.exports = {
     src: src + "/javascript/vendor/**",
     dest: dest
   },
+  appjson: {
+    src: "app.json",
+    dest: dest
+  },
   markup: {
     src: src + "/htdocs/**",
     dest: dest
