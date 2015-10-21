@@ -2,9 +2,8 @@
     "startup_app": {
         "name": "OpenfinPOC",
         "description": "OpenFin POC",
-        "url": "http://localhost:5000/index.html",
-        "linkURL":"https://dl.openfin.co/services/download?fileName=fin-trader-poc&config=http://localhost:5000/app.json",
-        "uuid": "OpenfinPOC",
+        "url": "http://localhost:5001",
+        "uuid": "OpenfinHyperBlotterDemo",
         "autoShow": true,
         "defaultWidth": 480,
         "maxWidth": 480,
@@ -29,8 +28,8 @@
     },
     "shortcut": {
         "company": "OpenFin",
-        "description": "OpenFin Demo Blotter",
+        "description": "OpenFin Hyper Blotter demo",
         "icon": "http://demoappdirectory.openf.in/desktop/config/apps/OpenFin/HelloOpenFin/img/openfin.ico",
-        "name": "OpenFin Demo Blotter"
+        "name": "OpenFin Hyper Blotter"
     }
 }
