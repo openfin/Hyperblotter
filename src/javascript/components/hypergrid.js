@@ -1,5 +1,5 @@
 var React = require('react'),
-		ticker = require('../components/ticker.js'),
+		ticker = require('../griddata/data_ticker.js'),
         numeral = require('numeral'),
         moment = require('moment'),
         _ = require('underscore'),
