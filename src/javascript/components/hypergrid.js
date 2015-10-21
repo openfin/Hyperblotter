@@ -3,7 +3,9 @@ var React = require('react'),
         numeral = require('numeral'),
         moment = require('moment'),
         _ = require('underscore'),
-        lastSelectedRow;
+        lastSelectedRow,
+        _arrayGen = ticker.arrayGenerator();
+
 
 var countries = ['GR','DK','ZA','RU','CO','IT','IN','BR','AE','AF','AG','AI','AM','AO','AS','AR','AT','AU','AX','BA','BB','BD','BE','BF','BH','BI','BJ','BM','BN','BS','BT','BV','BY','CA','CC','CD','CG','CH','CK','CL','CM','CN','CO','CR','CU','CV','CX','CY','CZ','DE','DM','DO','DZ','EE','EH','ES','FI','FJ','FK','FM','FR','GB','GE','GI','GL','GM','GN','GP','GQ','GS','GT','GU','GW','GY','HK','HM','HN','HR','HU','ID','IE','IL','IO','IQ','IR','JO','JP','KE','KG','KH','KM','KY','KZ','LC','LI','LK','LR','LS','LT','LU','LV','LY','MD','MH','MK','MM','MO','MQ','MR','MS','MT','MU','MV','MW','MX','MY','MZ','NA','NC','NE','NF','NG','NI','NL','NO','NP','NR','NU','NZ','OM','PA','PE','PF','PH','PK','PL','PM','PN','PR','PS','PW','PY','QA','RE','RO','RS','SA','SB','SD','SE','SG','SH','SJ','SM','SN','SO','SR','ST','SV','TC','TD','TH','TJ','TK','TL','TN','TO','TR','TT','TV','TW','UM','UY','UZ','VA','VE','VI','VN','WS','ZA','ZW','KR'];
 var imageCache = {};
@@ -90,7 +92,7 @@ var HyperGrid = React.createClass({
 
             var cellProvider = jsonModel.getCellProvider();
 
-            jsonModel.setData(ticker.stocks);
+            jsonModel.setData(_arrayGen.getStocks());
             jsonModel.setFixedColumnCount(1);
             jsonModel.setHeaders(['Symbol','High','Low','Last','Today', 'Change','% Change','Volume','Bid Qty','Bid','Spread','Ask','Ask Qty','Country Code','Country','ICB','Industry','Super Sector','Sector','Sub Sector','Date','Time','Open','Cls','Previous Cls','Previous Cls Dt','Name']);
             jsonModel.setFields(['TICKER','High','Low','Last','Today', 'Change','PercentChange','Volume','BidQuantity','Bid','Spread','Ask','AskQuantity','countryCode', 'COUNTRY','ICB','INDUS','SUP_SEC','SEC','SUB_SEC','Date','Time','Open','Close','PreviousClose','PreviousCloseDate','NAME']);
@@ -134,16 +136,15 @@ var HyperGrid = React.createClass({
             jsonGrid.editAt = function(){};
             
             setInterval(function() {
-                ticker.randomize();
-                console.log("ticker.stocks ", JSON.stringify(ticker.stocks[0]));
+                // ticker.randomize();
+                //console.log("ticker.getStocks() ", JSON.stringify(_arrayGen.getStocks()[0]) );
+                jsonModel.setData(_arrayGen.getRandomArray());
                 jsonModel.dataModified();
-            }, 2000);
+            }, 20);
 
             jsonModel.fixedColumnClicked = (grid, cellData) => {
                     lastSelectedRow =  cellData.gridCell.y;
                         var row = jsonModel.getRow(lastSelectedRow)
-                        
-
                         require('./child-window.js').createChildWindow({
                             name: row.NAME,
                             url: 'chartiq/stx-advanced.html?row=' + lastSelectedRow,
@@ -159,7 +160,6 @@ var HyperGrid = React.createClass({
                             maximizable: false,
                             saveWindowState: false
                         })
-
             };
 
             jsonModel.highlightCellOnHover= function(isColumnHovered, isRowHovered) {

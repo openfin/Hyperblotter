@@ -1,7 +1,7 @@
 {
     "startup_app": {
         "name": "OpenfinPOC",
-        "description": "OpenFin POC",
+        "description": "OpenFin Hyperblotter",
         "url": "http://localhost:5001",
         "uuid": "OpenfinHyperBlotterDemo",
         "autoShow": true,
@@ -9,9 +9,9 @@
         "maxWidth": 480,
         "minWidth": 480,
 
-        "maxHeight": 594,
-        "defaultHeight": 594,
-        "minHeight": 594,
+        "maxHeight": 80,
+        "defaultHeight": 80,
+        "minHeight": 80,
         "defaultTop": 50,
         "defaultLeft": 10,
         "resizable": true,

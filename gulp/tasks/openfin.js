@@ -34,6 +34,7 @@ function startServer(){
 }
 
 function openfinLaunch() {
+    process.chdir('C:\\Users\\grahamclapham\\AppData\\Local\\OpenFin');
     openfinLauncher.launchOpenFin({
         // Launch a locally hosted Node application.
         configPath: 'http://localhost:5001/app.json'

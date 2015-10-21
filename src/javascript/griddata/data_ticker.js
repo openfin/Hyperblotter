@@ -96,6 +96,53 @@ var arrayGeneratorProto = {
             flashColor: 'green',
             countryCode: countryMap[data.COUNTRY[i]]
         }
+    },
+    getStocks:function(){
+        var count = data.NAME.length;
+        var i = 0;
+        var stocks = [];
+        window.CC = {};
+        for (i = 0; i < count; i++) {
+            CC[data.COUNTRY[i]] = true;
+            stocks[i] = {
+                NAME: data.NAME[i],
+                TICKER: data.TICKER[i],
+                COUNTRY: data.COUNTRY[i],
+                ICB: data.ICB[i],
+                INDUS: data.INDUS[i],
+                SUP_SEC: data.SUP_SEC[i],
+                SEC: data.SEC[i],
+                SUB_SEC: data.SUB_SEC[i],
+                Date: new Date(),
+                Time: Date.now(),
+                Open: data.Open[i],
+                Close: data.Close[i],
+                getClose: data.Close[i],
+                PreviousClose: data.PreviousClose[i],
+                PreviousCloseDate: new Date(Date.now() - 1000*60*60*24),
+                High: data.High[i],
+                Low: data.Low[i],
+                Last: data.Last[i],
+                Change: data.Change[i],
+                PercentChange: data.PercentChange[i],
+                Volume: Math.floor(data.Volume[i]),
+                BidQuantity: data.BidQuantity[i],
+                Bid: data.Bid[i],
+                Spread: data.Spread[i],
+                Ask: data.Ask[i],
+                AskQuantity: data.AskQuantity[i],
+                Today:[0, 0, 0, 0,0, 0, 0, 0, 0, 0, 0, 0,0, 0, 0, 0],
+                flash: 0,
+                flashColor: 'green',
+                countryCode: countryMap[data.COUNTRY[i]]
+            }
+        }
+
+        stocks.sort(function(a,b){
+            return a.TICKER < b.TICKER ? -1 : 1;
+        });
+
+        return stocks
     }
 };
 
@@ -116,7 +163,6 @@ var tickerTimerPrivate = {
         if(t- this._lastTick > (second * tickerTimerPrivate._functionCallsPerSecond)){
             this._lastTick = t;
             tickerTimerPrivate.tickFunction();
-            //console.log("AAAA", tickerTimerPrivate._arrayGen.getRandomArray())
         }
         window.requestAnimationFrame(tickerTimerPrivate.onTick);
     },
@@ -133,9 +179,9 @@ var tickerTimerProto = {
         //    console.log("AAAA", tickerTimerPrivate._arrayGen.getRandomArray()[0].NAME);
         //}, 2000)
     },
-    stop: function start(){
+    stop: function stop(){
 
-    },
+    }
 
 
 };
