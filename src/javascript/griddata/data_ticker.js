@@ -97,7 +97,7 @@ var arrayGeneratorProto = {
             countryCode: countryMap[data.COUNTRY[i]]
         }
     },
-    getStocks:function(){
+    getStocks:function getStocks(){
         var count = data.NAME.length;
         var i = 0;
         var stocks = [];
@@ -131,7 +131,7 @@ var arrayGeneratorProto = {
                 Spread: data.Spread[i],
                 Ask: data.Ask[i],
                 AskQuantity: data.AskQuantity[i],
-                Today:[0, 0, 0, 0,0, 0, 0, 0, 0, 0, 0, 0,0, 0, 0, 0],
+                Today:[0, 10, 20, 30,0, 0, 0, 0, 0, 0, 0, 0,0, 0, 0, 0],
                 flash: 0,
                 flashColor: 'green',
                 countryCode: countryMap[data.COUNTRY[i]]

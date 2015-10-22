@@ -94,8 +94,8 @@ var HyperGrid = React.createClass({
 
             jsonModel.setData(_arrayGen.getStocks());
             jsonModel.setFixedColumnCount(1);
-            jsonModel.setHeaders(['Symbol','High','Low','Last','Today', 'Change','% Change','Volume','Bid Qty','Bid','Spread','Ask','Ask Qty','Country Code','Country','ICB','Industry','Super Sector','Sector','Sub Sector','Date','Time','Open','Cls','Previous Cls','Previous Cls Dt','Name']);
-            jsonModel.setFields(['TICKER','High','Low','Last','Today', 'Change','PercentChange','Volume','BidQuantity','Bid','Spread','Ask','AskQuantity','countryCode', 'COUNTRY','ICB','INDUS','SUP_SEC','SEC','SUB_SEC','Date','Time','Open','Close','PreviousClose','PreviousCloseDate','NAME']);
+            jsonModel.setHeaders(['Symbol','name','High','Low','Last','Today', 'Change','% Change','Volume','Bid Qty','Bid','Spread','Ask','Ask Qty','Country Code','Country','ICB','Industry','Super Sector','Sector','Sub Sector','Date','Time','Open','Cls','Previous Cls','Previous Cls Dt','Name']);
+            jsonModel.setFields(['TICKER','NAME','High','Low','Last','Today', 'Change','PercentChange','Volume','BidQuantity','Bid','Spread','Ask','AskQuantity','countryCode', 'COUNTRY','ICB','INDUS','SUP_SEC','SEC','SUB_SEC','Date','Time','Open','Close','PreviousClose','PreviousCloseDate','NAME']);
             
             var bgColor = '#07071E';
             var fixedAreasBGColor = bgColor;
@@ -136,11 +136,17 @@ var HyperGrid = React.createClass({
             jsonGrid.editAt = function(){};
             
             setInterval(function() {
-                // ticker.randomize();
+                ticker.randomize();
                 //console.log("ticker.getStocks() ", JSON.stringify(_arrayGen.getStocks()[0]) );
-                jsonModel.setData(_arrayGen.getRandomArray());
+                //jsonModel.setData(_arrayGen.getRandomArray());
+
+                console.log("STOCKS --->>>>-- ",JSON.stringify(ticker.stocks[0]));
+                console.log("GET STOCKS ---- ",JSON.stringify(_arrayGen.getStocks()[0]));
+
+                //jsonModel.setData(ticker.stocks);
+                jsonModel.setData(_arrayGen.getStocks());
                 jsonModel.dataModified();
-            }, 20);
+            }, 2000);
 
             jsonModel.fixedColumnClicked = (grid, cellData) => {
                     lastSelectedRow =  cellData.gridCell.y;
@@ -182,7 +188,7 @@ var HyperGrid = React.createClass({
                   flash: 0,
                   flashColor: 'green'
                 };
-                if (x === 4) {
+                if (x === 5) {
                     renderer = cellProvider.cellCache.sparklineCellRenderer;
                 } else if (x === 5 || x === 6) {
                     config.value = format(config.value);

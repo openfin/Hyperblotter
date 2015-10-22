@@ -10,7 +10,7 @@ Clone this Git repository and, in the Terminal window, change directories into t
 ```
 $ cd Hyperblotter
 ```
-if Node and NPM are not installed, insatll them from [here](https://nodejs.org/en/).
+if Node and NPM are not installed, insatll them from [here](https://nodejs.org/en/). Node version 4.2.1 or higher is required.
 
 Install dependencies:
 

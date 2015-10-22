@@ -20,7 +20,7 @@ function startServer(){
 
     var _resolve = function(){
         defered.resolve()
-    }
+    };
 
     nodemon({
         script: 'server.js'
@@ -34,7 +34,8 @@ function startServer(){
 }
 
 function openfinLaunch() {
-    process.chdir('C:\\Users\\grahamclapham\\AppData\\Local\\OpenFin');
+    //process.chdir('C:\\Users\\grahamclapham\\AppData\\Local\\OpenFin');
+    process.chdir('./');
     openfinLauncher.launchOpenFin({
         // Launch a locally hosted Node application.
         configPath: 'http://localhost:5001/app.json'
