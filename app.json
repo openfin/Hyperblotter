@@ -8,13 +8,12 @@
         "defaultWidth": 480,
         "maxWidth": 480,
         "minWidth": 480,
-
-        "maxHeight": 80,
-        "defaultHeight": 80,
-        "minHeight": 80,
+        "maxHeight": 50,
+        "defaultHeight": 50,
+        "minHeight": 50,
         "defaultTop": 50,
         "defaultLeft": 10,
-        "resizable": true,
+        "resizable": false,
         "maximizable": false,
         "frame": false,
         "cornerRounding": {

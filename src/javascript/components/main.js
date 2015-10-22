@@ -34,7 +34,6 @@ var rndData = [
 {ticker: "ACC", last: 14.787034222549517},
 {ticker: "AA", last: 13.787034222549517}]
 
-
 var floor = Math.floor;
 var random = Math.random;
 
@@ -75,7 +74,6 @@ fin.desktop.main(()=>{
 			top += cubeSize + 5
 		}
 	}
-
 
 	blotter = new fin.desktop.Window({
 				name: 'blotter',
@@ -126,7 +124,6 @@ function setTranspatentAsPromise(arr, opacity) {
 		});
 	});
 }
-
 
 module.exports = React.createClass({
 	closeApp: function(){
@@ -225,7 +222,6 @@ module.exports = React.createClass({
 	                console.error("Oh no it failed!");
 	            });
 	    });
-
 	},
 	getInitialState: function(){
 		return {
