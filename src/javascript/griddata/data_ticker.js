@@ -15,7 +15,63 @@ var _arrayGeneratorPrivate = {
 };
 
 var arrayGeneratorProto = {
-        _array: null,
+    _array: null,
+    _staticArray: null,
+    _arrayLength: 10,
+    //------------
+    _getStaticData:function _initialiseStaticData(){
+       // console.log("GET STATIC DATA CALLED >>", this._staticArray);
+        if(_arrayGeneratorPrivate._staticArray && _arrayGeneratorPrivate._staticArray.length>0){
+           // console.log("THE ARRAY HAS ALREADY BEEN CREATED +++ ",_arrayGeneratorPrivate._staticArray.length);
+            return _arrayGeneratorPrivate._staticArray;
+        }else {
+            //console.log("THERE IS NO STATIC DATA -----------------");
+            var count = data.NAME.length;
+            var i = 0;
+            _arrayGeneratorPrivate._staticArray = [];
+            window.CC = {};
+            for (i = 0; i < count; i++) {
+                CC[data.COUNTRY[i]] = true;
+                _arrayGeneratorPrivate._staticArray[i] = {
+                    NAME: data.NAME[i],
+                    TICKER: data.TICKER[i],
+                    COUNTRY: data.COUNTRY[i],
+                    ICB: data.ICB[i],
+                    INDUS: data.INDUS[i],
+                    SUP_SEC: data.SUP_SEC[i],
+                    SEC: data.SEC[i],
+                    SUB_SEC: data.SUB_SEC[i],
+                    Date: new Date(),
+                    Time: Date.now(),
+                    Open: data.Open[i],
+                    Close: data.Close[i],
+                    getClose: data.Close[i],
+                    PreviousClose: data.PreviousClose[i],
+                    PreviousCloseDate: new Date(Date.now() - 1000 * 60 * 60 * 24),
+                    High: data.High[i],
+                    Low: data.Low[i],
+                    Last: data.Last[i],
+                    Change: data.Change[i],
+                    PercentChange: data.PercentChange[i],
+                    Volume: Math.floor(data.Volume[i]),
+                    BidQuantity: data.BidQuantity[i],
+                    Bid: data.Bid[i],
+                    Spread: data.Spread[i],
+                    Ask: data.Ask[i],
+                    AskQuantity: data.AskQuantity[i],
+                    Today: [0, 10, 20, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    flash: 0,
+                    flashColor: 'green',
+                    countryCode: countryMap[data.COUNTRY[i]]
+                }
+            }
+        }
+        _arrayGeneratorPrivate._staticArray.sort(function(a,b){
+                return a.TICKER < b.TICKER ? -1 : 1;
+            });
+
+            return _arrayGeneratorPrivate._staticArray
+    },
     _generateEmptyArr:function _generateArr(){
             if(!this._array || this._array.length != this.getArrayLength()) {
                 this._array = [];
@@ -27,7 +83,6 @@ var arrayGeneratorProto = {
                 return this._array;
             }
     },
-        _arrayLength: 10,
         setArrayLength: function setArrayLength(val){
         if(isNaN(val)) return;
             this._arrayLength = val
@@ -39,7 +94,6 @@ var arrayGeneratorProto = {
         if( isNaN(parseInt(length)) || isNaN(parseInt(sampleLength)) ) {
             throw new Error("_generateRandomNumberArray requires a length shorter than the sampleLength.")
         }
-
         function addRandomNumber(arr){
             var _arr = arr || [];
             var _rand = Math.round( Math.random() * sampleLength );
@@ -98,51 +152,19 @@ var arrayGeneratorProto = {
         }
     },
     getStocks:function getStocks(){
-        var count = data.NAME.length;
-        var i = 0;
-        var stocks = [];
-        window.CC = {};
-        for (i = 0; i < count; i++) {
-            CC[data.COUNTRY[i]] = true;
-            stocks[i] = {
-                NAME: data.NAME[i],
-                TICKER: data.TICKER[i],
-                COUNTRY: data.COUNTRY[i],
-                ICB: data.ICB[i],
-                INDUS: data.INDUS[i],
-                SUP_SEC: data.SUP_SEC[i],
-                SEC: data.SEC[i],
-                SUB_SEC: data.SUB_SEC[i],
-                Date: new Date(),
-                Time: Date.now(),
-                Open: data.Open[i],
-                Close: data.Close[i],
-                getClose: data.Close[i],
-                PreviousClose: data.PreviousClose[i],
-                PreviousCloseDate: new Date(Date.now() - 1000*60*60*24),
-                High: data.High[i],
-                Low: data.Low[i],
-                Last: data.Last[i],
-                Change: data.Change[i],
-                PercentChange: data.PercentChange[i],
-                Volume: Math.floor(data.Volume[i]),
-                BidQuantity: data.BidQuantity[i],
-                Bid: data.Bid[i],
-                Spread: data.Spread[i],
-                Ask: data.Ask[i],
-                AskQuantity: data.AskQuantity[i],
-                Today:[0, 10, 20, 30,0, 0, 0, 0, 0, 0, 0, 0,0, 0, 0, 0],
-                flash: 0,
-                flashColor: 'green',
-                countryCode: countryMap[data.COUNTRY[i]]
-            }
-        }
-
-        stocks.sort(function(a,b){
-            return a.TICKER < b.TICKER ? -1 : 1;
-        });
-
-        return stocks
+        return this._getStaticData();
+    },
+    getMorphedStocks:function getStocks(){
+        // Start with an array of random numbers...
+        var _randomNumbers = this._generateRandomNumberArray(this.getArrayLength(), this._getStaticData().length);
+        // console.log(_randomNumbers)
+        // update the staticData for the selected random numbers
+        _randomNumbers.map(function(d,i){
+            if(!d) return;
+            this._getStaticData()[d].High = (Math.random() * 60).toFixed(2);
+            randomizeTick(this._getStaticData()[d]);
+        }.bind(this))
+        return this._getStaticData();
     }
 };
 
@@ -167,7 +189,7 @@ var tickerTimerPrivate = {
         window.requestAnimationFrame(tickerTimerPrivate.onTick);
     },
     tickFunction: function tickFunction(){
-        //console.log("AAAA", JSON.stringify( tickerTimerPrivate._arrayGen.getRandomArray() ) );
+        console.log("AAAA", JSON.stringify( tickerTimerPrivate._arrayGen.getRandomArray() ) );
         var _arr = tickerTimerPrivate._arrayGen.getRandomArray();
     }
 };
@@ -182,7 +204,6 @@ var tickerTimerProto = {
     stop: function stop(){
 
     }
-
 
 };
 

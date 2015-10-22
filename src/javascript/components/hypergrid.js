@@ -140,13 +140,11 @@ var HyperGrid = React.createClass({
                 //console.log("ticker.getStocks() ", JSON.stringify(_arrayGen.getStocks()[0]) );
                 //jsonModel.setData(_arrayGen.getRandomArray());
 
-                console.log("STOCKS --->>>>-- ",JSON.stringify(ticker.stocks[0]));
-                console.log("GET STOCKS ---- ",JSON.stringify(_arrayGen.getStocks()[0]));
 
                 //jsonModel.setData(ticker.stocks);
-                jsonModel.setData(_arrayGen.getStocks());
+                jsonModel.setData(_arrayGen.getMorphedStocks());
                 jsonModel.dataModified();
-            }, 2000);
+            }, 20);
 
             jsonModel.fixedColumnClicked = (grid, cellData) => {
                     lastSelectedRow =  cellData.gridCell.y;
