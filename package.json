@@ -6,20 +6,6 @@
     "type": "git",
     "url": "git://github.com/greypants/gulp-starter.git"
   },
-  "//": [
-    "The following 'underscore' example demonstrates exposing a module included ",
-    "by another module. If you were to npm install underscore separately and ",
-    "require('underscore'), you'd end up with two copies in your bundle. The one",
-    "you installed, and the one that shipped with another package (backbone in ",
-    "this example). This is an edge case and should rarely happen.",
-    "",
-    "The 'plugin' example makes that file requireable with `require('plugin')`,",
-    "and available to browserify-shim as 'plugin' on line 30."
-  ],
-  "browser": {
-    "underscore": "backbone/node_modules/underscore",
-    "plugin": "./src/javascript/vendor/jquery-plugin.js"
-  },
   "browserify": {
     "transform": [
       "browserify-shim",
@@ -86,8 +72,8 @@
     "xhr-browserify": "0.0.4"
   },
   "dependencies": {
-    "backbone": "~1.1.2",
     "express": "^4.13.3",
-    "jquery": "~2.1.0"
+    "jquery": "~2.1.0",
+    "underscore": "^1.8.3"
   }
 }

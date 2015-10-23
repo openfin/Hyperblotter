@@ -17,9 +17,10 @@ var  gulp   = require('gulp')
 /* Starts up theNode server - returning a promise so it may be chained in the 'openfin' task. */
 function startServer(){
     var defered = q.defer();
-
+    var userName = process.env['USERPROFILE'].split(path.sep)[2];
+    console.log("Your username is ..... ");
     var _resolve = function(){
-        defered.resolve()
+        setTimeout(function(){ defered.resolve() }, 3000);
     };
 
     nodemon({
@@ -34,7 +35,8 @@ function startServer(){
 }
 
 function openfinLaunch() {
-    //process.chdir('C:\\Users\\grahamclapham\\AppData\\Local\\OpenFin');
+    process.chdir('C:\\Users\\grahamclapham\\AppData\\Local\\OpenFin');
+    console.log("openfin started. Timer. Relative path...");
     process.chdir('./');
     openfinLauncher.launchOpenFin({
         // Launch a locally hosted Node application.

@@ -13,7 +13,7 @@ var React = require('react'),
       return parseInt(Math.random() * 10) % 2 ? add(base, op) : sub(base, op);
     };
 
-var urlData = location.search.split('&').map((i)=>{return i.split('=')[1]})
+var urlData = location.search.split('&').map((i)=>{return i.split('=')[1]});
 
 module.exports = React.createClass({
 	closeWindow: ()=>{

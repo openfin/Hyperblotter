@@ -75,24 +75,30 @@ fin.desktop.main(()=>{
 		}
 	}
 
-	blotter = new fin.desktop.Window({
-				name: 'blotter',
-				url: 'hypergrid.html',
-				autoShow: false,
-        defaultWidth: 960,
-        maxWidth: 960,
-        minWidth: 960,
-        maxHeight: 594,
-        defaultHeight: 594,
-        minHeight: 594,
-				resizable:false,
-				frame: false,
-				maximizable: false,
-				"icon": "http://demoappdirectory.openf.in/desktop/config/apps/OpenFin/HelloOpenFin/img/openfin.ico"
-			}, ()=>{
-
-			})
 });
+/* If the blotter has not been created yet, create it and return a promise...*/
+var initBlotter = function(){
+	var _blotterPromise = new Promise((resolve, reject)=>{
+		blotter = new fin.desktop.Window({
+			name: 'blotter',
+			url: 'hypergrid.html',
+			autoShow: false,
+			defaultWidth: 960,
+			maxWidth: 960,
+			minWidth: 960,
+			maxHeight: 594,
+			defaultHeight: 594,
+			minHeight: 594,
+			resizable:false,
+			frame: false,
+			maximizable: false,
+			"icon": "http://demoappdirectory.openf.in/desktop/config/apps/OpenFin/HelloOpenFin/img/openfin.ico"
+		}, ()=>{
+			resolve();
+		})
+	});
+	return _blotterPromise
+}
 
 function showAsPromise (wnd) {
 	return new Promise((resolve)=>{
@@ -206,7 +212,13 @@ module.exports = React.createClass({
 	  });
 	},
 	openBlotter: function(){
-		blotter.show();
+		if(!blotter){
+			initBlotter().then(function(b){
+				blotter.show();
+			});
+		}else{
+			blotter.show();
+		}
 	},
 	componentDidMount: function(){
 		this.showWindows();
@@ -266,7 +278,6 @@ function genPairs(arr) {
 	        return m
 	    }, [])
 }
-
 
 
 function launchRuntimeAsset(subPath, args, callback, errorCallback) {
