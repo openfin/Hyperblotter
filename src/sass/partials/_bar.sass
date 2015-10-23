@@ -1,5 +1,5 @@
 $bar-height: 50px
-$background-color: #030a28;
+$background-color: #030a28
 
 body
 	background-color: $background-color
@@ -9,20 +9,20 @@ body
 	font-size: 12pt
 
 .main-bar
-	display: flex;
+	display: flex
 	height: $bar-height
 	padding-right: 5px
 	.drag-area
 		flex: 1
-		-webkit-app-region: drag;
-		background-color: #FFF;
+		-webkit-app-region: drag
+		background-color: #FFF
 		opacity: .2
 	.content-area
 		display: flex
 		justify-content: space-around
 		flex: 10
-		padding: 10px;
-		color: steelblue;
+		padding: 10px
+		color: steelblue
 		text-align: center
 		i 
 			font-size: 2rem
@@ -65,7 +65,7 @@ body
 			display: flex
 			flex-direction: column
 			.last
-				flex:1
+				flex: 1
 				font-size: 2rem
 				border-bottom: 1px solid white
 			.percent-change
@@ -93,11 +93,10 @@ body
 .none 
 	display: none
 
-
 .start-color-change
-	animation-duration: 3.5s;
-	animation-name: slidein;
-	animation-iteration-count: infinite;
+	animation-duration: 3.5s
+	animation-name: slidein
+	animation-iteration-count: infinite
 
 
 @keyframes slidein 

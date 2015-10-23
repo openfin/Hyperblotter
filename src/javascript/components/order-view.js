@@ -14,7 +14,6 @@ var React = require('react'),
                 bidAsk: book[len]
             });
         }
-
         return state;
     };
 

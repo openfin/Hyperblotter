@@ -1,10 +1,10 @@
 {
-  "name": "gulp-starter",
-  "version": "0.1.1",
-  "description": "Gulp starter with common tasks and scenarios",
+  "name": "Hyperblotter",
+  "version": "1.0.1",
+  "description": "A demonstration app showing the capabilities of OpenFin.",
   "repository": {
     "type": "git",
-    "url": "git://github.com/greypants/gulp-starter.git"
+    "url": "https://github.com/openfin/Hyperblotter"
   },
   "browserify": {
     "transform": [
