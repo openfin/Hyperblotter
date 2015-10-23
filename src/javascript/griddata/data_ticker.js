@@ -160,9 +160,13 @@ var arrayGeneratorProto = {
         // console.log(_randomNumbers)
         // update the staticData for the selected random numbers
         _randomNumbers.map(function(d,i){
-            if(!d) return;
-            this._getStaticData()[d].High = (Math.random() * 60).toFixed(2);
-            randomizeTick(this._getStaticData()[d]);
+            try{
+                this._getStaticData()[d].High = (Math.random() * 60).toFixed(2);
+                randomizeTick(this._getStaticData()[d]);
+            }catch(err){
+                //---
+            }
+
         }.bind(this))
         return this._getStaticData();
     }

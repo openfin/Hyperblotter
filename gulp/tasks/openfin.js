@@ -56,7 +56,8 @@ gulp.task('server', function() {
     return startServerPromise()
             .then(function(){console.log("Server now running - call 'gulp openfin'")});
 });
-// NB this task is not curently funtioning due to relative/absolute path issues.
+
+
 gulp.task('openfin', function() {
             return openfinLaunch();
 });
