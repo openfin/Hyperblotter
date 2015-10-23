@@ -6,7 +6,9 @@ var  gulp   = require('gulp')
     //,openfinConfigBuilder = require('openfin-config-builder')
     ,nodemon = require('nodemon')
     ,src  = require('../config').js
-    ,path = require('path');
+    ,path = require('path')
+    ,userName = process.env['USERPROFILE'].split(path.sep)[2]
+    ,rootDir = process.cwd();
  
 //gulp.task('openfin', function() {
 //  openfinLauncher.launchOpenFin({
@@ -15,14 +17,12 @@ var  gulp   = require('gulp')
 //});
 
 /* Starts up theNode server - returning a promise so it may be chained in the 'openfin' task. */
-function startServer(){
+function startServerPromise(){
+    process.chdir(rootDir);
     var defered = q.defer();
-    var userName = process.env['USERPROFILE'].split(path.sep)[2];
-    console.log("Your username is ..... ");
     var _resolve = function(){
-        setTimeout(function(){ defered.resolve() }, 3000);
+            defered.resolve()
     };
-
     nodemon({
         script: 'server.js'
         , ext: 'js html'
@@ -35,24 +35,30 @@ function startServer(){
 }
 
 function openfinLaunch() {
-    process.chdir('C:\\Users\\grahamclapham\\AppData\\Local\\OpenFin');
-    console.log("openfin started. Timer. Relative path...");
-    process.chdir('./');
+    var _dir = 'C:\\Users\\'+userName+'\\AppData\\Local\\OpenFin'
+    process.chdir(_dir);
+
     openfinLauncher.launchOpenFin({
         // Launch a locally hosted Node application.
         configPath: 'http://localhost:5001/app.json'
     })
         .then(function () {
-            console.log('success!');
+            console.log('OpenFin launched!');
         })
         .fail(function (error) {
-            console.log('error!', error);
+            console.log('Error opening OpenFin!', error);
         });
 }
 
 /* THIS IS THE MAIN CALL TO LAUNCH THE OPENFIN APP. */
 
-gulp.task('openfin', function() {
-    return startServer()
-            .then(openfinLaunch);
+gulp.task('server', function() {
+    return startServerPromise()
+            .then(function(){console.log("Server now running - call 'gulp openfin'")});
 });
+// NB this task is not curently funtioning due to relative/absolute path issues.
+gulp.task('openfin', function() {
+            return openfinLaunch();
+});
+
+
