@@ -40,57 +40,62 @@ var floor = Math.floor;
 var random = Math.random;
 
 fin.desktop.main(()=>{
-	initTradeGrid().then(function(val){
+	initAnimationWindows().then(function(val){
 		console.log(" THE WINDOWS HAVE BEEN CREATED --- ", val)
 	});
 });
 
 /* Initialises all the floating 'trade' windows. */
-var initTradeGrid = function(){
-
+var initAnimationWindows = function(){
+	console.log("initAnimationWindows called ");
 	return new Promise(function(resolve, reject){
+		if(_tilesCreated){
+			resolve()
+		} else{
+			var top = 5, left = 5, i = 1;
+			for (; i < numTiles; i++){
+				console.log("LOOP ",i, " numTiles ",numTiles);
+				animationWindows.push(new fin.desktop.Window({
+					name: 'tile' + random(),
+					url: 'trade.html?t=' + rndData[i].ticker + '&l=' + rndData[i].last,
+					autoShow: false,
+					defaultHeight: cubeSize,
+					minHeight: cubeSize,
+					maxHeight:cubeSize,
+					defaultWidth: cubeSize,
+					minWidth:cubeSize,
+					maxWidth:cubeSize,
+					resizable:false,
+					frame: false,
+					maximizable: false,
+					saveWindowState: false,
+					defaultTop: top,
+					defaultLeft: left,
+					icon: "http://demoappdirectory.openf.in/desktop/config/apps/OpenFin/HelloOpenFin/img/openfin.ico"
+				}));
 
-		var top = 5, left = 5, i = 1;
+				locations.push({
+					top: top,
+					left: left,
+					duration: 1000
+				});
 
-		for (; i < numTiles; i++){
-			animationWindows.push(new fin.desktop.Window({
-				name: 'tile' + random(),
-				url: 'trade.html?t=' + rndData[i].ticker + '&l=' + rndData[i].last,
-				autoShow: false,
-				defaultHeight: cubeSize,
-				minHeight: cubeSize,
-				maxHeight:cubeSize,
-				defaultWidth: cubeSize,
-				minWidth:cubeSize,
-				maxWidth:cubeSize,
-				resizable:false,
-				frame: false,
-				maximizable: false,
-				saveWindowState: false,
-				defaultTop: top,
-				defaultLeft: left,
-				icon: "http://demoappdirectory.openf.in/desktop/config/apps/OpenFin/HelloOpenFin/img/openfin.ico"
-			}));
+				left += cubeSize + 5;
 
-			locations.push({
-				top: top,
-				left: left,
-				duration: 1000
-			});
-
-			left += cubeSize + 5;
-
-			if (i && !(i % numColumns)) {
-				left = 5;
-				top += cubeSize + 5
+				if (i && !(i % numColumns)) {
+					left = 5;
+					top += cubeSize + 5;
+				}
+				if(i === numTiles-1){
+					console.log(" _tilesCreated === true");
+					_tilesCreated = true;
+					resolve();
+				}
 			}
-			if(i === numTiles) resolve("Windows created... ")
 		}
-		_tilesCreated = true;
 
 	});
 };
-
 
 /* If the blotter has not been created yet, create it and return a promise...*/
 var initBlotter = function(){
@@ -173,6 +178,13 @@ module.exports = React.createClass({
 			asc: 'fa fa-sort-amount-asc'
 		})
 	},
+	openAnimationWindows:function(){
+		console.log(" openAnimationWindows called ")
+		initAnimationWindows().then(()=>{
+			console.log(" initAnimationWindows resolved ")
+			this.restoreWindows()
+		});
+	},
 	restoreWindows: function () {
 		animationWindows.forEach((wnd)=>{
 			wnd.restore();
@@ -184,6 +196,7 @@ module.exports = React.createClass({
 		})
 	},
 	closeWindows: ()=>{
+		this.toggleAnimateLoopStop()
 		animationWindows.forEach((wnd)=>{
 			wnd.close();
 		});
@@ -275,7 +288,9 @@ module.exports = React.createClass({
 									<i onClick={this.showWindows} className="fa fa-plus-square"></i>
 									<i onClick={this.toggleAnimateLoop} className={ this.getAnimateClass() }></i>
 									<i onClick={this.minWindows} className={this.state.desc}></i>
+									<i onClick={this.openAnimationWindows} className={this.state.asc}></i>
 									<i onClick={this.restoreWindows} className={this.state.asc}></i>
+									<i onClick={this.openAnimationWindows} className='openClass'>OPEN</i>
 									<i onClick={this.openBlotter} className="fa fa-table"></i>
 									<i onClick={this.openExcel} className="fa fa-file-excel-o"></i>
 							</div>
@@ -286,7 +301,6 @@ module.exports = React.createClass({
 						</div>
 	}
 });
-
 
 function genPairs(arr) {
     return arr.reduce(function(m, itm, idx, a) {
