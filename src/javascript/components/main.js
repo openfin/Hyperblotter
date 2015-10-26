@@ -40,48 +40,56 @@ var floor = Math.floor;
 var random = Math.random;
 
 fin.desktop.main(()=>{
-
-	var top = 5, left = 5, i = 1;
-
-	for (; i < numTiles; i++){
-		animationWindows.push(new fin.desktop.Window({
-			name: 'tile' + random(),
-			url: 'trade.html?t=' + rndData[i].ticker + '&l=' + rndData[i].last,
-			autoShow: false,
-			defaultHeight: cubeSize,
-			minHeight: cubeSize,
-			maxHeight:cubeSize,
-			defaultWidth: cubeSize,
-			minWidth:cubeSize,
-			maxWidth:cubeSize,
-			resizable:false,
-			frame: false,
-			maximizable: false,
-			saveWindowState: false,
-			defaultTop: top,
-			defaultLeft: left,
-			icon: "http://demoappdirectory.openf.in/desktop/config/apps/OpenFin/HelloOpenFin/img/openfin.ico"
-		}));
-
-		locations.push({
-			top: top,
-			left: left,
-			duration: 1000
-		});
-
-		left += cubeSize + 5;
-
-		if (i && !(i % numColumns)) {
-			left = 5;
-			top += cubeSize + 5
-		}
-	}
-
+	initTradeGrid().then(function(val){
+		console.log(" THE WINDOWS HAVE BEEN CREATED --- ", val)
+	});
 });
+
 /* Initialises all the floating 'trade' windows. */
 var initTradeGrid = function(){
 
-}
+	return new Promise(function(resolve, reject){
+
+		var top = 5, left = 5, i = 1;
+
+		for (; i < numTiles; i++){
+			animationWindows.push(new fin.desktop.Window({
+				name: 'tile' + random(),
+				url: 'trade.html?t=' + rndData[i].ticker + '&l=' + rndData[i].last,
+				autoShow: false,
+				defaultHeight: cubeSize,
+				minHeight: cubeSize,
+				maxHeight:cubeSize,
+				defaultWidth: cubeSize,
+				minWidth:cubeSize,
+				maxWidth:cubeSize,
+				resizable:false,
+				frame: false,
+				maximizable: false,
+				saveWindowState: false,
+				defaultTop: top,
+				defaultLeft: left,
+				icon: "http://demoappdirectory.openf.in/desktop/config/apps/OpenFin/HelloOpenFin/img/openfin.ico"
+			}));
+
+			locations.push({
+				top: top,
+				left: left,
+				duration: 1000
+			});
+
+			left += cubeSize + 5;
+
+			if (i && !(i % numColumns)) {
+				left = 5;
+				top += cubeSize + 5
+			}
+			if(i === numTiles) resolve("Windows created... ")
+		}
+		_tilesCreated = true;
+
+	});
+};
 
 
 /* If the blotter has not been created yet, create it and return a promise...*/
@@ -185,6 +193,7 @@ module.exports = React.createClass({
 	},
 	toggleAnimateLoopStart: function () {
 		inLoop = true;
+		this.setState({"inLoop":true});
 		console.log("IN LOOP SHOULD BE TRUE: ", inLoop);
 		if (inLoop) {
 			this.animateWindows(animationWindows);
@@ -192,8 +201,8 @@ module.exports = React.createClass({
 	},
 	toggleAnimateLoopStop: function () {
 		inLoop = false;
+		this.setState({"inLoop":false});
 		console.log("IN LOOP SHOULD BE TRUE: ", inLoop);
-
 	},
 	animateWindows: function(animationWindows){
 		setTranspatentAsPromise(animationWindows, 0.5).then(()=>{
@@ -236,7 +245,7 @@ module.exports = React.createClass({
 	},
 	componentDidMount: function(){
 		this.showWindows();
-		console.log('component did mount...');
+		console.log('Yay!!! component did mount...');
 	},
 	openExcel: function() {
 
@@ -252,16 +261,19 @@ module.exports = React.createClass({
 	getInitialState: function(){
 		return {
 			desc: 'fa fa-sort-amount-desc',
-			asc: 'fa fa-sort-amount-asc none'
+			asc: 'fa fa-sort-amount-asc none',
+			inLoop : false
 		}
+	},
+	getAnimateClass:function(){
+		return this.state.inLoop ?  "fa fa-arrows" : "fa fa-plus-square";
 	},
 	render: function(){
 		return	<div className="main-bar">
 							<div className="drag-area"></div>
 							<div className="content-area">
 									<i onClick={this.showWindows} className="fa fa-plus-square"></i>
-									<i onClick={this.toggleAnimateLoop} className="fa fa-arrows"></i>
-									<i onClick={this.toggleAnimateLoopStop} className="fa fa-ban"></i>
+									<i onClick={this.toggleAnimateLoop} className={ this.getAnimateClass() }></i>
 									<i onClick={this.minWindows} className={this.state.desc}></i>
 									<i onClick={this.restoreWindows} className={this.state.asc}></i>
 									<i onClick={this.openBlotter} className="fa fa-table"></i>

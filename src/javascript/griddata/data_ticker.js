@@ -59,7 +59,7 @@ var arrayGeneratorProto = {
                     Spread: data.Spread[i],
                     Ask: data.Ask[i],
                     AskQuantity: data.AskQuantity[i],
-                    Today: [0, 10, 20, 30, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    Today:this.createRandomSparkline(), //[0, 0, 0, 0,0, 0, 0, 0, 0, 0, 0, 0,0, 0, 0, 0],
                     flash: 0,
                     flashColor: 'green',
                     countryCode: countryMap[data.COUNTRY[i]]
@@ -118,6 +118,15 @@ var arrayGeneratorProto = {
                 return _this.createDataCell(_numbers[i]);
             });
     },
+    createRandomSparkline:function(){
+        var _arr = [];
+
+        for(var i=0; i< 16 ;i++){
+            _arr.push( _getSparklineRandomValue() )
+        }
+        console.log("ARRAY FOR SPARKLINE : ", _arr);
+        return _arr;
+    },
     createDataCell:function createDataCell(i){
         return {
             NAME: data.NAME[i],
@@ -145,7 +154,7 @@ var arrayGeneratorProto = {
             Spread: data.Spread[i],
             Ask: data.Ask[i],
             AskQuantity: data.AskQuantity[i],
-            Today:[0, 0, 0, 0,0, 0, 0, 0, 0, 0, 0, 0,0, 0, 0, 0],
+            Today:this.createRandomSparkline(), //[0, 0, 0, 0,0, 0, 0, 0, 0, 0, 0, 0,0, 0, 0, 0],
             flash: 0,
             flashColor: 'green',
             countryCode: countryMap[data.COUNTRY[i]]
@@ -157,7 +166,6 @@ var arrayGeneratorProto = {
     getMorphedStocks:function getStocks(){
         // Start with an array of random numbers...
         var _randomNumbers = this._generateRandomNumberArray(this.getArrayLength(), this._getStaticData().length);
-        // console.log(_randomNumbers)
         // update the staticData for the selected random numbers
         _randomNumbers.map(function(d,i){
             try{
@@ -193,7 +201,7 @@ var tickerTimerPrivate = {
         window.requestAnimationFrame(tickerTimerPrivate.onTick);
     },
     tickFunction: function tickFunction(){
-        console.log("AAAA", JSON.stringify( tickerTimerPrivate._arrayGen.getRandomArray() ) );
+        //console.log("AAAA", JSON.stringify( tickerTimerPrivate._arrayGen.getRandomArray() ) );
         var _arr = tickerTimerPrivate._arrayGen.getRandomArray();
     }
 };
@@ -201,12 +209,9 @@ var tickerTimerPrivate = {
 var tickerTimerProto = {
     start: function start(){
         window.requestAnimationFrame(tickerTimerPrivate.onTick);
-        //var __int = window.setInterval(function(e){
-        //    console.log("AAAA", tickerTimerPrivate._arrayGen.getRandomArray()[0].NAME);
-        //}, 2000)
     },
     stop: function stop(){
-
+    // TODO: add the stop() function...
     }
 
 };
@@ -321,6 +326,9 @@ var randomizeTicks = function() {
         randomizeTick(each);
     }
 };
+var _getSparklineRandomValue = function(){
+    return 5 + Math.floor(90 * rnd());
+}
 
 var randomizeTick = function(stock) {
     stock.Bid = (stock.Bid * 0.99) + (stock.Bid * 0.017 * rnd())
@@ -333,7 +341,7 @@ var randomizeTick = function(stock) {
         stock.Volume = Math.floor(stock.Volume + stock.BidQuantity);
         stock.Change = stock.Bid - stock.Last
         stock.PercentChange = (stock.Change)/stock.Last*100;
-        stock.Today.push(5 + Math.floor(90 * rnd()));
+        stock.Today.push( _getSparklineRandomValue() );
         if (stock.Today.length === 17) {
             stock.Today.shift();
         }
