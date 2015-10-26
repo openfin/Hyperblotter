@@ -10,7 +10,9 @@ var animationWindows = [],
 		numColumns = 6,
 		numRows = 3,
 		demoTiles = {},
-		numTiles = numRows * numColumns + 1;
+		numTiles = numRows * numColumns + 1,
+	// Have te grid windows been created yet?
+		_tilesCreated = false;
 
 
 var rndData = [
@@ -76,6 +78,12 @@ fin.desktop.main(()=>{
 	}
 
 });
+/* Initialises all the floating 'trade' windows. */
+var initTradeGrid = function(){
+
+}
+
+
 /* If the blotter has not been created yet, create it and return a promise...*/
 var initBlotter = function(){
 	var _blotterPromise = new Promise((resolve, reject)=>{
@@ -172,14 +180,20 @@ module.exports = React.createClass({
 			wnd.close();
 		});
 	},
+	toggleAnimateLoop:function(){
+		inLoop ? this.toggleAnimateLoopStop() : this.toggleAnimateLoopStart();
+	},
 	toggleAnimateLoopStart: function () {
 		inLoop = true;
+		console.log("IN LOOP SHOULD BE TRUE: ", inLoop);
 		if (inLoop) {
 			this.animateWindows(animationWindows);
 		}
 	},
 	toggleAnimateLoopStop: function () {
 		inLoop = false;
+		console.log("IN LOOP SHOULD BE TRUE: ", inLoop);
+
 	},
 	animateWindows: function(animationWindows){
 		setTranspatentAsPromise(animationWindows, 0.5).then(()=>{
@@ -222,7 +236,7 @@ module.exports = React.createClass({
 	},
 	componentDidMount: function(){
 		this.showWindows();
-		console.log('called hommie');
+		console.log('component did mount...');
 	},
 	openExcel: function() {
 
@@ -246,7 +260,7 @@ module.exports = React.createClass({
 							<div className="drag-area"></div>
 							<div className="content-area">
 									<i onClick={this.showWindows} className="fa fa-plus-square"></i>
-									<i onClick={this.toggleAnimateLoopStart} className="fa fa-arrows"></i>
+									<i onClick={this.toggleAnimateLoop} className="fa fa-arrows"></i>
 									<i onClick={this.toggleAnimateLoopStop} className="fa fa-ban"></i>
 									<i onClick={this.minWindows} className={this.state.desc}></i>
 									<i onClick={this.restoreWindows} className={this.state.asc}></i>
@@ -261,10 +275,6 @@ module.exports = React.createClass({
 	}
 });
 
-
-
-// var floor = Math.floor;
-// var random = Math.random;
 
 function genPairs(arr) {
     return arr.reduce(function(m, itm, idx, a) {

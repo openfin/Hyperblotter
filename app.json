@@ -16,6 +16,7 @@
         "resizable": false,
         "maximizable": false,
         "frame": false,
+        "alwaysOnTop":true,
         "cornerRounding": {
             "width": 5,
             "height": 5
@@ -25,6 +26,7 @@
         "arguments": "",
         "version": "stable"
     },
+    "splashScreenImage": "http:localhost:5001/images/splashscreen.png",
     "shortcut": {
         "company": "OpenFin",
         "description": "OpenFin Hyper Blotter demo",
