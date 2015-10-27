@@ -47,7 +47,7 @@ fin.desktop.main(()=>{
 
 /* Initialises all the floating 'trade' windows. */
 var initAnimationWindows = function(){
-	console.log("initAnimationWindows called ");
+	console.log("initAnimationWindows called _tilesCreated == ",_tilesCreated);
 	return new Promise(function(resolve, reject){
 		if(_tilesCreated){
 			resolve()
@@ -163,10 +163,12 @@ module.exports = React.createClass({
 		  fin.desktop.Window.getCurrent().minimize();
 		});
 	},
-	showWindows: ()=>{
+	showWindows: function(){
+		console.log("showWindows called");
 		animationWindows.forEach((wnd)=>{
 			wnd.show();
 		});
+		this.setState({animationWindowsShowing: true})
 	},
 	minWindows: function() {
 		animationWindows.forEach((wnd)=>{
@@ -178,28 +180,44 @@ module.exports = React.createClass({
 			asc: 'fa fa-sort-amount-asc'
 		})
 	},
+	toggleShowAnimationWindows:function(){
+		console.log("toggleShowAnimationWindows called this. openAnimationWindows = ", this.openAnimationWindows);
+		if(this.animationWindowsShowing){
+			this.openAnimationWindows()
+		}else{
+			this.closeAnimationWindows();
+		}
+	},
 	openAnimationWindows:function(){
-		console.log(" openAnimationWindows called ")
+		console.log(" openAnimationWindows called ");
 		initAnimationWindows().then(()=>{
-			console.log(" initAnimationWindows resolved ")
-			this.restoreWindows()
+			console.log(" initAnimationWindows resolved ");
+			this.showWindows();
 		});
 	},
 	restoreWindows: function () {
+		this.openAnimationWindows();
 		animationWindows.forEach((wnd)=>{
 			wnd.restore();
 		});
 
 		this.setState({
 			desc: 'fa fa-sort-amount-desc',
-			asc: 'fa fa-sort-amount-asc none'
+			asc: 'fa fa-sort-amount-asc none',
+			animationWindowsShowing: true
 		})
 	},
-	closeWindows: ()=>{
-		this.toggleAnimateLoopStop()
+	closeAnimationWindows: function(){
+		this.toggleAnimateLoopStop();
 		animationWindows.forEach((wnd)=>{
 			wnd.close();
 		});
+
+		this.setState({
+			asc: 'fa fa-sort-amount-desc',
+			desc: 'fa fa-sort-amount-asc none',
+			animationWindowsShowing: false
+		})
 	},
 	toggleAnimateLoop:function(){
 		inLoop ? this.toggleAnimateLoopStop() : this.toggleAnimateLoopStart();
@@ -215,7 +233,7 @@ module.exports = React.createClass({
 	toggleAnimateLoopStop: function () {
 		inLoop = false;
 		this.setState({"inLoop":false});
-		console.log("IN LOOP SHOULD BE TRUE: ", inLoop);
+		console.log("IN LOOP SHOULD BE FALSE: ", inLoop);
 	},
 	animateWindows: function(animationWindows){
 		setTranspatentAsPromise(animationWindows, 0.5).then(()=>{
@@ -257,7 +275,7 @@ module.exports = React.createClass({
 		}
 	},
 	componentDidMount: function(){
-		this.showWindows();
+		// this.showWindows();
 		console.log('Yay!!! component did mount...');
 	},
 	openExcel: function() {
@@ -275,20 +293,31 @@ module.exports = React.createClass({
 		return {
 			desc: 'fa fa-sort-amount-desc',
 			asc: 'fa fa-sort-amount-asc none',
+			animationWindowsShowing: false,
 			inLoop : false
 		}
 	},
+	getAnimatinWindowsClass:function(){
+		return this.state.animationWindowsShowing ? "none" : "menuitem";
+	},
 	getAnimateClass:function(){
-		return this.state.inLoop ?  "fa fa-arrows" : "fa fa-plus-square";
+		return this.state.animationWindowsShowing ?  "fa fa-spinner" : "fa fa-spinner";
+	},
+	getAnimateText:function(){
+		if(this.state.animationWindowsShowing ){
+			return this.state.inLoop ?  "Stop animation" : "Start animation";
+		}else{
+			return "---";
+		}
+
 	},
 	render: function(){
 		return	<div className="main-bar">
 							<div className="drag-area"></div>
 							<div className="content-area">
-									<i onClick={this.showWindows} className="fa fa-plus-square"></i>
-									<i onClick={this.toggleAnimateLoop} className={ this.getAnimateClass() }></i>
+									<i onClick={this.toggleAnimateLoop} className={ this.getAnimateClass() }>{ this.getAnimateText() }</i>
+									<i onClick={this.openAnimationWindows} className={this.getAnimatinWindowsClass() }>Show trades</i>
 									<i onClick={this.minWindows} className={this.state.desc}></i>
-									<i onClick={this.openAnimationWindows} className={this.state.asc}></i>
 									<i onClick={this.restoreWindows} className={this.state.asc}></i>
 									<i onClick={this.openAnimationWindows} className='openClass'>OPEN</i>
 									<i onClick={this.openBlotter} className="fa fa-table"></i>
@@ -301,6 +330,25 @@ module.exports = React.createClass({
 						</div>
 	}
 });
+/*
+ <div className="drag-area"></div>
+ <div className="content-area">
+ <i onClick={this.toggleShowAnimationWindows} className="menubar">Show trades</i>
+ <i onClick={this.toggleAnimateLoop} className={ this.getAnimateClass() }>{ this.getAnimateText() }</i>
+ <i onClick={this.openAnimationWindows} className='fa fa-folder-open'></i>
+ <i onClick={this.minWindows} className={this.state.desc}></i>
+ <i onClick={this.restoreWindows} className={this.state.asc}></i>
+ <i onClick={this.openAnimationWindows} className='openClass'>OPEN</i>
+ <i onClick={this.openBlotter} className="fa fa-table"></i>
+ <i onClick={this.openExcel} className="fa fa-file-excel-o"></i>
+ </div>
+ <div className="window-control">
+ <i onClick={this.minApp} className="fa fa-minus"></i>
+ <i onClick={this.closeApp} className="fa fa-times"></i>
+ </div>
+ </div>
+
+ */
 
 function genPairs(arr) {
     return arr.reduce(function(m, itm, idx, a) {

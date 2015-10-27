@@ -7,8 +7,8 @@ var  gulp   = require('gulp')
     ,nodemon = require('nodemon')
     ,src  = require('../config').js
     ,path = require('path')
-    ,userName = process.env['USERPROFILE'].split(path.sep)[2]
-    ,rootDir = process.cwd();
+    ,userName = function(){ return process.env['USERPROFILE'].split(path.sep)[2] || "user" }
+    ,rootDir = function(){return process.cwd() || 'cwd'}; // catches no process.env being available.
  
 //gulp.task('openfin', function() {
 //  openfinLauncher.launchOpenFin({
