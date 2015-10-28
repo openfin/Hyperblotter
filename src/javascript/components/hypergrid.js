@@ -100,8 +100,8 @@ var HyperGrid = React.createClass({
             var bgColor = '#07071E';
             var fixedAreasBGColor = bgColor;
 
-            var font = "24px Roboto Condensed";
-            var headingFont = "14px Roboto Condensed";
+            var font = "14px Roboto Condensed";
+            var headingFont = "16px Roboto Condensed";
             var headingFGColor = '#3D77FE';
 
             var lnfOverrides = {
@@ -265,12 +265,11 @@ var HyperGrid = React.createClass({
             },
             openOrders: () => {
 
-                var jsonGrid = document.querySelector('#stock-example')
-                var jsonModel = jsonGrid.getBehavior()
+                var jsonGrid = document.querySelector('#stock-example');
+                var jsonModel = jsonGrid.getBehavior();
 
                 lastSelectedRow = lastSelectedRow || 0;
-                var row = jsonModel.getRow(lastSelectedRow)
-
+                var row = jsonModel.getRow(lastSelectedRow);
 
                 require('./child-window.js').createChildWindow({
                     name: row.NAME,
@@ -282,7 +281,7 @@ var HyperGrid = React.createClass({
                     maximizable: false,
                     height: 594 / 3,
                     maxHeight: 594 / 3,
-                    minHeight: 594 / 3,
+                    minHeight: 594 / 3
                 })
             },
     render: function (){
@@ -306,3 +305,6 @@ var HyperGrid = React.createClass({
 
 module.exports = HyperGrid;
 
+/*
+
+ */

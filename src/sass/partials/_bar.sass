@@ -1,4 +1,4 @@
-$bar-height: 50px
+$bar-height: 30px
 $bar-width: 480px
 $controls-width: 50px
 $background-color: #030a28
@@ -8,33 +8,44 @@ body
   height: 100%
   width: 100%
   overflow: hidden
-  font-size: 16pt
+  font-size: 18pt
 
 .main-bar
   height: $bar-height
   padding-right: 5px
   .drag-area
     -webkit-app-region: drag
-    background-color: #FFF
-    opacity: 0.2
     height: 30px
     width: $bar-width - $controls-width
 
+  .drag-area-display
+    width: $bar-width
+    height: $bar-height
+    background-color: #FFF
+    opacity: 0.2
+    position: absolute
+    top: 0px
+    left: 0px
+    z-index: 1
+
   .content-area
+    z-index: 2
     width: $bar-width
     position: absolute
     top: 20px
     left: 0
     padding: 10px
     color: steelblue
-    text-align: center
+    text-align: left
     i
-      font-size: 12px
+      font-style: normal
+      font-size: 16px
       padding: 0 8px
     i:hover
       color: white
 
   .window-control
+    z-index: 4
     position: absolute
     top: 0px
     display: block
@@ -59,9 +70,7 @@ body
     .title
       flex: 5
     .window-control
-      flex: 2
-      display:flex
-      justify-content: flex-end
+      z-index: 3
       i
         padding-left: 10px
   .content

@@ -40,9 +40,18 @@ var floor = Math.floor;
 var random = Math.random;
 
 
+
 fin.desktop.main(()=>{
+
 	initAnimationWindows().then(function(val){
 		console.log(" THE WINDOWS HAVE BEEN CREATED --- ", val);
+
+        fin.desktop.System.deleteCacheOnRestart(function () {
+            console.log("successfuly deleted cache");
+        },function (err) {
+            console.log("failure to delete cache: " + err);
+        });
+
         fin.desktop.System.addEventListener('monitor-info-changed', function (evnt) {
             console.log("The monitor information has changed to: ", evnt);
             document.dispatchEvent(new CustomEvent('monitor-changed', {'detail': evnt}));
@@ -327,30 +336,32 @@ module.exports = React.createClass({
 		return this.state.animationWindowsShowing ? "none" : "menuitem";
 	},
 	getAnimateClass:function(){
-		return this.state.animationWindowsShowing ?  "fa fa-spinner" : "fa fa-spinner";
+		return this.state.animationWindowsShowing ?  "menuitem" : "menuitem";
 	},
 	getAnimateText:function(){
 		if(this.state.animationWindowsShowing ){
-			return this.state.inLoop ?  "Stop animation" : "Start animation";
+			return this.state.inLoop ?   "Stop animation" :  "Animate windows" ;
 		}else{
-			return "---";
+			return "";
 		}
 	},
 	render: function(){
 		return	<div className="main-bar">
 							<div className="window-control">
 								<i onClick={this.minApp} className="fa fa-minus"></i>
+								<i> </i>
 								<i onClick={this.closeApp} className="fa fa-times"></i>
 							</div>
 							<div className="drag-area"></div>
+							<div className="drag-area-display"></div>
 							<div className="content-area">
-									<i onClick={this.toggleAnimateLoop} className={ this.getAnimateClass() }>{ this.getAnimateText() }</i>
-									<i onClick={this.openAnimationWindows} className={this.getAnimatinWindowsClass() }>Show trades</i>
+									<i onClick={this.toggleAnimateLoop} className={ this.getAnimateClass() }>   { this.getAnimateText() }</i>
+									<i onClick={this.openAnimationWindows} className={this.getAnimatinWindowsClass() }><span className='fa fa-table'></span> Show trades</i>
 									<i onClick={this.minWindows} className={this.state.desc}></i>
 									<i onClick={this.restoreWindows} className={this.state.asc}></i>
-									<i onClick={this.openAnimationWindows} className='openClass'>OPEN</i>
-									<i onClick={this.openBlotter} className="fa fa-table"></i>
-									<i onClick={this.openExcel} className="fa fa-file-excel-o"></i>
+									<i> | </i>
+									<i onClick={this.openBlotter}><span className="fa fa-table"></span> Hypergrid</i>
+									<i onClick={this.openExcel} ><span className="fa fa-file-excel-o"></span> Open Excel file</i>
 							</div>
 						</div>
 	}
