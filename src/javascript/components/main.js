@@ -39,17 +39,18 @@ var rndData = [
 var floor = Math.floor;
 var random = Math.random;
 
+
 fin.desktop.main(()=>{
 	initAnimationWindows().then(function(val){
-		console.log(" THE WINDOWS HAVE BEEN CREATED --- ", val)
-	});
-
-	fin.desktop.System.addEventListener('monitor-info-changed', function (evnt) {
-		console.log("The monitor information has changed to: ", evnt);
-	}, function () {
-		console.log("The registration of 'monitor-info-changed' was successful");
-	},function (err) {
-		console.log("failure: " + err);
+		console.log(" THE WINDOWS HAVE BEEN CREATED --- ", val);
+        fin.desktop.System.addEventListener('monitor-info-changed', function (evnt) {
+            console.log("The monitor information has changed to: ", evnt);
+            document.dispatchEvent(new CustomEvent('monitor-changed', {'detail': evnt}));
+        }, function () {
+            console.log("The registration of 'monitor-info-changed' was successful");
+        },function (err) {
+            console.log("failure: " + err);
+        });
 	});
 });
 
@@ -190,7 +191,7 @@ module.exports = React.createClass({
 	},
 	toggleShowAnimationWindows:function(){
 		console.log("toggleShowAnimationWindows called this. openAnimationWindows = ", this.openAnimationWindows);
-		if(this.animationWindowsShowing){
+		if(this.state.animationWindowsShowing){
 			this.openAnimationWindows()
 		}else{
 			this.closeAnimationWindows();
@@ -285,6 +286,23 @@ module.exports = React.createClass({
 	componentDidMount: function(){
 		// this.showWindows();
 		console.log('Yay!!! component did mount...');
+		var _boundtoggleAnimateLoopStart = this.toggleAnimateLoopStart.bind(this);
+		var _boundtoggleAnimateLoopStop = this.toggleAnimateLoopStop.bind(this);
+		var _repositionWindows = function(){
+			console.log(" this.state.animationWindowsShowing ", this.state.animationWindowsShowing);
+			if(!this.state.inLoop &&  this.state.animationWindowsShowing){
+				_boundtoggleAnimateLoopStart();
+				setTimeout(_boundtoggleAnimateLoopStop, 100);
+			}
+		};
+
+		var _boundRepositionWindows = _repositionWindows.bind(this);
+
+
+		document.addEventListener('monitor-changed', function(e){
+			console.log("The monitor has changed ", e);
+			_boundRepositionWindows();
+		})
 	},
 	openExcel: function() {
 
@@ -317,7 +335,6 @@ module.exports = React.createClass({
 		}else{
 			return "---";
 		}
-
 	},
 	render: function(){
 		return	<div className="main-bar">
