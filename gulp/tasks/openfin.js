@@ -7,8 +7,8 @@ var  gulp   = require('gulp')
     ,nodemon = require('nodemon')
     ,src  = require('../config').js
     ,path = require('path')
-    ,userName = function(){ return process.env['USERPROFILE'].split(path.sep)[2] || "user" }
-    ,rootDir = function(){return process.cwd() || 'cwd'}; // catches no process.env being available.
+    ,userName =   (process && process.env && process.env['USERPROFILE'] ? process.env['USERPROFILE'].split(path.sep)[2] : null)
+    ,rootDir =    (process && process.cwd()  ? process.cwd() : null);
  
 //gulp.task('openfin', function() {
 //  openfinLauncher.launchOpenFin({
@@ -35,8 +35,12 @@ function startServerPromise(){
 }
 
 function openfinLaunch() {
-    var _dir = 'C:\\Users\\'+userName+'\\AppData\\Local\\OpenFin'
-    process.chdir(_dir);
+    try {
+        var _dir = 'C:\\Users\\' + userName + '\\AppData\\Local\\OpenFin'
+        process.chdir(_dir);
+    }catch(err){
+        //--
+    }
 
     openfinLauncher.launchOpenFin({
         // Launch a locally hosted Node application.

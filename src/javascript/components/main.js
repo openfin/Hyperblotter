@@ -43,6 +43,14 @@ fin.desktop.main(()=>{
 	initAnimationWindows().then(function(val){
 		console.log(" THE WINDOWS HAVE BEEN CREATED --- ", val)
 	});
+
+	fin.desktop.System.addEventListener('monitor-info-changed', function (evnt) {
+		console.log("The monitor information has changed to: ", evnt);
+	}, function () {
+		console.log("The registration of 'monitor-info-changed' was successful");
+	},function (err) {
+		console.log("failure: " + err);
+	});
 });
 
 /* Initialises all the floating 'trade' windows. */
@@ -313,6 +321,10 @@ module.exports = React.createClass({
 	},
 	render: function(){
 		return	<div className="main-bar">
+							<div className="window-control">
+								<i onClick={this.minApp} className="fa fa-minus"></i>
+								<i onClick={this.closeApp} className="fa fa-times"></i>
+							</div>
 							<div className="drag-area"></div>
 							<div className="content-area">
 									<i onClick={this.toggleAnimateLoop} className={ this.getAnimateClass() }>{ this.getAnimateText() }</i>
@@ -322,10 +334,6 @@ module.exports = React.createClass({
 									<i onClick={this.openAnimationWindows} className='openClass'>OPEN</i>
 									<i onClick={this.openBlotter} className="fa fa-table"></i>
 									<i onClick={this.openExcel} className="fa fa-file-excel-o"></i>
-							</div>
-							<div className="window-control">
-								<i onClick={this.minApp} className="fa fa-minus"></i>
-								<i onClick={this.closeApp} className="fa fa-times"></i>
 							</div>
 						</div>
 	}
