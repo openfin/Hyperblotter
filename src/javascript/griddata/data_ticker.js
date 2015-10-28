@@ -20,12 +20,9 @@ var arrayGeneratorProto = {
     _arrayLength: 10,
     //------------
     _getStaticData:function _initialiseStaticData(){
-       // console.log("GET STATIC DATA CALLED >>", this._staticArray);
         if(_arrayGeneratorPrivate._staticArray && _arrayGeneratorPrivate._staticArray.length>0){
-           // console.log("THE ARRAY HAS ALREADY BEEN CREATED +++ ",_arrayGeneratorPrivate._staticArray.length);
             return _arrayGeneratorPrivate._staticArray;
         }else {
-            //console.log("THERE IS NO STATIC DATA -----------------");
             var count = data.NAME.length;
             var i = 0;
             _arrayGeneratorPrivate._staticArray = [];
@@ -124,7 +121,6 @@ var arrayGeneratorProto = {
         for(var i=0; i< 16 ;i++){
             _arr.push( _getSparklineRandomValue() )
         }
-        console.log("ARRAY FOR SPARKLINE : ", _arr);
         return _arr;
     },
     createDataCell:function createDataCell(i){
@@ -187,8 +183,9 @@ var arrayGenerator = function () {
 //////
 var tickerTimerPrivate = {
     _lastTick:null,
-    _functionCallsPerSecond:.01,
+    _functionCallsPerSecond:.05,
     _arrayGen: arrayGenerator(),
+    _ticksExecuted: 1,
 
     onTick: function onTick(t){
         var _frame = 16;
@@ -196,13 +193,16 @@ var tickerTimerPrivate = {
         if(!this._lastTick) this._lastTick = t;
         if(t- this._lastTick > (second * tickerTimerPrivate._functionCallsPerSecond)){
             this._lastTick = t;
+            tickerTimerPrivate._ticksExecuted ++;
+            console.log("this._ticksExecuted ", tickerTimerPrivate._ticksExecuted);
             tickerTimerPrivate.tickFunction();
         }
         window.requestAnimationFrame(tickerTimerPrivate.onTick);
     },
     tickFunction: function tickFunction(){
         //console.log("AAAA", JSON.stringify( tickerTimerPrivate._arrayGen.getRandomArray() ) );
-        var _arr = tickerTimerPrivate._arrayGen.getRandomArray();
+        //var _arr = tickerTimerPrivate._arrayGen.getRandomArray();
+        document.dispatchEvent( new CustomEvent('frame-updated') );
     }
 };
 
@@ -213,7 +213,6 @@ var tickerTimerProto = {
     stop: function stop(){
     // TODO: add the stop() function...
     }
-
 };
 
 
@@ -304,9 +303,9 @@ var shuffle = function(arr){
 };
 
 var getRandomSelection = function(arr, length){
-    var _length = length || 100
+    var _length = length || 200
     var _arr = [];
-    for(var i=0; i<length; i++){
+    for(var i=0; i<_length; i++){
         _arr.push( arr[Math.round(Math.random() * arr.length)] );
     }
     return _arr;

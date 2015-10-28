@@ -6,7 +6,6 @@ var React = require('react'),
         lastSelectedRow,
         _arrayGen = ticker.arrayGenerator();
 
-
 var countries = ['GR','DK','ZA','RU','CO','IT','IN','BR','AE','AF','AG','AI','AM','AO','AS','AR','AT','AU','AX','BA','BB','BD','BE','BF','BH','BI','BJ','BM','BN','BS','BT','BV','BY','CA','CC','CD','CG','CH','CK','CL','CM','CN','CO','CR','CU','CV','CX','CY','CZ','DE','DM','DO','DZ','EE','EH','ES','FI','FJ','FK','FM','FR','GB','GE','GI','GL','GM','GN','GP','GQ','GS','GT','GU','GW','GY','HK','HM','HN','HR','HU','ID','IE','IL','IO','IQ','IR','JO','JP','KE','KG','KH','KM','KY','KZ','LC','LI','LK','LR','LS','LT','LU','LV','LY','MD','MH','MK','MM','MO','MQ','MR','MS','MT','MU','MV','MW','MX','MY','MZ','NA','NC','NE','NF','NG','NI','NL','NO','NP','NR','NU','NZ','OM','PA','PE','PF','PH','PK','PL','PM','PN','PR','PS','PW','PY','QA','RE','RO','RS','SA','SB','SD','SE','SG','SH','SJ','SM','SN','SO','SR','ST','SV','TC','TD','TH','TJ','TK','TL','TN','TO','TR','TT','TV','TW','UM','UY','UZ','VA','VE','VI','VN','WS','ZA','ZW','KR'];
 var imageCache = {};
 
@@ -59,9 +58,9 @@ var format = function(data) {
     }
 };
 
+
 var HyperGrid = React.createClass({
     componentDidMount: function(){
-
         window.addEventListener('polymer-ready',function(){
             var jsonGrid = document.querySelector('#stock-example');
             var jsonModel = jsonGrid.getBehavior();
@@ -71,8 +70,6 @@ var HyperGrid = React.createClass({
                     return;
                 }
                 this.renderGrid(gc);
-
-
                 //draw the thick blue line at the bottom of the header
                 gc.beginPath();
                 var fixedColumnsWidth = jsonModel.getFixedColumnsWidth();
@@ -83,18 +80,15 @@ var HyperGrid = React.createClass({
                 gc.moveTo(0, height + 0.5);
                 gc.lineTo(viewWidth, height + 0.5);
                 gc.stroke();
-
-
                 this.getGrid().gridRenderedNotification();
             };
             jsonGrid.getRenderer().paint.bind(jsonGrid);
-
 
             var cellProvider = jsonModel.getCellProvider();
 
             jsonModel.setData(_arrayGen.getStocks());
             jsonModel.setFixedColumnCount(1);
-            jsonModel.setHeaders(['Symbol','name','High','Low','Last','Today', 'Change','% Change','Volume','Bid Qty','Bid','Spread','Ask','Ask Qty','Country Code','Country','ICB','Industry','Super Sector','Sector','Sub Sector','Date','Time','Open','Cls','Previous Cls','Previous Cls Dt','Name']);
+            jsonModel.setHeaders(['Symbol','Name','High','Low','Last','Today', 'Change','% Change','Volume','Bid Qty','Bid','Spread','Ask','Ask Qty','Country Code','Country','ICB','Industry','Super Sector','Sector','Sub Sector','Date','Time','Open','Cls','Previous Cls','Previous Cls Dt','Name']);
             jsonModel.setFields(['TICKER','NAME','High','Low','Last','Today', 'Change','PercentChange','Volume','BidQuantity','Bid','Spread','Ask','AskQuantity','countryCode', 'COUNTRY','ICB','INDUS','SUP_SEC','SEC','SUB_SEC','Date','Time','Open','Close','PreviousClose','PreviousCloseDate','NAME']);
             
             var bgColor = '#07071E';
@@ -135,16 +129,21 @@ var HyperGrid = React.createClass({
             jsonGrid.addProperties(lnfOverrides);
             jsonGrid.editAt = function(){};
             
-            setInterval(function() {
-                ticker.randomize();
-                //console.log("ticker.getStocks() ", JSON.stringify(_arrayGen.getStocks()[0]) );
-                //jsonModel.setData(_arrayGen.getRandomArray());
+            //setInterval(function() {
+            //    //ticker.randomize();
+            //    //console.log("ticker.getStocks() ", JSON.stringify(_arrayGen.getStocks()[0]) );
+            //    //jsonModel.setData(_arrayGen.getRandomArray());
+            //    //jsonModel.setData(ticker.stocks);
+            //    jsonModel.setData(_arrayGen.getMorphedStocks());
+            //    jsonModel.dataModified();
+            //}, 50);
 
-
-                //jsonModel.setData(ticker.stocks);
+            ticker.timerGenerator().start();
+            document.addEventListener("frame-updated", function(e){
+                //console.log("DATA UPDATED ");
                 jsonModel.setData(_arrayGen.getMorphedStocks());
                 jsonModel.dataModified();
-            }, 20);
+            })
 
             jsonModel.fixedColumnClicked = (grid, cellData) => {
                     lastSelectedRow =  cellData.gridCell.y;
@@ -297,7 +296,6 @@ var HyperGrid = React.createClass({
             <i onClick={this.openOrders} className="fa fa-plus-square"></i>
             <i onClick={this.openBidOffer} className="fa fa-file-text"></i>
         </div>
-        
         </div>
     }
 });

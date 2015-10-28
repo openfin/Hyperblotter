@@ -47,7 +47,7 @@ fin.desktop.main(()=>{
 		console.log(" THE WINDOWS HAVE BEEN CREATED --- ", val);
 
         fin.desktop.System.deleteCacheOnRestart(function () {
-            console.log("successfuly deleted cache");
+            console.log("successfully deleted cache");
         },function (err) {
             console.log("failure to delete cache: " + err);
         });
