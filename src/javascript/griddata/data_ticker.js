@@ -10,7 +10,7 @@ var countryMap = staticData.countryMap;
 
 var _arrayGeneratorPrivate = {
     _privateFunction: function _privateFunction(){
-        return "HELLO WORLD";
+        return "Array generater private function...";
     }
 };
 

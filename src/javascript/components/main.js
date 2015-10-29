@@ -58,10 +58,11 @@ fin.desktop.main(()=>{
         }, function () {
             console.log("The registration of 'monitor-info-changed' was successful");
         },function (err) {
-            console.log("failure: " + err);
+            console.log("failure: registration of 'monitor-info-changed' " + err);
         });
 	});
 });
+
 
 /* Initialises all the floating 'trade' windows. */
 var initAnimationWindows = function(){
@@ -186,6 +187,7 @@ module.exports = React.createClass({
 		animationWindows.forEach((wnd)=>{
 			wnd.show();
 		});
+        this.animateWindows(animationWindows, false);
 		this.setState({animationWindowsShowing: true})
 	},
 	minWindows: function() {
@@ -253,16 +255,23 @@ module.exports = React.createClass({
 		this.setState({"inLoop":false});
 		console.log("IN LOOP SHOULD BE FALSE: ", inLoop);
 	},
-	animateWindows: function(animationWindows){
+	// Abstarcted out the function for randomising
+	randomiseAnimationWindows: function(){
+		return animationWindows
+			.reduce(function(m, itm, idx, a) {
+				m[0].push(m[1].splice(floor((random() * m[1].length)), 1)[0]);
+				return m
+			}, [
+				[], animationWindows.slice()
+			])[0]
+	},
+
+	animateWindows: function(animationWindows, randomise){
+		var _randomise = randomise !== false ? true : false;
+		var _arr = _randomise ?  this.randomiseAnimationWindows() : animationWindows;
 		setTranspatentAsPromise(animationWindows, 0.5).then(()=>{
 		   Promise.all(
-		       animationWindows
-			       .reduce(function(m, itm, idx, a) {
-			           m[0].push(m[1].splice(floor((random() * m[1].length)), 1)[0]);
-			           return m
-			       }, [
-			           [], animationWindows.slice()
-			       ])[0]
+			   _arr
 			       .map((item, index) => {
 			           return new Promise((resolve, reject) => {
 			               item.animate({
@@ -294,23 +303,19 @@ module.exports = React.createClass({
 	},
 	componentDidMount: function(){
 		// this.showWindows();
-		console.log('Yay!!! component did mount...');
-		var _boundtoggleAnimateLoopStart = this.toggleAnimateLoopStart.bind(this);
-		var _boundtoggleAnimateLoopStop = this.toggleAnimateLoopStop.bind(this);
-		var _repositionWindows = function(){
-			console.log(" this.state.animationWindowsShowing ", this.state.animationWindowsShowing);
-			if(!this.state.inLoop &&  this.state.animationWindowsShowing){
-				_boundtoggleAnimateLoopStart();
-				setTimeout(_boundtoggleAnimateLoopStop, 100);
-			}
-		};
+		console.log('Yay!!! component did mount...', this);
 
-		var _boundRepositionWindows = _repositionWindows.bind(this);
+		var _repositionWindows = function(){
+			if(!this.state.inLoop &&  this.state.animationWindowsShowing){
+				console.log("_repositionWindows this == ",this);
+				this.animateWindows.call(this, animationWindows, false);
+			}
+		}.bind(this);
 
 
 		document.addEventListener('monitor-changed', function(e){
-			console.log("The monitor has changed ", e);
-			_boundRepositionWindows();
+			console.log("The monitor has changed ", this);
+			_repositionWindows();
 		})
 	},
 	openExcel: function() {
