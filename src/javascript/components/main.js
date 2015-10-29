@@ -15,6 +15,7 @@ var animationWindows = [],
 		_tilesCreated = false;
 
 
+
 var rndData = [
 {ticker: "PCL", last: 21.251049070187836},
 {ticker: "SWI", last: 24.835458631124418},
@@ -188,18 +189,40 @@ module.exports = React.createClass({
 			wnd.show();
 		});
         this.animateWindows(animationWindows, false);
-		this.setState({animationWindowsShowing: true})
-	},
+        this.setState({
+            desc: 'fa fa-sort-amount-desc',
+            asc: 'fa fa-sort-amount-asc none',
+            animationWindowsShowing: true,
+            tilesMaximised: true
+        });
+
+    },
+    toggleMinimised:function(){
+        this.state.tilesMaximised ? this.minWindows() : this.restoreWindows();
+    },
 	minWindows: function() {
 		animationWindows.forEach((wnd)=>{
 			wnd.minimize();
 		});
-
 		this.setState({
 			desc: 'fa fa-sort-amount-desc none',
-			asc: 'fa fa-sort-amount-asc'
+			asc: 'fa fa-sort-amount-asc',
+            tilesMaximised: false
 		})
 	},
+    restoreWindows: function () {
+        this.openAnimationWindows();
+        animationWindows.forEach((wnd)=>{
+            wnd.restore();
+        });
+
+        this.setState({
+            desc: 'fa fa-sort-amount-desc',
+            asc: 'fa fa-sort-amount-asc none',
+            animationWindowsShowing: true,
+            tilesMaximised: true
+        })
+    },
 	toggleShowAnimationWindows:function(){
 		console.log("toggleShowAnimationWindows called this. openAnimationWindows = ", this.openAnimationWindows);
 		if(this.state.animationWindowsShowing){
@@ -215,18 +238,7 @@ module.exports = React.createClass({
 			this.showWindows();
 		});
 	},
-	restoreWindows: function () {
-		this.openAnimationWindows();
-		animationWindows.forEach((wnd)=>{
-			wnd.restore();
-		});
 
-		this.setState({
-			desc: 'fa fa-sort-amount-desc',
-			asc: 'fa fa-sort-amount-asc none',
-			animationWindowsShowing: true
-		})
-	},
 	closeAnimationWindows: function(){
 		this.toggleAnimateLoopStop();
 		animationWindows.forEach((wnd)=>{
@@ -236,7 +248,8 @@ module.exports = React.createClass({
 		this.setState({
 			asc: 'fa fa-sort-amount-desc',
 			desc: 'fa fa-sort-amount-asc none',
-			animationWindowsShowing: false
+			animationWindowsShowing: false,
+            tilesMaximised: false
 		})
 	},
 	toggleAnimateLoop:function(){
@@ -267,6 +280,7 @@ module.exports = React.createClass({
 	},
 
 	animateWindows: function(animationWindows, randomise){
+        //Unless explicitly asked not to, randomise
 		var _randomise = randomise !== false ? true : false;
 		var _arr = _randomise ?  this.randomiseAnimationWindows() : animationWindows;
 		setTranspatentAsPromise(animationWindows, 0.5).then(()=>{
@@ -334,6 +348,7 @@ module.exports = React.createClass({
 			desc: 'fa fa-sort-amount-desc',
 			asc: 'fa fa-sort-amount-asc none',
 			animationWindowsShowing: false,
+            tilesMaximised: false,
 			inLoop : false
 		}
 	},
@@ -341,15 +356,26 @@ module.exports = React.createClass({
 		return this.state.animationWindowsShowing ? "none" : "menuitem";
 	},
 	getAnimateClass:function(){
-		return this.state.animationWindowsShowing ?  "menuitem" : "menuitem";
+        if(this.state.animationWindowsShowing ){
+            return this.state.inLoop ?  "fa fa-pause" : "fa fa-play";
+        } else{
+            return "none";
+        }
 	},
 	getAnimateText:function(){
 		if(this.state.animationWindowsShowing ){
-			return this.state.inLoop ?   "Stop animation" :  "Animate windows" ;
+			return this.state.inLoop ?   "Pause animation" :  "Play animation" ;
 		}else{
 			return "";
 		}
 	},
+    getMinifyText:function(){
+        if(this.state.animationWindowsShowing ){
+            return this.state.tilesMaximised ?  {text: " Minimise", css: "", icon:"fa fa-sort-amount-desc"} : {text: " Maximise", css: "", icon:"fa fa-sort-amount-asc"};
+        } else{
+            return {text: "Minimise", css: "none", icon:"fa fa-sort-amount-desc"};
+        }
+    },
 	render: function(){
 		return	<div className="main-bar">
 							<div className="window-control">
@@ -359,16 +385,22 @@ module.exports = React.createClass({
 							</div>
 							<div className="drag-area"></div>
 							<div className="drag-area-display"></div>
-							<div className="content-area">
-									<i onClick={this.toggleAnimateLoop} className={ this.getAnimateClass() }>   { this.getAnimateText() }</i>
-									<i onClick={this.openAnimationWindows} className={this.getAnimatinWindowsClass() }><span className='fa fa-table'></span> Show trades</i>
-									<i onClick={this.minWindows} className={this.state.desc}></i>
-									<i onClick={this.restoreWindows} className={this.state.asc}></i>
-									<i> | </i>
-									<i onClick={this.openBlotter}><span className="fa fa-table"></span> Hypergrid</i>
-									<i onClick={this.openExcel} ><span className="fa fa-file-excel-o"></span> Open Excel file</i>
+            <image className="openfinLogo" type="image/svg+xml" src="images/openfin_logo.svg" />
+
+            <div className="content-area">
+                                    <div>
+                                        <i onClick={this.openAnimationWindows} className={this.getAnimatinWindowsClass() }><span className='fa fa-table'></span> Show trades</i>
+                                        <i onClick={this.toggleAnimateLoop}><span className={ this.getAnimateClass() }></span>   { this.getAnimateText() }</i>
+                                        <i onClick={this.toggleMinimised} className={this.getMinifyText().css} ><span className={this.getMinifyText().icon}></span>{this.getMinifyText().text}</i>
+                                    </div>
+                                    <div>
+                                        <i onClick={this.openBlotter}><span className="fa fa-table"></span> Hypergrid</i>
+                                    </div>
+                                    <div>
+                                        <i onClick={this.openExcel} ><span className="fa fa-file-excel-o"></span> Open Excel file</i>
+                                    </div>
+                                </div>
 							</div>
-						</div>
 	}
 });
 /*
