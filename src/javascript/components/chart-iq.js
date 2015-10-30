@@ -19,5 +19,4 @@ var ChartIq = React.createClass({
     }
 });
 
-
 module.exports = ChartIq;

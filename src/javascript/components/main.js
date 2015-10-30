@@ -11,10 +11,11 @@ var animationWindows = [],
     numRows = 3,
     demoTiles = {},
     numTiles = numRows * numColumns + 1,
-// Have te grid windows been created yet?
+// Have the grid windows been created yet?
     _tilesCreated = false;
 
 
+/* Static data for the floating 'trade' animation windows */
 
 var rndData = [
     {ticker: "PCL", last: 21.251049070187836},
@@ -45,8 +46,6 @@ var random = Math.random;
 fin.desktop.main(()=>{
 
     initAnimationWindows().then(function(val){
-        console.log(" THE WINDOWS HAVE BEEN CREATED --- ", val);
-
         fin.desktop.System.deleteCacheOnRestart(function () {
             console.log("successfully deleted cache");
         },function (err) {

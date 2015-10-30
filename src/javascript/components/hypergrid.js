@@ -199,9 +199,6 @@ var HyperGrid = React.createClass({
                     config.bgColor = flashMap[row.flashColor](row.flash);
                     config.fgColor = 'white';
                     row.flash = row.flash - 1;
-                    // if (y === 0) {
-                    //   console.log('update flash = ' + row.flash + ' ' + Date.now());
-                    // }
                   }
                 } else if (x === 13) {
                   config.value = [imageCache[config.value],config.value,null];
@@ -210,9 +207,6 @@ var HyperGrid = React.createClass({
                 }
 
                 row.lastViewedTime = Date.now();
-                // if (row.flash > 15) {
-                //   config.bgColor = 'yellow';
-                // }
 
                 renderer.config = config;
                 return renderer;
@@ -296,6 +290,7 @@ var HyperGrid = React.createClass({
 module.exports = HyperGrid;
 
 /*
+Holding onto this code to be rolled in on a later release.
  <div className="actions-bg"></div>
  <div className="actions">
  <i onClick={this.openOrders} className="fa fa-plus-square"></i>
