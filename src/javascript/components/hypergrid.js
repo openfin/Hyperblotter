@@ -58,7 +58,6 @@ var format = function(data) {
     }
 };
 
-
 var HyperGrid = React.createClass({
     componentDidMount: function(){
         window.addEventListener('polymer-ready',function(){
@@ -115,7 +114,6 @@ var HyperGrid = React.createClass({
                 lineColor: '#131C23',
                 gridLinesV: false,
                 gridLinesH: true,
-
                 fixedColumnFGSelColor: 'white',
                 fixedColumnBGSelColor: '#3D77FE',
                 fixedRowFGSelColor: 'white',
@@ -140,10 +138,9 @@ var HyperGrid = React.createClass({
 
             ticker.timerGenerator().start();
             document.addEventListener("frame-updated", function(e){
-                //console.log("DATA UPDATED ");
                 jsonModel.setData(_arrayGen.getMorphedStocks());
                 jsonModel.dataModified();
-            })
+            });
 
             jsonModel.fixedColumnClicked = (grid, cellData) => {
                     lastSelectedRow =  cellData.gridCell.y;

@@ -26,7 +26,7 @@
         "arguments": "",
         "version": "stable"
     },
-    "splashScreenImage": "http:localhost:5001/images/splashscreen.png",
+    "splashScreenImage": "http://localhost:5001/images/splashscreen.png",
     "shortcut": {
         "company": "OpenFin",
         "description": "OpenFin Hyper Blotter demo",

@@ -114,13 +114,12 @@ var TopBar = React.createClass({
 	            });
 	        });
 
-
 	    },
 	render: function () {
 		return <div className="top-bar">
 			<span className="title">Blotter</span>
 			
-			<i onClick={this.closeApp} className="fa fa-times-circle"></i>
+			<i onClick={this.closeApp} className="fa fa-times"></i>
 
 		</div>
 	}
@@ -176,76 +175,6 @@ function animateAsPromise (wnd, animations ,opts) {
 }
 
 
-
-
-	                /**
-	                 			      	// showAsPromise(wnd)
-	                				      // 	.then(()=>{
-	                				      // 		var animations = {};
-	                				      // 		animateAsPromise(wnd,animations, {}, ()=>{
-	                				      // 			var nextIndex = list.indexOf(wnd) + 1
-	                						    //   			hasNext = nextIndex + 1 < list.length;
-	                				      // 			if (hasNext) {
-	                				      // 				return processList(list[nextIndex])
-	                				      // 			}
-	                				      // 		})
-	                				      // 	})
-
-
-
-
-
-	                			      	// var top = 0,
-	                					     //  	left = 0;
-
-	                			       //    wnds.forEach((wnd) => {
-	                			       //    	console.log('in here')
-	                			       //        wnd.show(() => {
-	                			       //            wnd.animate({
-	                			       //                size: {
-	                			       //                    width: width, 
-	                			       //                    height: height, 
-	                			       //                    duration: 500
-	                			       //                }
-	                			       //            },
-	                			       //            {},
-	                			       //            ()=>{
-	                			       //            	left += width;
-	                			       //            	console.log('worked')
-	                			       //            },
-	                			       //            ()=>{
-	                			       //            	console.log('errrrrr');
-	                			       //            })
-	                			       //        });
-	                			       //    });
-	                 */
-
-	                // name: row.NAME,
-	                // url: 'row-view.html?row=' + lastSelectedRow,
-	                // var jsonGrid = document.querySelector('#stock-example')
-	                // var jsonModel = jsonGrid.getBehavior()
-
-	                // lastSelectedRow = lastSelectedRow || 0;
-	                // var row = jsonModel.getRow(lastSelectedRow)
-	                /*
-
-	                require('./child-window.js').createChildWindow({
-	                                    name: row.NAME,
-	                                    url: 'row-view.html?row=' + lastSelectedRow,
-	                                    autoShow: true,
-	                                    width: 350,
-	                                    maxWidth: 350,
-	                                    frame: false,
-	                                    maximizable: false,
-	                                    height: 594 / 3,
-	                                    maxHeight: 594 / 3,
-	                                    minHeight: 594 / 3,
-	                                })
-
-	                require('./child-window.js').createChildWindow()
-
-
-	                 */
 	                
 
 

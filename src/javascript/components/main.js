@@ -190,8 +190,6 @@ module.exports = React.createClass({
         });
         this.animateWindows(animationWindows, false);
         this.setState({
-            desc: 'fa fa-sort-amount-desc',
-            asc: 'fa fa-sort-amount-asc none',
             animationWindowsShowing: true,
             tilesMaximised: true
         });
@@ -205,8 +203,6 @@ module.exports = React.createClass({
             wnd.minimize();
         });
         this.setState({
-            desc: 'fa fa-sort-amount-desc none',
-            asc: 'fa fa-sort-amount-asc',
             tilesMaximised: false
         })
     },
@@ -217,8 +213,6 @@ module.exports = React.createClass({
         });
 
         this.setState({
-            desc: 'fa fa-sort-amount-desc',
-            asc: 'fa fa-sort-amount-asc none',
             animationWindowsShowing: true,
             tilesMaximised: true
         })
@@ -238,7 +232,6 @@ module.exports = React.createClass({
             this.showWindows();
         });
     },
-
     closeAnimationWindows: function(){
         this.toggleAnimateLoopStop();
         animationWindows.forEach((wnd)=>{
@@ -246,8 +239,6 @@ module.exports = React.createClass({
         });
 
         this.setState({
-            asc: 'fa fa-sort-amount-desc',
-            desc: 'fa fa-sort-amount-asc none',
             animationWindowsShowing: false,
             tilesMaximised: false
         })
@@ -258,7 +249,6 @@ module.exports = React.createClass({
     toggleAnimateLoopStart: function () {
         inLoop = true;
         this.setState({"inLoop":true});
-        console.log("IN LOOP SHOULD BE TRUE: ", inLoop);
         if (inLoop) {
             this.animateWindows(animationWindows);
         }
@@ -266,9 +256,8 @@ module.exports = React.createClass({
     toggleAnimateLoopStop: function () {
         inLoop = false;
         this.setState({"inLoop":false});
-        console.log("IN LOOP SHOULD BE FALSE: ", inLoop);
     },
-    // Abstarcted out the function for randomising
+    // Abstracted out the function for randomising
     randomiseAnimationWindows: function(){
         return animationWindows
             .reduce(function(m, itm, idx, a) {
@@ -317,18 +306,15 @@ module.exports = React.createClass({
     },
     componentDidMount: function(){
         // this.showWindows();
-        console.log('Yay!!! component did mount...', this);
+        console.log('Component did mount...', this);
 
         var _repositionWindows = function(){
             if(!this.state.inLoop &&  this.state.animationWindowsShowing){
-                console.log("_repositionWindows this == ",this);
                 this.animateWindows.call(this, animationWindows, false);
             }
         }.bind(this);
 
-
         document.addEventListener('monitor-changed', function(e){
-            console.log("The monitor has changed ", this);
             _repositionWindows();
         })
     },
@@ -336,17 +322,15 @@ module.exports = React.createClass({
 
         fin.desktop.main(function() {
             launchRuntimeAsset('excel', 'hypergrid.xlsx', function() {
-                    console.log('YAY IT LAUNCHED!');
+                    console.log('Excel launched.');
                 },
                 function(err) {
-                    console.error("Oh no it failed!");
+                    console.error("Excel failed!");
                 });
         });
     },
     getInitialState: function(){
         return {
-            desc: 'fa fa-sort-amount-desc',
-            asc: 'fa fa-sort-amount-asc none',
             animationWindowsShowing: false,
             tilesMaximised: false,
             inLoop : false
@@ -377,10 +361,9 @@ module.exports = React.createClass({
         }
     },
     openGithub: function(){
-        fin.desktop.System.openUrlWithBrowser("https://github.com/openfin/Hyperblotter/", function () {
-            console.log("opened github");
+        fin.desktop.System.openUrlWithBrowser("https://github.com/openfin/Hyperblotter/tree/develop", function () {
         },function (err) {
-            console.log("failure: " + err);
+            console.log("Failed to open GitHub: " + err);
         });
     },
     render: function(){
@@ -414,25 +397,6 @@ module.exports = React.createClass({
         </div>
     }
 });
-/*
- <div className="drag-area"></div>
- <div className="content-area">
- <i onClick={this.toggleShowAnimationWindows} className="menubar">Show trades</i>
- <i onClick={this.toggleAnimateLoop} className={ this.getAnimateClass() }>{ this.getAnimateText() }</i>
- <i onClick={this.openAnimationWindows} className='fa fa-folder-open'></i>
- <i onClick={this.minWindows} className={this.state.desc}></i>
- <i onClick={this.restoreWindows} className={this.state.asc}></i>
- <i onClick={this.openAnimationWindows} className='openClass'>OPEN</i>
- <i onClick={this.openBlotter} className="fa fa-table"></i>
- <i onClick={this.openExcel} className="fa fa-file-excel-o"></i>
- </div>
- <div className="window-control">
- <i onClick={this.minApp} className="fa fa-minus"></i>
- <i onClick={this.closeApp} className="fa fa-times"></i>
- </div>
- </div>
-
- */
 
 function genPairs(arr) {
     return arr.reduce(function(m, itm, idx, a) {
@@ -446,7 +410,6 @@ function genPairs(arr) {
             return m
         }, [])
 }
-
 
 function launchRuntimeAsset(subPath, args, callback, errorCallback) {
     fin.desktop.System.getEnvironmentVariable(['LOCALAPPDATA', 'USERNAME'], function(result) {
@@ -464,30 +427,3 @@ function launchRuntimeAsset(subPath, args, callback, errorCallback) {
         fin.desktop.System.launchExternalProcess(subPath, runtimePath + args, callback, errorCallback);
     }, errorCallback);
 }
-
-
-
-// function animateAsPromise (wnd, animations ,opts) {
-// 	return new Promise((resolve, reject)=>{
-// 		fin.desktop.main(()=>{
-// 			wnd.animate(animations, opts, ()=>{
-// 				resolve();	
-// 			},
-// 			(reason)=>{
-// 				reject(reason);
-// 			})
-// 		})
-// 	});
-// }
-
-// function getBoundsAsPromise(wnd){
-// 	return new Promise((resolve, reject)=>{
-// 		fin.desktop.main(()=>{
-// 			wnd.getBounds((bounds)=>{
-// 				resolve(bounds);
-// 			},(reason)=>{
-// 				reject(reason);
-// 			});
-// 		});
-// 	});
-// }

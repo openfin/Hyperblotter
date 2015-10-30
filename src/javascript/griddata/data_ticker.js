@@ -165,7 +165,10 @@ var arrayGeneratorProto = {
         // update the staticData for the selected random numbers
         _randomNumbers.map(function(d,i){
             try{
-                this._getStaticData()[d].High = (Math.random() * 60).toFixed(2);
+                var _high = (6 + (Math.random() * 60) ).toFixed(2);
+                var _low = (Math.random() * 6).toFixed(2);
+                this._getStaticData()[d].High   = _high;
+                this._getStaticData()[d].Low    = _low;
                 randomizeTick(this._getStaticData()[d]);
             }catch(err){
                 //---
@@ -183,7 +186,7 @@ var arrayGenerator = function () {
 //////
 var tickerTimerPrivate = {
     _lastTick:null,
-    _functionCallsPerSecond:.05,
+    _functionCallsPerSecond: 20,
     _arrayGen: arrayGenerator(),
     _ticksExecuted: 1,
 
@@ -191,10 +194,9 @@ var tickerTimerPrivate = {
         var _frame = 16;
         var second = _frame * 60;
         if(!this._lastTick) this._lastTick = t;
-        if(t- this._lastTick > (second * tickerTimerPrivate._functionCallsPerSecond)){
+        if(t- this._lastTick > (second / tickerTimerPrivate._functionCallsPerSecond)){
             this._lastTick = t;
             tickerTimerPrivate._ticksExecuted ++;
-            console.log("this._ticksExecuted ", tickerTimerPrivate._ticksExecuted);
             tickerTimerPrivate.tickFunction();
         }
         window.requestAnimationFrame(tickerTimerPrivate.onTick);
