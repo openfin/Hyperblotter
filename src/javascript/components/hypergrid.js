@@ -266,7 +266,7 @@ var HyperGrid = React.createClass({
 
                 lastSelectedRow = lastSelectedRow || 0;
                 var row = jsonModel.getRow(lastSelectedRow);
-
+                console.log("OPEN ORDERS --  ", row);
                 require('./child-window.js').createChildWindow({
                     name: row.NAME,
                     url: 'row-view.html?row=' + lastSelectedRow,
@@ -288,18 +288,17 @@ var HyperGrid = React.createClass({
             <fin-hypergrid-excel></fin-hypergrid-excel>
         </fin-hypergrid>
 
-        <div className="actions-bg"></div>
-        <div className="actions">
-            <i onClick={this.openOrders} className="fa fa-plus-square"></i>
-            <i onClick={this.openBidOffer} className="fa fa-file-text"></i>
-        </div>
+
         </div>
     }
 });
-// <fin-hypergrid id="q-example"></fin-hypergrid>
 
 module.exports = HyperGrid;
 
 /*
-
+ <div className="actions-bg"></div>
+ <div className="actions">
+ <i onClick={this.openOrders} className="fa fa-plus-square"></i>
+ <i onClick={this.openBidOffer} className="fa fa-file-text"></i>
+ </div>
  */
