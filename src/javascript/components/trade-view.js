@@ -26,6 +26,10 @@ module.exports = React.createClass({
 		  fin.desktop.Application.getCurrent().close();
 		});
 	},
+	closeWindow: function(){
+		var finWindow = fin.desktop.Window.getCurrent();
+		finWindow.close();
+	},
 	minApp: function(){
 		fin.desktop.main(function(){
 		  fin.desktop.Window.getCurrent().minimize();
@@ -65,7 +69,7 @@ module.exports = React.createClass({
 								</div>
 								<div className="window-control">
 									<i onClick={this.minApp} className="fa fa-minus"></i>
-									<i onClick={this.closeApp} className="fa fa-times"></i>
+									<i onClick={this.closeWindow} className="fa fa-times"></i>
 								</div>
 							</div>
 							<div className="content">
