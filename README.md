@@ -45,7 +45,7 @@ Then start the local Node server.
 NB for a production Node app this would require hosting remotely on Heroku, AWS or a similar platform. OpenFin is not designed to install apps locally.
 
 ```
-gulp server
+$ gulp server
 ```
 Once the message 'Express server is listening on port 5001' is shown in the terminal open the second terminal window (leave the first terminal window open, closing it will close the server). Launch Openfin.
 
