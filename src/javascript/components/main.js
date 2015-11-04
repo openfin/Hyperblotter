@@ -36,7 +36,7 @@ var rndData = [
     {ticker: "AMG", last: 127.23849660464248},
     {ticker: "BCE", last: 22.765628088640174},
     {ticker: "ACC", last: 14.787034222549517},
-    {ticker: "AA", last: 13.787034222549517}]
+    {ticker: "AA", last: 13.787034222549517}];
 
 var floor = Math.floor;
 var random = Math.random;
@@ -322,13 +322,19 @@ module.exports = React.createClass({
     openExcel: function() {
 
         fin.desktop.main(function() {
-            launchRuntimeAsset('excel', 'hypergrid.xlsx', function() {
-                    console.log('Excel launched.');
-                },
-                function(err) {
-                    console.error("Excel failed!");
-                });
+
+          fin.desktop.System.launchExternalProcess({
+            alias: 'hypergrid',
+            arguments: '',
+            listener: function(event){
+               // react to close event
+              if(event.topic === "exited" && event.exitCode === MY_KNOWN_BAD_STATE) {
+                // your desired logic here
+              }
+            }
+          });
         });
+
     },
     getInitialState: function(){
         return {
@@ -410,21 +416,4 @@ function genPairs(arr) {
             }
             return m
         }, [])
-}
-
-function launchRuntimeAsset(subPath, args, callback, errorCallback) {
-    fin.desktop.System.getEnvironmentVariable(['LOCALAPPDATA', 'USERNAME'], function(result) {
-        var localAppData = result['LOCALAPPDATA'];
-        var userName = result['USERNAME'];
-
-        // Assuming on Windows XP when LOCALAPPDATA fails to expand. Using default location. Anything with registry setting for installDir will fail.
-        if(typeof localAppData !== 'string' || localAppData === 'LOCALAPPDATA') {
-            // Assuming on XP
-            localAppData = 'C:\\Documents and Settings\\' + userName + '\\Local Settings\\Application Data';
-        }
-
-        var runtimePath = localAppData + '\\OpenFin\\runtime\\' + fin.desktop.getVersion() + '\\OpenFin\\';
-
-        fin.desktop.System.launchExternalProcess(subPath, runtimePath + args, callback, errorCallback);
-    }, errorCallback);
 }

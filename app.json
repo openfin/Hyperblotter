@@ -1,9 +1,10 @@
 {
     "startup_app": {
-        "name": "OpenfinPOC",
-        "description": "OpenFin Hyperblotter",
-        "url": "http://localhost:5001",
-        "uuid": "OpenfinHyperBlotterDemo",
+        "name": "Hyperblotter",
+        "description": "Hyperblotter Demo",
+        "__url": "http://cdn.openfin.co/demos/hyperblotter/index.html",
+        "url": "http://localhost:5001/index.html",
+        "uuid": "HyperblotterDemoUUID",
         "autoShow": true,
         "defaultWidth": 480,
         "maxWidth": 480,
@@ -26,11 +27,34 @@
         "arguments": "",
         "version": "stable"
     },
+    "appAssets": [
+            {
+                "__src": "http://cdn.openfin.co/demos/hyperblotter/assets/hypergrid.xlsx",
+                "src": "http://localhost:5001/assets/hypergrid.xlsx.zip",
+                "alias": "hypergrid",
+                "version": "0.0.1",
+                "target": "hypergrid.xlsx"
+            },
+            {
+              "__src": "http://cdn.openfin.co/demos/hyperblotter/assets/FinDesktopAddin-packed.xll",
+              "src": "http://localhost:5001/assets/FinDesktopAddin-packed.xll.zip",
+              "alias": "excel-plugin-32",
+              "version": "0.0.1"
+            },
+            {
+              "__src": "http://cdn.openfin.co/demos/hyperblotter/assets/FinDesktopAddin64-packed.xll",
+              "src": "http://localhost:5001/assets/FinDesktopAddin64-packed.xll.zip",
+              "alias": "excel-plugin-64",
+              "version": "0.0.1"
+            }
+        ],
+    "__splashScreenImage": "http://cdn.openfin.co/demos/hyperblotter/images/splashscreen.png",
     "splashScreenImage": "http://localhost:5001/images/splashscreen.png",
     "shortcut": {
         "company": "OpenFin",
-        "description": "OpenFin Hyper Blotter demo",
-        "icon": "http://demoappdirectory.openf.in/desktop/config/apps/OpenFin/HelloOpenFin/img/openfin.ico",
-        "name": "OpenFin Hyper Blotter"
+        "description": "Hyperblotter Demo",
+        "__icon": "http://cdn.openfin.co/demos/hyperblotter/images/shortcut.ico",
+        "icon": "http://localhost:5001/images/shortcut.ico",
+        "name": "Hyperblotter Demo"
     }
 }

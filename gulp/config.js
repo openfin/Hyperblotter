@@ -21,6 +21,10 @@ module.exports = {
     src: src + "/images/**",
     dest: dest + "/images"
   },
+  assets: {
+    src: "assets/**",
+    dest: dest + "/assets"
+  },
   vendor: {
     src: src + "/javascript/vendor/**",
     dest: dest
