@@ -130,25 +130,13 @@ var HyperGrid = React.createClass({
 
             jsonGrid.addFinEventListener('fin-click', function(event) {
                 setTimeout(function(){
-                    console.log(jsonGrid.getState().sorted);
                     _arrayGen.setSortArray( jsonGrid.getState().sorted );
                 }, 10);
             });
 
-            //setInterval(function() {
-            //    //ticker.randomize();
-            //    //console.log("ticker.getStocks() ", JSON.stringify(_arrayGen.getStocks()[0]) );
-            //    //jsonModel.setData(_arrayGen.getRandomArray());
-            //    //jsonModel.setData(ticker.stocks);
-            //    jsonModel.setData(_arrayGen.getMorphedStocks());
-            //    jsonModel.dataModified();
-            //}, 50);
-
             ticker.timerGenerator().start();
             document.addEventListener("frame-updated", function(e){
-                jsonModel.setData(_arrayGen.getDataWithRandomisation(jsonGrid.getVScrollValue(), jsonGrid.getVScrollValue()+12));
-               //  jsonModel.setData(_arrayGen.getStocks());
-
+                jsonModel.setData(_arrayGen.getDataWithRandomisation(jsonGrid.getVScrollValue(), jsonGrid.getVScrollValue()+11));
                 jsonModel.dataModified();
             });
 
@@ -288,14 +276,11 @@ var HyperGrid = React.createClass({
             },
     render: function (){
         return <div className="grid-contain">
-        
-        <fin-hypergrid id="stock-example">
-            <fin-hypergrid-behavior-json></fin-hypergrid-behavior-json>
-            <fin-hypergrid-excel></fin-hypergrid-excel>
-        </fin-hypergrid>
-
-
-        </div>
+                    <fin-hypergrid id="stock-example">
+                        <fin-hypergrid-behavior-json></fin-hypergrid-behavior-json>
+                        <fin-hypergrid-excel></fin-hypergrid-excel>
+                    </fin-hypergrid>
+                </div>
     }
 });
 

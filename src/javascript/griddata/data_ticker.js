@@ -7,7 +7,6 @@ var data = staticData.data;
 var countryMap = staticData.countryMap;
 
 //--- API on Static data
-
 var _arrayGeneratorPrivate = {
     _privateFunction: function _privateFunction(){
         return "Array generator private function...";
@@ -197,12 +196,19 @@ var arrayGeneratorProto = {
 
         var _subSlice = this._getStaticData().sort(
             function (a, b) {
-                if(_ascening){
-                    return a[_header] < b[_header] ? -1 : 1;
+                if(!_header){
+                    if(_ascening){
+                        return a.NAME < b.NAME ? -1 : 1;
+                    }else{
+                        return a.NAME > b.NAME ? -1 : 1;
+                    }
                 }else{
-                    return a[_header] > b[_header] ? -1 : 1;
+                    if(_ascening){
+                        return a[_header] < b[_header] ? -1 : 1;
+                    }else{
+                        return a[_header] > b[_header] ? -1 : 1;
+                    }
                 }
-
             }
         ).slice(from, to);
 
@@ -217,15 +223,11 @@ var arrayGeneratorProto = {
             }catch(err){
                 //---
             }
-
         }.bind(this));
-        console.log(" _ascening : ",_ascening, " _header = ",_header)
+
         return this._getStaticData();
     }
 };
-
-
-
 
 var arrayGenerator = function () {
     return Object.create(arrayGeneratorProto);
@@ -234,7 +236,7 @@ var arrayGenerator = function () {
 //////
 var tickerTimerPrivate = {
     _lastTick:null,
-    _functionCallsPerSecond: 20,
+    _functionCallsPerSecond: 10,
     _arrayGen: arrayGenerator(),
     _ticksExecuted: 1,
 
@@ -250,8 +252,6 @@ var tickerTimerPrivate = {
         window.requestAnimationFrame(tickerTimerPrivate.onTick);
     },
     tickFunction: function tickFunction(){
-        //console.log("AAAA", JSON.stringify( tickerTimerPrivate._arrayGen.getRandomArray() ) );
-        //var _arr = tickerTimerPrivate._arrayGen.getRandomArray();
         document.dispatchEvent( new CustomEvent('frame-updated') );
     }
 };
@@ -321,34 +321,7 @@ var rnd = function() {
     return r;
 };
 
-//var shuffle = function(array) {
-//  var currentIndex = array.length, temporaryValue, randomIndex ;
-//
-//  // While there remain elements to shuffle...
-//  while (0 !== currentIndex) {
-//
-//    // Pick a remaining element...
-//    randomIndex = Math.floor(Math.random() * currentIndex);
-//    currentIndex -= 1;
-//
-//    // And swap it with the current element.
-//    temporaryValue = array[currentIndex];
-//    array[currentIndex] = array[randomIndex];
-//    array[randomIndex] = temporaryValue;
-//  }
-//
-//  return array;
-//};
-
-
 var shuffle = function(arr){
-    //var scrambleRecursive = function(arr, count){
-    //    count++;
-    //    var _p1 = arr.splice(Math.floor(Math.random() * arr.length), 1)
-    //    var _arr = _p1.concat(arr.reverse());
-    //    return count <= arr.length ? scrambleRecursive(_arr, count) : _arr;
-    //};
-    //return 	scrambleRecursive(arr, 0)
     getRandomSelection(arr);
 };
 
@@ -359,8 +332,7 @@ var getRandomSelection = function(arr, length){
         _arr.push( arr[Math.round(Math.random() * arr.length)] );
     }
     return _arr;
-}
-
+};
 
 var toPickFrom = stocks.slice(0);
 shuffle(toPickFrom);
@@ -377,7 +349,7 @@ var randomizeTicks = function() {
 };
 var _getSparklineRandomValue = function(){
     return 5 + Math.floor(90 * rnd());
-}
+};
 
 var randomizeTick = function(stock) {
     stock.Bid = (stock.Bid * 0.99) + (stock.Bid * 0.017 * rnd());
@@ -404,7 +376,7 @@ var randomizeTick = function(stock) {
             stock.flash = 40;
         }
     }
-}
+};
 
 module.exports = {
     arrayGenerator: arrayGenerator,
@@ -412,81 +384,3 @@ module.exports = {
     randomize: randomizeTicks,
     timerGenerator: timerGenerator
 };
-
-
-/*
-
- {
-     "NAME":"Agilent Technologies Inc.",
-     "TICKER":"A",
-     "COUNTRY":"United States",
-     "ICB":"2737",
-     "INDUS":"Industrials",
-     SUP_SEC":"Industrial Goods & Services",
-     "SEC":"Electronic & Electrical Equipment",
-     "SUB_SEC":"Electronic Equipment",
-     "Date":"2015-10-20T15:45:12.629Z",
-     "Time":1445355912629,
-     "Open":42.345,
-     "Close":0,
-     "PreviousClose":41.8,
-     "PreviousCloseDate":"2015-10-19T15:45:12.629Z",
-     "High":42.53,
-     "Low":42.28,
-     "Last":42.41,
-     "Change":0.61,
-     "PercentChange":1.459,
-     "Volume":46566,
-     "BidQuantity":200,
-     "Bid":42.37918449854008,
-     "Spread":0.031121495776733354,
-     "Ask":42.41030599431681,
-     "AskQuantity":200,
-     "Today":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-     "flash":0,
-     "flashColor":"green",
-     "countryCode":"UM",
-     "__si":0,
-     "__i":0,
-     "lastViewedTime":1445355923076
- }
-
- =======
-
- stocks[i] = {
- NAME: data.NAME[i],
- TICKER: data.TICKER[i],
- COUNTRY: data.COUNTRY[i],
- ICB: data.ICB[i],
- INDUS: data.INDUS[i],
- SUP_SEC: data.SUP_SEC[i],
- SEC: data.SEC[i],
- SUB_SEC: data.SUB_SEC[i],
- Date: new Date(),
- Time: Date.now(),
- Open: data.Open[i],
- Close: data.Close[i],
- PreviousClose: data.PreviousClose[i],
- PreviousCloseDate: new Date(Date.now() - 1000*60*60*24),
- High: data.High[i],
- Low: data.Low[i],
- Last: data.Last[i],
- Change: data.Change[i],
- PercentChange: data.PercentChange[i],
- Volume: Math.floor(data.Volume[i]),
- BidQuantity: data.BidQuantity[i],
- Bid: data.Bid[i],
- Spread: data.Spread[i],
- Ask: data.Ask[i],
- AskQuantity: data.AskQuantity[i],
- Today:[0, 0, 0, 0,0, 0, 0, 0, 0, 0, 0, 0,0, 0, 0, 0],
- flash: 0,
- flashColor: 'green',
- countryCode: countryMap[data.COUNTRY[i]]
- }
-
-
-
-
-
- */

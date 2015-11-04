@@ -41,8 +41,6 @@ var rndData = [
 var floor = Math.floor;
 var random = Math.random;
 
-
-
 fin.desktop.main(()=>{
 
     initAnimationWindows().then(function(val){
@@ -112,7 +110,6 @@ var initAnimationWindows = function(){
                 }
             }
         }
-
     });
 };
 
@@ -185,14 +182,17 @@ module.exports = React.createClass({
     showWindows: function(){
         console.log("showWindows called");
         animationWindows.forEach((wnd)=>{
-            wnd.show();
+            try{
+                wnd.show();
+            }catch(err){
+                //--
+            }
         });
         this.animateWindows(animationWindows, false);
         this.setState({
             animationWindowsShowing: true,
             tilesMaximised: true
         });
-
     },
     toggleMinimised:function(){
         this.state.tilesMaximised ? this.minWindows() : this.restoreWindows();
@@ -276,11 +276,15 @@ module.exports = React.createClass({
                 _arr
                     .map((item, index) => {
                         return new Promise((resolve, reject) => {
-                            item.animate({
-                                position: locations[index]
-                            }, {}, () => {
-                                resolve()
-                            })
+                            try{
+                                item.animate({
+                                    position: locations[index]
+                                }, {}, () => {
+                                    resolve()
+                                })
+                            }catch(err){
+                                //-----
+                            }
                         });
                     })
             ).then(() => {
@@ -304,9 +308,7 @@ module.exports = React.createClass({
         }
     },
     componentDidMount: function(){
-        // this.showWindows();
         console.log('Component did mount...', this);
-
         var _repositionWindows = function(){
             if(!this.state.inLoop &&  this.state.animationWindowsShowing){
                 this.animateWindows.call(this, animationWindows, false);
