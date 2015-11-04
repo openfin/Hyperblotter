@@ -10,7 +10,7 @@ var countryMap = staticData.countryMap;
 
 var _arrayGeneratorPrivate = {
     _privateFunction: function _privateFunction(){
-        return "Array generater private function...";
+        return "Array generator private function...";
     }
 };
 
@@ -18,8 +18,9 @@ var arrayGeneratorProto = {
     _array: null,
     _staticArray: null,
     _arrayLength: 10,
+    _sortArray: [],
     //------------
-    _getStaticData:function _initialiseStaticData(){
+    _getStaticData:function _getStaticData(){
         if(_arrayGeneratorPrivate._staticArray && _arrayGeneratorPrivate._staticArray.length>0){
             return _arrayGeneratorPrivate._staticArray;
         }else {
@@ -62,11 +63,11 @@ var arrayGeneratorProto = {
                     countryCode: countryMap[data.COUNTRY[i]]
                 }
             }
-        }
-        _arrayGeneratorPrivate._staticArray.sort(function(a,b){
+            // sort it on TICKER to start with..
+            _arrayGeneratorPrivate._staticArray.sort(function(a,b){
                 return a.TICKER < b.TICKER ? -1 : 1;
             });
-
+        }
             return _arrayGeneratorPrivate._staticArray
     },
     _generateEmptyArr:function _generateArr(){
@@ -106,6 +107,12 @@ var arrayGeneratorProto = {
         }
         return addRandomNumber([]);
     },
+    setSortArray: function(value){
+        this._sortArray = value;
+    },
+    getSortArray: function(){
+        return  this._sortArray;
+    },
     getRandomArray: function getRandomArray(){
         var _this = this;
         if(this._arrayLength > data.NAME.length) throw new Error("Your Array length exceeds the data size.")
@@ -139,7 +146,7 @@ var arrayGeneratorProto = {
             Close: data.Close[i],
             PreviousClose: data.PreviousClose[i],
             PreviousCloseDate: new Date(Date.now() - 1000*60*60*24),
-            High: data.High[i],
+            x: data.High[i],
             Low: data.Low[i],
             Last: data.Last[i],
             Change: data.Change[i],
@@ -173,11 +180,52 @@ var arrayGeneratorProto = {
             }catch(err){
                 //---
             }
+        }.bind(this));
+        return this._getStaticData();
+    },
+    getDataWithRandomisation: function getDataWithRandomisation(from, to){
+        //var _subSlice = this._getStaticData().slice(from, to)
+        var _ascening;
+        var _headings = ['TICKER','NAME','High','Low','Last','Today', 'Change'];
+        var _header;
+        this.getSortArray().map(function(d,i){
+            if(d !== 0){
+                _ascening =  d === 1 ? true : false;
+                _header = _headings[i];
+            }
+        });
 
-        }.bind(this))
+        var _subSlice = this._getStaticData().sort(
+            function (a, b) {
+                if(_ascening){
+                    return a[_header] < b[_header] ? -1 : 1;
+                }else{
+                    return a[_header] > b[_header] ? -1 : 1;
+                }
+
+            }
+        ).slice(from, to);
+
+        _subSlice.map(function(d,i){
+            try{
+                var _high = (6 + (Math.random() * 60) ).toFixed(2);
+                var _low = (Math.random() * 6).toFixed(2);
+                d.High   = _high;
+                d.Low    = _low;
+                randomizeTick(d);
+                //console.log( this._getStaticData()[d] );
+            }catch(err){
+                //---
+            }
+
+        }.bind(this));
+        console.log(" _ascening : ",_ascening, " _header = ",_header)
         return this._getStaticData();
     }
 };
+
+
+
 
 var arrayGenerator = function () {
     return Object.create(arrayGeneratorProto);
@@ -332,7 +380,7 @@ var _getSparklineRandomValue = function(){
 }
 
 var randomizeTick = function(stock) {
-    stock.Bid = (stock.Bid * 0.99) + (stock.Bid * 0.017 * rnd())
+    stock.Bid = (stock.Bid * 0.99) + (stock.Bid * 0.017 * rnd());
     stock.Spread = rnd()/10;
     stock.Ask = stock.Bid + stock.Spread;
     //trades don't always happen

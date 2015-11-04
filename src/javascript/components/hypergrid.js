@@ -126,7 +126,15 @@ var HyperGrid = React.createClass({
             //to apply to a specific table
             jsonGrid.addProperties(lnfOverrides);
             jsonGrid.editAt = function(){};
-            
+
+
+            jsonGrid.addFinEventListener('fin-click', function(event) {
+                setTimeout(function(){
+                    console.log(jsonGrid.getState().sorted);
+                    _arrayGen.setSortArray( jsonGrid.getState().sorted );
+                }, 10);
+            });
+
             //setInterval(function() {
             //    //ticker.randomize();
             //    //console.log("ticker.getStocks() ", JSON.stringify(_arrayGen.getStocks()[0]) );
@@ -138,11 +146,14 @@ var HyperGrid = React.createClass({
 
             ticker.timerGenerator().start();
             document.addEventListener("frame-updated", function(e){
-                jsonModel.setData(_arrayGen.getMorphedStocks());
+                jsonModel.setData(_arrayGen.getDataWithRandomisation(jsonGrid.getVScrollValue(), jsonGrid.getVScrollValue()+12));
+               //  jsonModel.setData(_arrayGen.getStocks());
+
                 jsonModel.dataModified();
             });
 
             jsonModel.fixedColumnClicked = (grid, cellData) => {
+
                     lastSelectedRow =  cellData.gridCell.y;
                         var row = jsonModel.getRow(lastSelectedRow)
                         require('./child-window.js').createChildWindow({
@@ -182,6 +193,7 @@ var HyperGrid = React.createClass({
                   flash: 0,
                   flashColor: 'green'
                 };
+
                 if (x === 5) {
                     renderer = cellProvider.cellCache.sparklineCellRenderer;
                 } else if (x === 5 || x === 6) {
