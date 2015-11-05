@@ -54,7 +54,7 @@
         "company": "OpenFin",
         "description": "Hyperblotter Demo",
         "__icon": "http://cdn.openfin.co/demos/hyperblotter/images/shortcut.ico",
-        "icon": "http://localhost:5001/images/shortcut.ico",
+        "icon": "http://localhost:5001/images/hyperblotter_icon.ico",
         "name": "Hyperblotter Demo"
     }
 }
