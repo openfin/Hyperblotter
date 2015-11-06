@@ -50,7 +50,7 @@ module.exports = React.createClass({
   			ticker: urlData[0],
   			last: Number(urlData[1])
   		});
-  	}, Math.floor(Math.random() * 1000) );
+  	}, 100 + ( Math.floor(Math.random() * 1000) ) );
 
   	//setInterval(()=>{
   	//	this.setState({
