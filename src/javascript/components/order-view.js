@@ -46,6 +46,7 @@ module.exports = React.createClass({
   randBool: ()=>{
   	return parseInt(Math.random() * 10) % 2 ? true : false;
   },
+	/*
   rowFromArr: function(arr){
   	var components = [],
 		  	len = arr.length;
@@ -71,6 +72,7 @@ module.exports = React.createClass({
 
 		return components;
   },
+  */
   componentDidMount: function() {
       Object.observe(window.opener.orderBook, (...args) => {
           this.setState(window.opener.orderBook);
@@ -101,8 +103,7 @@ module.exports = React.createClass({
 	</thead>
 	<tbody>
 
-	{this.rowFromArr(configureDisplayState(this.state))}
-		
+
 
 	</tbody>
 </table></div>

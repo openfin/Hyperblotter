@@ -52,13 +52,13 @@ module.exports = React.createClass({
   		});
   	}, Math.floor(Math.random() * 1000) );
 
-  	setInterval(()=>{
-  		this.setState({
-  			class: 'tile start-color-change',
-  			ticker: urlData[0],
-  			last: Number(plusMinus(Number(urlData[1]), rndRange()))
-  		});
-  	}, 1000);
+  	//setInterval(()=>{
+  	//	this.setState({
+  	//		class: 'tile start-color-change',
+  	//		ticker: urlData[0],
+  	//		last: Number(plusMinus(Number(urlData[1]), rndRange()))
+  	//	});
+  	//}, 10000);
 
   },
 	render: function(){

@@ -353,6 +353,16 @@ module.exports = React.createClass({
             return "none";
         }
     },
+
+    getAnimateParentClass:function(){
+        if(this.state.animationWindowsShowing ){
+            return "";
+        } else{
+            return "none";
+        }
+    },
+
+
     getAnimateText:function(){
         if(this.state.animationWindowsShowing ){
             return this.state.inLoop ?   "Pause animation" :  "Play animation" ;
@@ -376,44 +386,53 @@ module.exports = React.createClass({
     render: function(){
         return	<div className="main-bar">
             <div className="window-control">
-                <i onClick={this.minApp} className="fa fa-minus"></i>
-                <i> </i>
-                <i onClick={this.closeApp} className="fa fa-times"></i>
+                <i onClick={this.closeApp} className="fa fa-times"><div></div> </i>
+                <i onClick={this.minApp}  className="fa fa-minus"><div></div></i>
             </div>
             <div className="drag-area"></div>
             <div className="drag-area-display"></div>
-            <image className="openfinLogo" type="image/svg+xml" src="images/openfin_logo.svg" />
 
             <div className="content-area">
                 <div>
-                    <i onClick={this.openAnimationWindows} className={this.getAnimatinWindowsClass() }><span className='fa fa-th'></span> Show trades</i>
-                    <i onClick={this.toggleAnimateLoop}><span className={ this.getAnimateClass() }></span>   { this.getAnimateText() }</i>
-                    <i onClick={this.toggleMinimised} className={this.getMinifyText().css} ><span className={this.getMinifyText().icon}></span>{this.getMinifyText().text}</i>
+                    <i onClick={this.openAnimationWindows} className={this.getAnimatinWindowsClass() }><span className='fa fa-th'></span></i>
+                    <i className = { this.getAnimateParentClass() } onClick={this.toggleAnimateLoop}><span className={ this.getAnimateClass() }></span></i>
+                    <i onClick={this.toggleMinimised} className={this.getMinifyText().css} ><span className={this.getMinifyText().icon}></span></i>
                 </div>
+                <hr />
                 <div>
-                    <i onClick={this.openBlotter}><span className="fa fa-table"></span> Hypergrid</i>
+                    <i onClick={this.openBlotter}><span className="fa fa-table"></span></i>
                 </div>
+                <hr />
                 <div>
-                    <i onClick={this.openExcel} ><span className="fa fa-file-excel-o"></span> Open Excel file</i>
+                    <i onClick={this.openExcel} ><span className="fa fa-file-excel-o"></span></i>
                 </div>
+                <hr />
+
+                <image className="" type="image/svg+xml" src="images/hyperblotter_sidetext.svg" />
 
                 <div className="copyright">
-                    <a onClick={this.openGithub}>Fork us on GitHub <i className="fa fa-github-alt"></i></a> © 2015 Openfin. All rights reserved.
+                    <a onClick={this.openGithub}><i className="fa fa-github-alt"></i></a>
                 </div>
             </div>
         </div>
     }
 });
 
-function genPairs(arr) {
-    return arr.reduce(function(m, itm, idx, a) {
-        m[0].push(m[1].splice(floor((random() * m[1].length)), 1)[0]);
-        return m
-    }, [[], arr.slice()])[0].reduce(function(m, itm, idx, a) {
+//function genPairs(arr) {
+//    return arr.reduce(function(m, itm, idx, a) {
+//        m[0].push(m[1].splice(floor((random() * m[1].length)), 1)[0]);
+//        return m
+//    }, [[], arr.slice()])[0].reduce(function(m, itm, idx, a) {
+//
+//            if (!(idx % 2)) {
+//                m.push([itm, a[idx + 1]]);
+//            }
+//            return m
+//        }, [])
+//}
 
-            if (!(idx % 2)) {
-                m.push([itm, a[idx + 1]]);
-            }
-            return m
-        }, [])
-}
+
+/*
+ <image className="openfinLogo" type="image/svg+xml" src="images/openfin_logo.svg" />
+
+ */
