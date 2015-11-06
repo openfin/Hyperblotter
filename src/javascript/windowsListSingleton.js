@@ -1,6 +1,5 @@
 var windowListSingleton = {
     _instance: null,
-    _bogusValue: "Hello World",
     createInstance:function createInstance(){
         this._instance = {
             _windows:[],
@@ -28,5 +27,4 @@ var windowListSingleton = {
     }
 };
 
-
-module.exports = windowListSingleton
+module.exports = windowListSingleton;

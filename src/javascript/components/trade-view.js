@@ -1,5 +1,6 @@
 var React = require('react'),
 		fin = require('../vendor/openfin.js'),
+        windowManager = require("../windowsListSingleton").getInstance(),
 		add = function(a,b){
       return a + b;
     },
@@ -44,18 +45,29 @@ module.exports = React.createClass({
   		last: Number(urlData[1])
   	}
   },
+	onAnimationFrame:function(){
+
+	},
   componentDidMount: function(){
-  	setTimeout(()=>{
-  		this.setState({
-  			class: 'tile start-color-change',
-  			ticker: urlData[0],
-  			last: Number(urlData[1])
-  		});
-  	}, 100 + ( Math.floor(Math.random() * 1000) ) );
+	  console.log("THe component mounted... windowManager ==  ", windowManager.getWindows());
+	  setInterval(()=>{
+		  this.setState({
+			  ticker: urlData[0],
+			  last: Number(urlData[1])
+		  });
+		  console.log(this.state.ticker)
+	  }, 5000);
+	  //setInterval(()=>{
+  	//	this.setState({
+  	//		class: 'tile start-color-change',
+  	//		ticker: urlData[0],
+  	//		last: Number(urlData[1])
+  	//	});
+  	//}, 200 + ( Math.floor(Math.random() * 1000) ) );
 
   },
 	render: function(){
-		return	<div className={this.state.class}>
+		return	<div className="tile start-color-change">
 							<div className="banner">
 								<div className="title">
 									{this.state.ticker}

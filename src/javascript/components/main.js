@@ -1,8 +1,10 @@
 var React = require('react'),
     _ = require('underscore'),
+    windowManager = require("../windowsListSingleton");
     fin = require('../vendor/openfin.js');
 
-var animationWindows = [],
+var _windowManager = windowManager.getInstance(),
+    animationWindows = _windowManager.getWindows(),
     blotter,
     inLoop = false,
     cubeSize = 185,

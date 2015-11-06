@@ -2,14 +2,8 @@ var winList = require('../../src/javascript/windowsListSingleton');
 
   var  item0 = {"value": "value zero"},
     item1 = {"value": "value one"},
-    item2 = {"value": "valeue three"};
+    item2 = {"value": "value three"};
 
-
-describe("Bogus Value Test ", function(){
-    it("Should have a bogus value winList._bogusValue" , function(){
-        expect(winList._bogusValue).toBe("Hello World");
-    })
-});
 
 describe("windowsListSingleton", function(){
     it("Should return an instance of itself", function(){
