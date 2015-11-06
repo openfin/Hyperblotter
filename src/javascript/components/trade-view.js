@@ -30,6 +30,7 @@ module.exports = React.createClass({
 		var finWindow = fin.desktop.Window.getCurrent();
 		finWindow.close();
 	},
+	//-- min app is not currently being used but remains here for possible future use.
 	minApp: function(){
 		fin.desktop.main(function(){
 		  fin.desktop.Window.getCurrent().minimize();
@@ -51,14 +52,6 @@ module.exports = React.createClass({
   			last: Number(urlData[1])
   		});
   	}, 100 + ( Math.floor(Math.random() * 1000) ) );
-
-  	//setInterval(()=>{
-  	//	this.setState({
-  	//		class: 'tile start-color-change',
-  	//		ticker: urlData[0],
-  	//		last: Number(plusMinus(Number(urlData[1]), rndRange()))
-  	//	});
-  	//}, 10000);
 
   },
 	render: function(){
