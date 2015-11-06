@@ -343,7 +343,7 @@ module.exports = React.createClass({
             inLoop : false
         }
     },
-    getAnimatinWindowsClass:function(){
+    getAnimationWindowsStyle:function(){
         return this.state.animationWindowsShowing ? "none" : "menuitem";
     },
     getAnimateClass:function(){
@@ -356,9 +356,9 @@ module.exports = React.createClass({
 
     getAnimateParentClass:function(){
         if(this.state.animationWindowsShowing ){
-            return "";
+            return {"display" : "none"};
         } else{
-            return "none";
+            return {"display":"block"};
         }
     },
 
@@ -394,7 +394,7 @@ module.exports = React.createClass({
 
             <div className="content-area">
                 <div>
-                    <i onClick={this.openAnimationWindows} className={this.getAnimatinWindowsClass() }><span className='fa fa-th'></span></i>
+                    <i onClick={this.openAnimationWindows} style={this.getAnimateParentClass() }><span className='fa fa-th'></span></i>
                     <i className = { this.getAnimateParentClass() } onClick={this.toggleAnimateLoop}><span className={ this.getAnimateClass() }></span></i>
                     <i onClick={this.toggleMinimised} className={this.getMinifyText().css} ><span className={this.getMinifyText().icon}></span></i>
                 </div>
