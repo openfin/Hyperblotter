@@ -175,6 +175,7 @@ module.exports = React.createClass({
         });
     },
     minApp: function(){
+        console.log("MINIFYING APP.")
         fin.desktop.main(function(){
             fin.desktop.Window.getCurrent().minimize();
         });
@@ -372,9 +373,9 @@ module.exports = React.createClass({
     },
     getMinifyText:function(){
         if(this.state.animationWindowsShowing ){
-            return this.state.tilesMaximised ?  {text: " Minimise", css: "", icon:"fa fa-sort-amount-desc"} : {text: " Maximise", css: "", icon:"fa fa-sort-amount-asc"};
+            return this.state.tilesMaximised ?  {text: " Minimise", style: {"display" :"block"}, css: "none", icon:"fa fa-sort-amount-desc"} : {text: " Maximise", css: "", style: {"display" :"block"}, icon:"fa fa-sort-amount-asc"};
         } else{
-            return {text: "Minimise", css: "none", icon:"fa fa-sort-amount-desc"};
+            return {text: "Minimise", style: {"display" :"none"}, css: "none", icon:"fa fa-sort-amount-desc"};
         }
     },
     openGithub: function(){
@@ -387,16 +388,16 @@ module.exports = React.createClass({
         return	<div className="main-bar">
             <div className="window-control">
                 <i onClick={this.closeApp} className="fa fa-times"><div></div> </i>
-                <i onClick={this.minApp}  className="fa fa-minus"><div></div></i>
+                <i onClick={this.minApp}  className="fa "><div></div></i>
             </div>
             <div className="drag-area"></div>
             <div className="drag-area-display"></div>
 
             <div className="content-area">
                 <div>
-                    <i onClick={this.openAnimationWindows} style={this.getAnimateParentClass() }><span className='fa fa-th'></span></i>
+                    <i onClick={this.openAnimationWindows} style={ this.getAnimateParentClass() }><span className='fa fa-th'></span></i>
                     <i className = { this.getAnimateParentClass() } onClick={this.toggleAnimateLoop}><span className={ this.getAnimateClass() }></span></i>
-                    <i onClick={this.toggleMinimised} className={this.getMinifyText().css} ><span className={this.getMinifyText().icon}></span></i>
+                    <i onClick={this.toggleMinimised} style={this.getMinifyText().style} ><span className={this.getMinifyText().icon}></span></i>
                 </div>
                 <hr />
                 <div>
