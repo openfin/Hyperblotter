@@ -55,7 +55,7 @@ module.exports = React.createClass({
 			  ticker: urlData[0],
 			  last: Number(urlData[1])
 		  });
-		  console.log(this.state.ticker)
+		  console.log(this.state.ticker, " : ", windowManager.getWindows())
 	  }, 5000);
 	  //setInterval(()=>{
   	//	this.setState({
