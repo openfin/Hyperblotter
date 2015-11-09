@@ -1,6 +1,6 @@
 var React = require('react'),
 		fin = require('../vendor/openfin.js'),
-        windowManager = require("../windowsListSingleton").getInstance(),
+        start = null,
 		add = function(a,b){
       return a + b;
     },
@@ -37,6 +37,32 @@ module.exports = React.createClass({
 		  fin.desktop.Window.getCurrent().minimize();
 		});
 	},
+    onEnterFrame:function(){
+        console.log("EnterFrame --- ");
+    },
+    getBackgroundColor:function(){
+        return Math.random() > .5 ? "#ff0000" : "#00DD00";
+    },
+    getTileStyle: function(){
+
+        return{ "background-color": this.getBackgroundColor()
+
+        }
+    },
+    step: function(timestamp){
+        if (!start) start = timestamp;
+
+        var progress = timestamp - start;
+        console.log("STEP CALLED .... ", timestamp)
+
+        element.style.left = Math.min(progress/10, 200) + "px";
+        if (progress < 2000) {
+            console.log("TOW SECNDS");
+        }
+        window.requestAnimationFrame(this.step);
+
+    },
+
   getInitialState: function () {
 
   	return {
@@ -45,36 +71,28 @@ module.exports = React.createClass({
   		last: Number(urlData[1])
   	}
   },
-	onAnimationFrame:function(){
-
-	},
   componentDidMount: function(){
-	  console.log("THe component mounted... windowManager ==  ", windowManager.getWindows());
-	  setInterval(()=>{
-		  this.setState({
-			  ticker: urlData[0],
-			  last: Number(urlData[1])
-		  });
-		  console.log(this.state.ticker, " : ", windowManager.getWindows())
-	  }, 5000);
-	  //setInterval(()=>{
-  	//	this.setState({
-  	//		class: 'tile start-color-change',
-  	//		ticker: urlData[0],
-  	//		last: Number(urlData[1])
-  	//	});
-  	//}, 200 + ( Math.floor(Math.random() * 1000) ) );
-
+	  console.log(">>>>>>>>> Component did mound in trade-view...");
+      window.requestAnimationFrame(this.step);
+  	setInterval(()=>{
+  		this.setState({
+  			ticker: urlData[0],
+  			last: Number(urlData[1])
+  		});
+  	}, 500 + ( Math.floor(Math.random() * 1000) ) );
   },
+    componentWillUnmount:function(){
+        console.log("componentWillUnmount ----- trade-view.js ");
+    },
 	render: function(){
-		return	<div className="tile start-color-change">
+        console.log("RENDERING --- ", this.state.ticker);
+		return	<div className='tile trade-cell' style={this.getTileStyle()}>
 							<div className="banner">
 								<div className="title">
 									{this.state.ticker}
 								</div>
 								<div className="window-control">
-									<i onClick={this.minApp} className="fa fa-minus"></i>
-									<i onClick={this.closeWindow} className="fa fa-times"></i>
+
 								</div>
 							</div>
 							<div className="content">
@@ -101,3 +119,10 @@ module.exports = React.createClass({
 						</div>
 	}
 });
+
+/*
+
+ <i onClick={this.minApp} className="fa fa-minus"></i>
+ <i onClick={this.closeWindow} className="fa fa-times"></i>
+
+ */
