@@ -51,18 +51,17 @@ module.exports = React.createClass({
   			ticker: urlData[0],
   			last: Number(urlData[1])
   		});
-  	}, 100 + ( Math.floor(Math.random() * 1000) ) );
+  	}, 300 + ( Math.floor(Math.random() * 1000) ) );
 
   },
 	render: function(){
-		return	<div className={this.state.class}>
+		return	<div className='tile start-color-change'>
 							<div className="banner">
 								<div className="title">
 									{this.state.ticker}
 								</div>
 								<div className="window-control">
-									<i onClick={this.minApp} className="fa fa-minus"></i>
-									<i onClick={this.closeWindow} className="fa fa-times"></i>
+
 								</div>
 							</div>
 							<div className="content">
@@ -89,3 +88,10 @@ module.exports = React.createClass({
 						</div>
 	}
 });
+
+/*
+
+ <i onClick={this.minApp} className="fa fa-minus"></i>
+ <i onClick={this.closeWindow} className="fa fa-times"></i>
+
+ */
