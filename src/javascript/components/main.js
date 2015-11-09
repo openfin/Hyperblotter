@@ -71,7 +71,7 @@ var initAnimationWindows = function(){
         if(_tilesCreated){
             resolve()
         } else{
-            var top = 5, left = 5, i = 1;
+            var leftOffset = 105, topOffset = 50, top = topOffset, left = leftOffset, tileMargin = 8,  i = 1;
             for (; i < numTiles; i++){
                 console.log("LOOP ",i, " numTiles ",numTiles);
                 animationWindows.push(new fin.desktop.Window({
@@ -99,11 +99,11 @@ var initAnimationWindows = function(){
                     duration: 1000
                 });
 
-                left += cubeSize + 5;
+                left += cubeSize + tileMargin;
 
                 if (i && !(i % numColumns)) {
-                    left = 5;
-                    top += cubeSize + 5;
+                    left = leftOffset;
+                    top += cubeSize + tileMargin;
                 }
                 if(i === numTiles-1){
                     console.log(" _tilesCreated === true");
@@ -201,6 +201,9 @@ module.exports = React.createClass({
         this.state.tilesMaximised ? this.minWindows() : this.restoreWindows();
     },
     minWindows: function() {
+        this.toggleAnimateLoopStop();
+
+
         animationWindows.forEach((wnd)=>{
             wnd.minimize();
         });
