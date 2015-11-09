@@ -212,11 +212,11 @@ module.exports = React.createClass({
         })
     },
     restoreWindows: function () {
-        this.openAnimationWindows();
+        //
         animationWindows.forEach((wnd)=>{
             wnd.restore();
         });
-
+        this.openAnimationWindows();
         this.setState({
             animationWindowsShowing: true,
             tilesMaximised: true
@@ -353,7 +353,7 @@ module.exports = React.createClass({
         return this.state.animationWindowsShowing ? "none" : "menuitem";
     },
     getAnimateClass:function(){
-        if(this.state.animationWindowsShowing ){
+        if(this.state.animationWindowsShowing && this.state.tilesMaximised){
             return this.state.inLoop ?  "fa fa-pause" : "fa fa-play";
         } else{
             return "none";
