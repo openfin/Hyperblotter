@@ -2,7 +2,6 @@ var React = require('react'),
 		ChartIq = require('./chart-iq.js'),
 		HyperGrid = require('./hypergrid.js'),
 		Menu = require('./menu.js'),
-		Login = require('./login.js'),
 		TopBar = require('./top-bar.js');
 
 

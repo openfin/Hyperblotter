@@ -23317,26 +23317,50 @@ var rnd = function() {
       return r;
 };
 
-var shuffle = function(array) {
-  var currentIndex = array.length, temporaryValue, randomIndex ;
+//var shuffle = function(array) {
+//  var currentIndex = array.length, temporaryValue, randomIndex ;
+//
+//  // While there remain elements to shuffle...
+//  while (0 !== currentIndex) {
+//
+//    // Pick a remaining element...
+//    randomIndex = Math.floor(Math.random() * currentIndex);
+//    currentIndex -= 1;
+//
+//    // And swap it with the current element.
+//    temporaryValue = array[currentIndex];
+//    array[currentIndex] = array[randomIndex];
+//    array[randomIndex] = temporaryValue;
+//  }
+//
+//  return array;
+//};
 
-  // While there remain elements to shuffle...
-  while (0 !== currentIndex) {
 
-    // Pick a remaining element...
-    randomIndex = Math.floor(Math.random() * currentIndex);
-    currentIndex -= 1;
-
-    // And swap it with the current element.
-    temporaryValue = array[currentIndex];
-    array[currentIndex] = array[randomIndex];
-    array[randomIndex] = temporaryValue;
-  }
-
-  return array;
+var shuffle = function(arr){
+    //var scrambleRecursive = function(arr, count){
+    //    count++;
+    //    var _p1 = arr.splice(Math.floor(Math.random() * arr.length), 1)
+    //    var _arr = _p1.concat(arr.reverse());
+    //    return count <= arr.length ? scrambleRecursive(_arr, count) : _arr;
+    //};
+    //return 	scrambleRecursive(arr, 0)
+    getRandomSelection(arr);
 };
 
+var getRandomSelection = function(arr, length){
+    var _length = length || 100
+    var _arr = [];
+    for(var i=0; i<length; i++){
+        _arr.push( arr[Math.round(Math.random() * arr.length)] );
+    }
+    return _arr
+}
+
+
 var toPickFrom = stocks.slice(0);
+
+console.log(" toPickFrom ", toPickFrom);
 shuffle(toPickFrom);
 
 var randomizeTicks = function() {

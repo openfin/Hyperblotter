@@ -1,0 +1,153 @@
+$bar-height: 30px
+$bar-width: 40px
+$controls-width: 60px
+$background-color: #030a28
+
+body
+  background-color: $background-color
+  height: 100%
+  width: 100%
+  overflow: hidden
+  font-size: 18pt
+
+.main-bar
+  height: $bar-height
+  padding-right: 5px
+
+  .drag-area
+    -webkit-app-region: drag
+    position: absolute
+    top: 0px
+    left: 0px
+    height: 30px
+    width: $bar-width
+
+  .drag-area-display
+    width: 60px
+    height: $bar-height
+    background-color: #FFF
+    opacity: 0.2
+    position: absolute
+    top: 0px
+    left: 0px
+    z-index: 1
+
+  .content-area
+    z-index: 2
+    width: $bar-width
+    position: relative
+    top: 0px
+    left: 0
+    padding: 20px 10px
+    color: steelblue
+    text-align: center
+    hr
+      width: 30px
+      height: 1px
+      border: 0px
+      background: #232935
+    i
+      font-style: normal
+      font-size: 16px
+      padding: 5px 0px
+      display: block
+    i:hover
+      color: white
+
+  .window-control
+    z-index: 4
+    position: relative
+    display: block
+    height: 10px
+    width: $controls-width
+    i
+      font-size: 14px
+      width: 22px
+      height: 26px
+      color: #6a6a6a
+      display: block
+      padding: 10px 4px
+      float: right
+      text-align: center
+      &:hover
+        color: #ffffff
+.tile
+  display: flex
+  flex-direction: column
+  height: 100%
+  padding: 10px
+  color: white
+  background-color: $background-color
+  .banner
+    display: flex
+    flex: 1
+    .title
+      flex: 5
+    .window-control
+      z-index: 3
+      i
+        padding-left: 10px
+  .content
+    display: flex
+    flex: 4
+    .main
+      flex: 1
+      display: flex
+      flex-direction: column
+      .last
+        flex: 1
+        font-size: 2rem
+        border-bottom: 1px solid white
+      .percent-change
+        flex: 2
+        display: flex
+        padding-top: 10px
+    .pricing
+      display: flex
+      flex: 1
+      flex-direction: column
+      .price
+        display: flex
+        flex: 1
+        flex-direction: column
+        text-align: right
+        font-size: 16px
+        .label
+          font-size: .7rem
+          font-weight: lighter
+
+.none
+  display: none
+
+.start-color-change
+  animation-duration: 3.5s
+  animation-name: slidein
+  animation-iteration-count: infinite
+
+
+@keyframes slidein
+  from
+    background-color: rgb(127,255,7)
+    color: white
+  45%
+    background-color: $background-color
+      color: white
+  50%
+    background-color: $background-color
+    color: white
+  55%
+    background-color: $background-color
+      color: white
+  to
+    background-color: rgb(251,7,7)
+    color: white
+
+.trade-cell-transition
+    webkit-transition: background-color 1.5s ease-in
+    moz-transition: background-color 1.5s ease-in
+    o-transition: background-color 1.5s ease-in
+    transition: background-color 1.5s ease-in
+
+  
+
+
