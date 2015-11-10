@@ -20,8 +20,6 @@ var React = require('react'),
 var jsonGrid = window.opener.document.querySelector('#stock-example'),
     jsonModel = jsonGrid.getBehavior();
 
-
-
 module.exports = React.createClass({
 	getInitialState: function () {
 		return {
@@ -46,33 +44,7 @@ module.exports = React.createClass({
   randBool: ()=>{
   	return parseInt(Math.random() * 10) % 2 ? true : false;
   },
-	/*
-  rowFromArr: function(arr){
-  	var components = [],
-		  	len = arr.length;
 
-		var curr, side;
-
-		while(len--){
-			curr = arr[len];
-
-			side = curr.bidAsk.type === 'bid' ? 'Bid' : 'Ask'
-			components.push(<tr>
-			<td><i key={curr.bidAsk.rowNum} onClick={this.removeBidOffer.bind(this,curr.bidAsk)} className="fa fa-times-circle"></i></td>
-			<td>{side}</td>
-			<td>{curr.bidAsk.qty}</td>
-			<td>{curr.rowInfo.TICKER}</td>
-			<td>{curr.bidAsk.amt}</td>
-			<td>OpenFin</td>
-			<td>ABC</td>
-			<td className="order-status">open</td>
-			<td>PTFO2015</td>
-		</tr>)
-		}
-
-		return components;
-  },
-  */
   componentDidMount: function() {
       Object.observe(window.opener.orderBook, (...args) => {
           this.setState(window.opener.orderBook);
@@ -87,7 +59,6 @@ module.exports = React.createClass({
 			</div>
 			<div className="contents">
 				<div className="order-book"><table className="order-table">
-		
 	<thead>
 	<tr>
 			<th>Action</th>
@@ -102,9 +73,6 @@ module.exports = React.createClass({
 		</tr>
 	</thead>
 	<tbody>
-
-
-
 	</tbody>
 </table></div>
 			</div>

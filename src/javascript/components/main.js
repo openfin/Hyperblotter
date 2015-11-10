@@ -123,9 +123,9 @@ var initBlotter = function(){
             name: 'blotter',
             url: 'hypergrid.html',
             autoShow: false,
-            defaultWidth: 960,
-            maxWidth: 960,
-            minWidth: 960,
+            defaultWidth: 840,
+            maxWidth: 840,
+            minWidth: 840,
             maxHeight: 594,
             defaultHeight: 594,
             minHeight: 594,
@@ -404,7 +404,7 @@ module.exports = React.createClass({
         }
     },
     openGithub: function(){
-        fin.desktop.System.openUrlWithBrowser("https://github.com/openfin/Hyperblotter/tree/develop", function () {
+        fin.desktop.System.openUrlWithBrowser("https://github.com/openfin/Hyperblotter/tree/master", function () {
         },function (err) {
             console.log("Failed to open GitHub: " + err);
         });
