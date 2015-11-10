@@ -1,7 +1,8 @@
 var React = require('react'),
     _ = require('underscore'),
-    windowManager = require("../windowsListSingleton");
-    fin = require('../vendor/openfin.js');
+    windowManager = require("../windowsListSingleton"),
+    fin = require('../vendor/openfin.js'),
+    excel = require("../vendor/ExcelAPI.js");
 
 var _windowManager = windowManager.getInstance(),
     animationWindows = _windowManager.getWindows(),
@@ -325,20 +326,39 @@ module.exports = React.createClass({
             _repositionWindows();
         })
     },
+    //openExcel: function() {
+    //
+    //    fin.desktop.main(function() {
+    //
+    //      fin.desktop.System.launchExternalProcess({
+    //        alias: 'hypergrid',
+    //        arguments: '',
+    //        listener: function(event){
+    //           // react to close event
+    //          if(event.topic === "exited" && event.exitCode === MY_KNOWN_BAD_STATE) {
+    //            // your desired logic here
+    //          }
+    //        }
+    //      });
+    //    });
+    //
+    //},
+
+
     openExcel: function() {
 
         fin.desktop.main(function() {
 
-          fin.desktop.System.launchExternalProcess({
-            alias: 'hypergrid',
-            arguments: '',
-            listener: function(event){
-               // react to close event
-              if(event.topic === "exited" && event.exitCode === MY_KNOWN_BAD_STATE) {
-                // your desired logic here
-              }
-            }
-          });
+            fin.desktop.System.launchExternalProcess({
+                alias: 'hypergrid',
+                arguments: '',
+                listener: function(event){
+                    // react to close event
+                    if(event.topic === "exited" && event.exitCode === MY_KNOWN_BAD_STATE) {
+                        // your desired logic here
+                    }
+                }
+            });
         });
 
     },
