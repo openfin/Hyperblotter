@@ -384,7 +384,7 @@ module.exports = React.createClass({
         }
     },
     openGithub: function(){
-        fin.desktop.System.openUrlWithBrowser("https://github.com/openfin/Hyperblotter/tree/develop", function () {
+        fin.desktop.System.openUrlWithBrowser("https://github.com/openfin/Hyperblotter/tree/master", function () {
         },function (err) {
             console.log("Failed to open GitHub: " + err);
         });
