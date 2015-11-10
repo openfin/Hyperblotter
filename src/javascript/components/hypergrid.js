@@ -141,21 +141,21 @@ var HyperGrid = React.createClass({
             jsonModel.fixedColumnClicked = (grid, cellData) => {
                     lastSelectedRow =  cellData.gridCell.y;
                         var row = jsonModel.getRow(lastSelectedRow)
-                        require('./child-window.js').createChildWindow({
-                            name: row.NAME,
-                            url: 'chartiq/stx-advanced.html?row=' + lastSelectedRow,
-                            autoShow: true,
-                            defaultWidth: 960,
-                            maxWidth: 960,
-                            minWidth: 960,
-                            maxHeight: 594,
-                            defaultHeight: 594,
-                            minHeight: 594,
-                            resizable:false,
-                            frame: true,
-                            maximizable: false,
-                            saveWindowState: false
-                        })
+                        //require('./child-window.js').createChildWindow({
+                        //    name: row.NAME,
+                        //    url: 'chartiq/stx-advanced.html?row=' + lastSelectedRow,
+                        //    autoShow: true,git
+                        //    defaultWidth: 960,
+                        //    maxWidth: 960,
+                        //    minWidth: 960,
+                        //    maxHeight: 594,
+                        //    defaultHeight: 594,
+                        //    minHeight: 594,
+                        //    resizable:false,
+                        //    frame: true,
+                        //    maximizable: false,
+                        //    saveWindowState: false
+                        //})
             };
 
             jsonModel.highlightCellOnHover= function(isColumnHovered, isRowHovered) {
