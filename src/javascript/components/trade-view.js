@@ -1,5 +1,6 @@
 var React = require('react'),
 		fin = require('../vendor/openfin.js'),
+        start = null,
 		add = function(a,b){
       return a + b;
     },
@@ -13,20 +14,55 @@ var React = require('react'),
       return parseInt(Math.random() * 10) % 2 ? add(base, op) : sub(base, op);
     };
 
-var urlData = location.search.split('&').map((i)=>{return i.split('=')[1]})
+var urlData = location.search.split('&').map((i)=>{return i.split('=')[1]});
 
 module.exports = React.createClass({
+	closeWindow: ()=>{
+  	fin.desktop.main(()=>{
+  		fin.desktop.Window.getCurrent().close();
+  	});
+  },
   closeApp: function(){
 		fin.desktop.main(function(){
-			// really its just hidden :)
-		  fin.desktop.Window.getCurrent().hide();
+		  fin.desktop.Application.getCurrent().close();
 		});
 	},
+	closeWindow: function(){
+		var finWindow = fin.desktop.Window.getCurrent();
+		finWindow.close();
+	},
+	//-- min app is not currently being used but remains here for possible future use.
 	minApp: function(){
 		fin.desktop.main(function(){
 		  fin.desktop.Window.getCurrent().minimize();
 		});
 	},
+    onEnterFrame:function(){
+        console.log("EnterFrame --- ");
+    },
+    getBackgroundColor:function(){
+        return Math.random() > .5 ? "#ff0000" : "#00DD00";
+    },
+    getTileStyle: function(){
+
+        return{ "background-color": this.getBackgroundColor()
+
+        }
+    },
+    step: function(timestamp){
+        if (!start) start = timestamp;
+
+        var progress = timestamp - start;
+        console.log("STEP CALLED .... ", timestamp)
+
+        element.style.left = Math.min(progress/10, 200) + "px";
+        if (progress < 2000) {
+            console.log("TOW SECNDS");
+        }
+        window.requestAnimationFrame(this.step);
+
+    },
+
   getInitialState: function () {
 
   	return {
@@ -36,31 +72,27 @@ module.exports = React.createClass({
   	}
   },
   componentDidMount: function(){
-  	setTimeout(()=>{
+	  console.log(">>>>>>>>> Component did mound in trade-view...");
+      window.requestAnimationFrame(this.step);
+  	setInterval(()=>{
   		this.setState({
-  			class: 'tile start-color-change',
   			ticker: urlData[0],
   			last: Number(urlData[1])
   		});
-  	}, Math.floor(Math.random() * 1000) );
-
-  	setInterval(()=>{
-  		this.setState({
-  			class: 'tile start-color-change',
-  			ticker: urlData[0],
-  			last: Number(plusMinus(Number(urlData[1]), rndRange()))
-  		});
-  	}, 2500);
-
+  	}, 500 + ( Math.floor(Math.random() * 1000) ) );
   },
+    componentWillUnmount:function(){
+        console.log("componentWillUnmount ----- trade-view.js ");
+    },
 	render: function(){
-		return	<div className={this.state.class}>
+        console.log("RENDERING --- ", this.state.ticker);
+		return	<div className='tile trade-cell' style={this.getTileStyle()}>
 							<div className="banner">
 								<div className="title">
 									{this.state.ticker}
 								</div>
 								<div className="window-control">
-									
+
 								</div>
 							</div>
 							<div className="content">
@@ -80,10 +112,17 @@ module.exports = React.createClass({
 									</div>
 									<div className="price low">
 										<div className="label">LOW</div>
-										<span className="value">{ (this.state.last - rndRange() - 1).toFixed(2)  }</span>
+										<span className="value">{ (this.state.last - rndRange()).toFixed(2) - 1 }</span>
 									</div>
 								</div>
 							</div>
 						</div>
 	}
 });
+
+/*
+
+ <i onClick={this.minApp} className="fa fa-minus"></i>
+ <i onClick={this.closeWindow} className="fa fa-times"></i>
+
+ */

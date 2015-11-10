@@ -1,5 +1,5 @@
-$app-height: 594px
-$app-width: 960px
+$app-height: 600px
+$app-width: 840px
 $transition-time: 1s
 /* $top-bar-color: #1976D2 */
 $top-bar-color: rgb(60,115,172)
@@ -24,13 +24,13 @@ body
 	height: 100%
 	margin: 0
 	overflow: hidden
-	font-family: 'Roboto Condensed', Verdana, sans-serif
-	color:#4C89BC
+	font-family: Verdana
+	color: #4C89BC
 	background-color: #000
 
 .app
 	display: flex
-	position: absolute
+	position: fixed
 	top: 0
 	left: 0
 	flex-direction: column
@@ -43,21 +43,20 @@ body
 	flex: 0.7
 	flex-direction: column
 
-
 .menu
 	flex: .1
 	z-index: $front
 	text-align: center
-	background-color:#242424
-	cursor:pointer
+	background-color: #242424
+	cursor: pointer
 	font-weight: bold
 	font-size: larger
-	color:white
+	color: white
 
 .menu-user
-	position:absolute
-	left:0
-	margin-left:9px
+	position: absolute
+	left: 0
+	margin-left: 9px
 
 .menu-page
 	height: $app-height
@@ -67,7 +66,7 @@ body
 	top: -$app-height
 	transition-duration: $transition-time
 	z-index: $slider
-	display:flex
+	display: flex
 	flex-flow: row wrap
 
 .menu-page.showing
@@ -84,14 +83,14 @@ body
 .hyper-grid
 	flex: 7
 	z-index: $middle
-	overflow:hidden
-	border-top: 1px white solid;
+	overflow: hidden
+	border-top: 1px white solid
 	padding: 5px
 
 
 .login 
 	/* display: flex */
-	display:none
+	display: none
 	position: absolute
 	top: 0
 	left: 0
@@ -105,31 +104,30 @@ body
 	transform: translateY(-$app-height)
 
 #chartContainer
-	width:$app-width
-	height:260px
+	width: $app-width
+	height: 260px
 
 .false-menu
-	flex:1 100%
+	flex: 1 100%
 
 .watchlist
-	flex:1 50%
-	background-color:#242424
+	flex: 1 50%
+	background-color: #242424
 
 .watchlist-details
-	flex:1 50%
-	background-color:#242424
+	flex: 1 50%
+	background-color: #242424
 
 .login-form
-	margin:auto
+	margin: auto
 
 .top-bar
-	flex: $top-bar-flex
 	display: flex
-	background-color: $top-bar-color
+	background-color: rgba(255,255,255,.2)
 	color: $actions-color
 	/* background: url('http://www.jackson-pollock.org/images/paintings/convergence.jpg') */
 	z-index: $front
-	height:12px;
+	height: 12px
 	justify-content: right
 	align-items: center
 	padding: 12px
@@ -137,7 +135,7 @@ body
 	i
 		flex: 1
 		font-size: $close-icon-size
-		color: white
+		color: grey
 		text-align: right
 		-webkit-app-region: no-drag
 	.title
@@ -147,73 +145,71 @@ body
 
 
 .grid-contain
-	flex: 10
-	padding: 8px
+	padding: 0px
+  	overflow: hidden
 
 #stock-example
 	display: block
-	width: 99.5%
-	height: 550px
+	width: $app-width
+	height: 573px
 
 .button
-	padding: 5px;
-	font-size: 12px;
-	color: white;
-	background-color: #2D2D2D;
-	border: 1px solid #333434;
-	margin-right: 0px;
-	font-weight: bold;
-	cursor: pointer;
-	transition: all $transition-time ease-in;
+	padding: 5px
+	font-size: 12px
+	color: white
+	background-color: #2D2D2D
+	border: 1px solid #333434
+	margin-right: 0px
+	font-weight: bold
+	cursor: pointer
+	transition: all $transition-time ease-in
 
 .button:hover
-	background-color: #8D8D8D;
-	border: 1px solid #333434;
+	background-color: #8D8D8D
+	border: 1px solid #333434
 
 .top-button
-	border-radius: 20px;
-	margin: 0px;
-	line-height: 10px;
-	padding: 1px 4px 3px 4px;
-	-webkit-app-region: no-drag;
+	border-radius: 20px
+	margin: 0px
+	line-height: 10px
+	padding: 1px 4px 3px 4px
+	-webkit-app-region: no-drag
 
 .close-button
-	position:absolute
-	left:930px;
-	left: 935px;
-	top: 3px;
+	position: absolute
+	left: 930px
+	left: 935px
+	top: 3px
 
 .equities-list
-	margin:0 0 0 10px;
-	padding:0
+	margin: 0 0 0 10px
+	padding: 0
 .equities-list.team span
 	 margin-left: 5px
 .equities-list li
-	cursor:pointer
-	list-style:none
+	cursor: pointer
+	list-style: none
 
 .equities-list .selected
-	color:#ADCFED
-	left:930px
+	color: #ADCFED
+	left: 930px
 
 .left-content
-	margin-left:10px
+	margin-left: 10px
 	border-bottom: #2D2D2D 2px solid
-	color:white
-
-
+	color: white
 
 
 
 #status-indicator
-  display: inline-block;
-  height: 10px;
-  width: 10px;
-  background-color: #2C2C2C;
-  border-radius: 20px;
+  display: inline-block
+  height: 10px
+  width: 10px
+  background-color: #2C2C2C
+  border-radius: 20px
 
 #status-indicator.online
-	background-color: red;
+	background-color: red
 
 .equities-list
 	li 
@@ -230,8 +226,8 @@ body
 	overflow: hidden
 	height: 41px
 	text-overflow: ellipsis
-	color:white
-	width:95%;
+	color: white
+	width: 95%
 
 .story:hover 
 	color: #ADCFED
@@ -239,8 +235,8 @@ body
 
 
 .item-logo
-  height: 20px;
-  width: 20px;
+  height: 20px
+  width: 20px
 
 .text-box
 	border: 0
@@ -252,24 +248,23 @@ body
 	border: 1px solid transparent
 
 .logo
-	margin-left:15px;
-
+	margin-left: 15px
 
 .real-chart
-	visibility: visible;
-	position: absolute!important;
-	top: 50px;
+	visibility: visible
+	position: absolute!important
+	top: 50px
 
 .hide-chart
 	visibility: hidden
 
 .is-chart
-		display: block;
-		font-family: Arial, Helvetica, sans-serif;
-		font-size: 12px;
-		position: relative;
-		width: 960px;
-		height: 260px;
+		display: block
+		font-family: Arial, Helvetica, sans-serif
+		font-size: 12px
+		position: relative
+		width: 960px
+		height: 260px
 
 
 /*child windows*/
@@ -342,22 +337,18 @@ body
 				flex: 1
 				display: flex
 
-
-
-
 		.quantity
 			flex: .5
 
 		.orders
 			flex: 2
 			display: flex
-			
 
 			table
 				flex: 1
 				width: 159px
-				margin-right:8px
-				margin-left:8px
+				margin-right: 8px
+				margin-left: 8px
 				background-color: black
 				color: white
 				th
@@ -461,21 +452,19 @@ body
 		text-align: center
 		color: red
 
-
-
-
-
-
-
 body
-	background-color: #030a28;
+	background-color: #030a28
 
-.main-bar
-	display: flex;
-	.drag-area
-		flex: 1
-		-webkit-app-region: drag;
-	.content-area
-		flex: 9
-		padding: 10px;
+.openfinLogo
+  	width: 85%
+  	padding: 12px
 
+.copyright
+  padding: 20px 8px
+  font-size: 11px
+  color: #cccccc
+  a
+    color: #4C89BC
+    text-decoration: none
+    &:hover
+      color: #ffffff
