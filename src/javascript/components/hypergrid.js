@@ -126,8 +126,6 @@ var HyperGrid = React.createClass({
             //to apply to a specific table
             jsonGrid.addProperties(lnfOverrides);
             jsonGrid.editAt = function(){};
-
-
             jsonGrid.addFinEventListener('fin-click', function(event) {
                 setTimeout(function(){
                     _arrayGen.setSortArray( jsonGrid.getState().sorted );
@@ -141,7 +139,6 @@ var HyperGrid = React.createClass({
             });
 
             jsonModel.fixedColumnClicked = (grid, cellData) => {
-
                     lastSelectedRow =  cellData.gridCell.y;
                         var row = jsonModel.getRow(lastSelectedRow)
                         require('./child-window.js').createChildWindow({
@@ -164,6 +161,7 @@ var HyperGrid = React.createClass({
             jsonModel.highlightCellOnHover= function(isColumnHovered, isRowHovered) {
                 return isRowHovered;
             };
+
             var flashMap = {
               red: function(v) {
                 return 'rgba(255, 0, 0, '+ (1.0-(40-v)/40) +')';
@@ -172,6 +170,7 @@ var HyperGrid = React.createClass({
                 return 'rgba(0, 255, 0, '+ (1.0-(40-v)/40) +')';
               }
             };
+
             cellProvider.getCell = function(config) {
                 var renderer = cellProvider.cellCache.simpleCellRenderer;
                 config.halign = 'right';
@@ -182,12 +181,23 @@ var HyperGrid = React.createClass({
                   flashColor: 'green'
                 };
 
+                if(x === 0){
+                    config.halign = 'left';
+                    config.bgColor = 'red';
+                };
+
+                if(x === 1){
+                    config.halign = 'left';
+                };
+
                 if (x === 5) {
                     renderer = cellProvider.cellCache.sparklineCellRenderer;
                 } else if (x === 5 || x === 6) {
                     config.value = format(config.value);
+                    config.halign = 'center';
                     if (config.value.indexOf('-') === 0) {
                       config.value = '(' + config.value.substring(1) + ')';
+
                       config.fgColor = 'red';
                     } else {
                       config.fgColor = 'green';
@@ -212,7 +222,7 @@ var HyperGrid = React.createClass({
                 return renderer;
             };
 
-            var state = {"columnIndexes":[0,26,4,3,5,7,27,28],"fixedColumnIndexes":[],"hiddenColumns":[25,1,18,24,14,8,9,10,11,12,13,21,6,2,15,16,17,19,20,23,22],"columnWidths":[null,450.80859375,95.01953125,103.9609375,160,107.2890625,86.30078125,114.203125,95.01953125,95.01953125,64.50390625,95.01953125,79.76171875,92.306640625,86.5908203125,38.38671875,118.5322265625,167.72021484375,341.04296875,248.8876953125,266.775390625,177.84765625,49.4189453125,25.3046875,73.591796875,269.416015625,467.5234375,102.35546875,86.30078125],"fixedColumnWidths":[79.4453125],"rowHeights":{},"fixedRowHeights":{},"sorted":[]}
+            var state = {"columnIndexes":[0,26,4,3,5,7,27,28],"fixedColumnIndexes":[],"hiddenColumns":[25,1,18,24,14,8,9,10,11,12,13,21,6,2,15,16,17,19,20,23,22],"columnWidths":[150,330,100,100,100,107.2890625,86.30078125,114.203125,95.01953125,95.01953125,64.50390625,95.01953125,79.76171875,92.306640625,86.5908203125,38.38671875,118.5322265625,167.72021484375,341.04296875,248.8876953125,266.775390625,177.84765625,49.4189453125,25.3046875,73.591796875,269.416015625,467.5234375,102.35546875,86.30078125],"fixedColumnWidths":[79.4453125],"rowHeights":{},"fixedRowHeights":{},"sorted":[]}
             jsonModel.setState(state);
 
             jsonModel.setImage('up-arrow', imageCache['up-arrow']);

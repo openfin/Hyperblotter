@@ -198,9 +198,9 @@ var arrayGeneratorProto = {
             function (a, b) {
                 if(!_header){
                     if(_ascening){
-                        return a.NAME < b.NAME ? -1 : 1;
-                    }else{
                         return a.NAME > b.NAME ? -1 : 1;
+                    }else{
+                        return a.NAME < b.NAME ? -1 : 1;
                     }
                 }else{
                     if(_ascening){
