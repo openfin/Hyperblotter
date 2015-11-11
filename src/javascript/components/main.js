@@ -354,9 +354,22 @@ module.exports = React.createClass({
     },
     getAnimateClass:function(){
         if(this.state.animationWindowsShowing && this.state.tilesMaximised){
-            return this.state.inLoop ?  "fa fa-pause" : "fa fa-play";
-        } else{
-            return "none";
+            var _class = this.state.inLoop ?  "fa fa-pause" : "fa fa-play";
+            return {class: _class , style: {"display": "block"}};
+        } else {
+            var _class = this.state.inLoop ? "fa fa-pause" : "fa fa-play";
+            var _style = {
+                "opacity": "0.2",
+                "webkitTouchCallout": "none",
+                "webkitUserSelect": "none",
+                "khtmlUserSelect": "none",
+                "mozUserSelect": "none",
+                "msUserSelect": "none",
+                "userSelect": "none",
+                "pointerEvents": "none"
+
+        };
+            return {class: _class, style: _style}
         }
     },
 
@@ -401,7 +414,7 @@ module.exports = React.createClass({
             <div className="content-area">
                 <div>
                     <i onClick={this.openAnimationWindows} style={ this.getAnimateParentClass() }><span className='fa fa-th'></span></i>
-                    <i className = { this.getAnimateParentClass() } onClick={this.toggleAnimateLoop}><span className={ this.getAnimateClass() }></span></i>
+                    <i onClick={this.toggleAnimateLoop} style={this.getAnimateClass().style} ><span className={ this.getAnimateClass().class }></span></i>
                     <i onClick={this.toggleMinimised} style={this.getMinifyText().style} ><span className={this.getMinifyText().icon}></span></i>
                 </div>
                 <hr />
