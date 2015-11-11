@@ -4,8 +4,8 @@
         "description": "Hyperblotter Demo",
         "icon": "http://localhost:5001/images/hyperblotter_icon.ico",
         "__url": "http://cdn.openfin.co/demos/hyperblotter/index.html",
-        "url": "http://localhost:5001/index.html",
-        "uuid": "HyperblotterDemoUUID",
+        "url": "http://localhost:5001/index.html?debug",
+        "uuid": "OpenfinPOC",
         "autoShow": true,
         "defaultWidth": 40,
         "maxWidth": 40,
@@ -26,7 +26,7 @@
     },
     "runtime": {
         "arguments": "",
-        "version": "stable"
+        "version": "stable-v4"
     },
     "appAssets": [
             {
