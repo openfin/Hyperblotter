@@ -45,6 +45,10 @@ var random = Math.random;
 
 fin.desktop.main(()=>{
 
+    initBlotter().then(function(b){
+        // do nothing, if you want the blotter to show automatically blotter.show();
+    });
+
     initAnimationWindows().then(function(val){
         fin.desktop.System.deleteCacheOnRestart(function () {
             console.log("successfully deleted cache");

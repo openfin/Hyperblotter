@@ -10,9 +10,9 @@
         "defaultWidth": 40,
         "maxWidth": 40,
         "minWidth": 40,
-        "maxHeight": 380,
-        "defaultHeight": 380,
-        "minHeight": 380,
+        "maxHeight": 360,
+        "defaultHeight": 360,
+        "minHeight": 360,
         "defaultTop": 50,
         "defaultLeft": 10,
         "resizable": false,
@@ -26,7 +26,7 @@
     },
     "runtime": {
         "arguments": "",
-        "version": "stable-v4"
+        "version": "5.44.8.33"
     },
     "appAssets": [
             {
