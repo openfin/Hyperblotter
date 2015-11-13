@@ -5,7 +5,7 @@
         "icon": "http://localhost:5001/images/hyperblotter_icon.ico",
         "__url": "http://cdn.openfin.co/demos/hyperblotter/index.html",
         "url": "http://localhost:5001/index.html?debug",
-        "uuid": "OpenfinPOC",
+        "uuid": "hyperblotter",
         "autoShow": true,
         "defaultWidth": 40,
         "maxWidth": 40,
