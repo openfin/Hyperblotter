@@ -354,7 +354,7 @@ module.exports = React.createClass({
         fin.desktop.main(function() {
 
             fin.desktop.System.launchExternalProcess({
-                alias: 'hypergrid',
+                alias: 'excel-dist',
                 arguments: '',
                 listener: function(event){
                     // react to close event
