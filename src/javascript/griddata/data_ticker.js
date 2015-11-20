@@ -334,19 +334,6 @@ var getRandomSelection = function(arr, length){
     return _arr;
 };
 
-var toPickFrom = stocks.slice(0);
-shuffle(toPickFrom);
-
-var randomizeTicks = function() {
-    if (toPickFrom.length < 200) {
-        toPickFrom = stocks.slice(0);
-        shuffle(toPickFrom);
-    }
-    for (i = 0; i < 200; i++) {
-        var each = toPickFrom.shift();
-        randomizeTick(each);
-    }
-};
 var _getSparklineRandomValue = function(){
     return 5 + Math.floor(90 * rnd());
 };
@@ -381,6 +368,5 @@ var randomizeTick = function(stock) {
 module.exports = {
     arrayGenerator: arrayGenerator,
     stocks: stocks,
-    randomize: randomizeTicks,
     timerGenerator: timerGenerator
 };
