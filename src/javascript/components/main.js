@@ -421,21 +421,16 @@ module.exports = React.createClass({
                     <i onClick={this.toggleAnimateLoop} style={this.getAnimateClass().style} ><span className={ this.getAnimateClass().class }></span></i>
                     <i onClick={this.toggleMinimised} style={this.getMinifyText().style} ><span className={this.getMinifyText().icon}></span></i>
                 </div>
-                <hr />
                 <div>
                     <i onClick={this.openBlotter}><span className="fa fa-table"></span></i>
                 </div>
-                <hr />
                 <div>
                     <i onClick={this.openExcel} ><span className="fa fa-file-excel-o"></span></i>
                 </div>
-                <hr />
-
-                <image className="" type="image/svg+xml" src="images/hyperblotter_sidetext.svg" />
-
-                <div className="copyright">
-                    <a onClick={this.openGithub}><i className="fa fa-github-alt"></i></a>
+                <div>
+                    <i onClick={this.openGithub}><span className="fa fa-github-alt"></span></i>
                 </div>
+
             </div>
         </div>
     }

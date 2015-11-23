@@ -2,18 +2,18 @@
     "startup_app": {
         "name": "Hyperblotter",
         "description": "Hyperblotter Demo",
-        "url": "http://cdn.openfin.co/demos/hyperblotter/index.html",
-        "__url": "http://localhost:5001/index.html?debug",
-        "icon": "http://cdn.openfin.co/demos/hyperblotter/images/hyperblotter_icon.ico",
-        "__icon": "http://localhost:5001/images/hyperblotter_icon.ico",
+        "__url": "http://cdn.openfin.co/demos/hyperblotter/index.html",
+        "url": "http://localhost:5001/index.html?debug",
+        "__icon": "http://cdn.openfin.co/demos/hyperblotter/images/hyperblotter_icon.ico",
+        "icon": "http://localhost:5001/images/hyperblotter_icon.ico",
         "uuid": "hyperblotter",
         "autoShow": true,
-        "defaultWidth": 40,
-        "maxWidth": 40,
-        "minWidth": 40,
-        "maxHeight": 360,
-        "defaultHeight": 360,
-        "minHeight": 360,
+        "defaultWidth": 360,
+        "maxWidth": 360,
+        "minWidth": 360,
+        "maxHeight": 90,
+        "defaultHeight": 90,
+        "minHeight": 90,
         "defaultTop": 50,
         "defaultLeft": 10,
         "resizable": false,
@@ -31,21 +31,21 @@
     },
     "appAssets": [
             {
-                "src": "http://cdn.openfin.co/demos/hyperblotter/assets/hypergrid.xlsx.zip",
-                "__src": "http://localhost:5001/assets/hypergrid.xlsx.zip",
+                "__src": "http://cdn.openfin.co/demos/hyperblotter/assets/hypergrid.xlsx.zip",
+                "src": "http://localhost:5001/assets/hypergrid.xlsx.zip",
                 "alias": "hypergrid",
                 "version": "0.0.1",
                 "target": "hypergrid.xlsx"
             },
             {
-              "src": "http://cdn.openfin.co/demos/hyperblotter/assets/FinDesktopAddin-packed.xll.zip",
-              "__src": "http://localhost:5001/assets/FinDesktopAddin-packed.xll.zip",
+              "__src": "http://cdn.openfin.co/demos/hyperblotter/assets/FinDesktopAddin-packed.xll.zip",
+              "src": "http://localhost:5001/assets/FinDesktopAddin-packed.xll.zip",
               "alias": "excel-plugin-32",
               "version": "0.0.1"
             },
             {
-              "src": "http://cdn.openfin.co/demos/hyperblotter/assets/FinDesktopAddin64-packed.xll.zip",
-              "__src": "http://localhost:5001/assets/FinDesktopAddin64-packed.xll.zip",
+              "__src": "http://cdn.openfin.co/demos/hyperblotter/assets/FinDesktopAddin64-packed.xll.zip",
+              "src": "http://localhost:5001/assets/FinDesktopAddin64-packed.xll.zip",
               "alias": "excel-plugin-64",
               "version": "0.0.1"
             }
