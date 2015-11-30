@@ -41,10 +41,18 @@
               "__src": "http://cdn.openfin.co/demos/hyperblotter/assets/FinDesktopAddin-packed.xll.zip",
               "src": "http://localhost:5001/assets/dist.zip",
               "alias": "excel-dist",
-              "target": "dist\\excel.exe",
+              "target": "excel.exe",
               "version": "0.0.1",
               "args" : "-i -l"
-            }
+            },
+        {
+            "src": "http://localhost:5001/assets/dist.zip",
+            "alias": "excel-launch",
+            "path": "excel.exe",
+            "version": "0.0.1",
+            "args" : "FinDesktopAddin.xll"
+        }
+
         ],
     "splashScreenImage": "http://cdn.openfin.co/demos/hyperblotter/images/splashscreen.png",
     "__splashScreenImage": "http://localhost:5001/images/splashscreen.png",

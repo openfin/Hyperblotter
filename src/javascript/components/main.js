@@ -348,6 +348,22 @@ module.exports = React.createClass({
     //
     //},
 
+    launchExcel: function(){
+        fin.desktop.System.launchExternalProcess({
+                path: "excel",
+                // arguments: "FinDesktopAddin.xll",
+                listener: function(code) {
+                    console.log('the exit code', code);
+                }
+            },
+            function() {
+                console.log('all good');
+            },
+            function(){
+                console.log('an error');
+            });
+    },
+
 
     openExcel: function() {
 
@@ -355,7 +371,7 @@ module.exports = React.createClass({
 
             fin.desktop.System.launchExternalProcess({
                 alias: 'excel-dist',
-                arguments: '',
+                arguments: '-i -l',
                 listener: function(event){
                     // react to close event
                     if(event.topic === "exited" && event.exitCode === MY_KNOWN_BAD_STATE) {
