@@ -1,6 +1,6 @@
 $bar-height: 30px
-$bar-width: 40px
-$controls-width: 60px
+$bar-width: 360px
+$controls-width: 360px
 $background-color: #030a28
 
 body
@@ -20,10 +20,10 @@ body
     top: 0px
     left: 0px
     height: 30px
-    width: $bar-width
+    width: $bar-width - 60
 
   .drag-area-display
-    width: 60px
+    width: $bar-width
     height: $bar-height
     background-color: #FFF
     opacity: 0.2
@@ -35,8 +35,8 @@ body
   .content-area
     z-index: 2
     width: $bar-width
-    position: relative
-    top: 0px
+    position: absolute
+    top: 15px
     left: 0
     padding: 20px 10px
     color: steelblue
@@ -48,9 +48,12 @@ body
       background: #232935
     i
       font-style: normal
-      font-size: 16px
+      font-size: 24px
       padding: 5px 0px
       display: block
+      width: 65px
+      height: 60px
+      float: left
     i:hover
       color: white
 
