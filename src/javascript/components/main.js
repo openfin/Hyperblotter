@@ -368,7 +368,7 @@ module.exports = React.createClass({
     openExcel: function() {
 
         fin.desktop.main(function() {
-
+            console.log("openExcel has been clicked...");
             fin.desktop.System.launchExternalProcess({
                 alias: 'excel-dist',
                 arguments: '-i -l',
