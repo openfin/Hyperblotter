@@ -51,15 +51,15 @@ module.exports = React.createClass({
     },
     step: function(timestamp){
         if (!start) start = timestamp;
-
-        var progress = timestamp - start;
-        console.log("STEP CALLED .... ", timestamp)
-
-        element.style.left = Math.min(progress/10, 200) + "px";
-        if (progress < 2000) {
-            console.log("TOW SECNDS");
-        }
-        window.requestAnimationFrame(this.step);
+        //
+        //var progress = timestamp - start;
+        //console.log("STEP CALLED .... ", timestamp)
+        //
+        //element.style.left = Math.min(progress/10, 200) + "px";
+        //if (progress < 2000) {
+        //    console.log("TOW SECNDS");
+        //}
+        //window.requestAnimationFrame(this.step);
 
     },
 
@@ -73,7 +73,20 @@ module.exports = React.createClass({
   },
   componentDidMount: function(){
 	  console.log(">>>>>>>>> Component did mound in trade-view...");
+
+
+      setTimeout(function(){
+          try {
+              fin.desktop.Window.getCurrent().defineDraggableArea(document.querySelector('.window-control'));
+          } catch (e) {
+              console.log("ERROR in trade-view : ", e)
+          }
+
+      },2000);
+
+
       window.requestAnimationFrame(this.step);
+
   	setInterval(()=>{
   		this.setState({
   			ticker: urlData[0],

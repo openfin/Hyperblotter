@@ -95,6 +95,7 @@ var initAnimationWindows = function(){
                     saveWindowState: false,
                     defaultTop: top,
                     defaultLeft: left,
+                    showTaskbarIcon: false,
                     icon: "http://demoappdirectory.openf.in/desktop/config/apps/OpenFin/HelloOpenFin/img/openfin.ico"
                 }));
 
