@@ -51,11 +51,11 @@ fin.desktop.main(()=>{
     });
 
     initAnimationWindows().then(function(val){
-        fin.desktop.System.deleteCacheOnRestart(function () {
-            console.log("successfully deleted cache");
-        },function (err) {
-            console.log("failure to delete cache: " + err);
-        });
+        //fin.desktop.System.deleteCacheOnRestart(function () {
+        //    console.log("successfully deleted cache");
+        //},function (err) {
+        //    console.log("failure to delete cache: " + err);
+        //});
 
         fin.desktop.System.addEventListener('monitor-info-changed', function (evnt) {
             console.log("The monitor information has changed to: ", evnt);
