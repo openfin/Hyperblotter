@@ -444,12 +444,15 @@ module.exports = React.createClass({
     },
     render: function(){
         return	<div className="main-bar">
+            <image className="openfinLogo" type="image/svg+xml" src="images/hyperblotter_text.svg" />
+
             <div className="window-control">
                 <i onClick={this.closeApp} className="fa fa-times"><div></div> </i>
                 <i onClick={this.minApp}  className="fa "><div></div></i>
             </div>
             <div className="drag-area"></div>
-            <div className="drag-area-display"></div>
+            <div className="drag-area-display">
+            </div>
 
             <div className="content-area">
                 <div>
