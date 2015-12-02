@@ -196,12 +196,13 @@ module.exports = React.createClass({
             }catch(err){
                 //--
             }
+            this.setState({
+                animationWindowsShowing: true,
+                tilesMaximised: true
+            })
         });
         this.animateWindows(animationWindows, false);
-        this.setState({
-            animationWindowsShowing: true,
-            tilesMaximised: true
-        });
+
     },
     toggleMinimised:function(){
         this.state.tilesMaximised ? this.minWindows() : this.restoreWindows();
@@ -217,23 +218,13 @@ module.exports = React.createClass({
             tilesMaximised: false
         })
     },
-    restoreWindows: function () {
-        //
-        animationWindows.forEach((wnd)=>{
-            wnd.restore();
-        });
-        this.openAnimationWindows();
-        this.setState({
-            animationWindowsShowing: true,
-            tilesMaximised: true
-        })
-    },
     toggleShowAnimationWindows:function(){
-        console.log("toggleShowAnimationWindows called this. openAnimationWindows = ", this.openAnimationWindows);
+        console.log("toggleShowAnimationWindows called this. this.state.animationWindowsShowing = ",this.state.animationWindowsShowing);
         if(this.state.animationWindowsShowing){
-            this.openAnimationWindows()
-        }else{
             this.closeAnimationWindows();
+        }else{
+            this.openAnimationWindows();
+
         }
     },
     openAnimationWindows:function(){
@@ -242,11 +233,17 @@ module.exports = React.createClass({
             console.log(" initAnimationWindows resolved ");
             this.showWindows();
         });
+
+        this.setState({
+            animationWindowsShowing: true,
+            tilesMaximised: true
+        });
     },
     closeAnimationWindows: function(){
+        console.log("closeAnimationWindows -- called")
         this.toggleAnimateLoopStop();
         animationWindows.forEach((wnd)=>{
-            wnd.close();
+            wnd.hide();
         });
 
         this.setState({
@@ -331,45 +328,11 @@ module.exports = React.createClass({
             _repositionWindows();
         })
     },
-    //openExcel: function() {
-    //
-    //    fin.desktop.main(function() {
-    //
-    //      fin.desktop.System.launchExternalProcess({
-    //        alias: 'hypergrid',
-    //        arguments: '',
-    //        listener: function(event){
-    //           // react to close event
-    //          if(event.topic === "exited" && event.exitCode === MY_KNOWN_BAD_STATE) {
-    //            // your desired logic here
-    //          }
-    //        }
-    //      });
-    //    });
-    //
-    //},
-
-    launchExcel: function(){
-        fin.desktop.System.launchExternalProcess({
-                path: "excel",
-                // arguments: "FinDesktopAddin.xll",
-                listener: function(code) {
-                    console.log('the exit code', code);
-                }
-            },
-            function() {
-                console.log('all good');
-            },
-            function(){
-                console.log('an error');
-            });
-    },
 
 
     openExcel: function() {
 
         fin.desktop.main(function() {
-            console.log("openExcel has been clicked...");
             fin.desktop.System.launchExternalProcess({
                 alias: 'excel-dist',
                 arguments: '-i -l',
@@ -434,7 +397,7 @@ module.exports = React.createClass({
         if(this.state.animationWindowsShowing ){
             return this.state.tilesMaximised ?  {text: " Minimise", style: {"display" :"block"}, css: "none", icon:"fa fa-sort-amount-desc"} : {text: " Maximise", css: "", style: {"display" :"block"}, icon:"fa fa-sort-amount-asc"};
         } else{
-            return {text: "Minimise", style: {"display" :"none"}, css: "none", icon:"fa fa-sort-amount-desc"};
+            return {text: "Minimise", style: {"display" :"block"}, css: "none", icon:"fa fa-sort-amount-desc"};
         }
     },
     openGithub: function(){
@@ -459,7 +422,7 @@ module.exports = React.createClass({
                 <div>
                     <i onClick={this.openAnimationWindows} style={ this.getAnimateParentClass() }><span className='fa fa-th'></span></i>
                     <i onClick={this.toggleAnimateLoop} style={this.getAnimateClass().style} ><span className={ this.getAnimateClass().class }></span></i>
-                    <i onClick={this.toggleMinimised} style={this.getMinifyText().style} ><span className={this.getMinifyText().icon}></span></i>
+                    <i onClick={this.toggleShowAnimationWindows} style={this.getMinifyText().style} ><span className={this.getMinifyText().icon}></span></i>
                 </div>
                 <div>
                     <i onClick={this.openBlotter}><span className="fa fa-table"></span></i>
