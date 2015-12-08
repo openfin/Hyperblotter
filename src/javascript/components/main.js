@@ -194,6 +194,7 @@ module.exports = React.createClass({
         animationWindows.forEach((wnd)=>{
             try{
                 wnd.show();
+                wnd.bringToFront();
             }catch(err){
                 //--
             }
@@ -315,6 +316,7 @@ module.exports = React.createClass({
             });
         }else{
             blotter.show();
+            blotter.bringToFront();
         }
     },
     componentDidMount: function(){
