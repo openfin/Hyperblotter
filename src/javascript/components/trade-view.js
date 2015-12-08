@@ -74,14 +74,19 @@ module.exports = React.createClass({
   componentDidMount: function(){
 	  console.log(">>>>>>>>> Component did mound in trade-view...");
 
+	  setTimeout(function(){
 
-      setTimeout(function(){
+
+		  try{
+			  fin.desktop.Window.getCurrent().bringToFront();
+		  }catch(err){
+			  //--
+		  }
           try {
               fin.desktop.Window.getCurrent().defineDraggableArea(document.querySelector('.window-control'));
           } catch (e) {
               console.log("ERROR in trade-view : ", e)
           }
-
       },2000);
 
 
@@ -126,7 +131,7 @@ module.exports = React.createClass({
 									</div>
 									<div className="price low">
 										<div className="label">LOW</div>
-										<span className="value">{ (this.state.last - rndRange()).toFixed(2) - 1 }</span>
+										<span className="value">{ (this.state.last - rndRange() - 1).toFixed(2)  }</span>
 									</div>
 								</div>
 							</div>
