@@ -100,13 +100,14 @@ module.exports = React.createClass({
 	render: function(){
         console.log("RENDERING --- ", this.state.ticker);
 		return	<div className='tile trade-cell' style={this.getTileStyle()}>
+            <div className="window-control">
+
+            </div>
 							<div className="banner">
 								<div className="title">
 									{this.state.ticker}
 								</div>
-								<div className="window-control">
 
-								</div>
 							</div>
 							<div className="content">
 								<div className="main">
