@@ -60,6 +60,18 @@ var format = function(data) {
 
 var HyperGrid = React.createClass({
     componentDidMount: function(){
+
+        setTimeout(function(){
+            try{
+                fin.desktop.Window.getCurrent().bringToFront();
+                console.log("Bringing HyperGrid to the front")
+            }catch(err){
+                //--
+                console.log("Error with HyperGrid coming to the front ", err)
+            }
+        }, 1000);
+
+
         window.addEventListener('polymer-ready',function(){
             var jsonGrid = document.querySelector('#stock-example');
             var jsonModel = jsonGrid.getBehavior();
