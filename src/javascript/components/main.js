@@ -3,6 +3,7 @@ var React = require('react'),
     windowManager = require("../windowsListSingleton"),
     fin = require('../vendor/openfin.js'),
     excel = require("../vendor/ExcelAPI.js");
+TooTip = require("../components/tooltip-decorator");
 
 var _windowManager = windowManager.getInstance(),
     animationWindows = _windowManager.getWindows(),
@@ -397,7 +398,7 @@ module.exports = React.createClass({
         if(this.state.animationWindowsShowing ){
             return this.state.tilesMaximised ?  {text: " Minimise", style: {"display" :"block"}, css: "none", icon:"fa fa-sort-amount-desc"} : {text: " Maximise", css: "", style: {"display" :"block"}, icon:"fa fa-sort-amount-asc"};
         } else{
-            return {text: "Minimise", style: {"display" :"block"}, css: "none", icon:"fa fa-sort-amount-desc"};
+            return {text: "Minimise", style: {"display" :"none"}, css: "none", icon:"fa fa-sort-amount-desc"};
         }
     },
     openGithub: function(){
@@ -420,18 +421,44 @@ module.exports = React.createClass({
 
             <div className="content-area">
                 <div>
-                    <i onClick={this.openAnimationWindows} style={ this.getAnimateParentClass() }><span className='fa fa-th'></span></i>
-                    <i onClick={this.toggleAnimateLoop} style={this.getAnimateClass().style} ><span className={ this.getAnimateClass().class }></span></i>
-                    <i onClick={this.toggleShowAnimationWindows} style={this.getMinifyText().style} ><span className={this.getMinifyText().icon}></span></i>
+                        <i onClick={this.openAnimationWindows} style={ this.getAnimateParentClass() }>
+                            <TooTip legend="Launch">
+                                <span className='fa fa-th'></span>
+                            </TooTip>
+                        </i>
+                        <i onClick={this.toggleShowAnimationWindows} style={this.getMinifyText().style} >
+                            <TooTip legend="Close">
+                                <span className={this.getMinifyText().icon}></span>
+                            </TooTip>
+                        </i>
+
+                    <i onClick={this.toggleAnimateLoop} style={this.getAnimateClass().style} >
+                        <TooTip legend="Animate">
+                            <span className={ this.getAnimateClass().class }></span>
+                        </TooTip>
+                    </i>
+
                 </div>
                 <div>
-                    <i onClick={this.openBlotter}><span className="fa fa-table"></span></i>
+                    <i onClick={this.openBlotter}>
+                        <TooTip legend="Grid">
+                            <span className="fa fa-table"></span>
+                        </TooTip>
+                    </i>
                 </div>
                 <div>
-                    <i onClick={this.openExcel} ><span className="fa fa-file-excel-o"></span></i>
+                    <i onClick={this.openExcel} >
+                        <TooTip legend="Excel">
+                            <span className="fa fa-file-excel-o"></span>
+                        </TooTip>
+                    </i>
                 </div>
                 <div>
-                    <i onClick={this.openGithub}><span className="fa fa-github-alt"></span></i>
+                    <i onClick={this.openGithub}>
+                        <TooTip legend="GitHub">
+                            <span className="fa fa-github-alt"></span>
+                        </TooTip>
+                    </i>
                 </div>
 
             </div>

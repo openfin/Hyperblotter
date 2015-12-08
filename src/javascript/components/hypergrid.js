@@ -93,8 +93,8 @@ var HyperGrid = React.createClass({
             var bgColor = '#07071E';
             var fixedAreasBGColor = bgColor;
 
-            var font = "14px Roboto Condensed";
-            var headingFont = "16px Roboto Condensed";
+            var font = "16px Roboto Condensed";
+            var headingFont = "18px Roboto Condensed";
             var headingFGColor = '#3D77FE';
 
             var lnfOverrides = {
