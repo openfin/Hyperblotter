@@ -72,10 +72,8 @@ module.exports = React.createClass({
   	}
   },
   componentDidMount: function(){
-	  console.log(">>>>>>>>> Component did mound in trade-view...");
 
 	  setTimeout(function(){
-
 
 		  try{
 			  fin.desktop.Window.getCurrent().bringToFront();
@@ -97,7 +95,7 @@ module.exports = React.createClass({
   			ticker: urlData[0],
   			last: Number(urlData[1])
   		});
-  	}, 500 + ( Math.floor(Math.random() * 1000) ) );
+  	}, 1000 + ( Math.floor(Math.random() * 1000) ) );
   },
     componentWillUnmount:function(){
         console.log("componentWillUnmount ----- trade-view.js ");
