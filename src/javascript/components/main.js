@@ -47,6 +47,8 @@ var random = Math.random;
 
 fin.desktop.main(()=>{
 
+    initExcel();
+
     initBlotter().then(function(b){
         // do nothing, if you want the blotter to show automatically blotter.show();
     });
@@ -79,7 +81,6 @@ var initAnimationWindows = function(){
         } else{
             var leftOffset = 105, topOffset = 50, top = topOffset, left = leftOffset, tileMargin = 8,  i = 1;
             for (; i < numTiles; i++){
-                console.log("LOOP ",i, " numTiles ",numTiles);
                 animationWindows.push(new fin.desktop.Window({
                     name: 'tile' + random(),
                     url: 'trade.html?t=' + rndData[i].ticker + '&l=' + rndData[i].last,
@@ -121,6 +122,16 @@ var initAnimationWindows = function(){
         }
     });
 };
+
+initExcel = function(){
+    var Excel = fin.desktop.Excel;
+    Excel.init();
+    Excel.getConnectionStatus(this.onExcelConnected);
+    Excel.addEventListener("workbookAdded", this.onWorkbookAdded);
+    Excel.addEventListener("workbookClosed", this.onWorkbookRemoved);
+    Excel.addEventListener("connected", this.onExcelConnected);
+    console.log("Called Excel ", Excel)
+}
 
 /* If the blotter has not been created yet, create it and return a promise...*/
 var initBlotter = function(){
@@ -333,22 +344,50 @@ module.exports = React.createClass({
     },
 
 
+    //openExcel: function() {
+    //
+    //    fin.desktop.main(function() {
+    //        fin.desktop.System.launchExternalProcess({
+    //            alias: 'excel-dist',
+    //            arguments: '-i -l',
+    //            listener: function(event){
+    //                // react to close event
+    //                if(event.topic === "exited" && event.exitCode === MY_KNOWN_BAD_STATE) {
+    //                    // your desired logic here
+    //                }
+    //            }
+    //        });
+    //    });
+    //
+    //},
+
     openExcel: function() {
 
-        fin.desktop.main(function() {
-            fin.desktop.System.launchExternalProcess({
-                alias: 'excel-dist',
-                arguments: '-i -l',
-                listener: function(event){
-                    // react to close event
-                    if(event.topic === "exited" && event.exitCode === MY_KNOWN_BAD_STATE) {
-                        // your desired logic here
-                    }
-                }
-            });
+        fin.desktop.main(function(){
+
+            var Excel = fin.desktop.Excel;
+            Excel.init();
+            Excel.getConnectionStatus(this.onExcelConnected);
+            Excel.addEventListener("workbookAdded", this.onWorkbookAdded);
+            Excel.addEventListener("workbookClosed", this.onWorkbookRemoved);
+            Excel.addEventListener("connected", this.onExcelConnected);
+            console.log("Called Excel ", Excel)
         });
 
     },
+    onExcelConnected:function(){
+        console.log("EXCEL FUNCTION CALLED ")
+    },
+    onWorkbookAdded:function(){
+        console.log("EXCEL FUNCTION CALLED ")
+    },
+    onWorkbookRemoved:function(){
+        console.log("EXCEL FUNCTION CALLED ")
+    },
+
+
+
+
     getInitialState: function(){
         return {
             animationWindowsShowing: false,
@@ -462,27 +501,7 @@ module.exports = React.createClass({
                         </TooTip>
                     </i>
                 </div>
-
             </div>
         </div>
     }
 });
-
-//function genPairs(arr) {
-//    return arr.reduce(function(m, itm, idx, a) {
-//        m[0].push(m[1].splice(floor((random() * m[1].length)), 1)[0]);
-//        return m
-//    }, [[], arr.slice()])[0].reduce(function(m, itm, idx, a) {
-//
-//            if (!(idx % 2)) {
-//                m.push([itm, a[idx + 1]]);
-//            }
-//            return m
-//        }, [])
-//}
-
-
-/*
- <image className="openfinLogo" type="image/svg+xml" src="images/openfin_logo.svg" />
-
- */
