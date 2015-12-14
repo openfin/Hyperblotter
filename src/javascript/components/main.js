@@ -47,16 +47,27 @@ var random = Math.random;
 var Excel;
 
 function excelCallback(o){
-    console.log("EXCEL CALLBACK ", o);
     fin.desktop.Excel.getWorkbooks(function(workbooks){
-        console.log("WORK BOOKS = ",workbooks[0]);
-
-        if(workbooks[0]){
-            workbooks[0].addWorksheet(function(sheet){
-
-                sheet.setCells([["a", "b", "c"], [1, 2, 3]], "A1");
-            });
-        }
+        console.log("WORK BOOKS = ",workbooks);
+        workbooks.filter(function(d, i){
+            return d.name === "hypergrid.xlsx"
+        }).map(function(d,i){
+            var _worksheet = d.getWorksheets(function(ws){
+                ws.filter(function(dd,ii){
+                    return dd.name === "Publisher"
+                }).map(function(ddd,iii){
+                    console.log("THE WORKSHEET IS ", ddd)
+                        ddd.setCells([["a", "b", "c"], [1, 2, 3]], "A1");
+                })
+            })
+            console.log("MAPPIN THE WORKBOOKS: _Worksheet ", _worksheet)
+        });
+        //if(workbooks[0]){
+        //    workbooks[0].addWorksheet(function(sheet){
+        //
+        //        sheet.setCells([["a", "b", "c"], [1, 2, 3]], "A1");
+        //    });
+        //}
     });
 }
 
@@ -374,39 +385,39 @@ module.exports = React.createClass({
     },
 
 
-    //openExcel: function() {
-    //
-    //    fin.desktop.main(function() {
-    //        fin.desktop.System.launchExternalProcess({
-    //            alias: 'excel-dist',
-    //            arguments: '-i -l',
-    //            listener: function(event){
-    //                // react to close event
-    //                if(event.topic === "exited" && event.exitCode === MY_KNOWN_BAD_STATE) {
-    //                    // your desired logic here
-    //                }
-    //            }
-    //        });
-    //    });
-    //
-    //},
-
     openExcel: function() {
 
-        fin.desktop.main(function(){
-
-            var Excel = fin.desktop.Excel;
-            Excel.init();
-            Excel.getConnectionStatus(function(evt){
-                console.log("ON CONNECTION STATUS -- ", evt)
+        fin.desktop.main(function() {
+            fin.desktop.System.launchExternalProcess({
+                alias: 'excel-dist',
+                arguments: '-i -l',
+                listener: function(event){
+                    // react to close event
+                    if(event.topic === "exited" && event.exitCode === MY_KNOWN_BAD_STATE) {
+                        // your desired logic here
+                    }
+                }
             });
-            Excel.addEventListener("workbookAdded", this.onWorkbookAdded);
-            Excel.addEventListener("workbookClosed", this.onWorkbookRemoved);
-            Excel.addEventListener("connected", this.onExcelConnected);
-            console.log("Called Excel ", Excel)
         });
 
     },
+
+    //openExcel: function() {
+    //
+    //    fin.desktop.main(function(){
+    //
+    //        var Excel = fin.desktop.Excel;
+    //        Excel.init();
+    //        Excel.getConnectionStatus(function(evt){
+    //            console.log("ON CONNECTION STATUS -- ", evt)
+    //        });
+    //        Excel.addEventListener("workbookAdded", this.onWorkbookAdded);
+    //        Excel.addEventListener("workbookClosed", this.onWorkbookRemoved);
+    //        Excel.addEventListener("connected", this.onExcelConnected);
+    //        console.log("Called Excel ", Excel)
+    //    });
+    //
+    //},
     onExcelConnected:function(){
         console.log("EXCEL FUNCTION CALLED ")
     },
