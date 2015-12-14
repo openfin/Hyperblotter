@@ -44,10 +44,49 @@ var rndData = [
 
 var floor = Math.floor;
 var random = Math.random;
+var Excel;
+
+function excelCallback(o){
+    console.log("EXCEL CALLBACK ", o);
+    fin.desktop.Excel.getWorkbooks(function(workbooks){
+        console.log("WORK BOOKS = ",workbooks[0]);
+
+        if(workbooks[0]){
+            workbooks[0].addWorksheet(function(sheet){
+
+                sheet.setCells([["a", "b", "c"], [1, 2, 3]], "A1");
+            });
+        }
+    });
+}
 
 fin.desktop.main(()=>{
 
-    initExcel();
+
+    Excel = fin.desktop.Excel;
+    Excel.init();
+    Excel.getConnectionStatus(excelCallback);
+    Excel.addEventListener("workbookAdded", excelCallback);
+    Excel.addEventListener("workbookClosed", excelCallback);
+    Excel.addEventListener("connected", excelCallback);
+    Excel.addEventListener("workbookActivated", function(w){
+        console.log("THERE HAS BEEN A WORKBOOK ADDED")
+    });
+
+    console.log("Called Excel ", Excel)
+    fin.desktop.InterApplicationBus.subscribe("*", "excelResult", function(data) {
+        console.log("excelResult ", data);
+    });
+
+
+    fin.desktop.InterApplicationBus.subscribe("*", "excelEvent", function(data) {
+        console.log("excelEvent", data.workbookName);
+    });
+
+    fin.desktop.InterApplicationBus.subscribe("*", "excelCustomFunction", function(data) {
+        console.log(data);
+    });
+
 
     initBlotter().then(function(b){
         // do nothing, if you want the blotter to show automatically blotter.show();
@@ -123,15 +162,6 @@ var initAnimationWindows = function(){
     });
 };
 
-initExcel = function(){
-    var Excel = fin.desktop.Excel;
-    Excel.init();
-    Excel.getConnectionStatus(this.onExcelConnected);
-    Excel.addEventListener("workbookAdded", this.onWorkbookAdded);
-    Excel.addEventListener("workbookClosed", this.onWorkbookRemoved);
-    Excel.addEventListener("connected", this.onExcelConnected);
-    console.log("Called Excel ", Excel)
-}
 
 /* If the blotter has not been created yet, create it and return a promise...*/
 var initBlotter = function(){
@@ -367,7 +397,9 @@ module.exports = React.createClass({
 
             var Excel = fin.desktop.Excel;
             Excel.init();
-            Excel.getConnectionStatus(this.onExcelConnected);
+            Excel.getConnectionStatus(function(evt){
+                console.log("ON CONNECTION STATUS -- ", evt)
+            });
             Excel.addEventListener("workbookAdded", this.onWorkbookAdded);
             Excel.addEventListener("workbookClosed", this.onWorkbookRemoved);
             Excel.addEventListener("connected", this.onExcelConnected);
@@ -383,6 +415,9 @@ module.exports = React.createClass({
     },
     onWorkbookRemoved:function(){
         console.log("EXCEL FUNCTION CALLED ")
+    },
+    onWorkbookActivateed:function(){
+        console.log("EXCEL ON WORKBOOK ACTIVATED CALLED ")
     },
 
 
