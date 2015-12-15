@@ -3,6 +3,8 @@ var React = require('react'),
         numeral = require('numeral'),
         moment = require('moment'),
         _ = require('underscore'),
+        excel = require("../vendor/ExcelAPI.js"),
+        Excel,
         lastSelectedRow,
         _arrayGen = ticker.arrayGenerator();
 
@@ -58,8 +60,56 @@ var format = function(data) {
     }
 };
 
+function excelCallback(o){
+    console.log("EXCEL CALLBACK ", o )
+    //  console.log("THE SELECTED WORKSHEET IS ", getWorkSheet("hypergrid.xlsx", "Publisher"))
+
+
+    fin.desktop.Excel.getWorkbooks(function(workbooks){
+        console.log("WORK BOOKS = ",workbooks);
+        workbooks.filter(function(d, i){
+            return d.name === "hypergrid.xlsx"
+        }).map(function(d,i){
+            var _worksheet = d.getWorksheets(function(ws){
+                ws.filter(function(dd,ii){
+                    return dd.name === "Publisher"
+                }).map(function(ddd,iii){
+                    console.log("THE WORKSHEET IS ", ddd)
+                    ddd.setCells([["a", "b", "c"], [1, 2, 3]], "A1");
+                })
+            })
+        });
+    });
+}
+
 var HyperGrid = React.createClass({
     componentDidMount: function(){
+
+        fin.desktop.main(()=>{
+
+            console.log("FIN IS INITIALISED IN THE GRID...")
+            Excel = fin.desktop.Excel;
+            Excel.init();
+            Excel.getConnectionStatus(excelCallback);
+            Excel.addEventListener("workbookAdded", excelCallback);
+            Excel.addEventListener("workbookClosed", excelCallback);
+            Excel.addEventListener("connected", excelCallback);
+            Excel.addEventListener("workbookActivated", function(w){
+                console.log("THERE HAS BEEN A WORKBOOK ADDED");
+            });
+
+            console.log("Called Excel ", Excel)
+            fin.desktop.InterApplicationBus.subscribe("*", "excelResult", function(data) {
+                console.log("excelResult ", data);
+            });
+
+
+            fin.desktop.InterApplicationBus.subscribe("*", "excelEvent", function(data) {
+                console.log("excelEvent", data.workbookName);
+            });
+        });
+
+
 
         setTimeout(function(){
             try{
@@ -143,6 +193,13 @@ var HyperGrid = React.createClass({
                     _arrayGen.setSortArray( jsonGrid.getState().sorted );
                 }, 10);
             });
+
+            jsonGrid.addFinEventListener('fin-selection-changed', function(event) {
+                console.log("+++++++++++++ The selection has changed ", event)
+                console.log("+++++++++++++ The selection has changed: this ", jsonGrid)
+            });
+
+
 
             ticker.timerGenerator().start();
             document.addEventListener("frame-updated", function(e){

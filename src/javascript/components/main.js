@@ -2,8 +2,7 @@ var React = require('react'),
     _ = require('underscore'),
     windowManager = require("../windowsListSingleton"),
     fin = require('../vendor/openfin.js'),
-    excel = require("../vendor/ExcelAPI.js");
-TooTip = require("../components/tooltip-decorator");
+    TooTip = require("../components/tooltip-decorator");
 
 var _windowManager = windowManager.getInstance(),
     animationWindows = _windowManager.getWindows(),
@@ -44,60 +43,30 @@ var rndData = [
 
 var floor = Math.floor;
 var random = Math.random;
-var Excel;
 
-function excelCallback(o){
-    fin.desktop.Excel.getWorkbooks(function(workbooks){
-        console.log("WORK BOOKS = ",workbooks);
+function getWorkSheet(workBook, workSheet){
+   //  "Worksheet is ", workBook + " : " +  workSheet
+   fin.desktop.Excel.getWorkbooks(function(workbooks){
         workbooks.filter(function(d, i){
-            return d.name === "hypergrid.xlsx"
+            return d.name === workBook
         }).map(function(d,i){
             var _worksheet = d.getWorksheets(function(ws){
                 ws.filter(function(dd,ii){
-                    return dd.name === "Publisher"
+                    return dd.name === workSheet
                 }).map(function(ddd,iii){
                     console.log("THE WORKSHEET IS ", ddd)
-                        ddd.setCells([["a", "b", "c"], [1, 2, 3]], "A1");
+                    ddd.setCells([["a", "b", "c"], [1, 2, 3]], "A1");
                 })
             })
             console.log("MAPPIN THE WORKBOOKS: _Worksheet ", _worksheet)
         });
-        //if(workbooks[0]){
-        //    workbooks[0].addWorksheet(function(sheet){
-        //
-        //        sheet.setCells([["a", "b", "c"], [1, 2, 3]], "A1");
-        //    });
-        //}
     });
+    return "TESTING "
 }
 
+
+
 fin.desktop.main(()=>{
-
-
-    Excel = fin.desktop.Excel;
-    Excel.init();
-    Excel.getConnectionStatus(excelCallback);
-    Excel.addEventListener("workbookAdded", excelCallback);
-    Excel.addEventListener("workbookClosed", excelCallback);
-    Excel.addEventListener("connected", excelCallback);
-    Excel.addEventListener("workbookActivated", function(w){
-        console.log("THERE HAS BEEN A WORKBOOK ADDED")
-    });
-
-    console.log("Called Excel ", Excel)
-    fin.desktop.InterApplicationBus.subscribe("*", "excelResult", function(data) {
-        console.log("excelResult ", data);
-    });
-
-
-    fin.desktop.InterApplicationBus.subscribe("*", "excelEvent", function(data) {
-        console.log("excelEvent", data.workbookName);
-    });
-
-    fin.desktop.InterApplicationBus.subscribe("*", "excelCustomFunction", function(data) {
-        console.log(data);
-    });
-
 
     initBlotter().then(function(b){
         // do nothing, if you want the blotter to show automatically blotter.show();
