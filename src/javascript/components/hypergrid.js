@@ -134,7 +134,14 @@ var HyperGrid = React.createClass({
                 //console.log("onSelect -- ", data.selection[0]);
                 console.log("onSelect -- region : ", data.selection[0].region[3]);
                 console.log("onSelect -- values : ", data.selection[0].values);
-
+                var _clearArray = function(){
+                    var _retArr = []
+                    var _arr = ["","","","","","","","","","","","","","","","","","","","","","",]
+                    for(var i=0; i<20; i++){
+                        _retArr.push(_arr.slice(0))
+                    }
+                    return _retArr;
+                }
                 var _rows = data.selection[0].region[3]
 
                 var _arrData =  splitFlatArray(data.selection[0].values, data.selection[0].region[3]);
@@ -147,9 +154,10 @@ var HyperGrid = React.createClass({
                             ws.filter(function(dd,ii){
                                 return dd.name === "Publisher"
                             }).map(function(ddd,iii){
-                                console.log("DATA SELECTION : ",data.selection[0].region);
-                                console.log("createExcelCoordinates", createExcelCoordinates(data.selection[0].region[2], data.selection[0].region[0]))
+                                //console.log("DATA SELECTION : ",data.selection[0].region);
+                                //console.log("createExcelCoordinates", createExcelCoordinates(data.selection[0].region[2], data.selection[0].region[0]))
                                 var _coords = createExcelCoordinates(data.selection[0].region[1], data.selection[0].region[0]);
+                                ddd.setCells(_clearArray(), "A1");
                                 ddd.setCells(_arrData, _coords.x + _coords.y);
                             })
                         })
