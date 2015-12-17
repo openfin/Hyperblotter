@@ -5,12 +5,6 @@
 var staticData = require('../../src/javascript/griddata/staticData');
 var dataTicker = require('../../src/javascript/griddata/data_ticker');
 
-describe("just to see if the Karma runner will run", function(){
-    it("Will actually run", function(){
-        expect(true).toBe(true);
-    })
-});
-
 describe("Expect the data to be available to use", function(){
 
     it("The staticData will exist", function(){
@@ -30,7 +24,6 @@ describe("Expect the data to be available to use", function(){
     });
 
 });
-
 
 describe("arrayGenerator.createDataCell.", function(){
     var _cell, _arrayCellGen;

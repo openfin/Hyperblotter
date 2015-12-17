@@ -64,23 +64,14 @@ function excelCallback(o){
     console.log("EXCEL CALLBACK ", o )
     //  console.log("THE SELECTED WORKSHEET IS ", getWorkSheet("hypergrid.xlsx", "Publisher"))
 
-
-    fin.desktop.Excel.getWorkbooks(function(workbooks){
-        console.log("WORK BOOKS = ",workbooks);
-        workbooks.filter(function(d, i){
-            return d.name === "hypergrid.xlsx"
-        }).map(function(d,i){
-            var _worksheet = d.getWorksheets(function(ws){
-                ws.filter(function(dd,ii){
-                    return dd.name === "Publisher"
-                }).map(function(ddd,iii){
-                    console.log("THE WORKSHEET IS ", ddd)
-                    ddd.setCells([["a", "b", "c"], [1, 2, 3]], "A1");
-                })
-            })
-        });
-    });
 }
+
+
+
+function OnCellSelectionChanged(){
+
+};
+///////////////////////////////////
 
 var HyperGrid = React.createClass({
     componentDidMount: function(){
@@ -107,8 +98,65 @@ var HyperGrid = React.createClass({
             fin.desktop.InterApplicationBus.subscribe("*", "excelEvent", function(data) {
                 console.log("excelEvent", data.workbookName);
             });
-        });
 
+            //-- function tp split the data returned from the fin-hypergid selection venet into a 3d object
+            function splitFlatArray(array, rows){
+                var _returnArray = [];
+
+                var _numArrays = Math.floor(array.length / rows );
+                var _arrayLength = array.length / _numArrays
+
+                for(var i = 0; i<=array.length; i+= _arrayLength) {
+                    _returnArray.push(array.slice(i, i+(_arrayLength) ));
+                }
+                return _returnArray;
+            }
+
+            function createExcelCoordinates(a, b){
+                if(isNaN(a) || isNaN(b)) return;
+                var _xCoord;
+                var _alphabet = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
+                var _numberOfAlphabetsLength = Math.floor(a/_alphabet.length);
+                if(_numberOfAlphabetsLength > _alphabet.length * _alphabet.length ){
+                    throw new Error("There are too many columns to generate a coordinate.")
+                }
+                var _alphabetLength = a % _alphabet.length;
+                var _letterOne = _alphabet[_numberOfAlphabetsLength-1] ? _alphabet[_numberOfAlphabetsLength-1] : "";
+                var _letterTwo  = _alphabet[_alphabetLength-1];
+
+                _xCoord = _letterOne+_letterTwo;
+                return {x: _xCoord, y: b}
+
+            }
+
+
+            fin.desktop.InterApplicationBus.subscribe("*", "onSelect", function(data) {
+                //console.log("onSelect -- ", data.selection[0]);
+                console.log("onSelect -- region : ", data.selection[0].region[3]);
+                console.log("onSelect -- values : ", data.selection[0].values);
+
+                var _rows = data.selection[0].region[3]
+
+                var _arrData =  splitFlatArray(data.selection[0].values, data.selection[0].region[3]);
+
+                fin.desktop.Excel.getWorkbooks(function(workbooks){
+                    workbooks.filter(function(d, i){
+                        return d.name === "hypergrid.xlsx"
+                    }).map(function(d,i){
+                        var _worksheet = d.getWorksheets(function(ws){
+                            ws.filter(function(dd,ii){
+                                return dd.name === "Publisher"
+                            }).map(function(ddd,iii){
+                                console.log("DATA SELECTION : ",data.selection[0].region);
+                                console.log("createExcelCoordinates", createExcelCoordinates(data.selection[0].region[2], data.selection[0].region[0]))
+                                var _coords = createExcelCoordinates(data.selection[0].region[1], data.selection[0].region[0]);
+                                ddd.setCells(_arrData, _coords.x + _coords.y);
+                            })
+                        })
+                    });
+                });
+            });
+        });
 
 
         setTimeout(function(){
@@ -198,6 +246,8 @@ var HyperGrid = React.createClass({
                 console.log("+++++++++++++ The selection has changed ", event)
                 console.log("+++++++++++++ The selection has changed: this ", jsonGrid)
             });
+
+
 
 
 
