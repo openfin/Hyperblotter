@@ -236,7 +236,7 @@ var HyperGrid = React.createClass({
                 fixedColumnBGSelColor: '#3D77FE',
                 fixedRowFGSelColor: 'white',
                 fixedRowBGSelColor: '#3D77FE',
-
+                columnAutosizing: false,
                 defaultFixedRowHeight: 40
             };
             jsonModel.defaultRowHeight = 57,
@@ -254,10 +254,6 @@ var HyperGrid = React.createClass({
                 console.log("+++++++++++++ The selection has changed ", event)
                 console.log("+++++++++++++ The selection has changed: this ", jsonGrid)
             });
-
-
-
-
 
             ticker.timerGenerator().start();
             document.addEventListener("frame-updated", function(e){
@@ -349,7 +345,7 @@ var HyperGrid = React.createClass({
                 return renderer;
             };
 
-            var state = {"columnIndexes":[0,26,4,3,5,7,27,28],"fixedColumnIndexes":[],"hiddenColumns":[25,1,18,24,14,8,9,10,11,12,13,21,6,2,15,16,17,19,20,23,22],"columnWidths":[150,330,100,100,100,107.2890625,86.30078125,114.203125,95.01953125,95.01953125,64.50390625,95.01953125,79.76171875,92.306640625,86.5908203125,38.38671875,118.5322265625,167.72021484375,341.04296875,248.8876953125,266.775390625,177.84765625,49.4189453125,25.3046875,73.591796875,269.416015625,467.5234375,102.35546875,86.30078125],"fixedColumnWidths":[79.4453125],"rowHeights":{},"fixedRowHeights":{},"sorted":[]}
+            var state = {"columnIndexes":[0,26,4,3,5,7,27,28],"fixedColumnIndexes":[],"hiddenColumns":[25,1,18,24,14,8,9,10,11,12,13,21,6,2,15,16,17,19,20,23,22],"columnWidths":[150,270,100,100,100,107.2890625,86.30078125,114.203125,95.01953125,95.01953125,64.50390625,95.01953125,79.76171875,92.306640625,86.5908203125,38.38671875,118.5322265625,167.72021484375,341.04296875,248.8876953125,266.775390625,177.84765625,49.4189453125,25.3046875,73.591796875,269.416015625,467.5234375,102.35546875,86.30078125],"fixedColumnWidths":[79.4453125],"rowHeights":{},"fixedRowHeights":{},"sorted":[]}
             jsonModel.setState(state);
 
             jsonModel.setImage('up-arrow', imageCache['up-arrow']);
