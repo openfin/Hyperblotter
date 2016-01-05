@@ -43,7 +43,7 @@
               "alias": "excel-dist",
               "target": "excel.exe",
               "version": "0.0.1",
-              "args" : "-i -l"
+              "args" : "-i -l hyperblotter.xlsx"
             }
         ],
     "__splashScreenImage": "http://cdn.openfin.co/demos/hyperblotter/images/splashscreen.png",

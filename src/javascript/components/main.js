@@ -2,7 +2,10 @@ var React = require('react'),
     _ = require('underscore'),
     windowManager = require("../windowsListSingleton"),
     fin = require('../vendor/openfin.js'),
-    TooTip = require("../components/tooltip-decorator");
+    TooTip = require("../components/tooltip-decorator"),
+    excel = require("../vendor/ExcelAPI.js"),
+    excel_plugin_installed = false;
+
 
 var _windowManager = windowManager.getInstance(),
     animationWindows = _windowManager.getWindows(),
@@ -355,43 +358,60 @@ module.exports = React.createClass({
 
 
     openExcel: function() {
+        console.log("Open Excel called in main excel_plugin_installed = ", excel_plugin_installed)
+        if(!excel_plugin_installed){
 
-        fin.desktop.main(function() {
-            fin.desktop.System.launchExternalProcess({
-                alias: 'excel-dist',
-                arguments: '-i -l',
-                listener: function(event){
-                    // react to close event
-                    if(event.topic === "exited" && event.exitCode === MY_KNOWN_BAD_STATE) {
-                        // your desired logic here
+            fin.desktop.main(function() {
+                fin.desktop.System.launchExternalProcess({
+                    alias: 'excel-dist',
+                    arguments: '-i -l',
+                    listener: function(event){
+                        // react to close event
+                        if(event.topic === "exited" && event.exitCode === MY_KNOWN_BAD_STATE) {
+                            // your desired logic here
+                            console.log("Excited Excel")
+                        }else{
+                            console.log("This is where I would like to open the new Excel...")
+                            // this.openNewExcel()
+                        }
                     }
-                }
+                });
             });
-        });
-
+            excel_plugin_installed = true;
+           // this.openNewExcel();
+            var workbook = fin.desktop.Excel.addWorkbook(function(evt){
+                console.log(">>>> A NEW WORKBOOK ADDED -- THIS IS THE CALLBACK: ", evt)
+            });
+            // if(currentWorkbook == workbook) return;
+        }else{
+            this.openNewExcel();
+        }
     },
 
-    //openExcel: function() {
-    //
-    //    fin.desktop.main(function(){
-    //
-    //        var Excel = fin.desktop.Excel;
-    //        Excel.init();
-    //        Excel.getConnectionStatus(function(evt){
-    //            console.log("ON CONNECTION STATUS -- ", evt)
-    //        });
-    //        Excel.addEventListener("workbookAdded", this.onWorkbookAdded);
-    //        Excel.addEventListener("workbookClosed", this.onWorkbookRemoved);
-    //        Excel.addEventListener("connected", this.onExcelConnected);
-    //        console.log("Called Excel ", Excel)
-    //    });
-    //
-    //},
+    openNewExcel: function() {
+
+        fin.desktop.main(function(){
+
+            var Excel = fin.desktop.Excel;
+            Excel.init();
+            Excel.getConnectionStatus(function(evt){
+                console.log("ON CONNECTION STATUS -- ", evt)
+            });
+            Excel.addEventListener("workbookAdded", this.onWorkbookAdded);
+            Excel.addEventListener("workbookClosed", this.onWorkbookRemoved);
+            Excel.addEventListener("connected", this.onExcelConnected);
+            console.log("Called Excel ", Excel)
+        });
+    },
+    workBookAddedCallback: function(evt){
+        console.log("Wokbook added callback called... ", evt);
+    },
+
     onExcelConnected:function(){
         console.log("EXCEL FUNCTION CALLED ")
     },
     onWorkbookAdded:function(){
-        console.log("EXCEL FUNCTION CALLED ")
+        console.log("EXCEL FUNCTION CALLED -- onWorkbookAdded ")
     },
     onWorkbookRemoved:function(){
         console.log("EXCEL FUNCTION CALLED ")
@@ -399,8 +419,6 @@ module.exports = React.createClass({
     onWorkbookActivateed:function(){
         console.log("EXCEL ON WORKBOOK ACTIVATED CALLED ")
     },
-
-
 
 
     getInitialState: function(){
