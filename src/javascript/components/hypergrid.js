@@ -185,10 +185,25 @@ var HyperGrid = React.createClass({
                                 //console.log("DATA SELECTION : ",data.selection[0].region);
                                 //console.log("createExcelCoordinates", createExcelCoordinates(data.selection[0].region[2], data.selection[0].region[0]))
                                 var _coords = createExcelCoordinates(data.selection[0].region[1], data.selection[0].region[0]);
-                                console.log("THE WORKSHEET IS : ",ddd);
+
+                                if(_cachedGridSelectionData){
+                                    if(_cachedGridSelectionData.x !== _coords.x || _cachedGridSelectionData.y !== _coords.y ){
+                                        ddd.setCells(_cachedGridSelectionData.data, _cachedGridSelectionData.x + _cachedGridSelectionData.y);
+                                    }
+                                }
+
+                                var _arrayBlankClone = _arrData.slice(0)
+                                    .map(function(d,i){
+                                    return d.map(function(dd,ii){
+                                        return "";
+                                    })
+                                });
+                                console.log(" >>>>>>>>> _arrayBlankClone  ", _arrayBlankClone);
+                                _cachedGridSelectionData = {data: _arrayBlankClone, x: _coords.x , y: _coords.y};
+                                console.log("_cachedGridSelectionData >>>>>>>>>> : ", _cachedGridSelectionData);
                                 ddd.setCells(_arrData, _coords.x + _coords.y);
-                            })
-                        })
+                            });
+                        });
                     });
                 });
 
