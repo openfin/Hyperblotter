@@ -31,13 +31,6 @@
     },
     "appAssets": [
             {
-                "__src": "http://cdn.openfin.co/demos/hyperblotter/assets/hypergrid.xlsx.zip",
-                "src": "http://localhost:5001/assets/hypergrid.xlsx.zip",
-                "alias": "hypergrid",
-                "version": "0.0.1",
-                "target": "hypergrid.xlsx"
-            },
-            {
               "__src": "http://cdn.openfin.co/demos/hyperblotter/assets/FinDesktopAddin-packed.xll.zip",
               "src": "http://localhost:5001/assets/dist.zip",
               "alias": "excel-dist",
