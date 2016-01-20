@@ -153,9 +153,9 @@ var initBlotter = function(){
             name: 'blotter',
             url: 'hypergrid.html',
             autoShow: false,
-            defaultWidth: 840,
-            maxWidth: 840,
-            minWidth: 840,
+            defaultWidth: 970,
+            maxWidth: 970,
+            minWidth: 970,
             maxHeight: 594,
             defaultHeight: 594,
             minHeight: 594,
@@ -364,7 +364,7 @@ module.exports = React.createClass({
             fin.desktop.main(function() {
                 fin.desktop.System.launchExternalProcess({
                     alias: 'excel-dist',
-                    arguments: '-i -l',
+                    arguments: "-i -l hyperblotter.xlsx",
                     listener: function(event){
                         // react to close event
                         if(event.topic === "exited" && event.exitCode === MY_KNOWN_BAD_STATE) {
@@ -377,7 +377,7 @@ module.exports = React.createClass({
                     }
                 });
             });
-            excel_plugin_installed = true;
+            // excel_plugin_installed = true;
            // this.openNewExcel();
             var workbook = fin.desktop.Excel.addWorkbook(function(evt){
                 console.log(">>>> A NEW WORKBOOK ADDED -- THIS IS THE CALLBACK: ", evt)

@@ -294,8 +294,8 @@ var HyperGrid = React.createClass({
             //jsonModel.setHeaders(['0 Symbol','1 Name','2 High','3 Low','Last','Today', 'Change','% Change','Volume','Bid Qty','Bid','Spread','Ask','Ask Qty','Country Code','Country','ICB','Industry','Super Sector','Sector','Sub Sector','Date','Time','Open','Cls','Previous Cls','Previous Cls Dt','Name']);
             //jsonModel.setFields(['TICKER','NAME','High','Low','Last','Today', 'Change','PercentChange','Volume','BidQuantity','Bid','Spread','Ask','AskQuantity','countryCode', 'COUNTRY','ICB','INDUS','SUP_SEC','SEC','SUB_SEC','Date','Time','Open','Close','PreviousClose','PreviousCloseDate','NAME']);
 
-            jsonModel.setHeaders(['Symbol','Name', 'Today', 'Last', 'Change','Volume','Bid Qty','Bid','Spread','Ask','Ask Qty','Country Code','Country','ICB','Industry','Super Sector','Sector','Sub Sector','Date','Time','Open','Cls','Previous Cls','Previous Cls Dt','Name']);
-            jsonModel.setFields(['TICKER','NAME', 'Today', 'Last', 'Change','Volume','BidQuantity','Bid','Spread','Ask','AskQuantity','countryCode', 'COUNTRY','ICB','INDUS','SUP_SEC','SEC','SUB_SEC','Date','Time','Open','Close','PreviousClose','PreviousCloseDate','NAME']);
+            jsonModel.setHeaders(['Symbol','Name', 'Today', 'Last', 'Change','Volume','Bid Qty']);
+            jsonModel.setFields(['TICKER','NAME', 'Today', 'Last', 'Change','Volume','BidQuantity']);
 
 
             var bgColor = '#07071E';
@@ -454,7 +454,7 @@ var HyperGrid = React.createClass({
             var state = {"columnIndexes":_columnIndexes ,
                 "fixedColumnIndexes":[],
                 "hiddenColumns":_hiddenColumns,
-                "columnWidths":[150,270,180,100,100,107.2890625,86.30078125,114.203125,95.01953125,95.01953125,64.50390625,95.01953125,79.76171875,92.306640625,86.5908203125,38.38671875,118.5322265625,167.72021484375,341.04296875,248.8876953125,266.775390625,177.84765625,49.4189453125,25.3046875,73.591796875,269.416015625,467.5234375,102.35546875,86.30078125],
+                "columnWidths":[150,358,210,100,100,107.2890625,86.30078125,114.203125,95.01953125,95.01953125,64.50390625,95.01953125,79.76171875,92.306640625,86.5908203125,38.38671875,118.5322265625,167.72021484375,341.04296875,248.8876953125,266.775390625,177.84765625,49.4189453125,25.3046875,73.591796875,269.416015625,467.5234375,102.35546875,86.30078125],
                 "fixedColumnWidths":[79.4453125],
                 "rowHeights":{},
                 "fixedRowHeights":{},
