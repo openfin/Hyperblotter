@@ -5,7 +5,7 @@ Hyperblotter is a demonstration app to show the capabilities of both [OpenFin](h
 Currently OpenFin applications only run in a Windows environment. They may be run on a Mac by using a Windows Virtual Machine (VM). Oracle's [Virtual Box](https://www.virtualbox.org/) is a free, open-source VM which may be used. 
 
 ## Demo Installer
-On a Windows machine, you can install hyperblotter via this installer:
+On a Windows machine, you can install Hyperblotter via this installer:
 
 [Hyperblotter](https://dl.openfin.co/services/download?fileName=Hyperblotter&config=http://cdn.openfin.co/demos/hyperblotter/app.json)
 
