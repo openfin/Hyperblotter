@@ -6,6 +6,7 @@ Currently OpenFin applications only run in a Windows environment. They may be ru
 
 ## Demo Installer
 On a Windows machine, you can install hyperblotter via this installer:
+
 [Hyperblotter](https://dl.openfin.co/services/download?fileName=Hyperblotter&config=http://cdn.openfin.co/demos/hyperblotter/app.json)
 
 ##Build and run demo from source on local machine:
