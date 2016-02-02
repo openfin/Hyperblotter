@@ -65,8 +65,17 @@ var format = function(data) {
 };
 
 function excelCallback(o){
-    console.log("EXCEL CALLBACK ", o )
+    console.log("EXCEL CALLBACK ", o );
 
+    var _hyperBlotters = workbooks.filter(function(d, i){
+        return d.name === "hyperblotter.xlsx"
+    });
+
+    if(_hyperBlotters.length > 0){
+        fin.desktop.InterApplicationBus.publish("inter_app_messaging", {
+            hyperblotterExists: true
+        });
+    }
 
     switch(o.type){
         case "workbookAdded" :
@@ -79,9 +88,7 @@ function excelCallback(o){
         default :
             console.log("The default action in the switch statement.")
     }
-    //  console.log("THE SELECTED WORKSHEET IS ", getWorkSheet("hypergrid.xlsx", "Publisher"))
 }
-
 
 
 function OnCellSelectionChanged(){
@@ -162,22 +169,21 @@ var HyperGrid = React.createClass({
             }
 
             fin.desktop.InterApplicationBus.subscribe("*", "onSelect", function(data) {
-                //console.log("onSelect -- ", data.selection[0]);
-                //console.log("onSelect -- region : ", data.selection[0].region[3]);
-                //console.log("onSelect -- values : ", data.selection[0].values);
-                // console.log("latestWorkBook ", latestWorkBook)
+
                 var clonedDataValues = data.selection[0].values.slice(0)
-                console.log(" data.selection[0].region ----- ", data.selection[0].region)
 
                 var _rowHeight = 1+(data.selection[0].region[2] - data.selection[0].region[0]);
-                    console.log(">>>>>>>>>>>>>>>>> _rowHeight ", _rowHeight);
                 var _arrData =  splitFlatArray(clonedDataValues, _rowHeight);
 
 
                 fin.desktop.Excel.getWorkbooks(function(workbooks){
-                    workbooks.filter(function(d, i){
+                    var _hyperBlotter = workbooks.filter(function(d, i){
                         return d.name === "hyperblotter.xlsx"
-                    }).map(function(d,i){
+                    });
+
+                    console.log("There are ", _hyperBlotter.length , " HyperBlotters");
+
+                    _hyperBlotter.map(function(d,i){
                         var _worksheet = d.getWorksheets(function(ws){
                             ws.filter(function(dd,ii){
                                 return dd.name === "Sheet1"
@@ -198,9 +204,7 @@ var HyperGrid = React.createClass({
                                         return "";
                                     })
                                 });
-                                console.log(" >>>>>>>>> _arrayBlankClone  ", _arrayBlankClone);
                                 _cachedGridSelectionData = {data: _arrayBlankClone, x: _coords.x , y: _coords.y};
-                                console.log("_cachedGridSelectionData >>>>>>>>>> : ", _cachedGridSelectionData);
                                 ddd.setCells(_arrData, _coords.x + _coords.y);
                             });
                         });

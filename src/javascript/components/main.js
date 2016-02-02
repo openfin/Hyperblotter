@@ -61,26 +61,30 @@ function getWorkSheet(workBook, workSheet){
                     ddd.setCells([["a", "b", "c"], [1, 2, 3]], "A1");
                 })
             })
-            console.log("MAPPIN THE WORKBOOKS: _Worksheet ", _worksheet)
         });
     });
     return "TESTING "
 }
 
-
+var _ExcelSheetOpen = false;
 
 fin.desktop.main(()=>{
+
+    fin.desktop.InterApplicationBus.subscribe("*",
+        "inter_app_messaging",
+        function (message, senderUuid) {
+            console.log("This following message has been received from "
+                + senderUuid + ": ", message);
+            if(message.hyperblotterExists === 'true'){
+                console.log()
+            }
+        });
 
     initBlotter().then(function(b){
         // do nothing, if you want the blotter to show automatically blotter.show();
     });
 
     initAnimationWindows().then(function(val){
-        //fin.desktop.System.deleteCacheOnRestart(function () {
-        //    console.log("successfully deleted cache");
-        //},function (err) {
-        //    console.log("failure to delete cache: " + err);
-        //});
 
         fin.desktop.System.addEventListener('monitor-info-changed', function (evnt) {
             console.log("The monitor information has changed to: ", evnt);
@@ -144,7 +148,6 @@ var initAnimationWindows = function(){
         }
     });
 };
-
 
 /* If the blotter has not been created yet, create it and return a promise...*/
 var initBlotter = function(){
