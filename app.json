@@ -2,8 +2,8 @@
     "startup_app": {
         "name": "Hyperblotter",
         "description": "Hyperblotter Demo",
-        "__url": "http://cdn.openfin.co/demos/hyperblotter/index.html",
-        "url": "http://localhost:5001/index.html?debug",
+        "url": "http://cdn.openfin.co/demos/hyperblotter/index.html",
+        "__url": "http://localhost:5001/index.html?debug",
         "icon": "http://cdn.openfin.co/demos/hyperblotter/images/hyperblotter_icon.ico",
         "__icon": "http://localhost:5001/images/hyperblotter_icon.ico",
         "uuid": "hyperblotter",
