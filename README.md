@@ -1,4 +1,4 @@
-#Hyperblotter Trader Demo
+#Hyperblotter Demo
 --
 Hyperblotter is a demonstration app to show the capabilities of both [OpenFin](http://openfin.co/) and [HyperGrid](https://github.com/openfin/fin-hypergrid).
 
