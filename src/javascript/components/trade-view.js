@@ -45,7 +45,7 @@ module.exports = React.createClass({
     },
     getTileStyle: function(){
 
-        return{ "background-color": this.getBackgroundColor()
+        return{ "backgroundColor": this.getBackgroundColor()
 
         }
     },
@@ -60,7 +60,13 @@ module.exports = React.createClass({
         //    console.log("TOW SECNDS");
         //}
         //window.requestAnimationFrame(this.step);
-
+	},
+	openDetailedChartWindow: function(){
+		console.log("openDetailedChartWindow [" + this.state.ticker + "]");
+		
+		fin.desktop.InterApplicationBus.publish('tickerSelection', {
+			symbolName: this.state.ticker
+		});
     },
 
   getInitialState: function () {
@@ -80,11 +86,6 @@ module.exports = React.createClass({
 		  }catch(err){
 			  //--
 		  }
-          try {
-              fin.desktop.Window.getCurrent().defineDraggableArea(document.querySelector('.window-control'));
-          } catch (e) {
-              console.log("ERROR in trade-view : ", e)
-          }
       },2000);
 
 
@@ -102,38 +103,37 @@ module.exports = React.createClass({
     },
 	render: function(){
         console.log("RENDERING --- ", this.state.ticker);
-		return	<div className='tile trade-cell' style={this.getTileStyle()}>
-            <div className="window-control">
-
-            </div>
-							<div className="banner">
-								<div className="title">
-									{this.state.ticker}
-								</div>
-
-							</div>
-							<div className="content">
-								<div className="main">
-									<span className="last" >{this.state.last.toFixed(2)}</span>
-									<span className="percent-change" >+%{rndRange().toFixed(2)}</span>
-
-								</div>
-								<div className="pricing">
-									<div className="price open">
-										<div className="label">OPEN</div>
-										<span className="value">{ (this.state.last - rndRange()).toFixed(2) } </span>
-									</div>
-									<div className="price high">
-										<div className="label">HIGH</div>
-										<span className="value">{ (this.state.last + rndRange()).toFixed(2) }</span>
-									</div>
-									<div className="price low">
-										<div className="label">LOW</div>
-										<span className="value">{ (this.state.last - rndRange() - 1).toFixed(2)  }</span>
-									</div>
-								</div>
-							</div>
+		return (
+			<div className='tile trade-cell' style={this.getTileStyle()}>
+				<div className="window-control" />
+				<div className="banner">
+					<div className="title">
+						{this.state.ticker}
+						<i className="fa fa-bar-chart" onClick={this.openDetailedChartWindow} />
+					</div>
+				</div>
+				<div className="content">
+					<div className="main">
+						<span className="last" >{this.state.last.toFixed(2)}</span>
+						<span className="percent-change" >+%{rndRange().toFixed(2)}</span>
+					</div>
+					<div className="pricing">
+						<div className="price open">
+							<div className="label">OPEN</div>
+							<span className="value">{ (this.state.last - rndRange()).toFixed(2) } </span>
 						</div>
+						<div className="price high">
+							<div className="label">HIGH</div>
+							<span className="value">{ (this.state.last + rndRange()).toFixed(2) }</span>
+						</div>
+						<div className="price low">
+							<div className="label">LOW</div>
+							<span className="value">{ (this.state.last - rndRange() - 1).toFixed(2)  }</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		);
 	}
 });
 

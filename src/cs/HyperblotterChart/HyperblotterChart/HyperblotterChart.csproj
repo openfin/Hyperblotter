@@ -1,0 +1,185 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{E5F3BAA9-7302-4F55-9222-2879F3CB42F3}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ChartIQDemo</RootNamespace>
+    <AssemblyName>HyperblotterChart</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Ionic.Zip, Version=1.9.1.8, Culture=neutral, PublicKeyToken=edbe51ad942a3f5c, processorArchitecture=MSIL">
+      <HintPath>..\packages\DotNetZip.1.9.1.8\lib\net20\Ionic.Zip.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net40\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Openfin.WinForm, Version=5.44.8.6, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Openfin.WinForm.5.44.8.6\lib\net40\Openfin.WinForm.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="OpenFin.WPF, Version=5.44.8.6, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\OpenFin.WPF.5.44.8.6\lib\net40\OpenFin.WPF.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="OpenfinDesktop, Version=5.44.8.6, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\OpenfinDesktop.5.44.8.6\lib\net40\OpenfinDesktop.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WebSocket4Net, Version=0.12.0.0, Culture=neutral, PublicKeyToken=eb4e154b696bf72a, processorArchitecture=MSIL">
+      <HintPath>..\packages\WebSocket4Net.0.12\lib\net40\WebSocket4Net.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="WindowsFormsIntegration" />
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Page Include="AboutWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="AboutWindow.xaml.cs">
+      <DependentUpon>AboutWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <AppDesigner Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="chartiq-html\css\font-awesome.css" />
+    <Content Include="chartiq-html\css\stx-advanced.css" />
+    <Content Include="chartiq-html\css\stx-chart.css" />
+    <Content Include="chartiq-html\css\stx-phone.css" />
+    <Content Include="chartiq-html\css\stx-print.css" />
+    <Content Include="chartiq-html\css\stx-standard.css" />
+    <Resource Include="chartiq-html\img\closedhand.cur" />
+    <Content Include="chartiq-html\img\loading-spin-white.svg" />
+    <Content Include="chartiq-html\img\loading-spin.svg" />
+    <Resource Include="chartiq-html\img\stx-loading.gif" />
+    <Content Include="chartiq-html\img\stx-sprite-markers.svg" />
+    <Resource Include="chartiq-html\img\stx-sprite-panels.png" />
+    <Content Include="chartiq-html\img\stx-sprite-panels.svg" />
+    <Resource Include="chartiq-html\img\stx-sprite-phone%402x.png" />
+    <Resource Include="chartiq-html\img\stx-sprite-phone.png" />
+    <Resource Include="chartiq-html\img\stx-sprite-trade%402x.png" />
+    <Resource Include="chartiq-html\img\stx-sprite-trade.png" />
+    <Content Include="chartiq-html\img\stx-sprite-ui.svg" />
+    <Resource Include="chartiq-html\img\stx-sprite.png" />
+    <Content Include="chartiq-html\js\excanvas.js" />
+    <Content Include="chartiq-html\js\openfin.js" />
+    <Content Include="chartiq-html\js\stx.js" />
+    <Content Include="chartiq-html\js\stxAdvanced.js" />
+    <Content Include="chartiq-html\js\stxKernelOs.js" />
+    <Content Include="chartiq-html\js\stxLibrary.js" />
+    <Content Include="chartiq-html\js\stxShare.js" />
+    <Content Include="chartiq-html\js\stxSymLookup_Xignite_Svc.js" />
+    <Content Include="chartiq-html\js\stxThirdParty.js" />
+    <Content Include="chartiq-html\js\stxTimeZoneData.js" />
+    <Content Include="chartiq-html\js\translations.js" />
+    <Resource Include="chartiq-html\plugins\tfc\stx-ico-trade%402x.png" />
+    <Resource Include="chartiq-html\plugins\tfc\stx-ico-trade.png" />
+    <Content Include="chartiq-html\plugins\tfc\stx-tfc.css" />
+    <Content Include="chartiq-html\plugins\tfc\stx-tfc.html" />
+    <Content Include="chartiq-html\plugins\tfc\stx-tfc.js" />
+    <Resource Include="chartiq-html\plugins\tfc\tfc-loading.gif" />
+    <Resource Include="chartiq-html\readme.txt" />
+    <Content Include="chartiq-html\stx-advanced.html" />
+    <Content Include="chartiq-html\stx-basic.html" />
+    <Content Include="chartiq-html\stx-phone.html" />
+    <Content Include="chartiq-html\stx-quickstart.html" />
+    <Content Include="chartiq-html\stx-standard.html" />
+    <Content Include="chartiq-html\STX_SAMPLE_DAILY.js" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>pushd $(ProjectDir)
+if not exist $(OutDir)chartiq-html mkdir $(OutDir)chartiq-html
+xcopy /s /y chartiq-html $(OutDir)chartiq-html
+popd</PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

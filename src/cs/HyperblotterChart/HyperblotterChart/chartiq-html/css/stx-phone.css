@@ -1,0 +1,620 @@
+@charset "UTF-8";
+/* This is a very basic sample css file that may be customized */
+
+
+/* --------------------------------------------------------- GENERAL STYLES --------------------------------------------------------- */
+
+html,body {
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:12px;
+	margin:0;
+	padding:0;
+}
+
+a {
+	color:#77bd00;
+	text-decoration:none;
+	transition: color .25s, border .25s;
+	-webkit-transition: color .25s, border .25s;
+	}
+a:hover {
+	color:#65a600;
+	}
+a:active {
+	color:#65a600;
+	}
+	
+.stx-nav #studiesBtn.stx-btn.stx-menu-btn,
+.stx-nav #styleBtn.stx-btn.stx-menu-btn,
+.stx-nav #cogBtn.stx-btn.stx-menu-btn,
+.stx-nav #menuWrapperCompare.stx-btn.stx-menu-btn,
+.stx-nav #drawBtn.stx-btn.stx-menu-btn,
+.stx-btn.stx-menu-btn > em,
+.stx-btn.stx-ico > span, 
+.stx-btn.stx-ico:hover > span, 
+.stx-btn.stx-ico:active > span,
+.stx-dialog .stx-btn.stx-ico-close > span.stx-ico-close, 
+.menuSelect .stx-btn.stx-ico > span.stx-ico-close,
+.stx-nav .stx-btn.stx-menu-btn#cogBtn,
+.stx-btn#toggleCrosshairs span,
+.stx-btn#shareBtn span,
+.menuSelect li.stx-option .stx-checkbox, 
+.menuSelect li.stx-option .stx-checkbox.false,
+#chartSize, #chartSize span, 
+.stx_chart_controls div.home span,
+.stx-ico-handle span,
+#overlayTrashCan.stx-btn span, 
+#vectorTrashCan.stx-btn span 
+{background-image: url(../img/stx-sprite-phone.png);}
+
+
+@media 
+(-webkit-min-device-pixel-ratio: 2), 
+(min-resolution: 192dpi) { 
+    .stx-nav #studiesBtn.stx-btn.stx-menu-btn,
+	.stx-nav #styleBtn.stx-btn.stx-menu-btn,
+	.stx-nav #cogBtn.stx-btn.stx-menu-btn,
+	.stx-nav #menuWrapperCompare.stx-btn.stx-menu-btn,
+	.stx-nav #drawBtn.stx-btn.stx-menu-btn,
+	.stx-btn.stx-menu-btn > em,
+	.stx-btn.stx-ico > span, 
+	.stx-btn.stx-ico:hover > span, 
+	.stx-btn.stx-ico:active > span,
+	.stx-dialog .stx-btn.stx-ico-close > span.stx-ico-close, 
+	.menuSelect .stx-btn.stx-ico > span.stx-ico-close,
+	.stx-nav .stx-btn.stx-menu-btn#cogBtn,
+	.stx-btn#shareBtn span,
+	.menuSelect li.stx-option .stx-checkbox, 
+	.menuSelect li.stx-option .stx-checkbox.false,
+	#chartSize, #chartSize span, 
+	.stx_chart_controls div.home span,
+	.stx-ico-handle span,
+	#overlayTrashCan.stx-btn span, 
+	#vectorTrashCan.stx-btn span  {
+	background-image:url(../img/stx-sprite-phone@2x.png);
+	background-size:360px 240px;
+	}
+}
+
+/* --------------------------------------------------------- LAYOUT --------------------------------------------------------- */
+
+.hidephone,
+#chartSize,
+.stx-panel-side,
+.stx-footer,
+#stxViews,
+#stxWatch
+{display:none}
+
+.stx-wrapper {width:100%;}
+
+#chartContainer {border:0px;}
+
+.stx-panel-side {
+	width:0px;
+	right:0px;
+	border:none;
+	}
+.stx-footer {
+	display:none;
+	position:fixed;
+	height:39px;
+	left:0px;
+	width:100%;
+	z-index:100;
+	bottom:0px;
+	margin:0px;
+	border-top:solid 1px #ddd;
+}
+.ios8 .stx-footer{
+	position:absolute;
+}
+
+.stx-footer {text-align:center}
+.stx-footer .orders {
+	display:inline-block;
+	margin:0 auto;
+	}
+.stx-footer .orders li {
+	display:inline-block;
+	float:left;
+	margin:0 0 0 1px;
+	width:70px;
+	height:38px;
+}
+.stx-footer .orders a {
+	display:inline-block;
+	width:70px;
+	margin-top:13px;
+	opacity:.7;
+	cursor:pointer;
+	color:#000000;
+	font-weight:bold;
+	}
+
+.stx-footer .orders li:hover {
+	background:rgba(0,0,0, .03);
+	}
+.stx-footer .orders a:hover {
+	opacity:.8;
+}
+
+
+
+
+/* -------------------------------------------------------- NAV BAR -------------------------------------------------------- */
+
+.stx-nav {border:none;}
+.stx-nav .stx-menus {margin-right:2px;}
+.stx-nav .stx-search {
+    margin-left: 10px;
+    position:static;
+}
+input#symbol {
+	width:50px;
+	background:#fff;
+	}
+.stx-nav .stx-btn.stx-menu-btn { /* Menu Buttons */
+	padding: 0px 14px 0px 5px;
+	width:auto;
+    margin: 0 0px 0 0;
+}
+.stx-nav .stx-btn.stx-menu-btn:hover > em {border-left:none;}
+.stx-nav #periodBtn.stx-btn.stx-menu-btn {padding: 0px 12px 0px 5px;}
+.stx-nav #studiesBtn.stx-btn.stx-menu-btn,
+.stx-nav #styleBtn.stx-btn.stx-menu-btn,
+.stx-nav #cogBtn.stx-btn.stx-menu-btn,
+.stx-nav #menuWrapperCompare.stx-btn.stx-menu-btn,
+.stx-nav #drawBtn.stx-btn.stx-menu-btn {
+    padding: 0;
+	height:27px;
+	width:35px;
+}
+.stx-nav .stx-btn.stx-menu-btn > em {
+    background-position: -306px -116px;
+    border-left: none;
+    opacity: 0.8;
+    width: 10px;
+}
+.stx-nav #studiesBtn.stx-btn.stx-menu-btn {background-position: -78px -198px}
+.stx-nav #styleBtn.stx-btn.stx-menu-btn {background-position: -37px -198px}
+.stx-nav #cogBtn.stx-btn.stx-menu-btn {background-position: -35px -118px; width:33px;}
+.stx-nav #menuWrapperCompare.stx-btn.stx-menu-btn {background-position: -116px -198px}
+.stx-nav #drawBtn.stx-btn.stx-menu-btn {background-position: -157px -197px}
+
+
+.stxLookupResults {
+    left: 0;
+    right: 0;
+    width: 100%;
+    top: 50px;
+	border-right:none;
+	border-left:none;
+	border-top:none;
+	}
+.stxResults {
+    width: 100%;}
+.stxLookupSymbols li span:nth-of-type(2) {
+    float: left;
+    width: 125px;
+}
+.stxResults li.stxLookupFilter {text-align:center; padding:10px 0}
+.stxResults li.stxLookupFilter .stx-btn {float: none;}
+
+.menuSelect.studies {
+    width: 160px;
+}
+
+.menuSelect.cog li.stx-menu-content:last-child {
+    padding: 0px;
+}
+
+/* ------------------------------------------------------- TOOLBAR ------------------------------------------------------- */
+
+.stx-toolbar {
+	border:none;
+	border-bottom:solid 1px #ddd;
+	}
+
+.stx-toolbar div.drawOptions {
+	display:none
+}
+
+.stx-btn#toggleCrosshairs { 
+	position: absolute;
+	top: 8px;
+	left: 10px;
+	border-color:rgba(0,0,0,.1);
+	margin: 0px;
+	padding: 0;
+	width:27px;
+	overflow:hidden;
+	transition: color .25s, border .25s, background .25s, box-shadow .25s;
+	-webkit-transition: color .25s, border .25s, background .25s, box-shadow .25s;
+}
+.stx-btn#toggleCrosshairs:active {background:rgba(153, 153, 153, 0.2);}
+.stx-btn#toggleCrosshairs.active {background:rgba(153, 153, 153, 0.3);}
+.stx-btn#toggleCrosshairs.active:active {background:rgba(153, 153, 153, 0.5);}
+
+.stx-btn#toggleCrosshairs span {
+	display:inline-block;
+	width: 25px;
+	height:25px;
+	background-position: -218px -197px;
+	opacity:.6
+}
+.stx-btn#toggleCrosshairs:hover span,
+.stx-btn#toggleCrosshairs:active span  {opacity:.8}
+.stx-btn#toggleCrosshairs.active span {opacity:1}
+.stx-btn#toggleCrosshairs.active:active span {opacity:1}
+
+
+ul.hu {
+	float:left;
+	margin-left:50px;
+	}
+ul.hu li {
+    width: 65px;
+}
+.huLabel {
+    margin-right: 0px;
+    width: 15px;
+}
+.huField {
+    width: 50px;
+}
+.stx-btn#shareBtn { 
+	position: absolute;
+	top: 8px;
+	right: 5px;
+	border-color:rgba(0,0,0,.1);
+	background: rgba(98,108,116,.45);
+	color:#fff;
+	font-size:12px;
+	text-shadow: 0 1px 0px rgba(0,0,0,.2);
+	margin: 0px;
+	padding: 0;
+	width:27px;
+	overflow:hidden;
+	transition: color .25s, border .25s, background .25s, box-shadow .25s;
+	-webkit-transition: color .25s, border .25s, background .25s, box-shadow .25s;
+}
+.stx-btn#shareBtn:hover{
+	background: rgba(98,108,116,.7);
+	-webkit-box-shadow: 0px 1px 1px rgba(0, 0, 0, .1), inset 0px 10px 10px rgba(255, 255, 255, .2);
+	-moz-box-shadow: 0px 1px 1px rgba(0, 0, 0, .1), inset 0px 10px 10px rgba(255, 255, 255, .2);
+	box-shadow: 0px 1px 1px rgba(0, 0, 0, .1), inset 0px 10px 10px rgba(255, 255, 255, .2);
+}
+.stx-btn#shareBtn:active{
+	-webkit-box-shadow: inset 0px -8px 10px rgba(255, 255, 255, .1);
+	-moz-box-shadow:inset 0px -8px 10px rgba(255, 255, 255, .1);
+	box-shadow: inset 0px -8px 10px rgba(255, 255, 255, .1);
+}
+.stx-btn#shareBtn span {
+	float:left;
+	display:inline-block;
+	width: 25px;
+	height:25px;
+	background-position: -96px -116px;
+	margin-right:4px;
+}
+
+
+/* ------------------------------------------------------- DIALOGS ------------------------------------------------------- */
+
+.stx-dialog {
+    width: auto;
+    margin: 50px 20px;
+	/*padding: 20px 30px*/;
+	-webkit-border-radius: 3px 3px 3px 3px;
+	-moz-border-radius: 3px;
+	border-radius: 0px 0px 3px 3px;
+	}
+.stx-dialog div.stx-data input[type="number"] {
+    width: 58px;
+}
+.stx-dialog input[type="text"], .stx-dialog input[type="number"], .stx-dialog input[type="date"] {
+    height: 23px;
+    line-height: 23px;
+    width: 110px;
+}
+.stx-dialog div.stx-data select {
+    float: right;
+    margin: 0;
+}
+.stx-dialog div.stx-heading, .stx-dialog div.stx-data {
+    margin-bottom: 5px;
+    min-height: 27px;
+    line-height: 25px;
+}
+.stx-dialog .inputTemplate, .stx-dialog .outputTemplate {
+    padding: 5px 0 0;
+}
+.stx-color, .stx-border-color {
+    border-radius: 3px;
+    height: 25px;
+    width: 25px;
+}
+
+#sharedLinkDialog {
+	text-align:center;
+	}
+#sharedLinkDialog h4 {
+	font-size:16px;
+	margin:15px 0 15px 0;
+	}
+#sharedLinkDialog .or,
+#sharedLinkDialog p:first-of-type {
+	font-family:Georgia, "Times New Roman", serif;
+	font-style:italic;
+	color:#666
+	}
+#sharedLinkDialog a {
+	font-weight:bold;
+	}
+
+#shareCopyPaste {
+    background: none repeat scroll 0 0 #EFEFEF;
+    border: 1px solid #FFFFFF;
+    border-radius: 5px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2) inset;
+    color:#484848;
+    margin-bottom: 20px;
+    padding: 20px;
+    width: auto;
+    overflow:hidden;
+}
+
+#timezoneDialog {
+    text-align: center;
+    width: auto;
+	border-radius:0px;
+}
+#timezoneDialog p {
+	margin-top:0px;
+}
+#timezoneDialog .detect {
+    margin: 15px auto;
+}
+#timezoneDialog .detect .stx-btn {
+    font-size: 11px;
+    line-height: 35px;
+    padding: 0 30px;
+}
+#timezoneDialog ul {
+    width: 100%;
+	overflow:hidden;
+}
+#timezoneDialog ul li {
+	width:100%;
+	font-size:11px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	}
+/* --------------------------------------------------------- CHART ELEMENT STYLES --------------------------------------------------------- */
+
+
+.stx-ico-handle {
+	left:auto;
+	right:46px;
+}
+#overlayTrashCan.stx-btn span, 
+#vectorTrashCan.stx-btn span {
+	background-position:-257px -118px;
+}
+
+
+/* --------------------------------------------------------- TRADING ------------------------------------------------------------- */
+
+
+
+body .tfc.create-order,
+body .tfc.create-order.OTO {
+	width:75px;
+    right:75px;
+	height:auto;
+	padding: 13px 13px 8px 13px;
+	}
+body .tfc.create-order .stx-btn.stx-ico {
+    right: -4px;
+    top: -4px;
+}
+body .tfc.create-order .col1,
+body .tfc.create-order .col2,
+body .tfc.create-order .col3 {
+    float: none;
+	width:auto
+}
+body .tfc .click {
+	 height: 25px;
+    line-height: 25px;
+}
+body .tfc.create-order .stx-label {
+	width: 20px;
+	font-size:10px;
+	margin-left:10px;
+	}
+body .tfc.create-order .stx-data input[type="text"], 
+body .tfc.create-order input[type="number"] {
+	 width: 47px;
+	 }
+body .tfc select {
+    margin: 4px 0;
+    width: 75px;
+}
+
+body .market-order.create-order {
+	position:absolute;
+	width:120px;
+	padding:0;
+	margin:55px 0 0 -50px
+	}
+body .market-order.create-order .stx-label {width: 40px;}
+body .market-order.create-order .col1,
+body .market-order.create-order .col2,
+body .market-order.create-order .col3 {
+    float: none;
+	width:auto
+}
+body .market-order.create-order .col2 {margin: 10px 0; width:auto}
+body .market-order.create-order .stx-data input[type="text"], body .market-order.create-order input[type="number"] {
+    width: 65px;
+}
+body .market-order.create-order .click {
+	 height: 40px;
+}
+
+body .tfc-market-section.complex {
+	display:none;
+}
+
+body .create-order.market-order {
+	left:100px;
+}
+
+body .stx-dialog-container.trade .stx-dialog {
+	margin:auto;
+}
+
+.tfc.stx-limit-order .inputTemplate.amount,
+body .tfc.create-order .stx-label.tfc-shares-to-buy,
+body .tfc.create-order .stx-label.tfc-price-dollars,
+body .tfc.create-order .tfc-shares-owned {display:none}
+
+body .tfc.create-order.market-order .stx-label.tfc-shares-to-buy,
+body .tfc.create-order.market-order .stx-label.tfc-price-dollars {
+	display:inline-block;
+}
+
+
+body .tfc.create-order .tfc-qty-to-buy,
+body .tfc.create-order .tfc-price-amt {display:inline-block}
+
+body .tfc .inputTemplate.risk-reward .stx-data {width:auto;}
+body .tfc .inputTemplate.risk-reward .stx-label {display:none;}
+
+body .tfc.create-order.OTO {padding: 0px 13px;}
+body .tfc.create-order.OTO .col2,
+body .tfc.create-order.OTO .col3 {display:none;}
+body .tfc-cancel .tfc-cancel-header {margin-bottom: 4px; margin-top:-5px;}
+body .tfc-cancel .tfc-cancel-header span {display:none;}
+body .tfc .tfc-cancel-button.click {
+	top:0px;
+	margin-bottom:0;
+	}
+
+body .tfc .inputTemplate.gain {display:none;}
+
+.tfc.container .tfc-replace.click,
+.tfc.container .tfc-cancel-button.click {
+	font-size:12px;
+	top:0;
+	margin-bottom:0;
+	}
+.tfc-cancel-button span:nth-of-type(2) {display:none}
+
+body .stx-dialog-container.trade .dialog,
+body .stx-dialog-container.trade #tfcConfirmOrder,
+body .stx-dialog-container.trade #tfcConfirmReplace {
+	margin-top:50px;
+    padding: 20px;
+    text-align: center;
+    width: auto;
+}
+body #tfcConfirmReplace .value {font-size:14px;}
+
+/* --------------------------------------------------------- Light Theme --------------------------------------------------------- */
+
+.Light .stx-btn#toggleCrosshairs { border-color:rgba(0,0,0,.1);}
+.Light .stx-btn#toggleCrosshairs span {background-position: -218px -197px;}
+
+
+/* --------------------------------------------------------- Dark Theme --------------------------------------------------------- */
+
+.Dark .stx-btn#toggleCrosshairs { border-color:rgba(255,255,255,.1);}
+.Dark .stx-btn#toggleCrosshairs span {background-position: -258px -197px;}
+
+#chartContainer { /* container will automatically expand to remaining space in stx-wrapper */
+	position:absolute;
+	top:96px;	/* height of header */
+	bottom:0;
+	left:0;
+	right:0;
+}
+
+.menuOutline#menuCompare{
+	right:-80px;
+}
+
+/* Chart Comparison Menu */
+.menuSelect.compare {width: 210px;}
+.menuSelect.compare input[type="text"] {
+	float: left;
+	width: 90px;
+	margin-right: 3px;
+	text-transform: uppercase; 
+	border:none;
+    color: #666666;
+    padding: 6px;
+	height:14px;
+	line-height:14px;
+}
+.menuSelect.compare .stx-color {
+	float: left;
+	width: 26px;
+	height:26px;
+	margin-top:1px
+}
+.menuSelect.compare > .add .stx-btn {
+	float: right;
+	height: 26px;
+	line-height: 26px;
+	padding: 0px 8px;
+}
+.menuSelect.compare .stx-menu-content.add {
+	height: 38px;
+	padding-bottom: 0px;
+	border-bottom: solid 1px #efefef;
+}
+.menuSelect.compare .stx-menu-content.add .stx-option input[type="text"] {
+	height: 10px;
+	line-height: 14px;
+	width: 45px;
+	margin-top: 2px;
+	margin-left: 6px;
+	text-align: right; 
+	float: right;
+}
+.menuSelect.compare .stx-menu-content.add .stx-checkbox, .menuSelect.compare .stx-menu-content.add .stx-checkbox.false { /* Compare checkbox toggles */
+	display: block;
+	float: left;
+	width: 14px;
+	height: 14px;
+	padding-right: 5px;
+	margin-top: 5px;
+	text-indent: -1000px;
+	overflow: hidden;
+	background-image: url(../img/stx-sprite.png);
+	background-position: -142px -122px;
+}
+.menuSelect.compare .stx-menu-content.add .stx-checkbox.true { /* Menu checkbox toggle active */
+	background-position: -182px -122px;
+}
+.menuSelect.compare .stx-menu-content.type {
+	padding-bottom:10px;
+	border-bottom: solid 1px #efefef;
+}
+.menuSelect.compare .stx-menu-content.stops {
+	border-bottom:0px;
+	padding-bottom:15px;
+}
+.menuSelect.compare .stx-menu-content.stops .stx-btn {
+	font-size:11px; 
+	width:65px;
+}
+.menuSelect.compare .stx-menu-content.stops .stx-btn:last-child {
+	float: right; 
+	margin-left:5px;
+}
+.menuSelect.compare #symComparison li.stx-menu-content {padding: 2px 16px;}
