@@ -1,3 +1,4 @@
+#HyperblotterChart View
 The HyperblotterChart view is a standalone WPF application which hosts a ChartIQ (HTML5) page which is fully controllable from the standard Hyperblotter UI. Hyperblotter deploys this tool as a third-party asset (external application) and then communicates with the WPF host and its HTML5 content over the OpenFin InterApplicationBus. The following code snippets highlight the key integration points in the code:
 ### Deploying and Launching a WPF Application from an OpenFin App
 Applications are co-deployed with OpenFin Apps by declaring them in the application manifest file as an `appAsset` entry. In this demo, the following entry has been added to the app.json file:
