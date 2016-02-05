@@ -28,6 +28,8 @@ namespace ChartIQDemo
         double _left = 0;
         bool _softHidden = false;
 
+        Fin.Runtime _runtime;
+
         #endregion
 
         #region Constructors
@@ -35,63 +37,25 @@ namespace ChartIQDemo
         {
             InitializeComponent();
 
-            var htmlRootPath = Path.GetFullPath(@"chartiq-html\stx-basic.html");
-            var htmlRootUrl = new Uri(htmlRootPath).ToString();
-
+            // Connect to the runtime
             var runtimeOptions = new Fin.RuntimeOptions()
             {
                 Version = string.IsNullOrEmpty(App.RuntimeVersion) ? "stable" : App.RuntimeVersion,
                 SecurityRealm = string.IsNullOrEmpty(App.SecurityRealm) ? null : App.SecurityRealm
             };
 
-            var appOptions = new Fin.ApplicationOptions("chartIQDemo", "chartIQUuid", htmlRootPath);
+            _runtime = Fin.Runtime.GetRuntimeInstance(runtimeOptions);
+            _runtime.Connect(RuntimeConnectedCallback);
 
-            var runtime = Fin.Runtime.GetRuntimeInstance(runtimeOptions);
+            // Initialize the embedded view
+            var htmlRootPath = Path.GetFullPath(@"chartiq-html\stx-basic.html");
+            var htmlRootUrl = new Uri(htmlRootPath).ToString();
+
+            var appOptions = new Fin.ApplicationOptions("chartIQDemo", "chartIQUuid", htmlRootPath);
 
             embeddedview.Initialize(runtimeOptions, appOptions);
 
-            embeddedview.OnReady = (s, e) =>
-            {
-                Dispatcher.Invoke(new Action(() =>
-                {
-                    showDeveloperToolsItem.IsEnabled = true;
-                }),
-                null);
-            };
-
-            runtime.Connect(() =>
-            {
-                if (!string.IsNullOrEmpty(App.ParentAppUuid))
-                {
-                    var parentAppUuid = App.ParentAppUuid;
-                    var parentApp = Fin.Application.wrap(parentAppUuid, runtime.DesktopConnection);
-
-                    parentApp.addEventListener("closed", (ack) =>
-                    {
-                        Dispatcher.Invoke(new Action(() =>
-                        {
-                            Application.Current.Shutdown();
-                        }));
-                    });
-
-                    runtime.InterApplicationBus.subscribe(parentAppUuid, "tickerSelection", (sourceUuid, topic, message) =>
-                    {
-                        Dispatcher.Invoke(new Action(() =>
-                        {
-                            if(_softHidden)
-                            {
-                                Visibility = Visibility.Hidden;
-                                SoftShow();
-                                System.Threading.Thread.Sleep(500);
-                            }
-
-                            Visibility = Visibility.Visible;
-
-                            Activate();
-                        }));
-                    });
-                }
-            });
+            embeddedview.OnReady += embeddedView_OnReady;
         }
 
         #endregion
@@ -137,6 +101,14 @@ namespace ChartIQDemo
         private void MenuItem_Click(object sender, RoutedEventArgs e)
         {
             embeddedview.OpenfinWindow.showDeveloperTools();
+        }
+
+        private void embeddedView_OnReady(object sender, EventArgs e)
+        {
+            Dispatcher.Invoke(new Action(() =>
+            {
+                showDeveloperToolsItem.IsEnabled = true;
+            }));
         }
 
         #endregion
@@ -189,6 +161,39 @@ namespace ChartIQDemo
                 
                 ShowInTaskbar = true;
                 _softHidden = false;
+            }
+        }
+
+        private void ShowAndActivate()
+        {
+            if (_softHidden)
+            {
+                Visibility = Visibility.Hidden;
+                SoftShow();
+                System.Threading.Thread.Sleep(500);
+            }
+
+            Visibility = Visibility.Visible;
+
+            Activate();
+        }
+
+        private void RuntimeConnectedCallback()
+        {
+            if (!string.IsNullOrEmpty(App.ParentAppUuid))
+            {
+                var parentAppUuid = App.ParentAppUuid;
+                var parentApp = Fin.Application.wrap(parentAppUuid, _runtime.DesktopConnection);
+
+                parentApp.addEventListener("closed", (ack) =>
+                {
+                    Dispatcher.Invoke(new Action(Application.Current.Shutdown));
+                });
+
+                _runtime.InterApplicationBus.subscribe(parentAppUuid, "tickerSelection", (sourceUuid, topic, message) =>
+                {
+                    Dispatcher.Invoke(new Action(ShowAndActivate));
+                });
             }
         }
 
