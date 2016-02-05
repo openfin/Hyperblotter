@@ -2,8 +2,10 @@ var React = require('react'),
     _ = require('underscore'),
     windowManager = require("../windowsListSingleton"),
     fin = require('../vendor/openfin.js'),
-    excel = require("../vendor/ExcelAPI.js");
-TooTip = require("../components/tooltip-decorator");
+    TooTip = require("../components/tooltip-decorator"),
+    excel = require("../vendor/ExcelAPI.js"),
+    excel_plugin_installed = false;
+
 
 var _windowManager = windowManager.getInstance(),
     animationWindows = _windowManager.getWindows(),
@@ -45,18 +47,44 @@ var rndData = [
 var floor = Math.floor;
 var random = Math.random;
 
+function getWorkSheet(workBook, workSheet){
+   //  "Worksheet is ", workBook + " : " +  workSheet
+   fin.desktop.Excel.getWorkbooks(function(workbooks){
+        workbooks.filter(function(d, i){
+            return d.name === workBook
+        }).map(function(d,i){
+            var _worksheet = d.getWorksheets(function(ws){
+                ws.filter(function(dd,ii){
+                    return dd.name === workSheet
+                }).map(function(ddd,iii){
+                    console.log("THE WORKSHEET IS ", ddd)
+                    ddd.setCells([["a", "b", "c"], [1, 2, 3]], "A1");
+                })
+            })
+        });
+    });
+    return "TESTING "
+}
+
+var _ExcelSheetOpen = false;
+
 fin.desktop.main(()=>{
+
+    fin.desktop.InterApplicationBus.subscribe("*",
+        "inter_app_messaging",
+        function (message, senderUuid) {
+            console.log("This following message has been received from "
+                + senderUuid + ": ", message);
+            if(message.hyperblotterExists === 'true'){
+                console.log()
+            }
+        });
 
     initBlotter().then(function(b){
         // do nothing, if you want the blotter to show automatically blotter.show();
     });
 
     initAnimationWindows().then(function(val){
-        //fin.desktop.System.deleteCacheOnRestart(function () {
-        //    console.log("successfully deleted cache");
-        //},function (err) {
-        //    console.log("failure to delete cache: " + err);
-        //});
 
         fin.desktop.System.addEventListener('monitor-info-changed', function (evnt) {
             console.log("The monitor information has changed to: ", evnt);
@@ -81,7 +109,6 @@ var initAnimationWindows = function(){
         } else{
             var leftOffset = 105, topOffset = 50, top = topOffset, left = leftOffset, tileMargin = 8,  i = 1;
             for (; i < numTiles; i++){
-                console.log("LOOP ",i, " numTiles ",numTiles);
                 animationWindows.push(new fin.desktop.Window({
                     name: 'tile' + random(),
                     url: 'trade.html?t=' + rndData[i].ticker + '&l=' + rndData[i].last,
@@ -131,9 +158,9 @@ var initBlotter = function(){
             name: 'blotter',
             url: 'hypergrid.html',
             autoShow: false,
-            defaultWidth: 840,
-            maxWidth: 840,
-            minWidth: 840,
+            defaultWidth: 970,
+            maxWidth: 970,
+            minWidth: 970,
             maxHeight: 594,
             defaultHeight: 594,
             minHeight: 594,
@@ -350,21 +377,69 @@ module.exports = React.createClass({
 
 
     openExcel: function() {
+        console.log("Open Excel called in main excel_plugin_installed = ", excel_plugin_installed)
+        if(!excel_plugin_installed){
 
-        fin.desktop.main(function() {
-            fin.desktop.System.launchExternalProcess({
-                alias: 'excel-dist',
-                arguments: '-i -l',
-                listener: function(event){
-                    // react to close event
-                    if(event.topic === "exited" && event.exitCode === MY_KNOWN_BAD_STATE) {
-                        // your desired logic here
+            fin.desktop.main(function() {
+                fin.desktop.System.launchExternalProcess({
+                    alias: 'excel-dist',
+                    arguments: "-i -l hyperblotter.xlsx",
+                    listener: function(event){
+                        // react to close event
+                        if(event.topic === "exited" && event.exitCode === MY_KNOWN_BAD_STATE) {
+                            // your desired logic here
+                            console.log("Excited Excel")
+                        }else{
+                            console.log("This is where I would like to open the new Excel...")
+                            // this.openNewExcel()
+                        }
                     }
-                }
+                });
             });
-        });
-
+            // excel_plugin_installed = true;
+           // this.openNewExcel();
+            var workbook = fin.desktop.Excel.addWorkbook(function(evt){
+                console.log(">>>> A NEW WORKBOOK ADDED -- THIS IS THE CALLBACK: ", evt)
+            });
+            // if(currentWorkbook == workbook) return;
+        }else{
+            this.openNewExcel();
+        }
     },
+
+    openNewExcel: function() {
+
+        fin.desktop.main(function(){
+
+            var Excel = fin.desktop.Excel;
+            Excel.init();
+            Excel.getConnectionStatus(function(evt){
+                console.log("ON CONNECTION STATUS -- ", evt)
+            });
+            Excel.addEventListener("workbookAdded", this.onWorkbookAdded);
+            Excel.addEventListener("workbookClosed", this.onWorkbookRemoved);
+            Excel.addEventListener("connected", this.onExcelConnected);
+            console.log("Called Excel ", Excel)
+        });
+    },
+    workBookAddedCallback: function(evt){
+        console.log("Wokbook added callback called... ", evt);
+    },
+
+    onExcelConnected:function(){
+        console.log("EXCEL FUNCTION CALLED ")
+    },
+    onWorkbookAdded:function(){
+        console.log("EXCEL FUNCTION CALLED -- onWorkbookAdded ")
+    },
+    onWorkbookRemoved:function(){
+        console.log("EXCEL FUNCTION CALLED ")
+    },
+    onWorkbookActivateed:function(){
+        console.log("EXCEL ON WORKBOOK ACTIVATED CALLED ")
+    },
+
+
     getInitialState: function(){
         return {
             animationWindowsShowing: false,
@@ -478,27 +553,7 @@ module.exports = React.createClass({
                         </TooTip>
                     </i>
                 </div>
-
             </div>
         </div>
     }
 });
-
-//function genPairs(arr) {
-//    return arr.reduce(function(m, itm, idx, a) {
-//        m[0].push(m[1].splice(floor((random() * m[1].length)), 1)[0]);
-//        return m
-//    }, [[], arr.slice()])[0].reduce(function(m, itm, idx, a) {
-//
-//            if (!(idx % 2)) {
-//                m.push([itm, a[idx + 1]]);
-//            }
-//            return m
-//        }, [])
-//}
-
-
-/*
- <image className="openfinLogo" type="image/svg+xml" src="images/openfin_logo.svg" />
-
- */

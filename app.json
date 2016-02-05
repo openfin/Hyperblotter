@@ -2,10 +2,10 @@
     "startup_app": {
         "name": "Hyperblotter",
         "description": "Hyperblotter Demo",
-        "__url": "http://cdn.openfin.co/demos/hyperblotter/index.html",
-        "url": "http://localhost:5001/index.html",
-        "__icon": "http://cdn.openfin.co/demos/hyperblotter/images/hyperblotter_icon.ico",
-        "icon": "http://localhost:5001/images/hyperblotter_icon.ico",
+        "url": "http://cdn.openfin.co/demos/hyperblotter/index.html",
+        "__url": "http://localhost:5001/index.html?debug",
+        "icon": "http://cdn.openfin.co/demos/hyperblotter/images/hyperblotter_icon.ico",
+        "__icon": "http://localhost:5001/images/hyperblotter_icon.ico",
         "uuid": "hyperblotter",
         "autoShow": true,
         "defaultWidth": 360,
@@ -36,7 +36,7 @@
               "alias": "excel-dist",
               "target": "excel.exe",
               "version": "0.0.1",
-              "args" : "-i -l"
+              "args" : "-i -l hyperblotter.xlsx"
             },
             {
               "src": "http://localhost:5001/assets/HyperblotterChart.zip",

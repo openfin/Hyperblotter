@@ -236,7 +236,7 @@ var arrayGenerator = function () {
 //////
 var tickerTimerPrivate = {
     _lastTick:null,
-    _functionCallsPerSecond: 10,
+    _functionCallsPerSecond: 3,
     _arrayGen: arrayGenerator(),
     _ticksExecuted: 1,
 

@@ -1,10 +1,15 @@
-#Hyperblotter Trader Demo
+#Hyperblotter Demo
 --
 Hyperblotter is a demonstration app to show the capabilities of both [OpenFin](http://openfin.co/) and [HyperGrid](https://github.com/openfin/fin-hypergrid).
 
 Currently OpenFin applications only run in a Windows environment. They may be run on a Mac by using a Windows Virtual Machine (VM). Oracle's [Virtual Box](https://www.virtualbox.org/) is a free, open-source VM which may be used. 
 
-####To build and run the demo from source on your local machine:
+## Demo Installer
+On a Windows machine, you can install Hyperblotter via this installer:
+
+[Hyperblotter](https://dl.openfin.co/services/download?fileName=Hyperblotter&config=http://cdn.openfin.co/demos/hyperblotter/app.json)
+
+##Build and run demo from source on local machine:
 
 Clone this Git repository and in the Terminal window, change directories into the created Directory 'Hyperblotter'. The following instructions are written in Unix syntax so it is recommended you use a compatible terminal app on a Windows machine, eg: [Git Bash](https://git-scm.com/downloads) or [Cmder](http://cmder.net/).
 
@@ -22,7 +27,7 @@ NB: (the additional 'sudo' command may be required, eg. 'sudo npm install' at wh
  
 The app runs locally on a simple Node server and the code is compiled using [Gulp](http://gulpjs.com/) as a build tool. 
 
-###Running the app locally
+###Run app locally
 The app must first be compiled. This only needs to be done the first time the app is run, but the app will need to be recompiled if modifications are made to the code.
 
 Open two terminal windows and in both change the directory to the 'Hyperblotter' folder.
