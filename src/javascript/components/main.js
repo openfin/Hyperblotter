@@ -95,6 +95,8 @@ fin.desktop.main(()=>{
             console.log("failure: registration of 'monitor-info-changed' " + err);
         });
     });
+	
+	initWpfChart();
 });
 
 
@@ -171,6 +173,20 @@ var initBlotter = function(){
         })
     });
     return _blotterPromise
+}
+
+var initWpfChart = function(){
+	fin.desktop.Application.getCurrent().getManifest(function (manifest) {
+		var version = manifest.runtime.version;
+		var appUuid = manifest.startup_app.uuid;
+		
+		var args = '--parentuuid=' + appUuid + ' --runtimeversion=' + version + ' --hidden=true';
+		
+		fin.desktop.System.launchExternalProcess({
+			alias: 'hyperblotter-chart',
+			arguments: args
+		});
+	});
 }
 
 function showAsPromise (wnd) {
