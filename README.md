@@ -1,6 +1,6 @@
 #Hyperblotter Demo
 --
-Hyperblotter is a demonstration app to show the capabilities of both [OpenFin](http://openfin.co/) and [HyperGrid](https://github.com/openfin/fin-hypergrid). Additionally it illustrates how to [co-deploy traditional desktop applications](wpf-integration-notes.md), in this case .NET, with an OpenFin App, and how to embed HTML5 content into WPF
+Hyperblotter is a demonstration app to show the capabilities of both [OpenFin](http://openfin.co/) and [HyperGrid](https://github.com/openfin/fin-hypergrid). Additionally it illustrates how to [co-deploy traditional desktop applications](wpf-integration-notes.md), in this case .NET, with an OpenFin App, and how to embed HTML5 content into WPF.
 
 Currently OpenFin applications only run in a Windows environment. They may be run on a Mac by using a Windows Virtual Machine (VM). Oracle's [Virtual Box](https://www.virtualbox.org/) is a free, open-source VM which may be used. 
 
