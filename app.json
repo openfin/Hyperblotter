@@ -27,7 +27,7 @@
     },
     "runtime": {
         "arguments": "",
-        "version": "stable"
+        "version": "5.44.9.2"
     },
     "appAssets": [
             {
@@ -37,6 +37,13 @@
               "target": "excel.exe",
               "version": "0.0.1",
               "args" : "-i -l hyperblotter.xlsx"
+            },
+            {
+              "src": "http://cdn.openfin.co/demos/hyperblotter/assets/HyperblotterChart.zip",
+              "__src": "http://localhost:5001/assets/HyperblotterChart.zip",
+              "alias": "hyperblotter-chart",
+              "target": "HyperblotterChart.exe",
+              "version": "1.0.0"
             }
         ],
     "splashScreenImage": "http://cdn.openfin.co/demos/hyperblotter/images/splashscreen.png",
