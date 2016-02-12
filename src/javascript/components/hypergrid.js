@@ -107,6 +107,7 @@ var HyperGrid = React.createClass({
             console.log("FIN IS INITIALISED IN THE GRID...")
             Excel = fin.desktop.Excel;
             Excel.init();
+            Excel.init();
             Excel.getConnectionStatus(excelCallback);
             Excel.addEventListener("workbookAdded", excelCallback);
             Excel.addEventListener("workbookClosed", excelCallback);
