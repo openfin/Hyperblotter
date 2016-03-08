@@ -103,10 +103,14 @@ fin.desktop.main(()=>{
 /* Initialises all the floating 'trade' windows. */
 var initAnimationWindows = function(){
     console.log("initAnimationWindows called _tilesCreated == ",_tilesCreated);
+
     return new Promise(function(resolve, reject){
         if(_tilesCreated){
             resolve()
         } else{
+
+            _tilesCreated = true;
+            
             var leftOffset = 105, topOffset = 50, top = topOffset, left = leftOffset, tileMargin = 8,  i = 1;
             for (; i < numTiles; i++){
                 animationWindows.push(new fin.desktop.Window({
