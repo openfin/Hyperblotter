@@ -103,6 +103,7 @@ fin.desktop.main(()=>{
 /* Initialises all the floating 'trade' windows. */
 var initAnimationWindows = function(){
     console.log("initAnimationWindows called _tilesCreated == ",_tilesCreated);
+    _tilesCreated = true;
     return new Promise(function(resolve, reject){
         if(_tilesCreated){
             resolve()
