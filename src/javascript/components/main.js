@@ -211,8 +211,34 @@ function initEikon(){
             console.log( "The list -- ", lst );
             // _appList.setData(lst);
             openEikonInstrumentsAndLinkThem();
+            createEikonWindow();
         });
     }).catch((err)=>{ console.log("ERROR CAUGHT: ",err)});
+}
+
+function createEikonWindow(){
+
+    console.log("Create Eikon Window --------------");
+    var _eikonPromise = new Promise((resolve, reject)=>{
+        blotter = new fin.desktop.Window({
+            name: 'Eikon controller',
+            url: 'Eikon.html',
+            autoShow: true,
+            defaultWidth: 970,
+            maxWidth: 970,
+            minWidth: 970,
+            maxHeight: 594,
+            defaultHeight: 594,
+            minHeight: 594,
+            resizable:true,
+            frame: false,
+            maximizable: false,
+            "icon": "http://demoappdirectory.openf.in/desktop/config/apps/OpenFin/HelloOpenFin/img/openfin.ico"
+        }, ()=>{
+            resolve();
+        })
+    });
+    return _eikonPromise;
 }
 
 function openEikonInstrumentsAndLinkThem(){
