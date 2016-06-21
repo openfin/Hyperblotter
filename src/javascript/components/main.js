@@ -4,7 +4,10 @@ var React = require('react'),
     fin = require('../vendor/openfin.js'),
     TooTip = require("../components/tooltip-decorator"),
     excel = require("../vendor/ExcelAPI.js"),
-    excel_plugin_installed = false;
+    excel_plugin_installed = false,
+    EikonLink = require('../eikon/EikonLink'),
+    eLink,
+    eikonEnums = require('../eikon/EikonEnums');
 
 
 var _windowManager = windowManager.getInstance(),
@@ -23,7 +26,7 @@ var _windowManager = windowManager.getInstance(),
 
 /* Static data for the floating 'trade' animation windows */
 
-var rndData = [
+var _old_rndData = [
     {ticker: "PCL", last: 21.251049070187836},
     {ticker: "IBM", last: 24.835458631124418},
     {ticker: "TCK", last: 6.235665990223004},
@@ -44,12 +47,33 @@ var rndData = [
     {ticker: "ACC", last: 14.787034222549517},
     {ticker: "AA", last: 13.787034222549517}];
 
+var rndData = [
+    {ticker: "GOOG.O", last: 21.251049070187836},
+    {ticker: "IBM", last: 24.835458631124418},
+    {ticker: "AAPL.O", last: 6.235665990223004},
+    {ticker: "BARCH.L", last: 17.01733357355432},
+    {ticker: "CSGN.S", last: 6.624939800309766},
+    {ticker: "EXR", last: 33.96528484183794},
+    {ticker: "BP", last: 21.19160933461151},
+    {ticker: "WCN", last: 23.501467942817747},
+    {ticker: "CVX", last: 53.67873008625956},
+    {ticker: "ITT", last: 22.803668802786465},
+    {ticker: "BIN", last: 12.594969339431945},
+    {ticker: "WTM", last: 348.8851038882928},
+    {ticker: "FHN", last: 6.624939800309766},
+    {ticker: "CYH", last: 19.131071861657016},
+    {ticker: "SWK", last: 52.198226722926165},
+    {ticker: "AMG", last: 127.23849660464248},
+    {ticker: "BCE", last: 22.765628088640174},
+    {ticker: "ACC", last: 14.787034222549517},
+    {ticker: "AA", last: 13.787034222549517}];
+
 var floor = Math.floor;
 var random = Math.random;
 
 function getWorkSheet(workBook, workSheet){
-   //  "Worksheet is ", workBook + " : " +  workSheet
-   fin.desktop.Excel.getWorkbooks(function(workbooks){
+    //  "Worksheet is ", workBook + " : " +  workSheet
+    fin.desktop.Excel.getWorkbooks(function(workbooks){
         workbooks.filter(function(d, i){
             return d.name === workBook
         }).map(function(d,i){
@@ -69,6 +93,27 @@ function getWorkSheet(workBook, workSheet){
 var _ExcelSheetOpen = false;
 
 fin.desktop.main(()=>{
+
+    fin.desktop.InterApplicationBus.subscribe("*",
+        eikonEnums.EIKON_EVENT,
+        function (message, uuid) {
+            console.log("Eikon Event Received: ", message," uuid ", uuid);
+        },
+        function(){console.log("Eikon interapp success. ")},
+        function(){console.log("Eikon interapp Fail. ")});
+
+    //---
+
+
+    fin.desktop.InterApplicationBus.subscribe("*",
+        eikonEnums.EIKON_SEND_CONTEXT,
+        function (message, uuid) {
+            console.log("Eikon send context ");
+            var sendValue ='{"entities": [{"RIC": "'+message.RIC+'"}] }'
+            eLink.mclSendContext(sendValue);
+        },
+        function(){console.log("Eikon CONTEXT interapp success. ")},
+        function(){console.log("Eikon CONTEXT interapp Fail. ")});
 
     fin.desktop.InterApplicationBus.subscribe("*",
         "inter_app_messaging",
@@ -95,8 +140,8 @@ fin.desktop.main(()=>{
             console.log("failure: registration of 'monitor-info-changed' " + err);
         });
     });
-	
-	initWpfChart();
+
+    initWpfChart();
 });
 
 
@@ -110,7 +155,7 @@ var initAnimationWindows = function(){
         } else{
 
             _tilesCreated = true;
-            
+
             var leftOffset = 105, topOffset = 50, top = topOffset, left = leftOffset, tileMargin = 8,  i = 1;
             for (; i < numTiles; i++){
                 animationWindows.push(new fin.desktop.Window({
@@ -154,6 +199,42 @@ var initAnimationWindows = function(){
         }
     });
 };
+// For Eikon
+
+function initEikon(){
+
+
+
+    eLink = new EikonLink();
+    eLink.connect().then((value)=>{
+        eLink.mclGetAppList().then((lst)=>{
+            console.log( "The list -- ", lst );
+            // _appList.setData(lst);
+            openEikonInstrumentsAndLinkThem();
+        });
+    }).catch((err)=>{ console.log("ERROR CAUGHT: ",err)});
+}
+
+function openEikonInstrumentsAndLinkThem(){
+    eLink.mcLaunchApp("News", 'GOOG.O');
+    eLink.mcLaunchApp("Graph", 'GOOG.O');
+    eLink.mcLaunchApp("Quote Object", 'GOOG.O');
+
+    //-- set time out -- allow the Eikon windows to be created.
+
+    setTimeout(function(){
+        console.log("TIMEOUT -- getting app list...");
+        var _apps = eLink.mclGetAppList().then(function(d){
+            d.map(function(d,i){
+                eLink.mclLinkApp( d.instanceId );
+            });
+
+            var apps2 = eLink.mclGetAppList().then(function(ln){
+                console.log("LINKS ", ln);
+            });
+        });
+    }, 2000);
+}
 
 /* If the blotter has not been created yet, create it and return a promise...*/
 var initBlotter = function(){
@@ -180,17 +261,17 @@ var initBlotter = function(){
 }
 
 var initWpfChart = function(){
-	fin.desktop.Application.getCurrent().getManifest(function (manifest) {
-		var version = manifest.runtime.version;
-		var appUuid = manifest.startup_app.uuid;
-		
-		var args = '--parentuuid=' + appUuid + ' --runtimeversion=' + version + ' --hidden=true';
-		
-		fin.desktop.System.launchExternalProcess({
-			alias: 'hyperblotter-chart',
-			arguments: args
-		});
-	});
+    fin.desktop.Application.getCurrent().getManifest(function (manifest) {
+        var version = manifest.runtime.version;
+        var appUuid = manifest.startup_app.uuid;
+
+        var args = '--parentuuid=' + appUuid + ' --runtimeversion=' + version + ' --hidden=true';
+
+        fin.desktop.System.launchExternalProcess({
+            alias: 'hyperblotter-chart',
+            arguments: args
+        });
+    });
 }
 
 function showAsPromise (wnd) {
@@ -367,6 +448,7 @@ module.exports = React.createClass({
         }
     },
     componentDidMount: function(){
+        initEikon();
         console.log('Component did mount...', this);
         var _repositionWindows = function(){
             if(!this.state.inLoop &&  this.state.animationWindowsShowing){
@@ -401,7 +483,7 @@ module.exports = React.createClass({
                 });
             });
             // excel_plugin_installed = true;
-           // this.openNewExcel();
+            // this.openNewExcel();
             var workbook = fin.desktop.Excel.addWorkbook(function(evt){
                 console.log(">>>> A NEW WORKBOOK ADDED -- THIS IS THE CALLBACK: ", evt)
             });
@@ -470,7 +552,7 @@ module.exports = React.createClass({
                 "userSelect": "none",
                 "pointerEvents": "none"
 
-        };
+            };
             return {class: _class, style: _style}
         }
     },
@@ -482,7 +564,6 @@ module.exports = React.createClass({
             return {"display":"block"};
         }
     },
-
 
     getAnimateText:function(){
         if(this.state.animationWindowsShowing ){
@@ -518,16 +599,16 @@ module.exports = React.createClass({
 
             <div className="content-area">
                 <div>
-                        <i onClick={this.openAnimationWindows} style={ this.getAnimateParentClass() }>
-                            <TooTip legend="Launch">
-                                <span className='fa fa-th'></span>
-                            </TooTip>
-                        </i>
-                        <i onClick={this.toggleShowAnimationWindows} style={this.getMinifyText().style} >
-                            <TooTip legend="Close">
-                                <span className={this.getMinifyText().icon}></span>
-                            </TooTip>
-                        </i>
+                    <i onClick={this.openAnimationWindows} style={ this.getAnimateParentClass() }>
+                        <TooTip legend="Launch">
+                            <span className='fa fa-th'></span>
+                        </TooTip>
+                    </i>
+                    <i onClick={this.toggleShowAnimationWindows} style={this.getMinifyText().style} >
+                        <TooTip legend="Close">
+                            <span className={this.getMinifyText().icon}></span>
+                        </TooTip>
+                    </i>
 
                     <i onClick={this.toggleAnimateLoop} style={this.getAnimateClass().style} >
                         <TooTip legend="Animate">

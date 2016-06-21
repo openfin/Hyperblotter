@@ -4,7 +4,7 @@ var windowListSingleton = {
         this._instance = {
             _windows:[],
             getWindows:function getWindows() {
-                return this._windows
+                return this._windows;
                 },
             addWindow:function addWindow(value){
                 if(this._windows.indexOf(value) === -1){
@@ -16,9 +16,9 @@ var windowListSingleton = {
                     var _sp = this._windows.indexOf(value);
                     this._windows.splice(_sp, 1);
                 }
-            },
+            }
         };
-    return this._instance
+    return this._instance;
     },
 
 

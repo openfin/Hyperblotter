@@ -1,4 +1,5 @@
 // Browserify entry point for the bundle (yay JavaScript!)
+"use strict";
 
 var _ = require('underscore'),
 		React = require('react'),

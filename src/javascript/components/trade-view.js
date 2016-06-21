@@ -1,5 +1,6 @@
 var React = require('react'),
-		fin = require('../vendor/openfin.js'),
+        eikonEnums = require('../eikon/EikonEnums'),
+        fin = require('../vendor/openfin.js'),
         start = null,
 		add = function(a,b){
       return a + b;
@@ -37,6 +38,24 @@ module.exports = React.createClass({
 		  fin.desktop.Window.getCurrent().minimize();
 		});
 	},
+	sendEikonMessage(){
+		fin.desktop.main(function(){
+			fin.desktop.InterApplicationBus.publish(eikonEnums.EIKON_SEND_CONTEXT, {
+				RIC: "IBM", instrument: "News"
+			});
+		});
+	},
+    sendEikonContext(){
+        console.log("sendEikonContext ");
+        var _ticker = this.state.ticker;
+        fin.desktop.main(function(){
+            fin.desktop.InterApplicationBus.publish(eikonEnums.EIKON_SEND_CONTEXT, {
+                RIC: _ticker, type: eikonEnums.EIKON_SEND_CONTEXT
+            });
+        });
+    },
+
+
     onEnterFrame:function(){
         console.log("EnterFrame --- ");
     },
@@ -80,14 +99,12 @@ module.exports = React.createClass({
   componentDidMount: function(){
 
 	  setTimeout(function(){
-
 		  try{
 			  fin.desktop.Window.getCurrent().bringToFront();
 		  }catch(err){
 			  //--
 		  }
       },2000);
-
 
       window.requestAnimationFrame(this.step);
 
@@ -96,7 +113,9 @@ module.exports = React.createClass({
   			ticker: urlData[0],
   			last: Number(urlData[1])
   		});
-  	}, 1000 + ( Math.floor(Math.random() * 1000) ) );
+
+
+	}, 1000 + ( Math.floor(Math.random() * 1000) ) );
   },
     componentWillUnmount:function(){
         console.log("componentWillUnmount ----- trade-view.js ");
@@ -108,9 +127,12 @@ module.exports = React.createClass({
 				<div className="window-control" />
 				<div className="banner">
 					<div className="title">
-						{this.state.ticker}
+						RIC: {this.state.ticker}
 						<i className="fa fa-bar-chart" onClick={this.openDetailedChartWindow} />
+						<i className="fa fa-asterisk nodrag" onClick={this.sendEikonContext} />
 					</div>
+
+
 				</div>
 				<div className="content">
 					<div className="main">
@@ -130,6 +152,7 @@ module.exports = React.createClass({
 							<div className="label">LOW</div>
 							<span className="value">{ (this.state.last - rndRange() - 1).toFixed(2)  }</span>
 						</div>
+
 					</div>
 				</div>
 			</div>
