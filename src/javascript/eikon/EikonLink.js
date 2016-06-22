@@ -24,7 +24,11 @@ var EikonLink = (function (config) {
         },
         onWsClose: function (evt) {
             // refer to http://tools.ietf.org/html/rfc6455#section-7.4.1
-            var txt = 'WebSocket closed. (Code = ' + evt.code + ')';
+            try{
+                var txt = 'WebSocket closed. (Code = ' + evt.code + ')';
+            }catch(e){
+                //--
+            }
         },
         onWsError: function (evt) {
             //showResult('Websocket error.', Mode.ERROR, true);
@@ -248,7 +252,7 @@ var EikonLink = (function (config) {
 
 /// Static functions
 EikonLink.FetchHttpRequest = function (url, responseType) {
-    var responseType = responseType || 'json'
+    var responseType = responseType || 'json';
     return new Promise(function (resolve, reject) {
         var xhr = new XMLHttpRequest();
         xhr.open('GET', url);

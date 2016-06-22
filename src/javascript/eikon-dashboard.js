@@ -1,41 +1,117 @@
 var React = require('react'),
     EikonLink = require('../javascript/eikon/EikonLink'),
+    eikonEnums = require('../javascript/eikon/EikonEnums'),
     elink;
 
+
+var AppButton = React.createClass({
+    /*
+     appId: "Graph"
+     instanceId: "23795968"
+     isLinked: false
+     name: "Chart GOOG.O"
+     */
+    onClick:function(){
+
+    },
+    onHover:function(){
+        var _this = this;
+        console.log("on hover -- ", _this.props.data.instanceId)
+        fin.desktop.main(function(){
+            fin.desktop.InterApplicationBus.publish(eikonEnums.EIKON_APP_HOVERED, {
+                instanceId: _this.props.data.instanceId, type: eikonEnums.EIKON_APP_HOVERED
+            });
+        });
+    },
+    onUnHover:function(){
+        var _this = this;
+        fin.desktop.InterApplicationBus.publish(eikonEnums.EIKON_APP_UNHOVERED, {
+            instanceId: _this.props.data.instanceId, type: eikonEnums.EIKON_APP_UNHOVERED
+        });
+    },
+    linkApp:function(){
+        console.log("LINK APP -- ", this.props.data.instanceId)
+        var _this = this;
+        fin.desktop.InterApplicationBus.publish(eikonEnums.EIKON_LINK_APP, {
+            instanceId: _this.props.data.instanceId, type: eikonEnums.EIKON_LINK_APP
+        });
+    },
+    unlinkApp:function(){
+        console.log("UN LINK APP -- ", this.props.data.instanceId);
+        var _this = this;
+        fin.desktop.InterApplicationBus.publish(eikonEnums.EIKON_UNLINK_APP, {
+            instanceId: _this.props.data.instanceId, type: eikonEnums.EIKON_UNLINK_APP
+        });
+    },
+    getDefaultProps:function(){
+        return {data: {
+                        appId: "Graph",
+                        instanceId: "23795968",
+                        isLinked: false,
+                        name: "Chart GOOG.O"
+                        }
+        }
+    },
+    getLinkEikon:function(){
+        return this.props.data.isLinked ? <i onClick={this.unlinkApp} className="eikon-cell fa fa-chain-broken" aria-hidden="true"></i> :
+            <i onClick={this.linkApp}  className="eikon-cell fa fa-link" aria-hidden="true"></i>;
+    },
+    render: function(){
+        return (
+            <div className="eikon-button">
+
+                <div><i className="eikon-cell fa fa-bullseye" aria-hidden="true"></i></div>
+                <div onMouseOver  = {this.onHover}
+                     onMouseLeave = {this.onUnHover}
+                     onMouseOut   = {this.onUnHover}
+                     onMouseLeave = {this.onUnHover}
+                    ><i className = "eikon-cell fa fa-eye" aria-hidden="true"></i></div>
+                <div>{this.getLinkEikon()}</div>
+                <div className="eikon-cell-text">
+                    {this.props.data.name} :
+                    {this.props.data.appId}
+                    {this.props.data.instanceId}
+                </div>
+            </div>
+        )
+    }
+});
 
 var EikonDashboard = React.createClass({
     getInitialState: function() {
         return {
-            menuShowing: false
+            eikonApps: []
         };
     },
     onClick: function(){
 
     },
+    refresh:function(){
+        eLink.mclGetAppList().then((lst)=>{
+            this.setState({eikonApps: lst});
+        });
+    },
     componentDidMount:function(){
         eLink = new EikonLink();
+        var _this = this;
 
         eLink.connect().then((value)=>{
-            eLink.mclGetAppList().then((lst)=>{
-                console.log( "The list in dashboard ------ ", lst );
-                // _appList.setData(lst);
-            });
+            var intv = setInterval(function(){
+                _this.refresh();
+            }, 2000);
         }).catch((err)=>{ console.log("ERROR CAUGHT: ",err)});
-
     },
     render: function() {
-        return <div className="eikon-dashboard" >
-            <div className={this.state.menuClass}>
-                <div className="drag-area" >
-                This is the drag area</div>
-                <div>
-                    <h1>THIS IS THE EIKON PAGE</h1>
+        return  <div>
+                    <div className={this.state.menuClass}>
+                        {this.state.eikonApps.map((d,i)=>{
+                            return <AppButton data={d} />
+                        })}
+                    </div>
                 </div>
-            </div>
-        </div>
     }
 });
 
 module.exports = EikonDashboard;
 
-React.render(<EikonDashboard />, document.body);
+React.render(<EikonDashboard />, document.querySelector('#eikon-holder'));

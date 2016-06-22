@@ -109,12 +109,51 @@ fin.desktop.main(()=>{
         eikonEnums.EIKON_SEND_CONTEXT,
         function (message, uuid) {
             console.log("Eikon send context ");
-            var sendValue ='{"entities": [{"RIC": "'+message.RIC+'"}] }'
+            var sendValue ='{"entities": [{"RIC": "'+message.RIC+'"}] }';
             eLink.mclSendContext(sendValue);
         },
         function(){console.log("Eikon CONTEXT interapp success. ")},
         function(){console.log("Eikon CONTEXT interapp Fail. ")});
+    //--
+    fin.desktop.InterApplicationBus.subscribe("*",
+        eikonEnums.EIKON_APP_HOVERED,
+        function (message, uuid) {
+            console.log("Eikon HOVERED --- message ", message.instanceId);
+            eLink.showFeedbackForLinking(message.instanceId);
+        },
+        function(){console.log("Eikon CONTEXT interapp success. ")},
+        function(){console.log("Eikon CONTEXT interapp Fail. ")});
+    //----
+    fin.desktop.InterApplicationBus.subscribe("*",
+        eikonEnums.EIKON_APP_UNHOVERED,
+        function (message, uuid) {
+            console.log("Eikon UNHOVERED --- message ", message.instanceId);
+            eLink.hideFeedbackForLinking(message.instanceId);
+        },
+        function(){console.log("Eikon CONTEXT interapp success. ")},
+        function(){console.log("Eikon CONTEXT interapp Fail. ")});
+    //----
 
+    fin.desktop.InterApplicationBus.subscribe("*",
+        eikonEnums.EIKON_LINK_APP,
+        function (message, uuid) {
+            console.log("LINK ___________________________ ", message.instanceId);
+            eLink.mclLinkApp(message.instanceId);
+        },
+        function(){console.log("Eikon CONTEXT interapp success. ")},
+        function(){console.log("Eikon CONTEXT interapp Fail. ")});
+
+    //----
+    fin.desktop.InterApplicationBus.subscribe("*",
+        eikonEnums.EIKON_UNLINK_APP,
+        function (message, uuid) {
+            eLink.mclUnlinkApp(message.instanceId);
+        },
+        function(){console.log("Eikon CONTEXT interapp success. ")},
+        function(){console.log("Eikon CONTEXT interapp Fail. ")});
+
+
+    //----
     fin.desktop.InterApplicationBus.subscribe("*",
         "inter_app_messaging",
         function (message, senderUuid) {
@@ -124,6 +163,7 @@ fin.desktop.main(()=>{
                 console.log()
             }
         });
+    //-----
 
     initBlotter().then(function(b){
         // do nothing, if you want the blotter to show automatically blotter.show();
@@ -217,18 +257,16 @@ function initEikon(){
 }
 
 function createEikonWindow(){
-
-    console.log("Create Eikon Window --------------");
     var _eikonPromise = new Promise((resolve, reject)=>{
         blotter = new fin.desktop.Window({
             name: 'Eikon controller',
             url: 'Eikon.html',
             autoShow: true,
-            defaultWidth: 970,
+            defaultWidth: 400,
             maxWidth: 970,
             minWidth: 970,
             maxHeight: 594,
-            defaultHeight: 594,
+            defaultHeight: 400,
             minHeight: 594,
             resizable:true,
             frame: false,
@@ -242,24 +280,10 @@ function createEikonWindow(){
 }
 
 function openEikonInstrumentsAndLinkThem(){
-    eLink.mcLaunchApp("News", 'GOOG.O');
-    eLink.mcLaunchApp("Graph", 'GOOG.O');
-    eLink.mcLaunchApp("Quote Object", 'GOOG.O');
+    // eLink.mcLaunchApp("News", 'GOOG.O');
+    // eLink.mcLaunchApp("Graph", 'GOOG.O');
+    // eLink.mcLaunchApp("Quote Object", 'GOOG.O');
 
-    //-- set time out -- allow the Eikon windows to be created.
-
-    setTimeout(function(){
-        console.log("TIMEOUT -- getting app list...");
-        var _apps = eLink.mclGetAppList().then(function(d){
-            d.map(function(d,i){
-                eLink.mclLinkApp( d.instanceId );
-            });
-
-            var apps2 = eLink.mclGetAppList().then(function(ln){
-                console.log("LINKS ", ln);
-            });
-        });
-    }, 2000);
 }
 
 /* If the blotter has not been created yet, create it and return a promise...*/
@@ -338,13 +362,11 @@ module.exports = React.createClass({
         });
     },
     minApp: function(){
-        console.log("MINIFYING APP.")
         fin.desktop.main(function(){
             fin.desktop.Window.getCurrent().minimize();
         });
     },
     showWindows: function(){
-        console.log("showWindows called");
         animationWindows.forEach((wnd)=>{
             try{
                 wnd.show();
@@ -380,7 +402,6 @@ module.exports = React.createClass({
             this.closeAnimationWindows();
         }else{
             this.openAnimationWindows();
-
         }
     },
     openAnimationWindows:function(){
@@ -396,7 +417,6 @@ module.exports = React.createClass({
         });
     },
     closeAnimationWindows: function(){
-        console.log("closeAnimationWindows -- called")
         this.toggleAnimateLoopStop();
         animationWindows.forEach((wnd)=>{
             wnd.hide();
@@ -470,7 +490,7 @@ module.exports = React.createClass({
             });
         }else{
             blotter.show();
-            blotter.bringToFront();
+            blotter.bringToFront();LIN
         }
     },
     componentDidMount: function(){
