@@ -7,7 +7,8 @@ var React = require('react'),
     excel_plugin_installed = false,
     EikonLink = require('../eikon/EikonLink'),
     eLink,
-    eikonEnums = require('../eikon/EikonEnums');
+    eikonEnums = require('../eikon/EikonEnums')
+    eikonRunning: false;
 
 
 var _windowManager = windowManager.getInstance(),
@@ -103,8 +104,6 @@ fin.desktop.main(()=>{
         function(){console.log("Eikon interapp Fail. ")});
 
     //---
-
-
     fin.desktop.InterApplicationBus.subscribe("*",
         eikonEnums.EIKON_SEND_CONTEXT,
         function (message, uuid) {
@@ -114,6 +113,7 @@ fin.desktop.main(()=>{
         },
         function(){console.log("Eikon CONTEXT interapp success. ")},
         function(){console.log("Eikon CONTEXT interapp Fail. ")});
+
     //--
     fin.desktop.InterApplicationBus.subscribe("*",
         eikonEnums.EIKON_APP_HOVERED,
@@ -182,7 +182,6 @@ fin.desktop.main(()=>{
     initWpfChart();
 });
 
-
 /* Initialises all the floating 'trade' windows. */
 var initAnimationWindows = function(){
     console.log("initAnimationWindows called _tilesCreated == ",_tilesCreated);
@@ -240,9 +239,6 @@ var initAnimationWindows = function(){
 // For Eikon
 
 function initEikon(){
-
-
-
     eLink = new EikonLink();
     eLink.connect().then((value)=>{
         eLink.mclGetAppList().then((lst)=>{
@@ -256,6 +252,13 @@ function initEikon(){
 
 function createEikonWindow(){
     console.log("Create Eikon Window is called .. ");
+
+    fin.desktop.main(()=>{
+        console.log("Create Eikon Window -- OpenFin .. ");
+        fin.desktop.InterApplicationBus.publish(eikonEnums.EIKON_OPEN, {});
+        eikonRunning = true;
+    });
+
     var _eikonPromise = new Promise((resolve, reject)=>{
         blotter = new fin.desktop.Window({
             name: 'Eikon controller',
@@ -379,14 +382,12 @@ module.exports = React.createClass({
             })
         });
         this.animateWindows(animationWindows, false);
-
     },
     toggleMinimised:function(){
         this.state.tilesMaximised ? this.minWindows() : this.restoreWindows();
     },
     minWindows: function() {
         this.toggleAnimateLoopStop();
-
 
         animationWindows.forEach((wnd)=>{
             wnd.minimize();
@@ -569,7 +570,6 @@ module.exports = React.createClass({
     onWorkbookActivateed:function(){
         console.log("EXCEL ON WORKBOOK ACTIVATED CALLED ")
     },
-
 
     getInitialState: function(){
         return {

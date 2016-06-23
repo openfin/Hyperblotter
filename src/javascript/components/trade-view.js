@@ -97,6 +97,20 @@ module.exports = React.createClass({
   	}
   },
   componentDidMount: function(){
+      fin.desktop.main(()=> {
+          fin.desktop.InterApplicationBus.subscribe("*",
+              eikonEnums.EIKON_OPEN,
+              function (message, uuid) {
+                  console.log("TRADE VIEW -- Eikon Event Received: ", message, " uuid ", uuid);
+              },
+              function () {
+                  console.log("Eikon interapp success. ")
+              },
+              function () {
+                  console.log("Eikon interapp Fail. ")
+              });
+        });
+
 
 	  setTimeout(function(){
 		  try{
@@ -121,13 +135,12 @@ module.exports = React.createClass({
         console.log("componentWillUnmount ----- trade-view.js ");
     },
 	render: function(){
-        console.log("RENDERING --- ", this.state.ticker);
 		return (
 			<div className='tile trade-cell' style={this.getTileStyle()}>
 				<div className="window-control" />
 				<div className="banner">
 					<div className="title">
-						RIC: {this.state.ticker}
+						{this.state.ticker}
 						<i className="fa fa-bar-chart" onClick={this.openDetailedChartWindow} />
 					</div>
 
