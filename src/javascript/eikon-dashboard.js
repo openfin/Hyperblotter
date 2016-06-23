@@ -94,6 +94,17 @@ var EikonDashboard = React.createClass({
     componentDidMount:function(){
         eLink = new EikonLink();
         var _this = this;
+        fin.desktop.main(function(){
+            "++++++++++++++ FIN DESKTOP MAIN -- ";
+            fin.desktop.InterApplicationBus.subscribe("*",
+                eikonEnums.EIKON_CLOSED,
+                function (message, uuid) {
+                    var finWindow = fin.desktop.Window.getCurrent();
+                    finWindow.close();
+                },
+                function(){console.log(">>>>>>> Subscribing to CLOSE EVENT . ",eikonEnums.EIKON_CLOSED)},
+                function(){console.log(">>>>>>> FAIL Subscribing to CLOSE EVENT . ",eikonEnums.EIKON_CLOSED)});
+        });
 
         eLink.connect().then((value)=>{
             var intv = setInterval(function(){

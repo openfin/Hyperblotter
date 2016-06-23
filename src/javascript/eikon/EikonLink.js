@@ -1,6 +1,8 @@
 "use strict";
 // 1
-var $ = require('jquery');
+var $ = require('jquery'),
+    eikonEnums = require('../eikon/EikonEnums');
+
 
 var EikonLink = (function (config) {
     //-- callbacks
@@ -163,6 +165,12 @@ var EikonLink = (function (config) {
                     reject();
                 };
                 ws.onclose = ()=> {
+                    console.log("EIKON CLOSED _______________________ >>>>>>>>>>>>>>>");
+
+                    fin.desktop.main(function(){
+                        console.log("The intrapBus callback should happen now.. ")
+                        fin.desktop.InterApplicationBus.publish(eikonEnums.EIKON_CLOSED, {type: eikonEnums.EIKON_CLOSED});
+                    });
                     websocketCallbacks.onWsClose.call(this);
                 };
                 ws.onopen = ()=> {
@@ -204,8 +212,9 @@ var EikonLink = (function (config) {
             });
         },
         mclUnlinkApp: function (targetId) {
-            var url = getUrl();
-            var post = { command: 'unlink', targetInstanceId: targetId };
+            console.log("UNLINK ==== mclLinkApp -- instanceId === ", targetId);
+            var url = this.getUrl();
+            var post = { command: 'unlink', targetInstanceId: targetId};
             requestSxS(url, this.g_token, post).done(function (data) {
                 var text = JSON.stringify(data);
                 if (!data.isSuccess) return;

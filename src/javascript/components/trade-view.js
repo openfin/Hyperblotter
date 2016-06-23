@@ -129,7 +129,6 @@ module.exports = React.createClass({
 					<div className="title">
 						RIC: {this.state.ticker}
 						<i className="fa fa-bar-chart" onClick={this.openDetailedChartWindow} />
-						<i className="fa fa-asterisk nodrag" onClick={this.sendEikonContext} />
 					</div>
 
 
@@ -152,6 +151,9 @@ module.exports = React.createClass({
 							<div className="label">LOW</div>
 							<span className="value">{ (this.state.last - rndRange() - 1).toFixed(2)  }</span>
 						</div>
+                        <div className="eikon-tile-button nodrag">
+                            <img src="images/eikon_logo.png" alt="eikon" onClick={this.sendEikonContext} />
+                        </div>
 
 					</div>
 				</div>

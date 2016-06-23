@@ -118,22 +118,21 @@ fin.desktop.main(()=>{
     fin.desktop.InterApplicationBus.subscribe("*",
         eikonEnums.EIKON_APP_HOVERED,
         function (message, uuid) {
-            console.log("Eikon HOVERED --- message ", message.instanceId);
             eLink.showFeedbackForLinking(message.instanceId);
         },
         function(){console.log("Eikon CONTEXT interapp success. ")},
         function(){console.log("Eikon CONTEXT interapp Fail. ")});
+
     //----
     fin.desktop.InterApplicationBus.subscribe("*",
         eikonEnums.EIKON_APP_UNHOVERED,
         function (message, uuid) {
-            console.log("Eikon UNHOVERED --- message ", message.instanceId);
             eLink.hideFeedbackForLinking(message.instanceId);
         },
         function(){console.log("Eikon CONTEXT interapp success. ")},
         function(){console.log("Eikon CONTEXT interapp Fail. ")});
-    //----
 
+    //----
     fin.desktop.InterApplicationBus.subscribe("*",
         eikonEnums.EIKON_LINK_APP,
         function (message, uuid) {
@@ -147,11 +146,11 @@ fin.desktop.main(()=>{
     fin.desktop.InterApplicationBus.subscribe("*",
         eikonEnums.EIKON_UNLINK_APP,
         function (message, uuid) {
+            console.log("UN-LINK ___________ ", message.instanceId);
             eLink.mclUnlinkApp(message.instanceId);
         },
         function(){console.log("Eikon CONTEXT interapp success. ")},
         function(){console.log("Eikon CONTEXT interapp Fail. ")});
-
 
     //----
     fin.desktop.InterApplicationBus.subscribe("*",
@@ -163,14 +162,13 @@ fin.desktop.main(()=>{
                 console.log()
             }
         });
-    //-----
 
+    //-----
     initBlotter().then(function(b){
         // do nothing, if you want the blotter to show automatically blotter.show();
     });
 
     initAnimationWindows().then(function(val){
-
         fin.desktop.System.addEventListener('monitor-info-changed', function (evnt) {
             console.log("The monitor information has changed to: ", evnt);
             document.dispatchEvent(new CustomEvent('monitor-changed', {'detail': evnt}));
@@ -257,17 +255,18 @@ function initEikon(){
 }
 
 function createEikonWindow(){
+    console.log("Create Eikon Window is called .. ");
     var _eikonPromise = new Promise((resolve, reject)=>{
         blotter = new fin.desktop.Window({
             name: 'Eikon controller',
             url: 'Eikon.html',
             autoShow: true,
             defaultWidth: 400,
-            maxWidth: 970,
-            minWidth: 970,
-            maxHeight: 594,
+            maxWidth: 1400,
+            minWidth: 400,
+            maxHeight: 1400,
             defaultHeight: 400,
-            minHeight: 594,
+            minHeight: 400,
             resizable:true,
             frame: false,
             maximizable: false,

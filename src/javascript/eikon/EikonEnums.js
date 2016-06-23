@@ -5,6 +5,6 @@ module.exports = {  EIKON_EVENT:         "eikonEvent",
                     EIKON_APP_HOVERED:   'eikonAppHovered',
                     EIKON_APP_UNHOVERED: 'eikonAppUnHovered',
                     EIKON_LINK_APP:      "eikonLinApp",
-                    EIKON_UNLINK_APP:    "eikonUnLinApp"
-
+                    EIKON_UNLINK_APP:    "eikonUnLinApp",
+                    EIKON_CLOSED:        "eikonClosed"
                 };
