@@ -1,4 +1,56 @@
-$cellHeight: 20px
+$cellHeight: 15px
+$transWhite: rgba(255,255,255,0.2)
+.eikon-tile-bar
+  display: block
+  height: 30px
+
+.eikon-holder
+  padding: 10px
+  button
+    background-color: $transWhite
+    display: inline-block
+    padding: 6px 12px
+    margin-bottom: 0
+    font-size: 14px
+    font-weight: 400
+    line-height: 1.42857143
+    text-align: center
+    white-space: nowrap
+    vertical-align: middle
+    -ms-touch-action: manipulation
+    touch-action: manipulation
+    cursor: pointer
+    -webkit-user-select: none
+    -moz-user-select: none
+    -ms-user-select: none
+    user-select: none
+    background-image: none
+    border: 1px solid transparent
+    border-radius: 4px
+    margin: 4px
+
+  input
+    display: block
+    width: 80%
+    height: 34px
+    padding: 6px 12px
+    font-size: 14px
+    line-height: 1.42857143
+    color: #ffffff
+    background-color: $transWhite
+    background-image: none
+    border: 1px solid #000000
+    border-radius: 4px
+    margin: 4px
+
+.eikon-header
+  h2
+    font-weight: 100
+    margin: 0 10px
+    float: left
+  img
+    width: 20px
+    float: left
 
 .eikon-dashboard
   font-size: 12px
@@ -16,6 +68,9 @@ $cellHeight: 20px
     color: #ffffff
     height: $cellHeight
 
+.linked
+    background-color: #ff5309 !important
+
 .eikon-cell
   height: $cellHeight
   width: $cellHeight
@@ -23,4 +78,6 @@ $cellHeight: 20px
 
 .eikon-cell-text
   float: left
+
+
 

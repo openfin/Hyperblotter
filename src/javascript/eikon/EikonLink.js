@@ -104,10 +104,16 @@ var EikonLink = (function (config) {
             return new Promise(function (resolve, reject) {
                 var url = 'http://localhost:' + _this.port + '/ping';
                 EikonLink.FetchHttpRequest(url).then(function (r) {
-                    _this.g_activePort = r
+                    _this.g_activePort = r;
                     resolve({ portDiscovered: true, activePort: _this.g_activePort })
                 }).catch((e) => {
                     console.log("There was an Error checking the port");
+
+                    fin.desktop.main(()=> {
+                        console.log("THE FUNCTION HAS BEEN CAUGHT AND EIKON WINDOW WILL NOT OPEN ");
+                        // fin.desktop.InterApplicationBus.publish(eikonEnums.EIKON_CLOSED, {});
+                    });
+
                     reject({ portDiscovered: false, activePort: null })
                 });
             });

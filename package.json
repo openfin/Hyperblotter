@@ -72,6 +72,7 @@
     "xhr-browserify": "0.0.4"
   },
   "dependencies": {
+    "bootstrap-sass": "3.3.6",
     "express": "^4.13.3",
     "jquery": "2.1.4",
     "underscore": "^1.8.3",

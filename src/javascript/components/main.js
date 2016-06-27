@@ -7,8 +7,8 @@ var React = require('react'),
     excel_plugin_installed = false,
     EikonLink = require('../eikon/EikonLink'),
     eLink,
-    eikonEnums = require('../eikon/EikonEnums')
-    eikonRunning: false;
+    eikonEnums = require('../eikon/EikonEnums'),
+    eikonRunning = false;
 
 
 var _windowManager = windowManager.getInstance(),
@@ -52,22 +52,22 @@ var rndData = [
     {ticker: "GOOG.O", last: 21.251049070187836},
     {ticker: "IBM", last: 24.835458631124418},
     {ticker: "AAPL.O", last: 6.235665990223004},
-    {ticker: "BARCH.L", last: 17.01733357355432},
+    {ticker: "BARC.L", last: 17.01733357355432},
     {ticker: "CSGN.S", last: 6.624939800309766},
-    {ticker: "EXR", last: 33.96528484183794},
-    {ticker: "BP", last: 21.19160933461151},
-    {ticker: "WCN", last: 23.501467942817747},
-    {ticker: "CVX", last: 53.67873008625956},
-    {ticker: "ITT", last: 22.803668802786465},
-    {ticker: "BIN", last: 12.594969339431945},
-    {ticker: "WTM", last: 348.8851038882928},
-    {ticker: "FHN", last: 6.624939800309766},
-    {ticker: "CYH", last: 19.131071861657016},
-    {ticker: "SWK", last: 52.198226722926165},
-    {ticker: "AMG", last: 127.23849660464248},
-    {ticker: "BCE", last: 22.765628088640174},
-    {ticker: "ACC", last: 14.787034222549517},
-    {ticker: "AA", last: 13.787034222549517}];
+    {ticker: "UBSG.S", last: 33.96528484183794},
+    {ticker: "F", last: 21.19160933461151},
+    {ticker: "C", last: 23.501467942817747},
+    {ticker: "MSFT.O", last: 53.67873008625956},
+    {ticker: "BAC", last: 22.803668802786465},
+    {ticker: "VOWG_p.DE", last: 12.594969339431945},
+    {ticker: "DBKGn.DE", last: 348.8851038882928},
+    {ticker: "BNPP.PA", last: 6.624939800309766},
+    {ticker: "SKYB.L", last: 19.131071861657016},
+    {ticker: "SAN.MC", last: 52.198226722926165},
+    {ticker: "NFLX.O", last: 127.23849660464248},
+    {ticker: "AMZN.O", last: 22.765628088640174},
+    {ticker: "LLOY.L", last: 14.787034222549517},
+    {ticker: "AMBK.PK", last: 13.787034222549517}];
 
 var floor = Math.floor;
 var random = Math.random;
@@ -82,7 +82,7 @@ function getWorkSheet(workBook, workSheet){
                 ws.filter(function(dd,ii){
                     return dd.name === workSheet
                 }).map(function(ddd,iii){
-                    console.log("THE WORKSHEET IS ", ddd)
+                    console.log("THE WORKSHEET IS ", ddd);
                     ddd.setCells([["a", "b", "c"], [1, 2, 3]], "A1");
                 })
             })
@@ -99,6 +99,15 @@ fin.desktop.main(()=>{
         eikonEnums.EIKON_EVENT,
         function (message, uuid) {
             console.log("Eikon Event Received: ", message," uuid ", uuid);
+        },
+        function(){console.log("Eikon interapp success. ")},
+        function(){console.log("Eikon interapp Fail. ")});
+
+    fin.desktop.InterApplicationBus.subscribe("*",
+        eikonEnums.EIKON_CLOSED,
+        function (message, uuid) {
+            console.log("MAIN -- Eikon Closed called ");
+            eikonRunning = false;
         },
         function(){console.log("Eikon interapp success. ")},
         function(){console.log("Eikon interapp Fail. ")});
@@ -168,6 +177,12 @@ fin.desktop.main(()=>{
         // do nothing, if you want the blotter to show automatically blotter.show();
     });
 
+    onEikonDetected();
+
+    initWpfChart();
+});
+/////// ONCE EIKON has been or not been detected...
+var onEikonDetected = function(){
     initAnimationWindows().then(function(val){
         fin.desktop.System.addEventListener('monitor-info-changed', function (evnt) {
             console.log("The monitor information has changed to: ", evnt);
@@ -178,13 +193,14 @@ fin.desktop.main(()=>{
             console.log("failure: registration of 'monitor-info-changed' " + err);
         });
     });
-
-    initWpfChart();
-});
+}
 
 /* Initialises all the floating 'trade' windows. */
 var initAnimationWindows = function(){
     console.log("initAnimationWindows called _tilesCreated == ",_tilesCreated);
+    //This is a bit of a hack to pass weather Eikon is running
+
+    var _name = eikonRunning ? 'eikon' : 'noeikon' ;
 
     return new Promise(function(resolve, reject){
         if(_tilesCreated){
@@ -196,7 +212,7 @@ var initAnimationWindows = function(){
             var leftOffset = 105, topOffset = 50, top = topOffset, left = leftOffset, tileMargin = 8,  i = 1;
             for (; i < numTiles; i++){
                 animationWindows.push(new fin.desktop.Window({
-                    name: 'tile' + random(),
+                    name: _name+'_' + random(),
                     url: 'trade.html?t=' + rndData[i].ticker + '&l=' + rndData[i].last,
                     autoShow: false,
                     defaultHeight: cubeSize,
@@ -212,6 +228,7 @@ var initAnimationWindows = function(){
                     defaultTop: top,
                     defaultLeft: left,
                     showTaskbarIcon: false,
+                    eikon: false,
                     icon: "http://demoappdirectory.openf.in/desktop/config/apps/OpenFin/HelloOpenFin/img/openfin.ico"
                 }));
 
@@ -243,20 +260,28 @@ function initEikon(){
     eLink.connect().then((value)=>{
         eLink.mclGetAppList().then((lst)=>{
             console.log( "The list -- ", lst );
-            // _appList.setData(lst);
-            openEikonInstrumentsAndLinkThem();
+            //openEikonInstrumentsAndLinkThem();
+            eikonRunning = true;
             createEikonWindow();
+            onEikonDetected();
         });
-    }).catch((err)=>{ console.log("ERROR CAUGHT: ",err)});
+    }).catch((err)=> {
+        console.log("ERROR ------ EIKON ERROR DETECTED");
+        fin.desktop.main(()=> {
+            console.log("THE FUNCTION HAS BEEN CAUGHT AND EIKON WINDOW WILL NOT OPEN ");
+            fin.desktop.InterApplicationBus.publish(eikonEnums.EIKON_UNAVAILABLE, {});
+            eikonRunning = false;
+            onEikonDetected();
+        });
+    })
 }
 
 function createEikonWindow(){
-    console.log("Create Eikon Window is called .. ");
+    console.log("Create Eikon Window is called .. eikonRunning ",eikonRunning);
 
     fin.desktop.main(()=>{
         console.log("Create Eikon Window -- OpenFin .. ");
         fin.desktop.InterApplicationBus.publish(eikonEnums.EIKON_OPEN, {});
-        eikonRunning = true;
     });
 
     var _eikonPromise = new Promise((resolve, reject)=>{
@@ -310,7 +335,7 @@ var initBlotter = function(){
         })
     });
     return _blotterPromise
-}
+};
 
 var initWpfChart = function(){
     fin.desktop.Application.getCurrent().getManifest(function (manifest) {
@@ -324,7 +349,7 @@ var initWpfChart = function(){
             arguments: args
         });
     });
-}
+};
 
 function showAsPromise (wnd) {
     return new Promise((resolve)=>{
@@ -369,8 +394,19 @@ module.exports = React.createClass({
         });
     },
     showWindows: function(){
+        console.log("Eikon running -->>>>>>>>>>>>>> ", eikonRunning);
+
         animationWindows.forEach((wnd)=>{
+            console.log("FOR EACH - Eikon running ++++++++++++ ", eikonRunning);
             try{
+                if(eikonRunning){
+                    wnd.contentWindow.document.body.classList.add('eikon');
+                    wnd.contentWindow.document.body.classList.remove('no-eikon');
+                }else{
+                    wnd.contentWindow.document.body.classList.remove('eikon');
+                    wnd.contentWindow.document.body.classList.add('no-eikon');
+                }
+                console.log(wnd.contentWindow.document.body);
                 wnd.show();
                 wnd.bringToFront();
             }catch(err){
@@ -405,7 +441,7 @@ module.exports = React.createClass({
         }
     },
     openAnimationWindows:function(){
-        console.log(" openAnimationWindows called ");
+        console.log(" openAnimationWindows called eikonRunning === ", eikonRunning);
         initAnimationWindows().then(()=>{
             console.log(" initAnimationWindows resolved ");
             this.showWindows();
@@ -484,16 +520,18 @@ module.exports = React.createClass({
         });
     },
     openBlotter: function(){
+        console.log("OPEN BLOTTER CALLED ")
         if(!blotter){
             initBlotter().then(function(b){
                 blotter.show();
             });
         }else{
             blotter.show();
-            blotter.bringToFront();LIN
+            blotter.bringToFront();
         }
     },
     componentDidMount: function(){
+        var _this = this;
         initEikon();
         console.log('Component did mount...', this);
         var _repositionWindows = function(){
@@ -504,9 +542,19 @@ module.exports = React.createClass({
 
         document.addEventListener('monitor-changed', function(e){
             _repositionWindows();
+        });
+
+        fin.desktop.main(()=>{
+            fin.desktop.InterApplicationBus.subscribe("*",
+                eikonEnums.EIKON_OPEN,
+                function (message, uuid) {
+                    _this.setState({eikonRunning: true});
+
+                },
+                function(){console.log("Eikon CONTEXT interapp success. ")},
+                function(){console.log("Eikon CONTEXT interapp Fail. ")});
         })
     },
-
 
     openExcel: function() {
         console.log("Open Excel called in main excel_plugin_installed = ", excel_plugin_installed)
@@ -575,7 +623,8 @@ module.exports = React.createClass({
         return {
             animationWindowsShowing: false,
             tilesMaximised: false,
-            inLoop : false
+            inLoop: false,
+            eikonRunning: false
         }
     },
     getAnimationWindowsStyle:function(){
@@ -596,7 +645,6 @@ module.exports = React.createClass({
                 "msUserSelect": "none",
                 "userSelect": "none",
                 "pointerEvents": "none"
-
             };
             return {class: _class, style: _style}
         }
@@ -616,6 +664,10 @@ module.exports = React.createClass({
         }else{
             return "";
         }
+    },
+    getEikonStyle:function(){
+        var _display = this.state.eikonRunning ? "block" : "none";
+        return {padding: 0, display: _display}
     },
     getMinifyText:function(){
         if(this.state.animationWindowsShowing ){
@@ -649,6 +701,7 @@ module.exports = React.createClass({
                             <span className='fa fa-th'></span>
                         </TooTip>
                     </i>
+
                     <i onClick={this.toggleShowAnimationWindows} style={this.getMinifyText().style} >
                         <TooTip legend="Close">
                             <span className={this.getMinifyText().icon}></span>
@@ -660,8 +713,8 @@ module.exports = React.createClass({
                             <span className={ this.getAnimateClass().class }></span>
                         </TooTip>
                     </i>
-
                 </div>
+
                 <div>
                     <i onClick={this.openBlotter}>
                         <TooTip legend="Grid">
@@ -669,6 +722,7 @@ module.exports = React.createClass({
                         </TooTip>
                     </i>
                 </div>
+
                 <div>
                     <i onClick={this.openExcel} >
                         <TooTip legend="Excel">
@@ -676,6 +730,15 @@ module.exports = React.createClass({
                         </TooTip>
                     </i>
                 </div>
+
+                <div>
+                    <i style={this.getEikonStyle()} onClick={this.openGithub}>
+                        <TooTip legend="Eikon">
+                            <i><img src="images/eikon_logo.png" alt="Eikon" /></i>
+                        </TooTip>
+                    </i>
+                </div>
+
                 <div>
                     <i onClick={this.openGithub}>
                         <TooTip legend="GitHub">
@@ -683,6 +746,7 @@ module.exports = React.createClass({
                         </TooTip>
                     </i>
                 </div>
+
             </div>
         </div>
     }
