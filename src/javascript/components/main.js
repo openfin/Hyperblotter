@@ -553,6 +553,15 @@ module.exports = React.createClass({
                 },
                 function(){console.log("Eikon CONTEXT interapp success. ")},
                 function(){console.log("Eikon CONTEXT interapp Fail. ")});
+
+            fin.desktop.InterApplicationBus.subscribe("*",
+                eikonEnums.EIKON_CLOSED,
+                function (message, uuid) {
+                    _this.setState({eikonRunning: false});
+                },
+                function(){console.log("Eikon CONTEXT interapp success. ")},
+                function(){console.log("Eikon CONTEXT interapp Fail. ")});
+
         })
     },
 

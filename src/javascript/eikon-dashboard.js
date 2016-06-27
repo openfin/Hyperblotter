@@ -166,9 +166,11 @@ var EikonDashboard = React.createClass({
                             <button onClick={this.newNews} id = "btn btn-primary eikon-news-btt"><i className="fa fa-newspaper-o" aria-hidden="true"></i> News </button>
                             <button onClick={this.newQuote} id = "btn btn-primary eikon-quote-btt"><i className="fa fa-money" aria-hidden="true"></i> Quote</button>
                         </div>
+                        <div className="eikon-app-holder">
                         {this.state.eikonApps.map((d,i)=>{
                             return <AppButton data={d} />
                         })}
+                        </div>
                     </div>
                 </div>
     }
