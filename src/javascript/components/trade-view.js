@@ -79,6 +79,15 @@ module.exports = React.createClass({
             });
         });
     },
+    openEikonNews:function(){
+        var _ticker = this.state.ticker;
+        fin.desktop.main(function(){
+            fin.desktop.InterApplicationBus.publish(eikonEnums.EIKON_OPEN_INSTRUMNT, {
+                RIC: _ticker, instrument: "News", type: eikonEnums.EIKON_OPEN_INSTRUMNT
+            });
+        });
+    },
+
     onEnterFrame:function(){
         console.log("EnterFrame --- ");
     },
@@ -175,7 +184,7 @@ module.exports = React.createClass({
                             <span className="value">{ (this.state.last - rndRange() - 1).toFixed(2)  }</span>
                         </div>
                         <div className="eikon-tile-button nodrag" >
-                            <img src="images/eikon_logo.png" alt="eikon" onClick={this.sendEikonContext} />
+                            <img src="images/eikon_logo.png" alt="eikon" onClick={this.openEikonNews} />
                         </div>
 
                     </div>

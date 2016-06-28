@@ -3,7 +3,6 @@ var React = require('react'),
     eikonEnums = require('../javascript/eikon/EikonEnums'),
     elink;
 
-
 var AppButton = React.createClass({
     /*
      appId: "Graph"
@@ -86,8 +85,10 @@ var EikonDashboard = React.createClass({
             RIC: 'GOOG.O'
         };
     },
-    onClick: function(){
-
+    closeApp: function(){
+        fin.desktop.main(function(){
+            fin.desktop.InterApplicationBus.publish(eikonEnums.EIKON_DASH_CLOSE, { type: eikonEnums.EIKON_APP_HOVERED });
+        });
     },
     refresh:function(){
         var _this = this
@@ -105,7 +106,6 @@ var EikonDashboard = React.createClass({
     newQuote:function(){
         eLink.mcLaunchApp('Quote Object', this.state.RIC);
     },
-
 
     componentDidMount:function(){
         eLink = new EikonLink();
@@ -137,6 +137,9 @@ var EikonDashboard = React.createClass({
             });
         });
     },
+    close:function(){
+
+    },
     inputChange:function(e){
         this.setState({RIC: e.target.value})
     },
@@ -144,13 +147,20 @@ var EikonDashboard = React.createClass({
         this.setState({RIC: ""})
     },
     render: function() {
-        return  <div className="eikon-holder">
-                    <div className={this.state.menuClass}>
+
+        return  <div>
+            <div className="drag-area" >
+                <div className="drag-active-area drag"></div>
+                <i onClick={this.closeApp} className="fa fa-times closer no-drag"></i>
+            </div>
+
+            <div className="eikon-holder">
+
+            <div className="no-drag">
                         <div className='eikon-header'>
                             <div className="eikon-tile-bar">
                                 <img src="images/eikon_logo.png" alt="" />  <h2>Linked to Eikon</h2>
                             </div>
-
 
                             <input value ={this.state.RIC}
                                    onChange={this.inputChange}
@@ -173,6 +183,7 @@ var EikonDashboard = React.createClass({
                         </div>
                     </div>
                 </div>
+        </div>
     }
 });
 

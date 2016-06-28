@@ -14,6 +14,7 @@ var React = require('react'),
 var _windowManager = windowManager.getInstance(),
     animationWindows = _windowManager.getWindows(),
     blotter,
+    eikon_dash,
     inLoop = false,
     cubeSize = 185,
     locations = [],
@@ -107,7 +108,7 @@ fin.desktop.main(()=>{
         eikonEnums.EIKON_CLOSED,
         function (message, uuid) {
             console.log("MAIN -- Eikon Closed called ");
-            eikonRunning = false;
+            // eikonRunning = false;
         },
         function(){console.log("Eikon interapp success. ")},
         function(){console.log("Eikon interapp Fail. ")});
@@ -161,6 +162,16 @@ fin.desktop.main(()=>{
         function(){console.log("Eikon CONTEXT interapp success. ")},
         function(){console.log("Eikon CONTEXT interapp Fail. ")});
 
+
+        //----
+    fin.desktop.InterApplicationBus.subscribe("*",
+        eikonEnums.EIKON_OPEN_INSTRUMNT,
+        function (message, uuid) {
+            eLink.mcLaunchApp(message.instrument, message.RIC);
+        },
+        function(){console.log("Eikon CONTEXT interapp success. ")},
+        function(){console.log("Eikon CONTEXT interapp Fail. ")});
+
     //----
     fin.desktop.InterApplicationBus.subscribe("*",
         "inter_app_messaging",
@@ -178,7 +189,6 @@ fin.desktop.main(()=>{
     });
 
     onEikonDetected();
-
     initWpfChart();
 });
 /////// ONCE EIKON has been or not been detected...
@@ -206,7 +216,6 @@ var initAnimationWindows = function(){
         if(_tilesCreated){
             resolve()
         } else{
-
             _tilesCreated = true;
 
             var leftOffset = 105, topOffset = 50, top = topOffset, left = leftOffset, tileMargin = 8,  i = 1;
@@ -285,22 +294,26 @@ function createEikonWindow(){
     });
 
     var _eikonPromise = new Promise((resolve, reject)=>{
-        blotter = new fin.desktop.Window({
+        eikon_dash = new fin.desktop.Window({
             name: 'Eikon controller',
             url: 'Eikon.html',
-            autoShow: true,
-            defaultWidth: 400,
+            autoShow: false,
+            defaultWidth: 300,
             maxWidth: 1400,
-            minWidth: 400,
+            minWidth: 300,
             maxHeight: 1400,
             defaultHeight: 400,
             minHeight: 400,
             resizable:true,
             frame: false,
             maximizable: false,
-            "icon": "http://demoappdirectory.openf.in/desktop/config/apps/OpenFin/HelloOpenFin/img/openfin.ico"
+            "icon": "http://demoappdirectory.openf.in/desktop/config/apps/OpenFin/HelloOpenFin/img/openfin.ico",
+            "cornerRounding": {
+                "width": 5,
+                "height": 5
+            }
         }, ()=>{
-            resolve();
+            resolve(eikon_dash);
         })
     });
     return _eikonPromise;
@@ -549,7 +562,6 @@ module.exports = React.createClass({
                 eikonEnums.EIKON_OPEN,
                 function (message, uuid) {
                     _this.setState({eikonRunning: true});
-
                 },
                 function(){console.log("Eikon CONTEXT interapp success. ")},
                 function(){console.log("Eikon CONTEXT interapp Fail. ")});
@@ -557,11 +569,22 @@ module.exports = React.createClass({
             fin.desktop.InterApplicationBus.subscribe("*",
                 eikonEnums.EIKON_CLOSED,
                 function (message, uuid) {
-                    _this.setState({eikonRunning: false});
+                    console.log("•••••••••••••••••••••  The Close Event triggered in the Conponent")
+                    // _this.setState({eikonRunning: false});
                 },
                 function(){console.log("Eikon CONTEXT interapp success. ")},
                 function(){console.log("Eikon CONTEXT interapp Fail. ")});
 
+
+
+            fin.desktop.InterApplicationBus.subscribe("*",
+                eikonEnums.EIKON_DASH_CLOSE,
+                function (message, uuid) {
+                    eikon_dash.hide();
+                    // _this.setState({eikonRunning: false});
+                },
+                function(){},
+                function(){});
         })
     },
 
@@ -626,6 +649,9 @@ module.exports = React.createClass({
     },
     onWorkbookActivateed:function(){
         console.log("EXCEL ON WORKBOOK ACTIVATED CALLED ")
+    },
+    openEikon:function(){
+        eikon_dash.show();
     },
 
     getInitialState: function(){
@@ -741,7 +767,7 @@ module.exports = React.createClass({
                 </div>
 
                 <div>
-                    <i style={this.getEikonStyle()} onClick={this.openGithub}>
+                    <i style={this.getEikonStyle()} onClick={this.openEikon}>
                         <TooTip legend="Eikon">
                             <i><img src="images/eikon_logo.png" alt="Eikon" /></i>
                         </TooTip>
