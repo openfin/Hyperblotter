@@ -104,14 +104,14 @@ fin.desktop.main(()=>{
         function(){console.log("Eikon interapp success. ")},
         function(){console.log("Eikon interapp Fail. ")});
 
-    fin.desktop.InterApplicationBus.subscribe("*",
-        eikonEnums.EIKON_CLOSED,
-        function (message, uuid) {
-            console.log("MAIN -- Eikon Closed called ");
-            // eikonRunning = false;
-        },
-        function(){console.log("Eikon interapp success. ")},
-        function(){console.log("Eikon interapp Fail. ")});
+    //fin.desktop.InterApplicationBus.subscribe("*",
+    //    eikonEnums.EIKON_CLOSED,
+    //    function (message, uuid) {
+    //        console.log("MAIN -- Eikon Closed called ");
+    //        // eikonRunning = false;
+    //    },
+    //    function(){console.log("Eikon interapp success. ")},
+    //    function(){console.log("Eikon interapp Fail. ")});
 
     //---
     fin.desktop.InterApplicationBus.subscribe("*",
@@ -562,20 +562,21 @@ module.exports = React.createClass({
                 eikonEnums.EIKON_OPEN,
                 function (message, uuid) {
                     _this.setState({eikonRunning: true});
+                    //-- add the listener for close after the socket is opened
+
+                    fin.desktop.InterApplicationBus.subscribe("*",
+                        eikonEnums.EIKON_CLOSED,
+                        function (message, uuid) {
+                            console.log("•••••••••••••••••••••  The Close Event triggered in the Conponent")
+                            _this.setState({eikonRunning: false});
+                        },
+                        function(){console.log("Eikon CONTEXT interapp success. ")},
+                        function(){console.log("Eikon CONTEXT interapp Fail. ")});
+
+                    //------
                 },
                 function(){console.log("Eikon CONTEXT interapp success. ")},
                 function(){console.log("Eikon CONTEXT interapp Fail. ")});
-
-            fin.desktop.InterApplicationBus.subscribe("*",
-                eikonEnums.EIKON_CLOSED,
-                function (message, uuid) {
-                    console.log("•••••••••••••••••••••  The Close Event triggered in the Conponent")
-                    // _this.setState({eikonRunning: false});
-                },
-                function(){console.log("Eikon CONTEXT interapp success. ")},
-                function(){console.log("Eikon CONTEXT interapp Fail. ")});
-
-
 
             fin.desktop.InterApplicationBus.subscribe("*",
                 eikonEnums.EIKON_DASH_CLOSE,
