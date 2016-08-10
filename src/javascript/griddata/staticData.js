@@ -191,8 +191,9 @@ var countryMap = {
 
 var data = {
     "NAME":[
-        "Exxon Mobil Corp.",
-        "International Business Machines Corp.",
+        "Apple Inc.",
+        "Apple Inc.",
+        //"International Business Machines Corp.",
         "Chevron Corp.",
         "General Electric Co.",
         "Procter & Gamble Co.",
@@ -1114,8 +1115,8 @@ var data = {
         "TCF Financial Corp."
     ],
     "TICKER":[
-        "XOM",
-        "IBM",
+        "AAPL",
+        "AAPL",
         "CVX",
         "GE",
         "PG",

@@ -191,8 +191,8 @@ var countryMap = {
 
 var data = {
    "NAME":[
-      "Exxon Mobil Corp.",
-      "International Business Machines Corp.",
+      "Apple Inc.",
+      "Apple Inc.",
       "Chevron Corp.",
       "General Electric Co.",
       "Procter & Gamble Co.",
@@ -1114,8 +1114,8 @@ var data = {
       "TCF Financial Corp."
    ],
    "TICKER":[
-      "XOM",
-      "IBM",
+      "AAPL",
+      "AAPL",
       "CVX",
       "GE",
       "PG",
@@ -3883,7 +3883,7 @@ var data = {
       "8355"
    ],
    "INDUS":[
-      "Oil & Gas",
+      "Technology",
       "Technology",
       "Oil & Gas",
       "Industrials",
@@ -4806,7 +4806,7 @@ var data = {
       "Financials"
    ],
    "SUP_SEC":[
-      "Oil & Gas",
+      "Technology",
       "Technology",
       "Oil & Gas",
       "Industrial Goods & Services",
@@ -5729,7 +5729,7 @@ var data = {
       "Banks"
    ],
    "SEC":[
-      "Oil & Gas Producers",
+      "Software & Computer Services",
       "Software & Computer Services",
       "Oil & Gas Producers",
       "General Industrials",
@@ -6652,7 +6652,7 @@ var data = {
       "Banks"
    ],
    "SUB_SEC":[
-      "Integrated Oil & Gas",
+      "Computer Services",
       "Computer Services",
       "Integrated Oil & Gas",
       "Diversified Industrials",
@@ -23400,10 +23400,8 @@ var randomizeTick = function(stock) {
             }
       }
 }
- 
+
 module.exports = {
 	stocks: stocks,
 	randomize: randomizeTicks
 };
-
-

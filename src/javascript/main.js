@@ -7,5 +7,3 @@ var _ = require('underscore'),
 //require('./components/orders.js');
 
 React.render(<Main />, document.body);
-
-

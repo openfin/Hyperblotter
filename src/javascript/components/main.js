@@ -25,7 +25,7 @@ var _windowManager = windowManager.getInstance(),
 
 var rndData = [
     {ticker: "PCL", last: 21.251049070187836},
-    {ticker: "IBM", last: 24.835458631124418},
+    {ticker: "AAPL", last: 24.835458631124418},
     {ticker: "TCK", last: 6.235665990223004},
     {ticker: "DBD", last: 17.01733357355432},
     {ticker: "FHN", last: 6.624939800309766},
@@ -95,7 +95,7 @@ fin.desktop.main(()=>{
             console.log("failure: registration of 'monitor-info-changed' " + err);
         });
     });
-	
+
 	initWpfChart();
 });
 
@@ -110,7 +110,7 @@ var initAnimationWindows = function(){
         } else{
 
             _tilesCreated = true;
-            
+
             var leftOffset = 105, topOffset = 50, top = topOffset, left = leftOffset, tileMargin = 8,  i = 1;
             for (; i < numTiles; i++){
                 animationWindows.push(new fin.desktop.Window({
@@ -183,9 +183,9 @@ var initWpfChart = function(){
 	fin.desktop.Application.getCurrent().getManifest(function (manifest) {
 		var version = manifest.runtime.version;
 		var appUuid = manifest.startup_app.uuid;
-		
+
 		var args = '--parentuuid=' + appUuid + ' --runtimeversion=' + version + ' --hidden=true';
-		
+
 		fin.desktop.System.launchExternalProcess({
 			alias: 'hyperblotter-chart',
 			arguments: args
