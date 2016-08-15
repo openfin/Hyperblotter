@@ -1,0 +1,52 @@
+{
+  "startup_app": {
+    "name": "Hyperblotter-eikon",
+    "description": "Hyperblotter Eikon Demo",
+    "url": "http://cdn.openfin.co/demos/hyperblotter-eikon/index.html",
+    "icon": "http://cdn.openfin.co/demos/hyperblotter-eikon/images/hyperblotter_icon.ico",
+    "uuid": "hyperblotter-eikon",
+    "autoShow": true,
+    "defaultWidth": 360,
+    "maxWidth": 360,
+    "minWidth": 360,
+    "maxHeight": 90,
+    "defaultHeight": 90,
+    "minHeight": 90,
+    "defaultTop": 50,
+    "defaultLeft": 10,
+    "resizable": false,
+    "maximizable": false,
+    "frame": false,
+    "alwaysOnTop":true,
+    "cornerRounding": {
+      "width": 5,
+      "height": 5
+    }
+  },
+  "runtime": {
+    "arguments": "",
+    "version": "5.44.9.2"
+  },
+  "appAssets": [
+    {
+      "src": "http://cdn.openfin.co/demos/hyperblotter-eikon/assets/dist.zip",
+      "alias": "excel-dist",
+      "target": "excel.exe",
+      "version": "0.0.1",
+      "args" : "-i -l hyperblotter.xlsx"
+    },
+    {
+      "src": "http://cdn.openfin.co/demos/hyperblotter-eikon/assets/HyperblotterChart.zip",
+      "alias": "hyperblotter-chart",
+      "target": "HyperblotterChart.exe",
+      "version": "1.0.0"
+    }
+  ],
+  "splashScreenImage": "http://cdn.openfin.co/demos/hyperblotter-eikon/images/splashscreen.png",
+  "shortcut": {
+    "company": "OpenFin",
+    "description": "Hyperblotter Demo",
+    "icon": "http://cdn.openfin.co/demos/hyperblotter-eikon/images/hyperblotter_icon.ico",
+    "name": "Hyperblotter Demo"
+  }
+}

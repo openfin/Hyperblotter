@@ -6,6 +6,11 @@
     "type": "git",
     "url": "https://github.com/openfin/Hyperblotter"
   },
+  "scripts": {
+    "deploy" : "aws s3 cp build/ s3://cdn.openfin.co/demos/hyperblotter-eikon/ --recursive --cache-control max-age=60",
+    "start": "grunt",
+    "postinstall": "bower install"
+  },
   "browserify": {
     "transform": [
       "browserify-shim",

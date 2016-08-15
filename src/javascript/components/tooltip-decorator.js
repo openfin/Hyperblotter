@@ -6,7 +6,7 @@ var React = require('react');
 
 var TooltipDecorator =  React.createClass({
     getInitialState:function(){
-        return {showing:false};
+        return {showing:false, width: '56px'};
     },
     getDefaultProps: function(){
         return {legend: "Hello"}
@@ -39,6 +39,7 @@ var TooltipDecorator =  React.createClass({
     getStyle:function(){
         var _opacity = this.state.showing ? .7 : 0;
         var _top = this.state.showing ? "-4px" : "10px";
+        var _width = this.state.width+"px";
 
         return {
             "WebkitTransition": ".5s ease-in-out",
@@ -46,7 +47,8 @@ var TooltipDecorator =  React.createClass({
             "OTransition": ".5s ease-in-out",
             "transition": ".5s ease-in-out",
             opacity:_opacity,
-            top: _top
+            top: _top,
+            width: _width
         }
     },
     /*

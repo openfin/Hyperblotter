@@ -30,7 +30,7 @@ module.exports = {
     dest: dest
   },
   appjson: {
-    src: "app.json",
+    src: "*.json",
     dest: dest
   },
   markup: {

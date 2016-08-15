@@ -178,7 +178,7 @@ var EikonDashboard = React.createClass({
                         </div>
                         <div className="eikon-app-holder">
                         {this.state.eikonApps.map((d,i)=>{
-                            return <AppButton data={d} />
+                            return <AppButton key={i} data={d} />
                         })}
                         </div>
                     </div>

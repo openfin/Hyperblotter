@@ -80,10 +80,10 @@ module.exports = React.createClass({
         });
     },
     openEikonNews:function(){
-        var _ticker = this.state.ticker;
+        var _ric = this.state.RIC;
         fin.desktop.main(function(){
             fin.desktop.InterApplicationBus.publish(eikonEnums.EIKON_OPEN_INSTRUMNT, {
-                RIC: _ticker, instrument: "News", type: eikonEnums.EIKON_OPEN_INSTRUMNT
+                RIC: _ric, instrument: "News", type: eikonEnums.EIKON_OPEN_INSTRUMNT
             });
         });
     },
@@ -122,6 +122,7 @@ module.exports = React.createClass({
             class: 'tile',
             ticker: urlData[0],
             last: Number(urlData[1]),
+            RIC: Number(urlData[2]),
             eikon: true
         }
     },
@@ -147,7 +148,8 @@ module.exports = React.createClass({
         setInterval(()=>{
             this.setState({
                 ticker: urlData[0],
-                last: Number(urlData[1])
+                last: Number(urlData[1]),
+                RIC: String(urlData[2])
             });
         }, 1000 + ( Math.floor(Math.random() * 1000) ) );
     },

@@ -49,7 +49,31 @@ var _old_rndData = [
     {ticker: "ACC", last: 14.787034222549517},
     {ticker: "AA", last: 13.787034222549517}];
 
+
+
 var rndData = [
+                {ticker: "PCL", last: 21.251049070187836,   RIC: "PCL.AX"  },
+                {ticker: "IBM", last: 24.835458631124418,   RIC: "IBM"     },
+                {ticker: "TCK", last: 6.235665990223004,    RIC: "TCKb.TO" },
+                {ticker: "DBD", last: 17.01733357355432,    RIC: "DBD.N"   },
+                {ticker: "FHN", last: 6.624939800309766,    RIC: "FHN.N"   },
+                {ticker: "EXR", last: 33.96528484183794,    RIC: "EXR.N"   },
+                {ticker: "BP",  last: 21.19160933461151,    RIC: "BP.L"    },
+                {ticker: "WCN", last: 23.501467942817747,   RIC: "WCN.TO"  },
+                {ticker: "CVX", last: 53.67873008625956,    RIC: "CVX.N"   },
+                {ticker: "ITT", last: 22.803668802786465,   RIC: "ITT.N"   },
+                {ticker: "BLK", last: 12.594969339431945,   RIC: "BLK.N"   },
+                {ticker: "WTM", last: 348.8851038882928,    RIC: "WTM.N"   },
+                {ticker: "FHN", last: 6.624939800309766,    RIC: "FHN.N"   },
+                {ticker: "CYH", last: 19.131071861657016,   RIC: "CYH.N"   },
+                {ticker: "SWK", last: 52.198226722926165,   RIC: "SWK.F"   },
+                {ticker: "AMG", last: 127.23849660464248,   RIC: "AMG.N"   },
+                {ticker: "BCE", last: 22.765628088640174,   RIC: "BCE.TO"  },
+                {ticker: "ACC", last: 14.787034222549517,   RIC: "ACC.N"   },
+                {ticker: "AA",  last: 13.787034222549517,   RIC: "AA.N"    }
+               ];
+
+var non_ric_rndData = [
     {ticker: "GOOG.O", last: 21.251049070187836},
     {ticker: "IBM", last: 24.835458631124418},
     {ticker: "AAPL.O", last: 6.235665990223004},
@@ -89,7 +113,7 @@ function getWorkSheet(workBook, workSheet){
             })
         });
     });
-    return "TESTING "
+    return "TESTING ";
 }
 
 var _ExcelSheetOpen = false;
@@ -222,7 +246,7 @@ var initAnimationWindows = function(){
             for (; i < numTiles; i++){
                 animationWindows.push(new fin.desktop.Window({
                     name: _name+'_' + random(),
-                    url: 'trade.html?t=' + rndData[i].ticker + '&l=' + rndData[i].last,
+                    url: 'trade.html?t=' + rndData[i].ticker + '&l=' + rndData[i].last +'&r='+ rndData[i].RIC,
                     autoShow: false,
                     defaultHeight: cubeSize,
                     minHeight: cubeSize,
@@ -568,7 +592,7 @@ module.exports = React.createClass({
                         eikonEnums.EIKON_CLOSED,
                         function (message, uuid) {
                             console.log("•••••••••••••••••••••  The Close Event triggered in the Conponent")
-                            _this.setState({eikonRunning: false});
+                           // _this.setState({eikonRunning: false});
                         },
                         function(){console.log("Eikon CONTEXT interapp success. ")},
                         function(){console.log("Eikon CONTEXT interapp Fail. ")});
@@ -667,9 +691,10 @@ module.exports = React.createClass({
         return this.state.animationWindowsShowing ? "none" : "menuitem";
     },
     getAnimateClass:function(){
+        var _this = this;
         if(this.state.animationWindowsShowing && this.state.tilesMaximised){
             var _class = this.state.inLoop ?  "fa fa-pause" : "fa fa-play";
-            return {class: _class , style: {"display": "block"}};
+            return {class: _class , style: {"display": "block", "width": _this.getIconWidth() }};
         } else {
             var _class = this.state.inLoop ? "fa fa-pause" : "fa fa-play";
             var _style = {
@@ -680,17 +705,19 @@ module.exports = React.createClass({
                 "mozUserSelect": "none",
                 "msUserSelect": "none",
                 "userSelect": "none",
-                "pointerEvents": "none"
+                "pointerEvents": "none",
+                "width": _this.getIconWidth()
             };
             return {class: _class, style: _style}
         }
     },
 
     getAnimateParentClass:function(){
+        var _this = this;
         if(this.state.animationWindowsShowing ){
-            return {"display" : "none"};
+            return {"display" : "none", "width": _this.getIconWidth() };
         } else{
-            return {"display":"block"};
+            return {"display":"block", "width": _this.getIconWidth() };
         }
     },
 
@@ -706,8 +733,11 @@ module.exports = React.createClass({
         return {padding: 0, display: _display}
     },
     getMinifyText:function(){
+        var _this = this;
         if(this.state.animationWindowsShowing ){
-            return this.state.tilesMaximised ?  {text: " Minimise", style: {"display" :"block"}, css: "none", icon:"fa fa-sort-amount-desc"} : {text: " Maximise", css: "", style: {"display" :"block"}, icon:"fa fa-sort-amount-asc"};
+            return this.state.tilesMaximised ?
+            {text: " Minimise", style: {"display" :"block",  "width": _this.getIconWidth() }, css: "none", icon:"fa fa-sort-amount-desc"} :
+            {text: " Maximise", css: "", style: {"display" :"block", "width": _this.getIconWidth() }, icon:"fa fa-sort-amount-asc"};
         } else{
             return {text: "Minimise", style: {"display" :"none"}, css: "none", icon:"fa fa-sort-amount-desc"};
         }
@@ -717,6 +747,13 @@ module.exports = React.createClass({
         },function (err) {
             console.log("Failed to open GitHub: " + err);
         });
+    },
+    getIconWidth:function(){
+        return this.state.eikonRunning ? '56px' : '66px';
+    },
+    getIconStyle:function(){
+        var _this = this;
+        return { 'width' : _this.getIconWidth() }
     },
     render: function(){
         return	<div className="main-bar">
@@ -733,35 +770,35 @@ module.exports = React.createClass({
             <div className="content-area">
                 <div>
                     <i onClick={this.openAnimationWindows} style={ this.getAnimateParentClass() }>
-                        <TooTip legend="Launch">
+                        <TooTip width={this.getIconWidth()} legend="Launch">
                             <span className='fa fa-th'></span>
                         </TooTip>
                     </i>
 
                     <i onClick={this.toggleShowAnimationWindows} style={this.getMinifyText().style} >
-                        <TooTip legend="Close">
+                        <TooTip width={this.getIconWidth()} legend="Close">
                             <span className={this.getMinifyText().icon}></span>
                         </TooTip>
                     </i>
 
                     <i onClick={this.toggleAnimateLoop} style={this.getAnimateClass().style} >
-                        <TooTip legend="Animate">
+                        <TooTip width={this.getIconWidth()} legend="Animate">
                             <span className={ this.getAnimateClass().class }></span>
                         </TooTip>
                     </i>
                 </div>
 
                 <div>
-                    <i onClick={this.openBlotter}>
-                        <TooTip legend="Grid">
+                    <i onClick={this.openBlotter} style={this.getIconStyle()}>
+                        <TooTip width={this.getIconWidth()} legend="Grid">
                             <span className="fa fa-table"></span>
                         </TooTip>
                     </i>
                 </div>
 
                 <div>
-                    <i onClick={this.openExcel} >
-                        <TooTip legend="Excel">
+                    <i onClick={this.openExcel} style={this.getIconStyle()} >
+                        <TooTip width={this.getIconWidth()} legend="Excel">
                             <span className="fa fa-file-excel-o"></span>
                         </TooTip>
                     </i>
@@ -769,15 +806,15 @@ module.exports = React.createClass({
 
                 <div>
                     <i style={this.getEikonStyle()} onClick={this.openEikon}>
-                        <TooTip legend="Eikon">
+                        <TooTip width={this.getIconWidth()} legend="Eikon">
                             <i><img src="images/eikon_logo.png" alt="Eikon" /></i>
                         </TooTip>
                     </i>
                 </div>
 
                 <div>
-                    <i onClick={this.openGithub}>
-                        <TooTip legend="GitHub">
+                    <i onClick={this.openGithub} style={this.getIconStyle()} >
+                        <TooTip width={this.getIconWidth()} legend="GitHub">
                             <span className="fa fa-github-alt"></span>
                         </TooTip>
                     </i>
