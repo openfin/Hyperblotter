@@ -64,8 +64,13 @@ module.exports = React.createClass({
 	openDetailedChartWindow: function(){
 		console.log("openDetailedChartWindow [" + this.state.ticker + "]");
 
-		fin.desktop.InterApplicationBus.publish('context', {
-			symbol: this.state.ticker
+	//	fin.desktop.InterApplicationBus.publish('context', {
+	//		symbol: this.state.ticker
+	//	});
+	fin.desktop.InterApplicationBus.send( "PLUGIN","launch",{
+			context:{
+				symbol: this.state.ticker
+			}
 		});
     },
 
