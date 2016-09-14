@@ -67,6 +67,7 @@ function getWorkSheet(workBook, workSheet){
 }
 
 var _ExcelSheetOpen = false;
+var useBloombergData = false;
 
 fin.desktop.main(()=>{
 
@@ -115,7 +116,7 @@ var initAnimationWindows = function(){
             for (; i < numTiles; i++){
                 animationWindows.push(new fin.desktop.Window({
                     name: 'tile' + random(),
-                    url: 'trade.html?t=' + rndData[i].ticker + '&l=' + rndData[i].last,
+                    url: 'trade.html?t=' + rndData[i].ticker + '&l=' + rndData[i].last + '&bloomberg-data=' + useBloombergData,
                     autoShow: false,
                     defaultHeight: cubeSize,
                     minHeight: cubeSize,
@@ -448,7 +449,8 @@ module.exports = React.createClass({
         return {
             animationWindowsShowing: false,
             tilesMaximised: false,
-            inLoop : false
+            inLoop : false,
+            useBloombergData: useBloombergData
         }
     },
     getAnimationWindowsStyle:function(){
@@ -504,6 +506,30 @@ module.exports = React.createClass({
             console.log("Failed to open GitHub: " + err);
         });
     },
+    onBloombergButtonClick: function() {
+        useBloombergData = !useBloombergData;
+        this.setState({
+            useBloombergData: useBloombergData
+        });
+    },
+    getBloombergButtonStyle: function() {
+        if (this.state.useBloombergData === true) {
+            return {
+                color: '#FFF',
+                cursor: 'default'
+            };
+        } else if (this.state.useBloombergData === null) {
+            return {
+                opacity: 0.2,
+                pointerEvents: 'none',
+                cursor: 'default'
+            };
+        } else {
+            return {
+                cursor: 'default'
+            };
+        }
+    },
     render: function(){
         return	<div className="main-bar">
             <image className="openfinLogo" type="image/svg+xml" src="images/hyperblotter_text.svg" />
@@ -547,6 +573,13 @@ module.exports = React.createClass({
                     <i onClick={this.openExcel} >
                         <TooTip legend="Excel">
                             <span className="fa fa-file-excel-o"></span>
+                        </TooTip>
+                    </i>
+                </div>
+                <div>
+                    <i onClick={this.onBloombergButtonClick} style={this.getBloombergButtonStyle()}>
+                        <TooTip legend="Bloomberg">
+                            <span>B</span>
                         </TooTip>
                     </i>
                 </div>
