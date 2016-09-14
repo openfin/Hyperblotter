@@ -17,39 +17,10 @@ var React = require('react'),
       return parseInt(Math.random() * 10) % 2 ? add(base, op) : sub(base, op);
     };
 
+require('./bloomberg-plugin-client.js');
+var bloombergSession; // bloomberg session will be stored here
 
 var urlData = location.search.split('&').map((i)=>{return i.split('=')[1]});
-
-var useBloombergData = JSON.parse(urlData[2]);
-require('./bloomberg-plugin-client.js');
-if (useBloombergData) {
-    let serviceId = 1;
-    let requestId = 2;
-
-    let session = new fin.desktop.Plugins.blpapi.Session();
-
-    session.on('SessionStarted', m => {
-        session.openService('//blp/mktdata', serviceId);
-    });
-
-    session.on('ServiceOpened', m => {
-        if (m.correlations[0].value === serviceId) {
-            session.subscribe([{security: 'AAPL US Equity', correlation: requestId, fields: ['LAST_PRICE', 'BID', 'ASK']}]);
-        }
-    });
-
-    session.on('MarketDataEvents', m => {
-        if (m.correlations[0].value === requestId) {
-            console.log(m.data);
-        }
-    });
-
-    session.on('SessionTerminated', m => {
-        session.destroy();
-    });
-
-    session.start();
-}
 
 module.exports = React.createClass({
 	closeWindow: ()=>{
@@ -76,7 +47,7 @@ module.exports = React.createClass({
         console.log("EnterFrame --- ");
     },
     getBackgroundColor:function(){
-        if (useBloombergData) {
+        if (this.state.useBloombergData) {
             return '#000';
         } else {
             return Math.random() > .5 ? "#ff0000" : "#00DD00";
@@ -89,7 +60,7 @@ module.exports = React.createClass({
         }
     },
     getColorBasedOnPlusMinus: function() {
-        if (!useBloombergData) {
+        if (!this.state.useBloombergData) {
             return {};
         }
         return this.state.plusMinus === '+' ? {color: '#00A500'} : {color: '#FF0000'};
@@ -119,9 +90,58 @@ module.exports = React.createClass({
   	return {
   		class: 'tile',
   		ticker: urlData[0],
-  		last: Number(urlData[1])
+  		last: Number(urlData[1]),
+        useBloombergData: false
   	}
   },
+    componentWillMount: function() {
+        var that = this;
+        fin.desktop.main(()=> {
+            fin.desktop.InterApplicationBus.subscribe('*', 'use bloomberg data', function(m) {
+                that.setState({
+                    useBloombergData: m
+                });
+
+                // Create Bloomberg session and subscribe to data
+                if (m === true) {
+                    var serviceId = 1;
+                    var requestId = 2;
+
+                    bloombergSession = new fin.desktop.Plugins.blpapi.Session();
+
+                    bloombergSession.on('SessionStarted', function(m) {
+                        bloombergSession.openService('//blp/mktdata', serviceId);
+                    });
+
+                    bloombergSession.on('ServiceOpened', function(m) {
+                        if (m.correlations[0].value === serviceId) {
+                            bloombergSession.subscribe([{security: 'AAPL US Equity', correlation: requestId, fields: ['LAST_PRICE', 'BID', 'ASK']}]);
+                        }
+                    });
+
+                    bloombergSession.on('MarketDataEvents', function(m) {
+                        if (m.correlations[0].value === requestId) {
+                            console.log(m.data);
+                        }
+                    });
+
+                    bloombergSession.on('SessionTerminated', function(m) {
+                        bloombergSession.destroy();
+                    });
+
+                    bloombergSession.start();
+                }
+
+                // Destroy Bloomberg session
+                else {
+                    if (bloombergSession !== undefined) {
+                        bloombergSession.destroy();
+                        bloombergSession = undefined;
+                    }
+                }
+            });
+        });
+    },
   componentDidMount: function(){
 
 	  setTimeout(function(){
@@ -150,7 +170,7 @@ module.exports = React.createClass({
 	render: function(){
         // console.log("RENDERING --- ", this.state.ticker);
 		return (
-			<div className={'tile trade-cell' + (useBloombergData ? ' bloomberg' : '')} style={this.getTileStyle()}>
+			<div className={'tile trade-cell' + (this.state.useBloombergData ? ' bloomberg' : '')} style={this.getTileStyle()}>
 				<div className="window-control" />
 				<div className="banner">
 					<div className="title">
@@ -160,21 +180,21 @@ module.exports = React.createClass({
 				</div>
 				<div className="content">
 					<div className="main">
-						<span className={"last" + (useBloombergData ? ' bloomberg' : '')} >{this.state.last.toFixed(2)}</span>
-						<span className="percent-change" style={this.getColorBasedOnPlusMinus()}>{useBloombergData ? '' : this.state.plusMinus}%{ useBloombergData ? '' : rndRange().toFixed(2) }</span>
+						<span className={"last" + (this.state.useBloombergData ? ' bloomberg' : '')} >{ this.state.useBloombergData ? '' : this.state.last.toFixed(2) }</span>
+						<span className="percent-change" style={this.getColorBasedOnPlusMinus()}>{this.state.useBloombergData ? '' : this.state.plusMinus}%{ this.state.useBloombergData ? '' : rndRange().toFixed(2) }</span>
 					</div>
 					<div className="pricing">
 						<div className="price open">
 							<div className="label">OPEN</div>
-							<span className="value">{ useBloombergData ? '' : (this.state.last - rndRange()).toFixed(2) } </span>
+							<span className="value">{ this.state.useBloombergData ? '' : (this.state.last - rndRange()).toFixed(2) } </span>
 						</div>
 						<div className="price high">
 							<div className="label">HIGH</div>
-							<span className="value">{ useBloombergData ? '' : (this.state.last + rndRange()).toFixed(2) }</span>
+							<span className="value">{ this.state.useBloombergData ? '' : (this.state.last + rndRange()).toFixed(2) }</span>
 						</div>
 						<div className="price low">
 							<div className="label">LOW</div>
-							<span className="value">{ useBloombergData ? '' : (this.state.last - rndRange() - 1).toFixed(2)  }</span>
+							<span className="value">{ this.state.useBloombergData ? '' : (this.state.last - rndRange() - 1).toFixed(2)  }</span>
 						</div>
 					</div>
 				</div>

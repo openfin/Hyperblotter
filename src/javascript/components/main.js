@@ -67,7 +67,6 @@ function getWorkSheet(workBook, workSheet){
 }
 
 var _ExcelSheetOpen = false;
-var useBloombergData = false;
 
 fin.desktop.main(()=>{
 
@@ -116,7 +115,7 @@ var initAnimationWindows = function(){
             for (; i < numTiles; i++){
                 animationWindows.push(new fin.desktop.Window({
                     name: 'tile' + random(),
-                    url: 'trade.html?t=' + rndData[i].ticker + '&l=' + rndData[i].last + '&bloomberg-data=' + useBloombergData,
+                    url: 'trade.html?t=' + rndData[i].ticker + '&l=' + rndData[i].last,
                     autoShow: false,
                     defaultHeight: cubeSize,
                     minHeight: cubeSize,
@@ -450,7 +449,7 @@ module.exports = React.createClass({
             animationWindowsShowing: false,
             tilesMaximised: false,
             inLoop : false,
-            useBloombergData: useBloombergData
+            useBloombergData: false
         }
     },
     getAnimationWindowsStyle:function(){
@@ -507,10 +506,13 @@ module.exports = React.createClass({
         });
     },
     onBloombergButtonClick: function() {
-        useBloombergData = !useBloombergData;
+        var useBloombergData = !this.state.useBloombergData;
         this.setState({
             useBloombergData: useBloombergData
         });
+
+        // let all the tiles know whether they should use bloomberg data or display fake one
+        fin.desktop.InterApplicationBus.publish('use bloomberg data', useBloombergData);
     },
     getBloombergButtonStyle: function() {
         if (this.state.useBloombergData === true) {
