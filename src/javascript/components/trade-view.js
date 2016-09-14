@@ -63,7 +63,7 @@ module.exports = React.createClass({
         if (!this.state.useBloombergData) {
             return {};
         }
-        return this.state.plusMinus === '+' ? {color: '#00A500'} : {color: '#FF0000'};
+        return this.state.bloombergData.RT_PX_CHG_PCT_1D >= 0 ? {color: '#00A500'} : {color: '#FF0000'};
     },
     step: function(timestamp){
         if (!start) start = timestamp;
@@ -91,16 +91,32 @@ module.exports = React.createClass({
   		class: 'tile',
   		ticker: urlData[0],
   		last: Number(urlData[1]),
-        useBloombergData: false
+        useBloombergData: false,
+        bloombergData: {
+            LAST_PRICE: 0,
+            RT_PX_CHG_PCT_1D: 0, // Real-Time Price Change 1 Day Percent
+            OPEN: 0,
+            HIGH: 0,
+            LOW: 0
+        }
   	}
   },
     componentWillMount: function() {
+        var ticker = this.state.ticker;
         var that = this;
         fin.desktop.main(()=> {
             fin.desktop.InterApplicationBus.subscribe('*', 'use bloomberg data', function(m) {
                 that.setState({
                     useBloombergData: m
                 });
+
+                // Bloomberg session termination
+                function terminateSession() {
+                    if (bloombergSession !== undefined) {
+                        bloombergSession.destroy();
+                        bloombergSession = undefined;
+                    }
+                }
 
                 // Create Bloomberg session and subscribe to data
                 if (m === true) {
@@ -115,7 +131,11 @@ module.exports = React.createClass({
 
                     bloombergSession.on('ServiceOpened', function(m) {
                         if (m.correlations[0].value === serviceId) {
-                            bloombergSession.subscribe([{security: 'AAPL US Equity', correlation: requestId, fields: ['LAST_PRICE', 'BID', 'ASK']}]);
+                            bloombergSession.subscribe([{
+                                security: ticker + ' US Equity',
+                                correlation: requestId,
+                                fields: ['LAST_PRICE', 'RT_PX_CHG_PCT_1D', 'OPEN', 'HIGH', 'LOW']
+                            }]);
                         }
                     });
 
@@ -125,19 +145,10 @@ module.exports = React.createClass({
                         }
                     });
 
-                    bloombergSession.on('SessionTerminated', function(m) {
-                        bloombergSession.destroy();
-                    });
-
+                    bloombergSession.on('SessionTerminated', terminateSession);
                     bloombergSession.start();
-                }
-
-                // Destroy Bloomberg session
-                else {
-                    if (bloombergSession !== undefined) {
-                        bloombergSession.destroy();
-                        bloombergSession = undefined;
-                    }
+                } else {
+                    terminateSession();
                 }
             });
         });
@@ -180,21 +191,21 @@ module.exports = React.createClass({
 				</div>
 				<div className="content">
 					<div className="main">
-						<span className={"last" + (this.state.useBloombergData ? ' bloomberg' : '')} >{ this.state.useBloombergData ? '' : this.state.last.toFixed(2) }</span>
-						<span className="percent-change" style={this.getColorBasedOnPlusMinus()}>{this.state.useBloombergData ? '' : this.state.plusMinus}%{ this.state.useBloombergData ? '' : rndRange().toFixed(2) }</span>
+						<span className={"last" + (this.state.useBloombergData ? ' bloomberg' : '')} >{ this.state.useBloombergData ? this.state.bloombergData.LAST_PRICE.toFixed(2) : this.state.last.toFixed(2) }</span>
+						<span className="percent-change" style={this.getColorBasedOnPlusMinus()}>{this.state.useBloombergData ? (this.state.bloombergData.RT_PX_CHG_PCT_1D >= 0 ? '+' : '-') : this.state.plusMinus}%{ this.state.useBloombergData ? this.state.bloombergData.RT_PX_CHG_PCT_1D.toFixed(2) : rndRange().toFixed(2) }</span>
 					</div>
 					<div className="pricing">
 						<div className="price open">
 							<div className="label">OPEN</div>
-							<span className="value">{ this.state.useBloombergData ? '' : (this.state.last - rndRange()).toFixed(2) } </span>
+							<span className="value">{ this.state.useBloombergData ? this.state.bloombergData.OPEN.toFixed(2) : (this.state.last - rndRange()).toFixed(2) } </span>
 						</div>
 						<div className="price high">
 							<div className="label">HIGH</div>
-							<span className="value">{ this.state.useBloombergData ? '' : (this.state.last + rndRange()).toFixed(2) }</span>
+							<span className="value">{ this.state.useBloombergData ? this.state.bloombergData.HIGH.toFixed(2) : (this.state.last + rndRange()).toFixed(2) }</span>
 						</div>
 						<div className="price low">
 							<div className="label">LOW</div>
-							<span className="value">{ this.state.useBloombergData ? '' : (this.state.last - rndRange() - 1).toFixed(2)  }</span>
+							<span className="value">{ this.state.useBloombergData ? this.state.bloombergData.LOW.toFixed(2) : (this.state.last - rndRange() - 1).toFixed(2)  }</span>
 						</div>
 					</div>
 				</div>

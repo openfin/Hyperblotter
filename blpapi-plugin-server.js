@@ -8,7 +8,8 @@ app.get('/', (req, res) => res.sendFile('app.html', {root: __dirname}));
 server.listen(5432);
 
 // Plugin
-const blpapi = require('blpapi');
+// const blpapi = require('blpapi');
+const blpapi = require('./blpapi-emulator');
 const sessionArgs = {serverHost: 'localhost', serverPort: 8194};
 const requestTopic = 'plugin-request';
 const responseTopic = 'plugin-response';
