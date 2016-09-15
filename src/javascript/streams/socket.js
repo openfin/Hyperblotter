@@ -49,15 +49,15 @@ function sendSymbol(origName, symbol, destName) {
 }
 
 //this sucks
-socket.on('openfin:socketmesage', function(package) {
-	if(package.message === 'user:join') {
-		socketStream.emit('user:joined', package.data);
-	} else if(package.message === 'user:rollcall') {
+socket.on('openfin:socketmesage', function(pkg) {
+	if(pkg.message === 'user:join') {
+		socketStream.emit('user:joined', pkg.data);
+	} else if(pkg.message === 'user:rollcall') {
 		socketStream.emit('user:rollcall');
-	} else if(package.message === 'user:rollcall:respond') {
-		socketStream.emit('user:joined', package.data);
-	} else if(package.message === 'notification:symbol') {
-		socketStream.emit('notification:symbol', package.data);
+	} else if(pkg.message === 'user:rollcall:respond') {
+		socketStream.emit('user:joined', pkg.data);
+	} else if(pkg.message === 'notification:symbol') {
+		socketStream.emit('notification:symbol', pkg.data);
 	}
 });
 
