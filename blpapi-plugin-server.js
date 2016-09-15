@@ -5,7 +5,7 @@ const server = require('http').Server(app);
 const io = require('socket.io')(server);
 app.use(express.static('./'));
 app.get('/', (req, res) => res.sendFile('app.html', {root: __dirname}));
-server.listen(5432);
+server.listen(5432, '0.0.0.0');
 
 // Plugin
 // const blpapi = require('blpapi');

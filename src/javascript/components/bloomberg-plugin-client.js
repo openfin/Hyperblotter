@@ -2,7 +2,7 @@
 // Bloomberg Plugin Client
 //=====================================================================
 var io = require('socket.io-client');
-var socket = io('http://localhost:5432');
+var socket = io('http://local:5432'); // todo
 const requestTopic = 'plugin-request';
 const responseTopic = 'plugin-response';
 const errorTopic = 'plugin-error';

@@ -21,11 +21,12 @@
       ]
     }
   },
-    "scripts": {
-        "bloomberg": "node blpapi-plugin-server"
-    },
-    "devDependencies": {
-    "babelify": "^6.4.0",
+  "scripts": {
+    "bloomberg": "node blpapi-plugin-server"
+  },
+  "devDependencies": {
+    "babel-preset-es2015": "6.14.0",
+    "babelify": "7.3.0",
     "browser-sync": "^2.7.1",
     "browserify": "^9.0.3",
     "browserify-shim": "^3.8.2",
