@@ -6,6 +6,7 @@ var React = require('react'),
     excel = require("../vendor/ExcelAPI.js"),
     excel_plugin_installed = false;
 
+require('./bloomberg-plugin-client.js');
 
 var _windowManager = windowManager.getInstance(),
     animationWindows = _windowManager.getWindows(),
@@ -368,6 +369,7 @@ module.exports = React.createClass({
     },
     componentDidMount: function(){
         console.log('Component did mount...', this);
+        var that = this;
         var _repositionWindows = function(){
             if(!this.state.inLoop &&  this.state.animationWindowsShowing){
                 this.animateWindows.call(this, animationWindows, false);
@@ -377,6 +379,23 @@ module.exports = React.createClass({
         document.addEventListener('monitor-changed', function(e){
             _repositionWindows();
         })
+
+        // Start this session to monitor connection with Bloomberg.
+        // It will help determine whether Bloomberg is available on the system
+        var bloombergSession = new fin.desktop.Plugins.blpapi.Session();
+        bloombergSession.on('SessionStarted', function(e) {
+            that.setState({bloombergIsAvailable: true});
+        });
+        bloombergSession.on('SessionConnectionUp', function(e) {
+            that.setState({bloombergIsAvailable: true});
+        });
+        bloombergSession.on('SessionStartupFailure', function(e) {
+            that.setState({bloombergIsAvailable: false});
+        });
+        bloombergSession.on('SessionConnectionDown', function(e) {
+            that.setState({bloombergIsAvailable: false});
+        });
+        bloombergSession.start();
     },
 
 
@@ -515,15 +534,16 @@ module.exports = React.createClass({
         fin.desktop.InterApplicationBus.publish('use bloomberg data', useBloombergData);
     },
     getBloombergButtonStyle: function() {
-        if (this.state.useBloombergData === true) {
-            return {
-                color: '#FFF',
-                cursor: 'default'
-            };
-        } else if (this.state.useBloombergData === null) {
+        if (!this.state.bloombergIsAvailable) {
             return {
                 opacity: 0.2,
                 pointerEvents: 'none',
+                cursor: 'default'
+            };
+        }
+        if (this.state.useBloombergData === true) {
+            return {
+                color: '#FFF',
                 cursor: 'default'
             };
         } else {

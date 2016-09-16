@@ -64,7 +64,12 @@ module.exports = React.createClass({
         if (!this.state.useBloombergData || typeof priceChange !== 'number') {
             return {};
         }
-        return priceChange >= 0 ? {color: '#00A500'} : {color: '#FF0000'};
+        if (priceChange > 0) {
+            return {color: '#00A500'};
+        }
+        if (priceChange < 0) {
+            return {color: '#FF0000'};
+        }
     },
     step: function(timestamp){
         if (!start) start = timestamp;
@@ -118,6 +123,7 @@ module.exports = React.createClass({
                         bloombergSession.destroy();
                         bloombergSession = undefined;
                         that.setState({
+                            bloombergFailedToConnect: false,
                             bloombergDataDetected: false
                         });
                     }
@@ -129,6 +135,12 @@ module.exports = React.createClass({
                     var requestId = 2;
 
                     bloombergSession = new fin.desktop.Plugins.blpapi.Session();
+
+                    bloombergSession.on('SessionStartupFailure', function(e) {
+                        that.setState({
+                            bloombergFailedToConnect: true
+                        });
+                    });
 
                     bloombergSession.on('SessionStarted', function(m) {
                         bloombergSession.openService('//blp/mktdata', serviceId);
@@ -223,7 +235,8 @@ module.exports = React.createClass({
 					<div className="main">
 						<span className={"last" + (this.state.useBloombergData ? ' bloomberg' : '')} >{ this.state.useBloombergData ? this.renderBloombergData('LAST_PRICE') : this.state.last.toFixed(2) }</span>
 						<span className="percent-change" style={this.getColorBasedOnPlusMinus()}>{this.state.useBloombergData ? this.renderBloombergPlusMinus(this.state.bloombergData.RT_PX_CHG_PCT_1D) : this.state.plusMinus}%{ this.state.useBloombergData ? this.renderBloombergData('RT_PX_CHG_PCT_1D') : rndRange().toFixed(2) }</span>
-                        <span className="waiting-for-bb-data" style={ (!this.state.useBloombergData || this.state.bloombergDataDetected) ? {display: 'none'} : {} }>Waiting for Bloomberg data...</span>
+                        <span className="bloomberg-messages" style={ (this.state.bloombergFailedToConnect || !this.state.useBloombergData || this.state.bloombergDataDetected) ? {display: 'none'} : {} }>Waiting for Bloomberg data...</span>
+                        <span className="bloomberg-messages" style={ (!this.state.useBloombergData || !this.state.bloombergFailedToConnect) ? {display: 'none'} : {} }>Failed to connect to Bloomberg</span>
 					</div>
 					<div className="pricing">
 						<div className="price open">

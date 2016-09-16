@@ -23,6 +23,5 @@ io.on('connection', socket => {
                 socket.emit(errorTopic, Object.assign(m, {error: err.message}));
             }
         }
-
     });
 });
