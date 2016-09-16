@@ -533,25 +533,6 @@ module.exports = React.createClass({
         // let all the tiles know whether they should use bloomberg data or display fake one
         fin.desktop.InterApplicationBus.publish('use bloomberg data', useBloombergData);
     },
-    getBloombergButtonStyle: function() {
-        if (!this.state.bloombergIsAvailable) {
-            return {
-                opacity: 0.2,
-                pointerEvents: 'none',
-                cursor: 'default'
-            };
-        }
-        if (this.state.useBloombergData === true) {
-            return {
-                color: '#FFF',
-                cursor: 'default'
-            };
-        } else {
-            return {
-                cursor: 'default'
-            };
-        }
-    },
     render: function(){
         return	<div className="main-bar">
             <image className="openfinLogo" type="image/svg+xml" src="images/hyperblotter_text.svg" />
@@ -599,9 +580,9 @@ module.exports = React.createClass({
                     </i>
                 </div>
                 <div>
-                    <i onClick={this.onBloombergButtonClick} style={this.getBloombergButtonStyle()}>
+                    <i onClick={this.onBloombergButtonClick}>
                         <TooTip legend="Bloomberg">
-                            <span>B</span>
+                            <img src="images/bloomberg-logo.png" className={'bloomberg-button' + (!this.state.bloombergIsAvailable ? ' disabled' : (this.state.useBloombergData ? ' active' : ''))}/>
                         </TooTip>
                     </i>
                 </div>

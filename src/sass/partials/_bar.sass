@@ -58,6 +58,16 @@ body
     i:hover
       color: white
 
+    .bloomberg-button
+      width: 25px
+      height: 25px
+      cursor: default
+      &.active
+        box-shadow: 0 0 20px steelblue
+      &.disabled
+        opacity: 0.5
+        pointer-events: none
+
   .window-control
     z-index: 4
     position: relative
