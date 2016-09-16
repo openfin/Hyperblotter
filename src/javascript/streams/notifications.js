@@ -13,7 +13,7 @@ user.on('data', function (usr) {
 socket.on('notification:symbol', function(data) {
 	if (currentUser.name === data.destName) {
 		var notification = new fin.desktop.Notification({
-			url: 'http://local:8080/build/notification.html',
+			url: 'http://localhost:8080/build/notification.html',
 			message: {
 				text : data.origName + ' wants you to look at ',
 				symbol : data.symbol
