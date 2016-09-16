@@ -60,10 +60,11 @@ module.exports = React.createClass({
         }
     },
     getColorBasedOnPlusMinus: function() {
-        if (!this.state.useBloombergData) {
+        let priceChange = this.state.bloombergData.RT_PX_CHG_PCT_1D;
+        if (!this.state.useBloombergData || typeof priceChange !== 'number') {
             return {};
         }
-        return this.state.bloombergData.RT_PX_CHG_PCT_1D >= 0 ? {color: '#00A500'} : {color: '#FF0000'};
+        return priceChange >= 0 ? {color: '#00A500'} : {color: '#FF0000'};
     },
     step: function(timestamp){
         if (!start) start = timestamp;
@@ -92,6 +93,7 @@ module.exports = React.createClass({
   		ticker: urlData[0],
   		last: Number(urlData[1]),
         useBloombergData: false,
+        bloombergDataDetected: false,
         bloombergData: {
             LAST_PRICE: 0,
             RT_PX_CHG_PCT_1D: 0, // Real-Time Price Change 1 Day Percent
@@ -115,6 +117,9 @@ module.exports = React.createClass({
                     if (bloombergSession !== undefined) {
                         bloombergSession.destroy();
                         bloombergSession = undefined;
+                        that.setState({
+                            bloombergDataDetected: false
+                        });
                     }
                 }
 
@@ -141,7 +146,16 @@ module.exports = React.createClass({
 
                     bloombergSession.on('MarketDataEvents', function(m) {
                         if (m.correlations[0].value === requestId) {
-                            console.log(m.data);
+                            that.setState({
+                                bloombergDataDetected: true,
+                                bloombergData: {
+                                    LAST_PRICE: m.data.LAST_PRICE,
+                                    RT_PX_CHG_PCT_1D: m.data.RT_PX_CHG_PCT_1D,
+                                    OPEN: m.data.OPEN,
+                                    HIGH: m.data.HIGH,
+                                    LOW: m.data.LOW
+                                }
+                            });
                         }
                     });
 
@@ -176,10 +190,26 @@ module.exports = React.createClass({
   	}, 1000 + ( Math.floor(Math.random() * 1000) ) );
   },
     componentWillUnmount:function(){
-        // console.log("componentWillUnmount ----- trade-view.js ");
+    },
+    renderBloombergData: function(propName) {
+        let bloombergData = this.state.bloombergData[propName];
+        if (typeof bloombergData !== 'number') {
+            bloombergData = 0;
+        }
+        return bloombergData.toFixed(2);
+    },
+    renderBloombergPlusMinus: function(v) {
+        let result = '';
+        if (typeof v === 'number') {
+            if (v > 0) {
+                result = '+';
+            } else if (v < 0) {
+                result = '-';
+            }
+        }
+        return result;
     },
 	render: function(){
-        // console.log("RENDERING --- ", this.state.ticker);
 		return (
 			<div className={'tile trade-cell' + (this.state.useBloombergData ? ' bloomberg' : '')} style={this.getTileStyle()}>
 				<div className="window-control" />
@@ -191,21 +221,22 @@ module.exports = React.createClass({
 				</div>
 				<div className="content">
 					<div className="main">
-						<span className={"last" + (this.state.useBloombergData ? ' bloomberg' : '')} >{ this.state.useBloombergData ? this.state.bloombergData.LAST_PRICE.toFixed(2) : this.state.last.toFixed(2) }</span>
-						<span className="percent-change" style={this.getColorBasedOnPlusMinus()}>{this.state.useBloombergData ? (this.state.bloombergData.RT_PX_CHG_PCT_1D >= 0 ? '+' : '-') : this.state.plusMinus}%{ this.state.useBloombergData ? this.state.bloombergData.RT_PX_CHG_PCT_1D.toFixed(2) : rndRange().toFixed(2) }</span>
+						<span className={"last" + (this.state.useBloombergData ? ' bloomberg' : '')} >{ this.state.useBloombergData ? this.renderBloombergData('LAST_PRICE') : this.state.last.toFixed(2) }</span>
+						<span className="percent-change" style={this.getColorBasedOnPlusMinus()}>{this.state.useBloombergData ? this.renderBloombergPlusMinus(this.state.bloombergData.RT_PX_CHG_PCT_1D) : this.state.plusMinus}%{ this.state.useBloombergData ? this.renderBloombergData('RT_PX_CHG_PCT_1D') : rndRange().toFixed(2) }</span>
+                        <span className="waiting-for-bb-data" style={ (!this.state.useBloombergData || this.state.bloombergDataDetected) ? {display: 'none'} : {} }>Waiting for Bloomberg data...</span>
 					</div>
 					<div className="pricing">
 						<div className="price open">
 							<div className="label">OPEN</div>
-							<span className="value">{ this.state.useBloombergData ? this.state.bloombergData.OPEN.toFixed(2) : (this.state.last - rndRange()).toFixed(2) } </span>
+							<span className="value">{ this.state.useBloombergData ? this.renderBloombergData('OPEN') : (this.state.last - rndRange()).toFixed(2) } </span>
 						</div>
 						<div className="price high">
 							<div className="label">HIGH</div>
-							<span className="value">{ this.state.useBloombergData ? this.state.bloombergData.HIGH.toFixed(2) : (this.state.last + rndRange()).toFixed(2) }</span>
+							<span className="value">{ this.state.useBloombergData ? this.renderBloombergData('HIGH') : (this.state.last + rndRange()).toFixed(2) }</span>
 						</div>
 						<div className="price low">
 							<div className="label">LOW</div>
-							<span className="value">{ this.state.useBloombergData ? this.state.bloombergData.LOW.toFixed(2) : (this.state.last - rndRange() - 1).toFixed(2)  }</span>
+							<span className="value">{ this.state.useBloombergData ? this.renderBloombergData('LOW') : (this.state.last - rndRange() - 1).toFixed(2)  }</span>
 						</div>
 					</div>
 				</div>
