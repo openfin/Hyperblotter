@@ -2,41 +2,30 @@
 // Bloomberg Plugin Client
 //=====================================================================
 var io = require('socket.io-client');
-var socket = io('http://local:5432'); // todo
-const requestTopic = 'plugin-request';
-const responseTopic = 'plugin-response';
 const errorTopic = 'plugin-error';
-
-let sessions = [];
+const requestTopic = 'plugin-request';
 
 function Session() {
-    this.id = getUuid();
-    this.events = {};
-    sessions.push(this);
-    socket.emit(requestTopic, {functionName: 'newSession', id: this.id});
+    this.callbackId = 0; // helps correlate callbacks when getting responses from the server
+    this.socket = io('http://localhost:5432'); // todo
+    this.socket.on(errorTopic, m => {
+        console.error(m);
+    });
 }
 
 Session.prototype.on = function(event, listener) {
-    let callbackId = getUuid();
-    if (typeof this.events[event] !== 'object') {
-        this.events[event] = {callbacks: {}};
-    }
-    this.events[event].callbacks[callbackId] = listener;
-    socket.emit(requestTopic, {functionName: 'on', id: this.id, callbackId, event});
+    let callbackId = this.callbackId++;
+    this.socket.on(event, m => {
+        if (callbackId === m.callbackId) {
+            listener(m.payload);
+        }
+    });
+    this.socket.emit(requestTopic, {functionName: 'on', callbackId, event});
 };
-socket.on(responseTopic, m => {
-    console.log(m.event, ': ', m.payload); // todo
-
-    let session = sessions.find(e => e.id === m.id);
-    session.events[m.event].callbacks[m.callbackId](m.payload);
-});
-socket.on(errorTopic, m => {
-    console.error(m.error);
-});
 
 function bindInvokeFunction(functionName) {
     return function() {
-        socket.emit(requestTopic, {functionName, id: this.id, args: [...arguments]});
+        this.socket.emit(requestTopic, {functionName, args: [...arguments]});
     }
 }
 Session.prototype.start = bindInvokeFunction('start');
@@ -52,12 +41,3 @@ Session.prototype.request = bindInvokeFunction('request');
 
 fin.desktop.Plugins = {};
 fin.desktop.Plugins.blpapi = {Session};
-
-
-// UUID v4
-function getUuid() {
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-        let r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
-        return v.toString(16);
-    });
-}
