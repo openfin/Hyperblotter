@@ -1,7 +1,7 @@
 // Communication
 const server = require('http').Server();
 const io = require('socket.io')(server);
-server.listen(5432, '0.0.0.0');
+server.listen(8198, '0.0.0.0');
 
 // Plugin
 const blpapi = require('blpapi');
