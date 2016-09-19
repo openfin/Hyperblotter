@@ -4,8 +4,7 @@ const io = require('socket.io')(server);
 server.listen(5432, '0.0.0.0');
 
 // Plugin
-// const blpapi = require('blpapi');
-const blpapi = require('./blpapi-emulator');
+const blpapi = require('blpapi');
 const sessionArgs = {serverHost: 'localhost', serverPort: 8194};
 const requestTopic = 'plugin-request';
 const errorTopic = 'plugin-error';

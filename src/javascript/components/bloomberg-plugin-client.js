@@ -7,7 +7,7 @@ const requestTopic = 'plugin-request';
 
 function Session() {
     this.callbackId = 0; // helps correlate callbacks when getting responses from the server
-    this.socket = io('http://localhost:5432'); // todo
+    this.socket = io('http://localhost:5432');
     this.socket.on(errorTopic, m => {
         console.error(m);
     });
