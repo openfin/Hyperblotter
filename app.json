@@ -44,6 +44,12 @@
               "alias": "hyperblotter-chart",
               "target": "HyperblotterChart.exe",
               "version": "1.0.0"
+            },
+            {
+                "src": "http://cdn.openfin.co/demos/hyperblotter-bloomberg/assets/openfin-plugin-bloomberg.zip",
+                "alias": "bloomberg",
+                "target": "server.bat",
+                "version": "0.0.1"
             }
         ],
     "splashScreenImage": "http://cdn.openfin.co/demos/hyperblotter-bloomberg/images/splashscreen.png",
