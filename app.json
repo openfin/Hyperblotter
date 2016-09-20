@@ -56,9 +56,9 @@
     "__splashScreenImage": "http://localhost:5001/images/splashscreen.png",
     "shortcut": {
         "company": "OpenFin",
-        "description": "Hyperblotter Demo",
+        "description": "Hyperblotter Bloomberg",
         "icon": "http://cdn.openfin.co/demos/hyperblotter-bloomberg/images/hyperblotter_icon.ico",
         "__icon": "http://localhost:5001/images/hyperblotter_icon.ico",
-        "name": "Hyperblotter Demo"
+        "name": "Hyperblotter Bloomberg"
     }
 }
