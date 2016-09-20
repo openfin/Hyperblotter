@@ -96,7 +96,7 @@ fin.desktop.main(()=>{
             console.log("failure: registration of 'monitor-info-changed' " + err);
         });
     });
-	
+
 	initWpfChart();
 });
 
@@ -111,7 +111,7 @@ var initAnimationWindows = function(){
         } else{
 
             _tilesCreated = true;
-            
+
             var leftOffset = 105, topOffset = 50, top = topOffset, left = leftOffset, tileMargin = 8,  i = 1;
             for (; i < numTiles; i++){
                 animationWindows.push(new fin.desktop.Window({
@@ -184,9 +184,9 @@ var initWpfChart = function(){
 	fin.desktop.Application.getCurrent().getManifest(function (manifest) {
 		var version = manifest.runtime.version;
 		var appUuid = manifest.startup_app.uuid;
-		
+
 		var args = '--parentuuid=' + appUuid + ' --runtimeversion=' + version + ' --hidden=true';
-		
+
 		fin.desktop.System.launchExternalProcess({
 			alias: 'hyperblotter-chart',
 			arguments: args
@@ -380,22 +380,58 @@ module.exports = React.createClass({
             _repositionWindows();
         })
 
+        var bloombergPluginServerUuid;
+
+        // Launch bloomberg plugin on the server
+        fin.desktop.main(function() {
+            fin.desktop.System.launchExternalProcess(
+                {
+                    alias: 'bloomberg',
+                    listener: function(m) {
+                        console.log('Listener on Bloomberg plugin server received: ', m);
+                    }
+                },
+                function(m) {
+                    console.log('Bloomberg plugin server launched successfully: ', m);
+                    bloombergPluginServerUuid = m.uuid;
+                    startBloombergSession();
+                },
+                function() {
+                    console.log('An error from Bloomberg plugin server: ', arguments);
+                }
+            );
+
+            fin.desktop.Window.getCurrent().addEventListener('close-requested', function() {
+                if (bloombergPluginServerUuid) {
+                    fin.desktop.System.terminateExternalProcess(bloombergPluginServerUuid, 1000, function() {
+                        console.log('Terminated bloomberg plugin server');
+                        fin.desktop.Application.getCurrent().close(true);
+                    }, function() {
+                        console.log('Failed to terminated bloomberg plugin server');
+                        fin.desktop.Application.getCurrent().close(true);
+                    });
+                }
+            });
+        });
+
         // Start this session to monitor connection with Bloomberg.
         // It will help determine whether Bloomberg is available on the system
-        var bloombergSession = new fin.desktop.Plugins.blpapi.Session();
-        bloombergSession.on('SessionStarted', function(e) {
-            that.setState({bloombergIsAvailable: true});
-        });
-        bloombergSession.on('SessionConnectionUp', function(e) {
-            that.setState({bloombergIsAvailable: true});
-        });
-        bloombergSession.on('SessionStartupFailure', function(e) {
-            that.setState({bloombergIsAvailable: false});
-        });
-        bloombergSession.on('SessionConnectionDown', function(e) {
-            that.setState({bloombergIsAvailable: false});
-        });
-        bloombergSession.start();
+        function startBloombergSession() {
+            var bloombergSession = new fin.desktop.Plugins.blpapi.Session();
+            bloombergSession.on('SessionStarted', function(e) {
+                that.setState({bloombergIsAvailable: true});
+            });
+            bloombergSession.on('SessionConnectionUp', function(e) {
+                that.setState({bloombergIsAvailable: true});
+            });
+            bloombergSession.on('SessionStartupFailure', function(e) {
+                that.setState({bloombergIsAvailable: false});
+            });
+            bloombergSession.on('SessionConnectionDown', function(e) {
+                that.setState({bloombergIsAvailable: false});
+            });
+            bloombergSession.start();
+        }
     },
 
 

@@ -1,33 +1,27 @@
-//=====================================================================
-// Bloomberg Plugin Client
-//=====================================================================
-var io = require('socket.io-client');
+const io = require('socket.io-client');
 const errorTopic = 'plugin-error';
 const requestTopic = 'plugin-request';
 
 function Session() {
-    this.callbackId = 0; // helps correlate callbacks when getting responses from the server
-    this.socket = io('http://localhost:8198');
-    this.socket.on(errorTopic, m => {
-        console.error(m);
+    this.listenerId = 0; // helps correlate listeners when getting responses from the server
+    this.socket = io('http://localhost:8198'); // each session has it's own socket
+    this.socket.on(errorTopic, m => { // receive all exceptions from the server and show them in console
+        console.error('Error from blpapi: ', m.stack);
     });
 }
 
 Session.prototype.on = function(event, listener) {
-    let callbackId = this.callbackId++;
+    let listenerId = this.listenerId++;
     this.socket.on(event, m => {
-        if (callbackId === m.callbackId) {
+        // execute correlated listeners
+        if (listenerId === m.listenerId) {
             listener(m.payload);
         }
     });
-    this.socket.emit(requestTopic, {functionName: 'on', callbackId, event});
+    // tell the server to listen for events
+    this.socket.emit(requestTopic, {functionName: 'on', listenerId, event});
 };
 
-function bindInvokeFunction(functionName) {
-    return function() {
-        this.socket.emit(requestTopic, {functionName, args: [...arguments]});
-    }
-}
 Session.prototype.start = bindInvokeFunction('start');
 Session.prototype.authorize = bindInvokeFunction('authorize');
 Session.prototype.authorizeUser = bindInvokeFunction('authorizeUser');
@@ -39,5 +33,13 @@ Session.prototype.resubscribe = bindInvokeFunction('resubscribe');
 Session.prototype.unsubscribe = bindInvokeFunction('unsubscribe');
 Session.prototype.request = bindInvokeFunction('request');
 
+function bindInvokeFunction(functionName) {
+    return function() {
+        // tell the server to execute a function
+        this.socket.emit(requestTopic, {functionName, args: [...arguments]});
+    }
+}
+
+// todo: temporary namespace for OpenFin plugin architecture
 fin.desktop.Plugins = {};
 fin.desktop.Plugins.blpapi = {Session};
