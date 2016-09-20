@@ -2,9 +2,9 @@
     "startup_app": {
         "name": "Hyperblotter",
         "description": "Hyperblotter Demo",
-        "url": "https://s3.amazonaws.com/cdn.openfin.co/demos/hyperblotter-bloomberg/index.html",
+        "url": "http://s3.amazonaws.com/cdn.openfin.co/demos/hyperblotter-bloomberg/index.html",
         "__url": "http://localhost:5001/index.html?debug",
-        "icon": "https://s3.amazonaws.com/cdn.openfin.co/demos/hyperblotter-bloomberg/images/hyperblotter-bloomberg.ico",
+        "icon": "http://s3.amazonaws.com/cdn.openfin.co/demos/hyperblotter-bloomberg/images/hyperblotter-bloomberg.ico",
         "__icon": "http://localhost:5001/images/hyperblotter-bloomberg.ico",
         "uuid": "hyperblotter",
         "autoShow": true,
@@ -31,7 +31,7 @@
     },
     "appAssets": [
         {
-            "src": "https://s3.amazonaws.com/cdn.openfin.co/demos/hyperblotter-bloomberg/assets/dist.zip",
+            "src": "http://s3.amazonaws.com/cdn.openfin.co/demos/hyperblotter-bloomberg/assets/dist.zip",
             "__src": "http://localhost:5001/assets/dist.zip",
             "alias": "excel-dist",
             "target": "excel.exe",
@@ -39,25 +39,25 @@
             "args" : "-i -l hyperblotter.xlsx"
         },
         {
-            "src": "https://s3.amazonaws.com/cdn.openfin.co/demos/hyperblotter-bloomberg/assets/HyperblotterChart.zip",
+            "src": "http://s3.amazonaws.com/cdn.openfin.co/demos/hyperblotter-bloomberg/assets/HyperblotterChart.zip",
             "__src": "http://localhost:5001/assets/HyperblotterChart.zip",
             "alias": "hyperblotter-chart",
             "target": "HyperblotterChart.exe",
             "version": "1.0.0"
         },
         {
-            "src": "https://s3.amazonaws.com/cdn.openfin.co/demos/hyperblotter-bloomberg/assets/openfin-plugin-bloomberg.zip",
+            "src": "http://s3.amazonaws.com/cdn.openfin.co/demos/hyperblotter-bloomberg/assets/openfin-plugin-bloomberg.zip",
             "alias": "bloomberg",
             "target": "server.bat",
             "version": "0.0.1"
         }
     ],
-    "splashScreenImage": "https://s3.amazonaws.com/cdn.openfin.co/demos/hyperblotter-bloomberg/images/splashscreen.png",
+    "splashScreenImage": "http://s3.amazonaws.com/cdn.openfin.co/demos/hyperblotter-bloomberg/images/splashscreen.png",
     "__splashScreenImage": "http://localhost:5001/images/splashscreen.png",
     "shortcut": {
         "company": "OpenFin",
         "description": "Hyperblotter Bloomberg",
-        "icon": "https://s3.amazonaws.com/cdn.openfin.co/demos/hyperblotter-bloomberg/images/hyperblotter-bloomberg.ico",
+        "icon": "http://s3.amazonaws.com/cdn.openfin.co/demos/hyperblotter-bloomberg/images/hyperblotter-bloomberg.ico",
         "__icon": "http://localhost:5001/images/hyperblotter-bloomberg.ico",
         "name": "Hyperblotter Bloomberg"
     }
