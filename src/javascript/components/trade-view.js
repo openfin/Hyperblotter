@@ -17,6 +17,7 @@ var React = require('react'),
       return parseInt(Math.random() * 10) % 2 ? add(base, op) : sub(base, op);
     };
 
+require('./bloomberg-plugin-client.js');
 var bloombergSession; // bloomberg session will be stored here
 
 var urlData = location.search.split('&').map((i)=>{return i.split('=')[1]});

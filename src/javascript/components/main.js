@@ -6,6 +6,8 @@ var React = require('react'),
     excel = require("../vendor/ExcelAPI.js"),
     excel_plugin_installed = false;
 
+require('./bloomberg-plugin-client.js');
+
 var _windowManager = windowManager.getInstance(),
     animationWindows = _windowManager.getWindows(),
     blotter,
