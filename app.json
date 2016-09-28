@@ -27,7 +27,7 @@
     },
     "runtime": {
         "arguments": "",
-        "version": "beta"
+        "version": "stable"
     },
     "appAssets": [
         {
