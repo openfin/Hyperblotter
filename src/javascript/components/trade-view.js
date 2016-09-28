@@ -20,6 +20,7 @@ var React = require('react'),
 window.io = require('socket.io-client');
 
 var bloombergSession; // bloomberg session will be stored here
+var lastBloombergDataUpdate; // used for throttling console log
 
 var urlData = location.search.split('&').map((i)=>{return i.split('=')[1]});
 
@@ -100,6 +101,7 @@ module.exports = React.createClass({
   		last: Number(urlData[1]),
         useBloombergData: false,
         bloombergDataDetected: false,
+        bloombergIsConnected: false,
         bloombergData: {
             LAST_PRICE: 0,
             RT_PX_CHG_PCT_1D: 0, // Real-Time Price Change 1 Day Percent
@@ -110,73 +112,38 @@ module.exports = React.createClass({
   	}
   },
     componentWillMount: function() {
-        var ticker = this.state.ticker;
         var that = this;
+
         fin.desktop.main(()=> {
+
+            // Know when to show fake or real Bloomberg data
             fin.desktop.InterApplicationBus.subscribe('*', 'use bloomberg data', function(m) {
                 that.setState({
                     useBloombergData: m
                 });
+            });
 
-                // Bloomberg session termination
-                function terminateSession() {
-                    if (bloombergSession !== undefined) {
-                        bloombergSession.destroy();
-                        bloombergSession = undefined;
-                        that.setState({
-                            bloombergFailedToConnect: false,
-                            bloombergDataDetected: false
-                        });
+            // Know if was able to connect to Bloomberg
+            fin.desktop.InterApplicationBus.subscribe('*', 'bloomberg connected', function(m) {
+                that.setState({
+                    bloombergIsConnected: m
+                });
+            });
+
+            // Receive Bloomberg data here
+            fin.desktop.InterApplicationBus.subscribe('*', 'tile' + urlData[2], function(m) {
+                lastBloombergDataUpdate = m;
+
+                that.setState({
+                    bloombergDataDetected: true,
+                    bloombergData: {
+                        LAST_PRICE: m.data.LAST_PRICE || m.data.LAST_PRICE_TDY || m.data.LAST2_TRADE || m.data.LAST_CONTINUOUS_TRADE_PRICE_RT,
+                        RT_PX_CHG_PCT_1D: m.data.RT_PX_CHG_PCT_1D || m.data.RT_PX_CHG_NET_1D,
+                        OPEN: m.data.OPEN || m.data.OPEN_TDY || m.data.OPEN_TRADE_PRICE_REALTIME || m.data.OPEN_TRADE_PRICE_TODAY_RT,
+                        HIGH: m.data.HIGH || m.data.HIGH_TDY || m.data.HIGH_TRADE_PRICE_RT || m.data.HIGH_TRADE_PRICE_TODAY_RT,
+                        LOW: m.data.LOW || m.data.LOW_TDY || m.data.LOW_TRADE_PRICE_RT || m.data.LOW_TRADE_PRICE_TODAY_RT
                     }
-                }
-
-                // Create Bloomberg session and subscribe to data
-                if (m === true) {
-                    var serviceId = 1;
-                    var requestId = 2;
-
-                    bloombergSession = new fin.desktop.Plugins.blpapi.Session();
-
-                    bloombergSession.on('SessionStartupFailure', function(e) {
-                        that.setState({
-                            bloombergFailedToConnect: true
-                        });
-                    });
-
-                    bloombergSession.on('SessionStarted', function(m) {
-                        bloombergSession.openService('//blp/mktdata', serviceId);
-                    });
-
-                    bloombergSession.on('ServiceOpened', function(m) {
-                        if (m.correlations[0].value === serviceId) {
-                            bloombergSession.subscribe([{
-                                security: ticker + ' US Equity',
-                                correlation: requestId,
-                                fields: ['LAST_PRICE', 'RT_PX_CHG_PCT_1D', 'OPEN', 'HIGH', 'LOW']
-                            }]);
-                        }
-                    });
-
-                    bloombergSession.on('MarketDataEvents', function(m) {
-                        if (m.correlations[0].value === requestId) {
-                            that.setState({
-                                bloombergDataDetected: true,
-                                bloombergData: {
-                                    LAST_PRICE: m.data.LAST_PRICE,
-                                    RT_PX_CHG_PCT_1D: m.data.RT_PX_CHG_PCT_1D,
-                                    OPEN: m.data.OPEN,
-                                    HIGH: m.data.HIGH,
-                                    LOW: m.data.LOW
-                                }
-                            });
-                        }
-                    });
-
-                    bloombergSession.on('SessionTerminated', terminateSession);
-                    bloombergSession.start();
-                } else {
-                    terminateSession();
-                }
+                });
             });
         });
     },
@@ -201,6 +168,13 @@ module.exports = React.createClass({
             plusMinus: randomPlusMinus()
   		});
   	}, 1000 + ( Math.floor(Math.random() * 1000) ) );
+
+      setInterval(function() {
+          if (lastBloombergDataUpdate) {
+              console.log('Throttled BB data: ', lastBloombergDataUpdate);
+              lastBloombergDataUpdate = null;
+          }
+      }, 5000);
   },
     componentWillUnmount:function(){
     },
@@ -236,8 +210,8 @@ module.exports = React.createClass({
 					<div className="main">
 						<span className={"last" + (this.state.useBloombergData ? ' bloomberg' : '')} >{ this.state.useBloombergData ? this.renderBloombergData('LAST_PRICE') : this.state.last.toFixed(2) }</span>
 						<span className="percent-change" style={this.getColorBasedOnPlusMinus()}>{this.state.useBloombergData ? this.renderBloombergPlusMinus(this.state.bloombergData.RT_PX_CHG_PCT_1D) : this.state.plusMinus}%{ this.state.useBloombergData ? this.renderBloombergData('RT_PX_CHG_PCT_1D') : rndRange().toFixed(2) }</span>
-                        <span className="bloomberg-messages" style={ (this.state.bloombergFailedToConnect || !this.state.useBloombergData || this.state.bloombergDataDetected) ? {display: 'none'} : {} }>Waiting for Bloomberg data...</span>
-                        <span className="bloomberg-messages" style={ (!this.state.useBloombergData || !this.state.bloombergFailedToConnect) ? {display: 'none'} : {} }>Failed to connect to Bloomberg</span>
+                        <span className="bloomberg-messages" style={ (this.state.useBloombergData && this.state.bloombergIsConnected && !this.state.bloombergDataDetected) ? {} : {display: 'none'} }>Waiting for Bloomberg data...</span>
+                        <span className="bloomberg-messages" style={ (this.state.useBloombergData && !this.state.bloombergIsConnected && !this.state.bloombergDataDetected) ? {} : {display: 'none'} }>No Bloomberg connection</span>
 					</div>
 					<div className="pricing">
 						<div className="price open">

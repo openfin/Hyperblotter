@@ -25,25 +25,25 @@ var _windowManager = windowManager.getInstance(),
 /* Static data for the floating 'trade' animation windows */
 
 var rndData = [
-    {ticker: "PCL", last: 21.251049070187836},
-    {ticker: "IBM", last: 24.835458631124418},
-    {ticker: "TCK", last: 6.235665990223004},
-    {ticker: "DBD", last: 17.01733357355432},
-    {ticker: "FHN", last: 6.624939800309766},
-    {ticker: "EXR", last: 33.96528484183794},
-    {ticker: "BP", last: 21.19160933461151},
-    {ticker: "WCN", last: 23.501467942817747},
-    {ticker: "CVX", last: 53.67873008625956},
-    {ticker: "ITT", last: 22.803668802786465},
-    {ticker: "BIN", last: 12.594969339431945},
-    {ticker: "WTM", last: 348.8851038882928},
-    {ticker: "FHN", last: 6.624939800309766},
-    {ticker: "CYH", last: 19.131071861657016},
-    {ticker: "SWK", last: 52.198226722926165},
-    {ticker: "AMG", last: 127.23849660464248},
-    {ticker: "BCE", last: 22.765628088640174},
-    {ticker: "ACC", last: 14.787034222549517},
-    {ticker: "AA", last: 13.787034222549517}];
+    {ticker: "GOOG", last: 799.70},
+    {ticker: "PCLN", last: 698.54},
+    {ticker: "ISRG", last: 575.04},
+    {ticker: "MA", last: 513.20},
+    {ticker: "AAPL", last: 448.45},
+    {ticker: "WPO", last: 400.75},
+    {ticker: "AZO", last: 375.55},
+    {ticker: "CMG", last: 313.29},
+    {ticker: "AMZN", last: 263.11},
+    {ticker: "BLK", last: 239.92},
+    {ticker: "GWW", last: 226.82},
+    {ticker: "IBM", last: 200.47},
+    {ticker: "CF", last: 199.16},
+    {ticker: "PCP", last: 185.25},
+    {ticker: "NFLX", last: 182.26},
+    {ticker: "RL", last: 172.83},
+    {ticker: "CRM", last: 166.21},
+    {ticker: "BIIB", last: 165.12},
+    {ticker: "VFC", last: 160.36}];
 
 var floor = Math.floor;
 var random = Math.random;
@@ -115,8 +115,8 @@ var initAnimationWindows = function(){
             var leftOffset = 105, topOffset = 50, top = topOffset, left = leftOffset, tileMargin = 8,  i = 1;
             for (; i < numTiles; i++){
                 animationWindows.push(new fin.desktop.Window({
-                    name: 'tile' + random(),
-                    url: 'trade.html?t=' + rndData[i].ticker + '&l=' + rndData[i].last,
+                    name: 'tile' + i,
+                    url: 'trade.html?t=' + rndData[i-1].ticker + '&l=' + rndData[i-1].last + '&tile=' + i,
                     autoShow: false,
                     defaultHeight: cubeSize,
                     minHeight: cubeSize,
@@ -370,6 +370,7 @@ module.exports = React.createClass({
     componentDidMount: function(){
         console.log('Component did mount...', this);
         var that = this;
+        var lastBloombergDataUpdate;
         var _repositionWindows = function(){
             if(!this.state.inLoop &&  this.state.animationWindowsShowing){
                 this.animateWindows.call(this, animationWindows, false);
@@ -404,11 +405,11 @@ module.exports = React.createClass({
 
             fin.desktop.Window.getCurrent().addEventListener('close-requested', function() {
                 if (bloombergPluginServerUuid) {
-                    fin.desktop.System.terminateExternalProcess(bloombergPluginServerUuid, 1000, function() {
+                    fin.desktop.System.terminateExternalProcess(bloombergPluginServerUuid, 2000, true, function() {
                         console.log('Terminated bloomberg plugin server');
                         fin.desktop.Application.getCurrent().close(true);
-                    }, function() {
-                        console.log('Failed to terminated bloomberg plugin server');
+                    }, function(err) {
+                        console.log('Failed to terminated bloomberg plugin server', err);
                         fin.desktop.Application.getCurrent().close(true);
                     });
                 }
@@ -419,20 +420,68 @@ module.exports = React.createClass({
         // It will help determine whether Bloomberg is available on the system
         function startBloombergSession() {
             var bloombergSession = new fin.desktop.Plugins.blpapi.Session();
-            bloombergSession.on('SessionStarted', function(e) {
-                that.setState({bloombergIsAvailable: true});
-            });
-            bloombergSession.on('SessionConnectionUp', function(e) {
-                that.setState({bloombergIsAvailable: true});
-            });
+            var bloombergDataSubList = [];
+
             bloombergSession.on('SessionStartupFailure', function(e) {
-                that.setState({bloombergIsAvailable: false});
+                that.setState({bloombergIsConnected: false});
+                fin.desktop.InterApplicationBus.publish('bloomberg connected', false);
             });
+
             bloombergSession.on('SessionConnectionDown', function(e) {
-                that.setState({bloombergIsAvailable: false});
+                that.setState({bloombergIsConnected: false});
+                fin.desktop.InterApplicationBus.publish('bloomberg connected', false);
             });
+
+            bloombergSession.on('SessionConnectionUp', function(e) {
+                that.setState({bloombergIsConnected: true});
+                fin.desktop.InterApplicationBus.publish('bloomberg connected', true);
+            });
+
+            bloombergSession.on('SessionStarted', function(m) {
+                that.setState({bloombergIsConnected: true});
+                fin.desktop.InterApplicationBus.publish('bloomberg connected', true);
+                bloombergSession.openService('//blp/mktdata', 100);
+            });
+
+            // Create subscriptions list
+            rndData.forEach(function(e, i) {
+                bloombergDataSubList.push({
+                    security: e.ticker + ' US Equity',
+                    correlation: i + 1,
+                    fields: [
+                        // needed
+                        'LAST_PRICE',     'RT_PX_CHG_PCT_1D', 'OPEN',                      'HIGH',                      'LOW',
+                        // backups
+                        'LAST_PRICE_TDY', 'RT_PX_CHG_NET_1D', 'OPEN_TDY',                  'HIGH_TDY',                  'LOW_TDY',
+                        'LAST2_TRADE',                        'OPEN_TRADE_PRICE_REALTIME', 'HIGH_TRADE_PRICE_RT',       'LOW_TRADE_PRICE_RT',
+                        'LAST_CONTINUOUS_TRADE_PRICE_RT',     'OPEN_TRADE_PRICE_TODAY_RT', 'HIGH_TRADE_PRICE_TODAY_RT', 'LOW_TRADE_PRICE_TODAY_RT'
+                    ]
+                });
+            });
+
+            bloombergSession.on('ServiceOpened', function(m) {
+                if (m.correlations[0].value === 100) {
+                    bloombergSession.subscribe(bloombergDataSubList);
+                } else {
+                    console.error('Service opened had wrong correlation value! (Needed 100)', m);
+                }
+            });
+
+            bloombergSession.on('MarketDataEvents', function(m) {
+                lastBloombergDataUpdate = m;
+                fin.desktop.InterApplicationBus.publish('tile' + m.correlations[0].value, m);
+            });
+
             bloombergSession.start();
         }
+
+
+        setInterval(function() {
+            if (lastBloombergDataUpdate) {
+                console.log('Throttled BB data: ', lastBloombergDataUpdate);
+                lastBloombergDataUpdate = null;
+            }
+        }, 5000);
     },
 
 
@@ -619,7 +668,7 @@ module.exports = React.createClass({
                 <div>
                     <i onClick={this.onBloombergButtonClick}>
                         <TooTip legend="Bloomberg">
-                            <img src="images/bloomberg-logo.png" className={'bloomberg-button' + (!this.state.bloombergIsAvailable ? ' disabled' : (this.state.useBloombergData ? ' active' : ''))}/>
+                            <img src="images/bloomberg-logo.png" className={'bloomberg-button' + (!this.state.bloombergIsConnected ? ' disabled' : (this.state.useBloombergData ? ' active' : ''))}/>
                         </TooTip>
                     </i>
                 </div>
