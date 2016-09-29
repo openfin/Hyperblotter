@@ -212,8 +212,8 @@ module.exports = React.createClass({
 					<div className="main">
 						<span className={"last" + (this.state.useBloombergData ? ' bloomberg' : '')} >{ this.state.useBloombergData ? this.state.bloombergData.LAST_TRADE.toFixed(2) : this.state.last.toFixed(2) }</span>
 						<span className="percent-change" style={this.getColorBasedOnPlusMinus()}>{ this.state.useBloombergData ? this.state.bloombergData._change.toFixed(2) : rndRange().toFixed(2) }</span>
-                        <span className="bloomberg-messages" style={ (this.state.useBloombergData && this.state.bloombergIsConnected && !this.state.bloombergDataDetected) ? {} : {display: 'none'} }>Waiting for Bloomberg data...</span>
-                        <span className="bloomberg-messages" style={ (this.state.useBloombergData && !this.state.bloombergIsConnected && !this.state.bloombergDataDetected) ? {} : {display: 'none'} }>No Bloomberg connection</span>
+                        <span className="bloomberg-messages" style={ (this.state.useBloombergData && this.state.bloombergIsConnected && !this.state.bloombergDataDetected) ? {} : {display: 'none'} }>Waiting for data...</span>
+                        <span className="bloomberg-messages" style={ (this.state.useBloombergData && !this.state.bloombergIsConnected) ? {} : {display: 'none'} }>Not connected</span>
 					</div>
 					<div className="pricing">
 						<div className="price open">
