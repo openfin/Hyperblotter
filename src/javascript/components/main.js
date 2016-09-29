@@ -30,7 +30,7 @@ var rndData = [
     {ticker: "ISRG", last: 575.04},
     {ticker: "MA", last: 513.20},
     {ticker: "AAPL", last: 448.45},
-    {ticker: "WPO", last: 400.75},
+    {ticker: "GHC", last: 483.00}, // changed from WPO
     {ticker: "AZO", last: 375.55},
     {ticker: "CMG", last: 313.29},
     {ticker: "AMZN", last: 263.11},
@@ -38,7 +38,7 @@ var rndData = [
     {ticker: "GWW", last: 226.82},
     {ticker: "IBM", last: 200.47},
     {ticker: "CF", last: 199.16},
-    {ticker: "PCP", last: 185.25},
+    {ticker: "CHTR", last: 272.25}, // changed from PCP
     {ticker: "NFLX", last: 182.26},
     {ticker: "RL", last: 172.83},
     {ticker: "CRM", last: 166.21},
