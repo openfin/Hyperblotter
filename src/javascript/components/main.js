@@ -424,22 +424,18 @@ module.exports = React.createClass({
 
             bloombergSession.on('SessionStartupFailure', function(e) {
                 that.setState({bloombergIsConnected: false});
-                fin.desktop.InterApplicationBus.publish('bloomberg connected', false);
             });
 
             bloombergSession.on('SessionConnectionDown', function(e) {
                 that.setState({bloombergIsConnected: false});
-                fin.desktop.InterApplicationBus.publish('bloomberg connected', false);
             });
 
             bloombergSession.on('SessionConnectionUp', function(e) {
                 that.setState({bloombergIsConnected: true});
-                fin.desktop.InterApplicationBus.publish('bloomberg connected', true);
             });
 
             bloombergSession.on('SessionStarted', function(m) {
                 that.setState({bloombergIsConnected: true});
-                fin.desktop.InterApplicationBus.publish('bloomberg connected', true);
                 bloombergSession.openService('//blp/mktdata', 100);
             });
 
