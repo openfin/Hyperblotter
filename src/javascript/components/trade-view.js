@@ -180,6 +180,21 @@ module.exports = React.createClass({
           }
       }, 5000);
   },
+    renderPriceChange() {
+        var priceChange = this.state._change;
+        var isPositive = priceChange > 0;
+
+        priceChange = Math.abs(priceChange);
+        priceChange = priceChange.toFixed(2);
+
+        if (priceChange === "0.00") {
+            return priceChange;
+        } else if (isPositive) {
+            return '+' + priceChange;
+        } else {
+            return '-' + priceChange;
+        }
+    },
 	render: function(){
 		return (
 			<div className={'tile trade-cell' + (this.state.useBloombergData ? ' bloomberg' : '')} style={this.getTileStyle()}>
@@ -193,7 +208,7 @@ module.exports = React.createClass({
 				<div className="content">
 					<div className="main">
 						<span className={"last" + (this.state.useBloombergData ? ' bloomberg' : '')} >{ this.state.useBloombergData ? this.state.LAST_TRADE.toFixed(2) : this.state.last.toFixed(2) }</span>
-						<span className="percent-change" style={this.getColorBasedOnPlusMinus()}>{ this.state.useBloombergData ? this.state._change.toFixed(2) : rndRange().toFixed(2) }</span>
+						<span className="percent-change" style={this.getColorBasedOnPlusMinus()}>{ this.state.useBloombergData ? this.renderPriceChange() : rndRange().toFixed(2) }</span>
                         <span className="bloomberg-messages" style={ (this.state.useBloombergData && !this.state.bloombergDataDetected) ? {} : {display: 'none'} }>Waiting for data...</span>
 					</div>
 					<div className="pricing">
