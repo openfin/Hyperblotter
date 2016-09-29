@@ -46,7 +46,7 @@
             "version": "1.0.0"
         },
         {
-            "src": "http://s3.amazonaws.com/cdn.openfin.co/plugins/openfin-bloomberg/openfin-plugin-bloomberg.zip",
+            "src": "http://s3.amazonaws.com/cdn.openfin.co/plugins/openfin-bloomberg/server.zip",
             "alias": "bloomberg",
             "target": "server.bat",
             "version": "0.0.1"
