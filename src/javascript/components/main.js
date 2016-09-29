@@ -448,14 +448,7 @@ module.exports = React.createClass({
                 bloombergDataSubList.push({
                     security: e.ticker + ' US Equity',
                     correlation: i + 1,
-                    fields: [
-                        // needed
-                        'LAST_PRICE',     'RT_PX_CHG_PCT_1D', 'OPEN',                      'HIGH',                      'LOW',
-                        // backups
-                        'LAST_PRICE_TDY', 'RT_PX_CHG_NET_1D', 'OPEN_TDY',                  'HIGH_TDY',                  'LOW_TDY',
-                        'LAST2_TRADE',                        'OPEN_TRADE_PRICE_REALTIME', 'HIGH_TRADE_PRICE_RT',       'LOW_TRADE_PRICE_RT',
-                        'LAST_CONTINUOUS_TRADE_PRICE_RT',     'OPEN_TRADE_PRICE_TODAY_RT', 'HIGH_TRADE_PRICE_TODAY_RT', 'LOW_TRADE_PRICE_TODAY_RT'
-                    ]
+                    fields: ['LAST_TRADE', 'LAST2_TRADE', 'OPEN', 'HIGH', 'LOW', 'OPEN_TDY', 'HIGH_TDY', 'LOW_TDY']
                 });
             });
 
@@ -468,8 +461,19 @@ module.exports = React.createClass({
             });
 
             bloombergSession.on('MarketDataEvents', function(m) {
-                lastBloombergDataUpdate = m;
-                fin.desktop.InterApplicationBus.publish('tile' + m.correlations[0].value, m);
+                // Prevent sending garbage
+                if (typeof m.data['LAST_TRADE'] === 'number' ||
+                    typeof m.data['LAST2_TRADE'] === 'number' ||
+                    typeof m.data['OPEN'] === 'number' ||
+                    typeof m.data['HIGH'] === 'number' ||
+                    typeof m.data['LOW'] === 'number' ||
+                    typeof m.data['OPEN_TDY'] === 'number' ||
+                    typeof m.data['HIGH_TDY'] === 'number' ||
+                    typeof m.data['LOW_TDY'] === 'number') {
+
+                    lastBloombergDataUpdate = m;
+                    fin.desktop.InterApplicationBus.publish('tile' + m.correlations[0].value, m);
+                }
             });
 
             bloombergSession.start();
