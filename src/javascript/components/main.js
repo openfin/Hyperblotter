@@ -112,46 +112,48 @@ var initAnimationWindows = function(){
 
             _tilesCreated = true;
 
-            var leftOffset = 105, topOffset = 50, top = topOffset, left = leftOffset, tileMargin = 8,  i = 1;
-            for (; i < numTiles; i++){
-                animationWindows.push(new fin.desktop.Window({
-                    name: 'tile' + i,
-                    url: 'trade.html?t=' + rndData[i-1].ticker + '&l=' + rndData[i-1].last + '&tile=' + i,
-                    autoShow: false,
-                    defaultHeight: cubeSize,
-                    minHeight: cubeSize,
-                    maxHeight:cubeSize,
-                    defaultWidth: cubeSize,
-                    minWidth:cubeSize,
-                    maxWidth:cubeSize,
-                    resizable:false,
-                    frame: false,
-                    maximizable: false,
-                    saveWindowState: false,
-                    defaultTop: top,
-                    defaultLeft: left,
-                    showTaskbarIcon: false,
-                    icon: "http://demoappdirectory.openf.in/desktop/config/apps/OpenFin/HelloOpenFin/img/openfin.ico"
-                }));
+            fin.desktop.main(()=> {
+                var leftOffset = 105, topOffset = 50, top = topOffset, left = leftOffset, tileMargin = 8, i = 1;
+                for (; i < numTiles; i++) {
+                    animationWindows.push(new fin.desktop.Window({
+                        name: 'tile' + i,
+                        url: 'trade.html?t=' + rndData[i - 1].ticker + '&l=' + rndData[i - 1].last + '&tile=' + i,
+                        autoShow: false,
+                        defaultHeight: cubeSize,
+                        minHeight: cubeSize,
+                        maxHeight: cubeSize,
+                        defaultWidth: cubeSize,
+                        minWidth: cubeSize,
+                        maxWidth: cubeSize,
+                        resizable: false,
+                        frame: false,
+                        maximizable: false,
+                        saveWindowState: false,
+                        defaultTop: top,
+                        defaultLeft: left,
+                        showTaskbarIcon: false,
+                        icon: "http://demoappdirectory.openf.in/desktop/config/apps/OpenFin/HelloOpenFin/img/openfin.ico"
+                    }));
 
-                locations.push({
-                    top: top,
-                    left: left,
-                    duration: 1000
-                });
+                    locations.push({
+                        top: top,
+                        left: left,
+                        duration: 1000
+                    });
 
-                left += cubeSize + tileMargin;
+                    left += cubeSize + tileMargin;
 
-                if (i && !(i % numColumns)) {
-                    left = leftOffset;
-                    top += cubeSize + tileMargin;
+                    if (i && !(i % numColumns)) {
+                        left = leftOffset;
+                        top += cubeSize + tileMargin;
+                    }
+                    if (i === numTiles - 1) {
+                        console.log(" _tilesCreated === true");
+                        _tilesCreated = true;
+                        resolve();
+                    }
                 }
-                if(i === numTiles-1){
-                    console.log(" _tilesCreated === true");
-                    _tilesCreated = true;
-                    resolve();
-                }
-            }
+            });
         }
     });
 };
@@ -381,107 +383,108 @@ module.exports = React.createClass({
             _repositionWindows();
         })
 
-        var bloombergPluginServerUuid;
+        initAnimationWindows().then(function(val) {
+            var bloombergPluginServerUuid;
 
-        // Launch bloomberg plugin on the server
-        fin.desktop.main(function() {
-            fin.desktop.System.launchExternalProcess(
-                {
-                    alias: 'bloomberg',
-                    arguments: '--log',
-                    listener: function(m) {
-                        console.log('Listener on Bloomberg plugin server received: ', m);
+            // Launch bloomberg plugin on the server
+            fin.desktop.main(function() {
+                fin.desktop.System.launchExternalProcess(
+                    {
+                        alias: 'bloomberg',
+                        arguments: '--log',
+                        listener: function(m) {
+                            console.log('Listener on Bloomberg plugin server received: ', m);
+                        }
+                    },
+                    function(m) {
+                        console.log('Bloomberg plugin server launched successfully: ', m);
+                        bloombergPluginServerUuid = m.uuid;
+                        startBloombergSession();
+                    },
+                    function() {
+                        console.log('An error from Bloomberg plugin server: ', arguments);
                     }
-                },
-                function(m) {
-                    console.log('Bloomberg plugin server launched successfully: ', m);
-                    bloombergPluginServerUuid = m.uuid;
-                    startBloombergSession();
-                },
-                function() {
-                    console.log('An error from Bloomberg plugin server: ', arguments);
-                }
-            );
+                );
 
-            fin.desktop.Window.getCurrent().addEventListener('close-requested', function() {
-                if (bloombergPluginServerUuid) {
-                    fin.desktop.System.terminateExternalProcess(bloombergPluginServerUuid, 2000, true, function() {
-                        console.log('Terminated bloomberg plugin server');
-                        fin.desktop.Application.getCurrent().close(true);
-                    }, function(err) {
-                        console.log('Failed to terminated bloomberg plugin server', err);
-                        fin.desktop.Application.getCurrent().close(true);
-                    });
-                }
-            });
-        });
-
-        // Start this session to monitor connection with Bloomberg.
-        // It will help determine whether Bloomberg is available on the system
-        function startBloombergSession() {
-            var bloombergSession = new fin.desktop.Plugins.blpapi.Session();
-            var bloombergDataSubList = [];
-
-            bloombergSession.on('SessionStartupFailure', function(e) {
-                that.setState({bloombergIsConnected: false});
-            });
-
-            bloombergSession.on('SessionConnectionDown', function(e) {
-                that.setState({bloombergIsConnected: false});
-            });
-
-            bloombergSession.on('SessionConnectionUp', function(e) {
-                that.setState({bloombergIsConnected: true});
-            });
-
-            bloombergSession.on('SessionStarted', function(m) {
-                that.setState({bloombergIsConnected: true});
-                bloombergSession.openService('//blp/mktdata', 100);
-            });
-
-            // Create subscriptions list
-            rndData.forEach(function(e, i) {
-                bloombergDataSubList.push({
-                    security: e.ticker + ' US Equity',
-                    correlation: i + 1,
-                    fields: ['LAST_TRADE', 'LAST2_TRADE', 'OPEN', 'HIGH', 'LOW', 'OPEN_TDY', 'HIGH_TDY', 'LOW_TDY']
+                fin.desktop.Window.getCurrent().addEventListener('close-requested', function() {
+                    if (bloombergPluginServerUuid) {
+                        fin.desktop.System.terminateExternalProcess(bloombergPluginServerUuid, 2000, true, function() {
+                            console.log('Terminated bloomberg plugin server');
+                            fin.desktop.Application.getCurrent().close(true);
+                        }, function(err) {
+                            console.log('Failed to terminated bloomberg plugin server', err);
+                            fin.desktop.Application.getCurrent().close(true);
+                        });
+                    }
                 });
             });
 
-            bloombergSession.on('ServiceOpened', function(m) {
-                if (m.correlations[0].value === 100) {
-                    bloombergSession.subscribe(bloombergDataSubList);
-                } else {
-                    console.error('Service opened had wrong correlation value! (Needed 100)', m);
-                }
-            });
+            // Start this session to monitor connection with Bloomberg.
+            // It will help determine whether Bloomberg is available on the system
+            function startBloombergSession() {
+                var bloombergSession = new fin.desktop.Plugins.blpapi.Session();
+                var bloombergDataSubList = [];
 
-            bloombergSession.on('MarketDataEvents', function(m) {
-                // Prevent sending garbage
-                if (typeof m.data['LAST_TRADE'] === 'number' ||
-                    typeof m.data['LAST2_TRADE'] === 'number' ||
-                    typeof m.data['OPEN'] === 'number' ||
-                    typeof m.data['HIGH'] === 'number' ||
-                    typeof m.data['LOW'] === 'number' ||
-                    typeof m.data['OPEN_TDY'] === 'number' ||
-                    typeof m.data['HIGH_TDY'] === 'number' ||
-                    typeof m.data['LOW_TDY'] === 'number') {
+                bloombergSession.on('SessionStartupFailure', function(e) {
+                    that.setState({bloombergIsConnected: false});
+                });
 
-                    lastBloombergDataUpdate = m;
-                    fin.desktop.InterApplicationBus.publish('tile' + m.correlations[0].value, m);
-                }
-            });
+                bloombergSession.on('SessionConnectionDown', function(e) {
+                    that.setState({bloombergIsConnected: false});
+                });
 
-            bloombergSession.start();
-        }
+                bloombergSession.on('SessionConnectionUp', function(e) {
+                    that.setState({bloombergIsConnected: true});
+                });
 
+                bloombergSession.on('SessionStarted', function(m) {
+                    that.setState({bloombergIsConnected: true});
+                    bloombergSession.openService('//blp/mktdata', 100);
+                });
 
-        setInterval(function() {
-            if (lastBloombergDataUpdate) {
-                console.log('Throttled BB data: ', lastBloombergDataUpdate);
-                lastBloombergDataUpdate = null;
+                // Create subscriptions list
+                rndData.forEach(function(e, i) {
+                    bloombergDataSubList.push({
+                        security: e.ticker + ' US Equity',
+                        correlation: i + 1,
+                        fields: ['LAST_TRADE', 'LAST2_TRADE', 'OPEN', 'HIGH', 'LOW', 'OPEN_TDY', 'HIGH_TDY', 'LOW_TDY']
+                    });
+                });
+
+                bloombergSession.on('ServiceOpened', function(m) {
+                    if (m.correlations[0].value === 100) {
+                        bloombergSession.subscribe(bloombergDataSubList);
+                    } else {
+                        console.error('Service opened had wrong correlation value! (Needed 100)', m);
+                    }
+                });
+
+                bloombergSession.on('MarketDataEvents', function(m) {
+                    // Prevent sending garbage
+                    if (typeof m.data['LAST_TRADE'] === 'number' ||
+                        typeof m.data['OPEN'] === 'number' ||
+                        typeof m.data['HIGH'] === 'number' ||
+                        typeof m.data['LOW'] === 'number' ||
+                        typeof m.data['OPEN_TDY'] === 'number' ||
+                        typeof m.data['HIGH_TDY'] === 'number' ||
+                        typeof m.data['LOW_TDY'] === 'number') {
+
+                        lastBloombergDataUpdate = m;
+                        fin.desktop.InterApplicationBus.publish('tile' + m.correlations[0].value, m);
+                    }
+                });
+
+                bloombergSession.start();
             }
-        }, 5000);
+
+
+            setInterval(function() {
+                if (lastBloombergDataUpdate) {
+                    console.log('Throttled BB data: ', lastBloombergDataUpdate);
+                    lastBloombergDataUpdate = null;
+                }
+            }, 5000);
+        });
     },
 
 

@@ -15,6 +15,9 @@ var React = require('react'),
     },
     plusMinus = function(base, op){
       return parseInt(Math.random() * 10) % 2 ? add(base, op) : sub(base, op);
+    },
+    round2 = function(num) {
+        return Math.round(num * 100) / 100;
     };
 
 window.io = require('socket.io-client');
@@ -62,8 +65,8 @@ module.exports = React.createClass({
     },
     getColorBasedOnPlusMinus: function() {
         let priceChange = this.state._change;
-        if (!this.state.useBloombergData) {
-            return {};
+        if (!this.state.useBloombergData || priceChange === 0) {
+            return {color: 'inherit'};
         }
         if (priceChange > 0) {
             return {color: '#00A500'};
@@ -136,17 +139,30 @@ module.exports = React.createClass({
                 bbLow = m.data.LOW_TDY || m.data.LOW;
 
                 if (typeof bbOpen === 'number') {
-                    that.setState({OPEN: bbOpen});
+                    that.setState({OPEN: round2(bbOpen)});
                 }
                 if (typeof bbHigh === 'number') {
-                    that.setState({HIGH: bbHigh});
+                    that.setState({HIGH: round2(bbHigh)});
                 }
                 if (typeof bbLow === 'number') {
-                    that.setState({LOW: bbLow});
+                    that.setState({LOW: round2(bbLow)});
                 }
-                if (typeof m.data.LAST_TRADE === 'number' && typeof m.data.LAST2_TRADE === 'number') {
-                    that.setState({LAST_TRADE: m.data.LAST_TRADE});
-                    that.setState({_change: m.data.LAST_TRADE - m.data.LAST2_TRADE});
+                if (typeof m.data.LAST_TRADE === 'number') {
+                    // Round it here to show proper change with 2 decimals
+                    var lastTrade = round2(m.data.LAST_TRADE);
+
+                    if (that.state.LAST_TRADE === 0) {
+                        // Initial _change where we don't have previous price
+                        if (typeof m.data.LAST2_TRADE === 'number') {
+                            that.setState({_change: round2(lastTrade - m.data.LAST2_TRADE)});
+                        }
+                    } else {
+                        // Use previous price to calculate change
+                        that.setState({_change: round2(lastTrade - that.state.LAST_TRADE)});
+                    }
+
+                    // important!: keep it here to update last, need to calculate _change before this update
+                    that.setState({LAST_TRADE: lastTrade});
                 }
             });
         });
@@ -180,19 +196,14 @@ module.exports = React.createClass({
           }
       }, 5000);
   },
-    renderPriceChange() {
+    renderPlusMinus() {
         var priceChange = this.state._change;
-        var isPositive = priceChange > 0;
-
-        priceChange = Math.abs(priceChange);
-        priceChange = priceChange.toFixed(2);
-
-        if (priceChange === "0.00") {
-            return priceChange;
-        } else if (isPositive) {
-            return '+' + priceChange;
+        if (priceChange === 0) {
+            return '';
+        } else if (priceChange > 0) {
+            return '+';
         } else {
-            return '-' + priceChange;
+            return '-';
         }
     },
 	render: function(){
@@ -208,7 +219,10 @@ module.exports = React.createClass({
 				<div className="content">
 					<div className="main">
 						<span className={"last" + (this.state.useBloombergData ? ' bloomberg' : '')} >{ this.state.useBloombergData ? this.state.LAST_TRADE.toFixed(2) : this.state.last.toFixed(2) }</span>
-						<span className="percent-change" style={this.getColorBasedOnPlusMinus()}>{ this.state.useBloombergData ? this.renderPriceChange() : rndRange().toFixed(2) }</span>
+						<span className="percent-change" style={this.getColorBasedOnPlusMinus()}>
+                            <span>{this.renderPlusMinus()}</span>
+                            <span className="price-change-number">{ this.state.useBloombergData ? Math.abs(this.state._change).toFixed(2) : rndRange().toFixed(2) }</span>
+                        </span>
                         <span className="bloomberg-messages" style={ (this.state.useBloombergData && !this.state.bloombergDataDetected) ? {} : {display: 'none'} }>Waiting for data...</span>
 					</div>
 					<div className="pricing">
