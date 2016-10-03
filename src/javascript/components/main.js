@@ -422,7 +422,7 @@ module.exports = React.createClass({
             // Start this session to monitor connection with Bloomberg.
             // It will help determine whether Bloomberg is available on the system
             function startBloombergSession() {
-                var bloombergSession = new fin.desktop.Plugins.blpapi.Session();
+                var bloombergSession = new fin.desktop.Plugins['openfin-bloomberg'].Session();
                 var bloombergDataSubList = [];
 
                 bloombergSession.on('SessionStartupFailure', function(e) {
