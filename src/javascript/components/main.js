@@ -391,7 +391,6 @@ module.exports = React.createClass({
                 fin.desktop.System.launchExternalProcess(
                     {
                         alias: 'bloomberg',
-                        arguments: '--log',
                         listener: function(m) {
                             console.log('Listener on Bloomberg plugin server received: ', m);
                         }

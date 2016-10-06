@@ -20,8 +20,6 @@ var React = require('react'),
         return Math.round(num * 100) / 100;
     };
 
-window.io = require('socket.io-client');
-
 var lastBloombergDataUpdate; // used for throttling console log
 
 var urlData = location.search.split('&').map((i)=>{return i.split('=')[1]});
