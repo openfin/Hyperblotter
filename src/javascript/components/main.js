@@ -390,7 +390,7 @@ module.exports = React.createClass({
             fin.desktop.main(function() {
                 fin.desktop.System.launchExternalProcess(
                     {
-                        alias: 'bloomberg',
+                        alias: 'openfin-bloomberg',
                         listener: function(m) {
                             console.log('Listener on Bloomberg plugin server received: ', m);
                         }
