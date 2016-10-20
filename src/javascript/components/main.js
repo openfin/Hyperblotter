@@ -24,25 +24,25 @@ var _windowManager = windowManager.getInstance(),
 /* Static data for the floating 'trade' animation windows */
 
 var rndData = [
-    {ticker: "PCL", last: 21.251049070187836},
-    {ticker: "AAPL", last: 24.835458631124418},
-    {ticker: "TCK", last: 6.235665990223004},
-    {ticker: "DBD", last: 17.01733357355432},
-    {ticker: "FHN", last: 6.624939800309766},
-    {ticker: "EXR", last: 33.96528484183794},
-    {ticker: "BP", last: 21.19160933461151},
-    {ticker: "WCN", last: 23.501467942817747},
-    {ticker: "CVX", last: 53.67873008625956},
-    {ticker: "ITT", last: 22.803668802786465},
-    {ticker: "BIN", last: 12.594969339431945},
-    {ticker: "WTM", last: 348.8851038882928},
-    {ticker: "FHN", last: 6.624939800309766},
-    {ticker: "CYH", last: 19.131071861657016},
-    {ticker: "SWK", last: 52.198226722926165},
-    {ticker: "AMG", last: 127.23849660464248},
-    {ticker: "BCE", last: 22.765628088640174},
-    {ticker: "ACC", last: 14.787034222549517},
-    {ticker: "AA", last: 13.787034222549517}];
+    {ticker: "PCL", exchange:"ASX", last: 21.251049070187836},
+    {ticker: "AAPL", exchange:"NSQ", last: 24.835458631124418},
+    {ticker: "TCK", exchange:"NYSE", last: 6.235665990223004},
+    {ticker: "DBD", exchange:"NYSE",last: 17.01733357355432},
+    {ticker: "FHN", exchange:"NYSE",last: 6.624939800309766},
+    {ticker: "EXR", exchange:"NYSE",last: 33.96528484183794},
+    {ticker: "BP", exchange:"NYSE",last: 21.19160933461151},
+    {ticker: "WCN", exchange:"NYSE",last: 23.501467942817747},
+    {ticker: "CVX", exchange:"NYSE",last: 53.67873008625956},
+    {ticker: "ITT", exchange:"NYSE",last: 22.803668802786465},
+    {ticker: "BIN", exchange:"FRA",last: 12.594969339431945},
+    {ticker: "WTM", exchange:"NYSE",last: 348.8851038882928},
+    {ticker: "FHN", exchange:"NYSE",last: 6.624939800309766},
+    {ticker: "CYH", exchange:"NYSE",last: 19.131071861657016},
+    {ticker: "SWK", exchange:"NYSE",last: 52.198226722926165},
+    {ticker: "AMG", exchange:"NSQ",last: 127.23849660464248},
+    {ticker: "BCE", exchange:"NYSE",last: 22.765628088640174},
+    {ticker: "ACC", exchange:"NYSE",last: 14.787034222549517},
+    {ticker: "AA", exchange:"NYSE",last: 13.787034222549517}];
 
 var floor = Math.floor;
 var random = Math.random;
@@ -115,7 +115,7 @@ var initAnimationWindows = function(){
             for (; i < numTiles; i++){
                 animationWindows.push(new fin.desktop.Window({
                     name: 'tile' + random(),
-                    url: 'trade.html?t=' + rndData[i].ticker + '&l=' + rndData[i].last,
+                    url: 'trade.html?t=' + rndData[i].ticker + '&l=' + rndData[i].last + "&e=" + rndData[i].exchange,
                     autoShow: false,
                     defaultHeight: cubeSize,
                     minHeight: cubeSize,

@@ -69,7 +69,8 @@ module.exports = React.createClass({
 	//	});
 	fin.desktop.InterApplicationBus.send( "PLUGIN","launch",{
 			context:{
-				symbol: this.state.ticker
+				symbol: this.state.ticker,
+				exchange: this.state.exchange
 			}
 		});
     },
@@ -99,6 +100,7 @@ module.exports = React.createClass({
   	setInterval(()=>{
   		this.setState({
   			ticker: urlData[0],
+				exchange: urlData[2],
   			last: Number(urlData[1])
   		});
   	}, 1000 + ( Math.floor(Math.random() * 1000) ) );
