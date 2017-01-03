@@ -11,6 +11,11 @@
   </head>
 
   <body>
+    <script>// Let's register our serviceworker
+      navigator.serviceWorker.register('sw.js', {
+        // The scope cannot be parent to the script url
+        scope: './'
+      });</script>
     <script src="out.js"></script>
   </body>
 </html>
