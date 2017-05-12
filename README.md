@@ -33,7 +33,7 @@ NB: (the additional 'sudo' command may be required, eg. 'sudo npm install' at wh
  
 The app runs locally on a simple Node server and the code is compiled using [Gulp](http://gulpjs.com/) as a build tool. 
 
-###Run app locally
+### Run app locally
 The app must first be compiled. This only needs to be done the first time the app is run, but the app will need to be recompiled if modifications are made to the code.
 
 Open two terminal windows and in both change the directory to the 'Hyperblotter' folder.
@@ -51,17 +51,24 @@ Once installed, in the first terminal window, build the project from the source 
 ```
 $ gulp build
 ```
-Then start the local Node server.
+Then start the app.
 
 NB for a production Node app this would require hosting remotely on Heroku, AWS or a similar platform. OpenFin is not designed to install apps locally.
 
 ```
+$ gulp start
+```
+`gulp start` starts the server and launches OpenFin.
+
+An executable should now be created and launched. 
+
+### Start only the server
+You can choose to start the server alone by running
+```
 $ gulp server
 ```
-Once the message 'Express server is listening on port 5001' is shown in the terminal open the second terminal window (leave the first terminal window open, closing it will close the server). Launch Openfin.
 
-```
+If you've started your server and you want to start OpenFin you can do so by running
+ ```
 $ gulp openfin
 ```
-An executable should now be created an launch the Hyperblotter toolbar. 
- 
