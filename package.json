@@ -73,6 +73,7 @@
   },
   "dependencies": {
     "express": "^4.13.3",
+    "gulp-sequence": "^0.4.6",
     "jquery": "~2.1.0",
     "underscore": "^1.8.3",
     "webpack": "1.12.11"
