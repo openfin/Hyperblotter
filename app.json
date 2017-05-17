@@ -46,8 +46,7 @@
               "version": "1.0.0"
             }
         ],
-    "splashScreenImage": "http://cdn.openfin.co/demos/hyperblotter/images/splashscreen.png",
-    "__splashScreenImage": "http://localhost:5001/images/splashscreen.png",
+    "splashScreenImage": "http://localhost:5001/images/splashscreen.png",
     "shortcut": {
         "company": "OpenFin",
         "description": "Hyperblotter Demo",
