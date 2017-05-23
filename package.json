@@ -2,6 +2,12 @@
   "name": "Hyperblotter",
   "version": "1.0.1",
   "description": "A demonstration app showing the capabilities of OpenFin.",
+  "scripts": {
+    "build": "gulp build",
+    "start": "gulp start",
+    "server": "gulp server",
+    "openfin": "gulp openfin"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/openfin/Hyperblotter"
@@ -27,7 +33,6 @@
     "browserify": "^9.0.3",
     "browserify-shim": "^3.8.2",
     "coffeeify": "~1.0.0",
-    "gulp": "^3.8.11",
     "gulp-autoprefixer": "^3.1.1",
     "gulp-changed": "^1.1.1",
     "gulp-exec": "^2.1.2",
@@ -58,7 +63,6 @@
     "lodash": "^3.3.1",
     "merge-stream": "^0.1.7",
     "moment": "^2.10.2",
-    "nodemon": "^1.7.3",
     "numeral": "^1.5.3",
     "openfin-launcher": "^0.2.0",
     "pretty-hrtime": "~1.0.0",
@@ -73,7 +77,8 @@
   },
   "dependencies": {
     "express": "^4.13.3",
-    "gulp-sequence": "^0.4.6",
+    "gulp": "^3.8.11",
+    "gulp-live-server": "^0.0.30",
     "jquery": "~2.1.0",
     "underscore": "^1.8.3",
     "webpack": "1.12.11"
