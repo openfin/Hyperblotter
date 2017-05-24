@@ -34,7 +34,15 @@ If yarn is not installed, install from [here](https://yarnpkg.com/lang/en/docs/i
 $ npm install -g yarn
 ```
 
-Install dependencies using yarn:
+### Run app locally
+
+Open a terminal window and change the directory to the 'Hyperblotter' folder.
+
+```
+$ cd Hyperblotter
+```
+
+In the terminal window, install dependencies using yarn:
 
 ```
 $ yarn install
@@ -44,23 +52,15 @@ NB: (the additional 'sudo' command may be required, eg. 'sudo yarn install' at w
 
 The app runs locally on a simple Node server and the code is compiled using [Gulp](http://gulpjs.com/) as a build tool.
 
-### Run app locally
-
 The app must first be compiled. This only needs to be done the first time the app is run, but the app will need to be recompiled if modifications are made to the code.
 
-Open a terminal windows and change the directory to the 'Hyperblotter' folder.
-
-```
-$ cd Hyperblotter
-```
-
-In the terminal window, build the project from the source files.
+In the terminal, build the project from the source files:
 
 ```
 $ yarn build
 ```
 
-Then start the app.
+Then start the app:
 
 NB for a production Node app this would require hosting remotely on Heroku, AWS or a similar platform. OpenFin is not designed to install apps locally.
 
