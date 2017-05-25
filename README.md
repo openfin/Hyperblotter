@@ -71,3 +71,16 @@ $ yarn start
 `yarn start` starts the server and launches OpenFin.
 
 An executable should now be created and launched.
+
+
+### Testing
+
+To test Hyperblotter you must first have installed the dependencies by running 
+
+`yarn install`
+
+afterwards, simply run 
+
+`yarn test`
+
+and watch the tests run.
