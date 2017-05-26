@@ -7,10 +7,11 @@ var dataTicker = require('../../src/javascript/griddata/data_ticker');
 
 describe("Expect the data to be available to use", function(){
 
-    it("The staticData will exist", function(){
-        expect(staticData).toBe.ok;
-    });
-
+    // it("The staticData will exist", function(){
+    //     console.log(staticData, 'staticData')
+    //     expect(undefined === staticData).toBeFalsy();
+    // });
+    console.log('CHANGES ++++++++++++++');
     it("staticData.data.NAME.length will equal 921", function(){
         expect(staticData.data.NAME.length).toEqual(921);
     });
