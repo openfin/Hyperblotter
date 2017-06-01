@@ -3,7 +3,7 @@ var React = require('react'),
     windowManager = require("../windowsListSingleton"),
     fin = require('../vendor/openfin.js'),
     TooTip = require("../components/tooltip-decorator"),
-    excel = require("../vendor/ExcelAPI.js"),
+    // excel = require("../vendor/ExcelAPI.js"),
     excel_plugin_installed = false;
 
 

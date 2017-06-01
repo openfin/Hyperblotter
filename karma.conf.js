@@ -5,7 +5,14 @@ module.exports = function(config) {
   config.set({
     browserify: {
       debug: true,
-      transform: [ 'babelify' ]
+      configure: function browserify(bundle) {
+                bundle.exclude('react/lib/ReactContext');
+                bundle.exclude('react/lib/ExecutionEnvironment');
+                bundle.exclude('react/addons');
+                bundle.once('prebundle', function prebundle() {
+                    bundle.transform('babelify', {presets: ['es2015', 'react']});
+                });
+            },
     },
     // base path that will be used to resolve all patterns (eg. files, exclude)
     basePath: '',

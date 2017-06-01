@@ -1,7 +1,7 @@
 /**
  * Created by haseebriaz on 14/05/15.
  */
-
+var fin = require('../vendor/openfin');
 var __extends = function(d, b) {
 
     function Construct() {
@@ -10,6 +10,7 @@ var __extends = function(d, b) {
     Construct.prototype = b.prototype;
     d.prototype = new Construct();
 };
+
 
 fin.desktop.Excel = (function(){
 
