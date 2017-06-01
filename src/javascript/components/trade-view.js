@@ -1,13 +1,13 @@
 var React = require('react'),
-		fin = require('../vendor/openfin.js'),
-        start = null,
-		add = function(a,b){
+	fin = require('../vendor/openfin.js'),
+	start = null,
+	add = function(a,b){
       return a + b;
     },
     sub = function(a,b){
       return a - b;
     },
-		rndRange = function () {
+	rndRange = function () {
       return Math.floor(Math.random() * 10 % 5) / 10;
     },
     plusMinus = function(base, op){
@@ -18,10 +18,10 @@ var urlData = location.search.split('&').map((i)=>{return i.split('=')[1]});
 
 module.exports = React.createClass({
 	closeWindow: ()=>{
-  	fin.desktop.main(()=>{
-  		fin.desktop.Window.getCurrent().close();
-  	});
-  },
+		fin.desktop.main(()=>{
+			fin.desktop.Window.getCurrent().close();
+		});
+	},
   closeApp: function(){
 		fin.desktop.main(function(){
 		  fin.desktop.Application.getCurrent().close();
@@ -69,8 +69,11 @@ module.exports = React.createClass({
 		});
     },
 
-  getInitialState: function () {
+	showNotifications: function(){
+		console.log("Notification opened")
+	},
 
+  getInitialState: function () {
   	return {
   		class: 'tile',
   		ticker: urlData[0],
@@ -116,6 +119,11 @@ module.exports = React.createClass({
 					<div className="main">
 						<span className="last" >{this.state.last.toFixed(2)}</span>
 						<span className="percent-change" >+%{rndRange().toFixed(2)}</span>
+					</div>
+					<div className="purchasing">
+						<ToolTip legend="Purchase">
+                        	<span className='fa fa-usd' onClick={this.showNotifications}></span>
+                        </ToolTip>
 					</div>
 					<div className="pricing">
 						<div className="price open">
