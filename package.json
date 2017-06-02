@@ -5,6 +5,7 @@
   "scripts": {
     "build": "gulp build",
     "start": "gulp start",
+    "prod": "set NODE_ENV=production && gulp start",
     "server": "gulp server",
     "openfin": "gulp openfin",
     "test": "gulp karma",

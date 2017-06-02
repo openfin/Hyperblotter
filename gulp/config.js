@@ -33,6 +33,10 @@ module.exports = {
     src: "app.json",
     dest: dest
   },
+  devappjson: {
+    src: "devapp.json",
+    dest: dest
+  },
   markup: {
     src: src + "/htdocs/**",
     dest: dest

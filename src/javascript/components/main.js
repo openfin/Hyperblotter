@@ -506,7 +506,7 @@ module.exports = React.createClass({
     },
     render: function(){
         return	<div className="main-bar">
-            <image className="openfinLogo" type="image/svg+xml" src="images/hyperblotter_text.svg" />
+            <img className="openfinLogo" type="image/svg+xml" src="images/hyperblotter_text.svg" />
 
             <div className="window-control">
                 <i onClick={this.closeApp} className="fa fa-times"><div></div> </i>
