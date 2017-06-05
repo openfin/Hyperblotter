@@ -1,7 +1,6 @@
 var _ = require('underscore'),
-		React = require('react'),
-		OFApp = require('./components/openfin.js');
-
-
-
-React.render(<OFApp />, document.body);
+	React = require('react'),
+	ReactDOM = require('react-dom'),
+	OFApp = require('./components/openfin.js');
+  
+ReactDOM.render(<OFApp />, document.getElementById('root'));

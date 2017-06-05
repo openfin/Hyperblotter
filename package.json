@@ -5,9 +5,11 @@
   "scripts": {
     "build": "gulp build",
     "start": "gulp start",
+    "prod": "set NODE_ENV=production && gulp start",
     "server": "gulp server",
     "openfin": "gulp openfin",
-    "test": "gulp karma"
+    "test": "gulp karma",
+    "postinstall": "gulp build"
   },
   "repository": {
     "type": "git",
@@ -75,7 +77,6 @@
     "openfin-launcher": "^1.3.12",
     "pretty-hrtime": "~1.0.0",
     "q": "^1.4.1",
-    "react": "^15.5.4",
     "react-addons-test-utils": "^15.5.1",
     "require-dir": "^0.3.0",
     "sinon": "^2.3.1",
@@ -90,6 +91,7 @@
     "gulp": "^3.9.1",
     "gulp-live-server": "^0.0.30",
     "jquery": "^3.2.1",
+    "react": "^15.5.4",
     "react-dom": "^15.5.4",
     "underscore": "^1.8.3",
     "webpack": "^2.6.1"

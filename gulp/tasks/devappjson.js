@@ -1,7 +1,7 @@
 var gulp = require('gulp');
-var config = require('../config').appjson;
+var config = require('../config').devappjson;
 
-gulp.task('appjson', function() {
+gulp.task('devappjson', function() {
   return gulp.src(config.src)
     .pipe(gulp.dest(config.dest))
 });

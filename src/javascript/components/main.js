@@ -2,7 +2,7 @@ var React = require('react'),
     _ = require('underscore'),
     windowManager = require("../windowsListSingleton"),
     fin = require('../vendor/openfin.js'),
-    TooTip = require("../components/tooltip-decorator"),
+    ToolTip = require("../components/tooltip-decorator"),
     excel = require("../vendor/ExcelAPI.js"),
     excel_plugin_installed = false;
 
@@ -462,10 +462,10 @@ module.exports = React.createClass({
             var _class = this.state.inLoop ? "fa fa-pause" : "fa fa-play";
             var _style = {
                 "opacity": "0.2",
-                "webkitTouchCallout": "none",
-                "webkitUserSelect": "none",
+                "WebkitTouchCallout": "none",
+                "WebkitUserSelect": "none",
                 "khtmlUserSelect": "none",
-                "mozUserSelect": "none",
+                "MozUserSelect": "none",
                 "msUserSelect": "none",
                 "userSelect": "none",
                 "pointerEvents": "none"
@@ -506,7 +506,7 @@ module.exports = React.createClass({
     },
     render: function(){
         return	<div className="main-bar">
-            <image className="openfinLogo" type="image/svg+xml" src="images/hyperblotter_text.svg" />
+            <img className="openfinLogo" type="image/svg+xml" src="images/hyperblotter_text.svg" />
 
             <div className="window-control">
                 <i onClick={this.closeApp} className="fa fa-times"><div></div> </i>
@@ -519,42 +519,42 @@ module.exports = React.createClass({
             <div className="content-area">
                 <div>
                         <i onClick={this.openAnimationWindows} style={ this.getAnimateParentClass() }>
-                            <TooTip legend="Launch">
+                            <ToolTip legend="Launch">
                                 <span className='fa fa-th'></span>
-                            </TooTip>
+                            </ToolTip>
                         </i>
                         <i onClick={this.toggleShowAnimationWindows} style={this.getMinifyText().style} >
-                            <TooTip legend="Close">
+                            <ToolTip legend="Close">
                                 <span className={this.getMinifyText().icon}></span>
-                            </TooTip>
+                            </ToolTip>
                         </i>
 
                     <i onClick={this.toggleAnimateLoop} style={this.getAnimateClass().style} >
-                        <TooTip legend="Animate">
+                        <ToolTip legend="Animate">
                             <span className={ this.getAnimateClass().class }></span>
-                        </TooTip>
+                        </ToolTip>
                     </i>
 
                 </div>
                 <div>
                     <i onClick={this.openBlotter}>
-                        <TooTip legend="Grid">
+                        <ToolTip legend="Grid">
                             <span className="fa fa-table"></span>
-                        </TooTip>
+                        </ToolTip>
                     </i>
                 </div>
                 <div>
                     <i onClick={this.openExcel} >
-                        <TooTip legend="Excel">
+                        <ToolTip legend="Excel">
                             <span className="fa fa-file-excel-o"></span>
-                        </TooTip>
+                        </ToolTip>
                     </i>
                 </div>
                 <div>
                     <i onClick={this.openGithub}>
-                        <TooTip legend="GitHub">
+                        <ToolTip legend="GitHub">
                             <span className="fa fa-github-alt"></span>
-                        </TooTip>
+                        </ToolTip>
                     </i>
                 </div>
             </div>

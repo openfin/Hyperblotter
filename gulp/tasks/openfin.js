@@ -9,6 +9,16 @@ var gulp = require('gulp'),
   userName = (process && process.env && process.env['USERPROFILE'] ? process.env['USERPROFILE'].split(path.sep)[2] : null),
   rootDir = (process && process.cwd() ? process.cwd() : null);
 
+function getConfigPath() {
+  var node_env = process.env.NODE_ENV || 'development';
+
+  if(node_env !== 'development') {
+    return 'http://localhost:5001/app.json'
+  }
+
+  return 'http://localhost:5001/devapp.json'
+}
+
 function openfinLaunch() {
   try {
     var _dir = 'C:\\Users\\' + userName + '\\AppData\\Local\\OpenFin'
@@ -19,7 +29,7 @@ function openfinLaunch() {
 
   openfinLauncher.launchOpenFin({
       // Launch a locally hosted Node application.
-      configPath: 'http://localhost:5001/app.json'
+      configPath: getConfigPath()
     })
     .then(function() {
       console.log('OpenFin launched!');

@@ -78,10 +78,11 @@ body
 .tile
   display: flex
   flex-direction: column
-  height: 100%
   padding: 10px
   color: white
   background-color: $background-color
+  height: 165px;
+  padding: 10px;
   .banner
     display: flex
     flex: 1
@@ -98,6 +99,7 @@ body
   .content
     display: flex
     flex: 4
+    margin-bottom: -15px
     .main
       flex: 1
       display: flex
@@ -110,6 +112,11 @@ body
         flex: 2
         display: flex
         padding-top: 10px
+      .purchase
+        flex: 2
+        .fa-usd
+          -webkit-app-region: no-drag
+          cursor: pointer
     .pricing
       display: flex
       flex: 1
@@ -126,7 +133,6 @@ body
 
 .none
   display: none
-
 .start-color-change
   animation-duration: 3.5s
   animation-name: slidein
@@ -151,11 +157,7 @@ body
     color: white
 
 .trade-cell-transition
-    webkit-transition: background-color 1.5s ease-in
-    moz-transition: background-color 1.5s ease-in
-    o-transition: background-color 1.5s ease-in
-    transition: background-color 1.5s ease-in
-
-  
-
-
+  webkit-transition: background-color 1.5s ease-in
+  moz-transition: background-color 1.5s ease-in
+  o-transition: background-color 1.5s ease-in
+  transition: background-color 1.5s ease-in
