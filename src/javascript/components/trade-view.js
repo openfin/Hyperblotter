@@ -76,7 +76,7 @@ module.exports = React.createClass({
     var notification = new fin.desktop.Notification({
       url: 'purchaseNotification.html',
       message: data,
-      timeout: 50000
+      timeout: -1
     },function(){
       console.log('created');
     },function(){
