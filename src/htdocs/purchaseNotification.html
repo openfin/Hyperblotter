@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=<device-width>, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script>
+        function onNotificationMessage(message){
+            document.getElementById('message').innerHTML = `You are buying 100 units of ${message.company} stock at ${message.price}`;
+        }
+    </script>
+</head>
+<body>
+    <h1>issa notif</h1>
+    <p id='message'></p>
+</body>
+</html>
