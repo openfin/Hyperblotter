@@ -76,7 +76,10 @@ module.exports = React.createClass({
     var notification = new fin.desktop.Notification({
       url: 'purchaseNotification.html',
       message: data,
-      timeout: -1
+      timeout: -1,
+      onMessage: (message) => {
+        alert(`You have purchased 100 units of ${message.company} stock at \$${message.price}`);
+      }
     },function(){
       console.log('created');
     },function(){
