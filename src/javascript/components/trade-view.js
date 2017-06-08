@@ -71,8 +71,20 @@ module.exports = React.createClass({
 		});
   },
 
-	showNotifications: function(){
+	showNotifications: function(data){
 		console.log("Notification opened")
+    var notification = new fin.desktop.Notification({
+      url: 'purchaseNotification.html',
+      message: data,
+      timeout: -1,
+      onMessage: (message) => {
+        alert(`You have purchased 100 units of ${message.company} stock at \$${message.price}`);
+      }
+    },function(){
+      console.log('created');
+    },function(){
+      console.log('closed');
+    });
 	},
 
   getInitialState: function () {
@@ -122,7 +134,7 @@ module.exports = React.createClass({
             <span className="last" >{this.state.last.toFixed(2)}</span>
             <span className="percent-change" >+%{rndRange().toFixed(2)}</span>
             <div className="purchase">
-              <i className='fa fa-usd' onClick={this.showNotifications}></i>
+              <i className='fa fa-usd' onClick={() => this.showNotifications({ company: this.state.ticker, price: this.state.last.toFixed(2)})}></i>
             </div>
           </div>
           <div className="pricing">
