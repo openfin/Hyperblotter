@@ -126,16 +126,18 @@ module.exports = React.createClass({
         <div className="banner">
           <div className="title">
             {this.state.ticker}
-            <i className="fa fa-bar-chart" onClick={this.openDetailedChartWindow} />
           </div>
+          <span className="chart" onClick={this.openDetailedChartWindow}>
+            <i className="fa fa-bar-chart" ></i>
+          </span>
         </div>
         <div className="content">
           <div className="main">
             <span className="last" >{this.state.last.toFixed(2)}</span>
             <span className="percent-change" >+%{rndRange().toFixed(2)}</span>
-            <div className="purchase">
-              <i className='fa fa-usd' onClick={() => this.showNotifications({ company: this.state.ticker, price: this.state.last.toFixed(2)})}></i>
-            </div>
+            <span className="purchase" onClick={() => this.showNotifications({ company: this.state.ticker, price: this.state.last.toFixed(2)})}>
+              <i className='fa fa-usd' ></i>
+            </span>
           </div>
           <div className="pricing">
             <div className="price open">
