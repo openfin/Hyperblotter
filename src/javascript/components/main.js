@@ -284,6 +284,8 @@ module.exports = React.createClass({
     this.setState({
       animationWindowsShowing: true,
       tilesMaximised: true
+    }, () => {
+      window.animationWindowsShowing = true;
     });
   },
 
@@ -291,13 +293,17 @@ module.exports = React.createClass({
     console.log("closeAnimationWindows -- called")
     this.toggleAnimateLoopStop();
     animationWindows.forEach((wnd)=>{
-      wnd.hide();
+      if(!window.pinnedWindows[wnd.name]){
+        wnd.hide();
+      }
     });
 
     this.setState({
       animationWindowsShowing: false,
       tilesMaximised: false
-    })
+    }, () =>{
+      window.animationWindowsShowing = false;
+    });
   },
 
   toggleAnimateLoop:function(){

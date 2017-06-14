@@ -97,6 +97,26 @@ module.exports = React.createClass({
     });
 	},
 
+togglePinWindow: function() {
+    var currentWindow = fin.desktop.Window.getCurrent();
+    var parentWindow = window.opener.window;
+    
+    if(!parentWindow.pinnedWindows){
+      parentWindow.pinnedWindows = {};
+    };
+
+    if(parentWindow.pinnedWindows[currentWindow.name]){
+      parentWindow.pinnedWindows[currentWindow.name] = !parentWindow.pinnedWindows[currentWindow.name];
+
+      if(!parentWindow.animationWindowsShowing) {
+        currentWindow.hide();
+      }
+    } else {
+      //if this doesn't exist this must be the first time.
+      parentWindow.pinnedWindows[currentWindow.name] = true;
+    }
+  },
+
   getInitialState: function () {
   	return {
   		class: 'tile',
@@ -131,21 +151,35 @@ module.exports = React.createClass({
 
   countAnimations(){
     this.state.animationEndCount++;
+    // there are 3 animations we want to remove the class after they all finish
     if(this.state.animationEndCount === 3){
       document.querySelector('.purchaseFeedback').classList.remove('slide-in-out');
       this.state.animationEndCount = 0;
     }
   },
 
+  getPinnedWindowClass:function(){
+    var currentWindow = fin.desktop.Window.getCurrent();
+    var parentWindow = window.opener.window;
+
+    if(parentWindow.pinnedWindows && parentWindow.pinnedWindows[currentWindow.name]){
+      return {icon:"fa fa-lock"}
+    } else {
+      return {icon:"fa fa-unlock"};
+    }
+  },
+
 	render: function(){
     console.log("RENDERING --- ", this.state.ticker);
 		return (
-			<div className='tile trade-cell' style={this.getTileStyle()}>
-        <div className="window-control"></div>
+			<div className='tile trade-cell' style={this.getTileStyle()} onContextMenu={ (e) => e.preventDefault() }>
         <div className="banner">
           <div className="title">
             {this.state.ticker}
           </div>
+          <span className="lock" onClick={this.togglePinWindow}>
+            <i className={ this.getPinnedWindowClass().icon } ></i>
+          </span>
           <span className="chart" onClick={this.openDetailedChartWindow}>
             <i className="fa fa-bar-chart" ></i>
           </span>
@@ -173,7 +207,7 @@ module.exports = React.createClass({
             </div>
           </div>
         </div>
-        <div className="purchaseFeedback" onAnimationEnd={ this.countAnimations } onContextMenu={ false }>
+        <div className="purchaseFeedback" onAnimationEnd={ this.countAnimations } onContextMenu={ (e) => e.preventDefault() }>
           <h3 className="header">Purchase Notification</h3>
           <h2 className="company"></h2>
           <h3 className="price"></h3>
