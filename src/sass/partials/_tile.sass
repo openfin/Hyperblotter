@@ -1,5 +1,24 @@
+@keyframes slide-in
+  0%
+    transform: translateX(100%)
+  100%
+    transform: translateX(0%)
+
+@keyframes slide-stay
+  0%
+    transform: translateX(0%)
+  100%
+    transform: translateX(0%)
+
+@keyframes slide-out
+  0%
+    transform: translateX(0%)
+  100%
+    transform: translateX(100%)
+
 .tile
   color: #ffffff
+  position: relative
   .window-control
     width: 300px
     height: 300px
@@ -13,3 +32,32 @@
       pointer-events: none
     .pricing
       pointer-events: none
+  .purchaseFeedback
+    background-color: steelblue
+    position: fixed
+    top: 0
+    left: 0
+    transform: translateX(100%)
+    text-align: center
+    font-size: 0.8em
+    z-index: 5
+    padding: 1px
+    .header
+      margin-bottom: 5px
+      margin-top: 15px
+      font-size: 1.0em
+    h2.company
+      margin-top: 5px
+      margin-bottom: 0
+      font-size: 1.8em
+    h3.price
+      margin-top: 5px
+      margin-bottom: 5px
+    .description
+      font-size: 0.8em
+      margin-top: 5px
+      line-height: 20px
+
+    &.slide-in-out
+      animation: slide-in 0.5s ease, slide-stay 4s, slide-out 0.5s ease
+      animation-delay: 0s, 0.5s, 4.5s

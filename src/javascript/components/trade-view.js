@@ -72,13 +72,23 @@ module.exports = React.createClass({
   },
 
 	showNotifications: function(data){
-		console.log("Notification opened")
     var notification = new fin.desktop.Notification({
       url: 'purchaseNotification.html',
       message: data,
       timeout: -1,
       onMessage: (message) => {
-        alert(`You have purchased 100 units of ${message.company} stock at \$${message.price}`);
+        var companyNodes = document.querySelectorAll('.company');
+        var priceNodes = document.querySelectorAll('.price');
+
+        Array.prototype.forEach.call(companyNodes, (node)=>{
+          node.innerHTML = message.company;
+        });
+
+        Array.prototype.forEach.call(priceNodes, (node)=>{
+          node.innerHTML = '$'+message.price;
+        });
+
+        document.querySelector('.purchaseFeedback').classList.add('slide-in-out');
       }
     },function(){
       console.log('created');
@@ -91,7 +101,8 @@ module.exports = React.createClass({
   	return {
   		class: 'tile',
   		ticker: urlData[0],
-  		last: Number(urlData[1])
+  		last: Number(urlData[1]),
+      animationEndCount: 0
   	}
   },
 
@@ -116,6 +127,14 @@ module.exports = React.createClass({
 
   componentWillUnmount:function(){
     console.log("componentWillUnmount ----- trade-view.js ");
+  },
+
+  countAnimations(){
+    this.state.animationEndCount++;
+    if(this.state.animationEndCount === 3){
+      document.querySelector('.purchaseFeedback').classList.remove('slide-in-out');
+      this.state.animationEndCount = 0;
+    }
   },
 
 	render: function(){
@@ -153,6 +172,12 @@ module.exports = React.createClass({
               <span className="value">{ (this.state.last - rndRange() - 1).toFixed(2)  }</span>
             </div>
           </div>
+        </div>
+        <div className="purchaseFeedback" onAnimationEnd={ this.countAnimations } onContextMenu={ false }>
+          <h3 className="header">Purchase Notification</h3>
+          <h2 className="company"></h2>
+          <h3 className="price"></h3>
+          <p className="description">You've just purchased <b>100</b> units of <span className="company"></span> stock at <span className="price"></span> each.</p>
         </div>
 			</div>
 		);
