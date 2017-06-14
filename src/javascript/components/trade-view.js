@@ -172,7 +172,8 @@ togglePinWindow: function() {
 	render: function(){
     console.log("RENDERING --- ", this.state.ticker);
 		return (
-			<div className='tile trade-cell' style={this.getTileStyle()} >
+			<div className="tile trade-cell" style={this.getTileStyle()} >
+        <div className="window-control"></div>
         <div className="banner">
           <div className="title">
             {this.state.ticker}
@@ -189,7 +190,7 @@ togglePinWindow: function() {
             <span className="last" >{this.state.last.toFixed(2)}</span>
             <span className="percent-change" >+%{rndRange().toFixed(2)}</span>
             <span className="purchase" onClick={() => this.showNotifications({ company: this.state.ticker, price: this.state.last.toFixed(2)})}>
-              <i className='fa fa-usd' ></i>
+              <i className="fa fa-usd" ></i>
             </span>
           </div>
           <div className="pricing">
