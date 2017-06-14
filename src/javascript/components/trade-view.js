@@ -172,7 +172,7 @@ togglePinWindow: function() {
 	render: function(){
     console.log("RENDERING --- ", this.state.ticker);
 		return (
-			<div className='tile trade-cell' style={this.getTileStyle()} onContextMenu={ (e) => e.preventDefault() }>
+			<div className='tile trade-cell' style={this.getTileStyle()} >
         <div className="banner">
           <div className="title">
             {this.state.ticker}
