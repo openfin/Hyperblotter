@@ -7,7 +7,8 @@ var gulp = require('gulp'),
   src = require('../config').js,
   path = require('path'),
   userName = (process && process.env && process.env['USERPROFILE'] ? process.env['USERPROFILE'].split(path.sep)[2] : null),
-  rootDir = (process && process.cwd() ? process.cwd() : null);
+  rootDir = (process && process.cwd() ? process.cwd() : null),
+  server = gls('server.js', {env: {NODE_ENV: 'development'}}, false);
 
 function getConfigPath() {
   var node_env = process.env.NODE_ENV || 'development';
@@ -32,7 +33,8 @@ function openfinLaunch() {
       configPath: getConfigPath()
     })
     .then(function() {
-      console.log('OpenFin launched!');
+      console.log("Server closing...");
+      server.stop();
     })
     .fail(function(error) {
       console.log('Error opening OpenFin!', error);
@@ -41,7 +43,6 @@ function openfinLaunch() {
 
 /* Task to run server */
 gulp.task('server', function() {
-  var server = gls('server.js', {env: {NODE_ENV: 'development'}}, false);
   server.start();
 });
 
