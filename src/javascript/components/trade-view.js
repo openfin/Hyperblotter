@@ -78,7 +78,7 @@ module.exports = React.createClass({
       timeout: -1,
       onMessage: (message) => {
         var companyNodes = document.querySelectorAll('.company');
-        var priceNodes = document.querySelectorAll('.price');
+        var priceNodes = document.querySelectorAll('.purchasePrice');
 
         Array.prototype.forEach.call(companyNodes, (node)=>{
           node.innerHTML = message.company;
@@ -97,7 +97,7 @@ module.exports = React.createClass({
     });
 	},
 
-togglePinWindow: function() {
+  togglePinWindow: function() {
     var currentWindow = fin.desktop.Window.getCurrent();
     var parentWindow = window.opener.window;
     
@@ -187,16 +187,16 @@ togglePinWindow: function() {
         </div>
         <div className="content">
           <div className="main">
-            <span className="last" >{this.state.last.toFixed(2)}</span>
+            <span className="last" >{ (this.state.last - rndRange()).toFixed(2) }</span>
             <span className="percent-change" >+%{rndRange().toFixed(2)}</span>
-            <span className="purchase" onClick={() => this.showNotifications({ company: this.state.ticker, price: this.state.last.toFixed(2)})}>
+            <span className="purchase" onClick={() => this.showNotifications({ company: this.state.ticker, price: (this.state.last - rndRange()).toFixed(2)})}>
               <i className="fa fa-usd" ></i>
             </span>
           </div>
           <div className="pricing">
             <div className="price open">
               <div className="label">OPEN</div>
-              <span className="value">{ (this.state.last - rndRange()).toFixed(2) } </span>
+              <span className="value">{this.state.last.toFixed(2)}</span>
             </div>
             <div className="price high">
               <div className="label">HIGH</div>
@@ -211,8 +211,8 @@ togglePinWindow: function() {
         <div className="purchaseFeedback" onAnimationEnd={ this.countAnimations } onContextMenu={ (e) => e.preventDefault() }>
           <h3 className="header">Purchase Notification</h3>
           <h2 className="company"></h2>
-          <h3 className="price"></h3>
-          <p className="description">You've just purchased <b>100</b> units of <span className="company"></span> stock at <span className="price"></span> each.</p>
+          <h3 className="purchasePrice"></h3>
+          <p className="description">You've just purchased <b>100</b> units of <span className="company"></span> stock at <span className="purchasePrice"></span> each.</p>
         </div>
 			</div>
 		);
