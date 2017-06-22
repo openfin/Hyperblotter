@@ -1,17 +1,12 @@
-var React = require('react'),
-		vestorly = require('./vestorly.js'),
-		_ = require('underscore');
+import React, { Component } from 'react';
+// import vestorly from './vestorly';
 
-
-var WatchListDetails = React.createClass({
-	getInitialState: function() {
-		return {};
-	},
-		render: function () {
+class WatchListDetails extends Component{
+	render(){
 		return <div className="watchlist">
 			<h3 className="left-content"> upper right </h3>
 		</div>
 	}
-});
+}
 
-module.exports = WatchListDetails;
+export default WatchListDetails;

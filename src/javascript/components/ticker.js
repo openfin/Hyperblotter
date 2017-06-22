@@ -1,4 +1,4 @@
-var countryMap = {
+const countryMap = {
       "United Emirites":'AE',
       "Afghanistan":'AF',
       "Antigua":'AG',
@@ -189,7 +189,7 @@ var countryMap = {
       "":'UM'
 };
 
-var data = {
+const data = {
    "NAME":[
       "Exxon Mobil Corp.",
       "International Business Machines Corp.",
@@ -23266,11 +23266,11 @@ var data = {
       1000
    ]
 }
-var count = data.NAME.length;
-var i = 0;
-var stocks = [];
+
+let count = data.NAME.length;
+const stocks = [];
 window.CC = {};
-for (i = 0; i < count; i++) {
+for (let i = 0; i < count; i++) {
       CC[data.COUNTRY[i]] = true;
 	stocks[i] = {
             NAME: data.NAME[i],
@@ -23305,15 +23305,15 @@ for (i = 0; i < count; i++) {
 	}
 }
 
-stocks.sort(function(a,b){
+stocks.sort((a,b) => {
       return a.TICKER < b.TICKER ? -1 : 1;
 });
 
-var seed = 1;
+let seed = 1;
 
-var rnd = function() {
-      var x = Math.sin(seed++)*10000;
-      var r = x - Math.floor(x);
+const rnd = () => {
+      const x = Math.sin(seed++)*10000;
+      const r = x - Math.floor(x);
       return r;
 };
 
@@ -23337,7 +23337,7 @@ var rnd = function() {
 //};
 
 
-var shuffle = function(arr){
+const shuffle = (arr) => {
     //var scrambleRecursive = function(arr, count){
     //    count++;
     //    var _p1 = arr.splice(Math.floor(Math.random() * arr.length), 1)
@@ -23348,22 +23348,22 @@ var shuffle = function(arr){
     getRandomSelection(arr);
 };
 
-var getRandomSelection = function(arr, length){
-    var _length = length || 100
-    var _arr = [];
-    for(var i=0; i<length; i++){
-        _arr.push( arr[Math.round(Math.random() * arr.length)] );
+const getRandomSelection = (arr, length) => {
+    const _length = length || 100
+    const _arr = [];
+    for(let i = 0; i < length; i++){
+        _arr.push(arr[Math.round(Math.random() * arr.length)]);
     }
-    return _arr
+    return _arr;
 }
 
 
-var toPickFrom = stocks.slice(0);
+const toPickFrom = stocks.slice(0);
 
 console.log(" toPickFrom ", toPickFrom);
 shuffle(toPickFrom);
 
-var randomizeTicks = function() {
+const randomizeTicks = () => {
       if (toPickFrom.length < 200) {
             toPickFrom = stocks.slice(0);
             shuffle(toPickFrom);
@@ -23374,7 +23374,7 @@ var randomizeTicks = function() {
       }
 };
 
-var randomizeTick = function(stock) {
+const randomizeTick = (stock) => {
       stock.Bid = (stock.Bid * 0.99) + (stock.Bid * 0.017 * rnd())
       stock.Spread = rnd()/10;
       stock.Ask = stock.Bid + stock.Spread;
@@ -23400,10 +23400,11 @@ var randomizeTick = function(stock) {
             }
       }
 }
- 
-module.exports = {
-	stocks: stocks,
-	randomize: randomizeTicks
+
+export default {
+      stocks,
+      randomize: randomizeTicks
 };
+
 
 

@@ -1,12 +1,12 @@
-var windowListSingleton = {
+const windowListSingleton = {
     _instance: null,
-    createInstance:function createInstance(){
+    createInstance: function createInstance(){
         this._instance = {
             _windows:[],
-            getWindows:function getWindows() {
+            getWindows: function getWindows() {
                 return this._windows
                 },
-            addWindow:function addWindow(value){
+            addWindow: function addWindow(value){
                 if(this._windows.indexOf(value) === -1){
                     this._windows.push(value);
                 }
@@ -27,4 +27,4 @@ var windowListSingleton = {
     }
 };
 
-module.exports = windowListSingleton;
+export default windowListSingleton;

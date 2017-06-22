@@ -44,7 +44,7 @@ var isInt = function(n){
 };
 
 var isFloat = function(n){
-  return   n===Number(n)  && n%1!==0
+  return n===Number(n)  && n%1!==0
 };
 
 var format = function(data) {

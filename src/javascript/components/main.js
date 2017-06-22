@@ -1,28 +1,28 @@
-var React = require('react'),
-    _ = require('underscore'),
-    windowManager = require("../windowsListSingleton"),
-    fin = require('../vendor/openfin.js'),
-    ToolTip = require("../components/tooltip-decorator"),
-    excel = require("../vendor/ExcelAPI.js"),
-    excel_plugin_installed = false;
+import React, { Component } from 'react';
+import _ from 'underscore';
+import fin from '../vendor/openfin';
+import windowManager from "../windowsListSingleton";
+import ToolTip from '../components/tooltip-decorator';
+import excel from '../vendor/ExcelAPI';
 
-
-var _windowManager = windowManager.getInstance(),
-    animationWindows = _windowManager.getWindows(),
-    blotter,
-    inLoop = false,
-    cubeSize = 185,
-    locations = [],
-    numColumns = 6,
-    numRows = 3,
-    demoTiles = {},
-    numTiles = numRows * numColumns + 1,
+let excel_plugin_installed = false;
+let _windowManager = windowManager.getInstance();
+let animationWindows = _windowManager.getWindows();
+let blotter;
+let inLoop = false;
+let locations = [];
 // Have the grid windows been created yet?
-    _tilesCreated = false;
+let _tilesCreated = false;
+
+const cubeSize = 185;
+const numColumns = 6;
+const numRows = 3;
+const demoTiles = {};
+const numTiles = numRows * numColumns + 1;
 
 /* Static data for the floating 'trade' animation windows */
 
-var rndData = [
+const rndData = [
     {ticker: "PCL", last: 21.251049070187836},
     {ticker: "IBM", last: 24.835458631124418},
     {ticker: "TCK", last: 6.235665990223004},
@@ -43,10 +43,10 @@ var rndData = [
     {ticker: "ACC", last: 14.787034222549517},
     {ticker: "AA", last: 13.787034222549517}];
 
-var floor = Math.floor;
-var random = Math.random;
+const floor = Math.floor;
+const random = Math.random;
 
-function getWorkSheet(workBook, workSheet){
+const getWorkSheet = (workBook, workSheet) => {
   //  "Worksheet is ", workBook + " : " +  workSheet
   fin.desktop.Excel.getWorkbooks(function(workbooks){
     workbooks.filter(function(d, i){
@@ -65,7 +65,7 @@ function getWorkSheet(workBook, workSheet){
   return "TESTING "
 }
 
-var _ExcelSheetOpen = false;
+let _ExcelSheetOpen = false;
 
 fin.desktop.main(()=>{
   fin.desktop.InterApplicationBus.subscribe("*",
@@ -98,7 +98,7 @@ fin.desktop.main(()=>{
 });
 
 /* Initialises all the floating 'trade' windows. */
-var initAnimationWindows = function(){
+const initAnimationWindows = () => {
   console.log("initAnimationWindows called _tilesCreated == ",_tilesCreated);
 
   return new Promise(function(resolve, reject){
@@ -152,7 +152,7 @@ var initAnimationWindows = function(){
 };
 
 /* If the blotter has not been created yet, create it and return a promise...*/
-var initBlotter = function(){
+const initBlotter = () => {
   var _blotterPromise = new Promise((resolve, reject)=>{
     blotter = new fin.desktop.Window({
       name: 'blotter',
@@ -168,14 +168,14 @@ var initBlotter = function(){
       frame: false,
       maximizable: false,
       "icon": "http://demoappdirectory.openf.in/desktop/config/apps/OpenFin/HelloOpenFin/img/openfin.ico"
-    }, ()=>{
+    }, () => {
       resolve();
     })
   });
   return _blotterPromise
 };
 
-var initWpfChart = function(){
+const initWpfChart = () => {
 	fin.desktop.Application.getCurrent().getManifest(function (manifest) {
 		var version = manifest.runtime.version;
 		var appUuid = manifest.startup_app.uuid;
@@ -189,7 +189,7 @@ var initWpfChart = function(){
 	});
 }
 
-function showAsPromise (wnd) {
+const showAsPromise = (wnd) => {
   return new Promise((resolve)=>{
     fin.desktop.main(()=>{
       wnd.show(()=>{
@@ -201,7 +201,7 @@ function showAsPromise (wnd) {
   })
 }
 
-function setTranspatentAsPromise(arr, opacity) {
+const setTranspatentAsPromise = (arr, opacity) => {
   return new Promise((transparentFinished, transparentFailed)=>{
     Promise.all(arr.map((item)=>{
       return new Promise((resolve, reject)=>{
@@ -219,42 +219,56 @@ function setTranspatentAsPromise(arr, opacity) {
   });
 }
 
-module.exports = React.createClass({
-  closeApp: function(){
+class Main extends Component{
+
+  constructor(props){
+    super(props);
+    this.state = {
+      animationWindowsShowing: false,
+      tilesMaximised: false,
+      inLoop : false
+    }
+  }
+
+  closeApp(){
     fin.desktop.main(function(){
       fin.desktop.Application.getCurrent().close();
     });
-  },
+  }
 
-  minApp: function(){
+  minApp(){
     console.log("MINIFYING APP.")
     fin.desktop.main(function(){
       fin.desktop.Window.getCurrent().minimize();
     });
-  },
+  }
 
-  showWindows: function(){
+  showWindows = () => {
     console.log("showWindows called");
     animationWindows.forEach((wnd)=>{
       try{
         wnd.show();
         wnd.bringToFront();
+
       }catch(err){
-        //--
+        //
       }
+
       this.setState({
         animationWindowsShowing: true,
         tilesMaximised: true
-      })
+      }, () => {
+        window.animationWindowsShowing = true;
+        this.animateWindows(animationWindows, false);
+      });
     });
-    this.animateWindows(animationWindows, false);
-  },
+  }
 
-  toggleMinimised:function(){
+  toggleMinimised = () => {
     this.state.tilesMaximised ? this.minWindows() : this.restoreWindows();
-  },
+  }
 
-  minWindows: function() {
+  minWindows = () => {
     this.toggleAnimateLoopStop();
 
     animationWindows.forEach((wnd)=>{
@@ -263,33 +277,26 @@ module.exports = React.createClass({
     this.setState({
       tilesMaximised: false
     })
-  },
+  }
 
-  toggleShowAnimationWindows:function(){
+  toggleShowAnimationWindows = () => {
     console.log("toggleShowAnimationWindows called this. this.state.animationWindowsShowing = ",this.state.animationWindowsShowing);
     if(this.state.animationWindowsShowing){
       this.closeAnimationWindows();
     } else {
       this.openAnimationWindows();
     }
-  },
+  }
 
-  openAnimationWindows:function(){
-    console.log(" openAnimationWindows called ");
-    initAnimationWindows().then(()=>{
+  openAnimationWindows = () => {
+    console.log(" openAnimationWindows called ", this);
+    initAnimationWindows().then(() => {
       console.log(" initAnimationWindows resolved ");
       this.showWindows();
     });
+  }
 
-    this.setState({
-      animationWindowsShowing: true,
-      tilesMaximised: true
-    }, () => {
-      window.animationWindowsShowing = true;
-    });
-  },
-
-  closeAnimationWindows: function(){
+  closeAnimationWindows = () => {
     console.log("closeAnimationWindows -- called")
     this.toggleAnimateLoopStop();
     animationWindows.forEach((wnd)=>{
@@ -305,27 +312,27 @@ module.exports = React.createClass({
     }, () =>{
       window.animationWindowsShowing = false;
     });
-  },
+  }
 
-  toggleAnimateLoop:function(){
+  toggleAnimateLoop = () => {
     inLoop ? this.toggleAnimateLoopStop() : this.toggleAnimateLoopStart();
-  },
+  }
 
-  toggleAnimateLoopStart: function () {
+  toggleAnimateLoopStart = () => {
     inLoop = true;
     this.setState({"inLoop":true});
     if (inLoop) {
       this.animateWindows(animationWindows);
     }
-  },
+  }
 
-  toggleAnimateLoopStop: function () {
+  toggleAnimateLoopStop = () => {
     inLoop = false;
     this.setState({"inLoop":false});
-  },
+  }
 
     // Abstracted out the function for randomising
-  randomiseAnimationWindows: function(){
+  randomiseAnimationWindows(){
     return animationWindows
       .reduce(function(m, itm, idx, a) {
         m[0].push(m[1].splice(floor((random() * m[1].length)), 1)[0]);
@@ -333,9 +340,9 @@ module.exports = React.createClass({
       }, [
         [], animationWindows.slice()
       ])[0]
-  },
+  }
 
-  animateWindows: function(animationWindows, randomise){
+  animateWindows = (animationWindows, randomise) => {
     //Unless explicitly asked not to, randomise
     var _randomise = randomise !== false ? true : false;
     var _arr = _randomise ?  this.randomiseAnimationWindows() : animationWindows;
@@ -365,9 +372,10 @@ module.exports = React.createClass({
           })
         });
     });
-  },
+  }
 
-  openBlotter: function(){
+  openBlotter = () => {
+    console.log(this, "in open")
       if(!blotter){
           initBlotter().then(function(b){
               blotter.show();
@@ -376,9 +384,9 @@ module.exports = React.createClass({
           blotter.show();
           blotter.bringToFront();
       }
-  },
+  }
 
-  componentDidMount: function(){
+  componentDidMount = () => {
     console.log('Component did mount...', this);
     var _repositionWindows = function(){
       if(!this.state.inLoop &&  this.state.animationWindowsShowing){
@@ -389,10 +397,10 @@ module.exports = React.createClass({
     document.addEventListener('monitor-changed', function(e){
       _repositionWindows();
     })
-  },
+  }
 
 
-  openExcel: function() {
+  openExcel = () => {
     console.log("Open Excel called in main excel_plugin_installed = ", excel_plugin_installed)
     if(!excel_plugin_installed) {
       fin.desktop.main(function() {
@@ -420,9 +428,9 @@ module.exports = React.createClass({
     } else {
       this.openNewExcel();
     }
-  },
+  }
 
-  openNewExcel: function() {
+  openNewExcel = () => {
     fin.desktop.main(function(){
       var Excel = fin.desktop.Excel;
       Excel.init();
@@ -436,41 +444,33 @@ module.exports = React.createClass({
       Excel.addEventListener("connected", this.onExcelConnected);
       console.log("Called Excel ", Excel)
     });
-  },
+  }
 
-  workBookAddedCallback: function(evt){
+  workBookAddedCallback = (evt) => {
     console.log("Wokbook added callback called... ", evt);
-  },
+  }
 
-  onExcelConnected:function(){
+  onExcelConnected = () => {
     console.log("EXCEL FUNCTION CALLED ")
-  },
+  }
 
-  onWorkbookAdded:function(){
+  onWorkbookAdded = () => {
     console.log("EXCEL FUNCTION CALLED -- onWorkbookAdded ")
-  },
+  }
 
-  onWorkbookRemoved:function(){
+  onWorkbookRemoved = () => {
     console.log("EXCEL FUNCTION CALLED ")
-  },
+  }
 
-  onWorkbookActivateed:function(){
+  onWorkbookActivateed = () => {
     console.log("EXCEL ON WORKBOOK ACTIVATED CALLED ")
-  },
+  }
 
-  getInitialState: function(){
-    return {
-      animationWindowsShowing: false,
-      tilesMaximised: false,
-      inLoop : false
-    }
-  },
-
-  getAnimationWindowsStyle:function(){
+  getAnimationWindowsStyle = () => {
     return this.state.animationWindowsShowing ? "none" : "menuitem";
-  },
+  }
 
-  getAnimateClass:function(){
+  getAnimateClass = () => {
     if(this.state.animationWindowsShowing && this.state.tilesMaximised){
       var _class = this.state.inLoop ?  "fa fa-pause" : "fa fa-play";
       return {class: _class , style: {"display": "block"}};
@@ -488,40 +488,40 @@ module.exports = React.createClass({
       };
       return {class: _class, style: _style}
     }
-  },
+  }
 
-  getAnimateParentClass:function(){
+  getAnimateParentClass = () => {
     if(this.state.animationWindowsShowing ){
       return {"display" : "none"};
     } else {
       return {"display":"block"};
     }
-  },
+  }
 
-  getAnimateText:function(){
+  getAnimateText = () => {
     if(this.state.animationWindowsShowing ){
       return this.state.inLoop ?   "Pause animation" :  "Play animation" ;
     } else {
       return "";
     }
-  },
+  }
 
-  getMinifyText:function(){
+  getMinifyText = () => {
     if(this.state.animationWindowsShowing ){
       return this.state.tilesMaximised ?  {text: " Minimise", style: {"display" :"block"}, css: "none", icon:"fa fa-sort-amount-desc"} : {text: " Maximise", css: "", style: {"display" :"block"}, icon:"fa fa-sort-amount-asc"};
     } else {
       return {text: "Minimise", style: {"display" :"none"}, css: "none", icon:"fa fa-sort-amount-desc"};
     }
-  },
+  }
 
-  openGithub: function(){
+  openGithub = () => {
     fin.desktop.System.openUrlWithBrowser("https://github.com/openfin/Hyperblotter/tree/master", function () {
     },function (err) {
       console.log("Failed to open GitHub: " + err);
     });
-  },
+  }
 
-  render: function(){
+  render = () => {
     return <div className="main-bar">
       <img className="openfinLogo" type="image/svg+xml" src="images/hyperblotter_text.svg" />
       <div className="window-control">
@@ -573,4 +573,6 @@ module.exports = React.createClass({
       </div>
     </div>
   }
-});
+};
+
+export default Main;
