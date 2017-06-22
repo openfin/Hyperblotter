@@ -2,15 +2,21 @@ import React, { Component } from 'react';
 import _ from 'underscore';
 import fin from '../vendor/openfin';
 import RowDisplay from './row-display';
+import Utils from './utils';
+
+const {
+  rndRange,
+  add,
+  sub,
+  randTime,
+  lt,
+  gt,
+  prepNumbers
+} = Utils; 
 
 const userBids = [];
 const userAsks = [];
 let rowInfo, tmpState;
-
-
-const rndRange = () => {
-  return Math.floor(Math.random() * 10 % 5) / 10;
-};
 
 const rndDecrement = (base, len) => {
   const list = [];
@@ -20,18 +26,6 @@ const rndDecrement = (base, len) => {
     list.push(base);
   }
   return list;
-}
-
-const add = (a,b) => {
-  return a+b;
-}
-
-const sub = (a,b) => {
-  return a-b;
-}
-
-const plusMinus = (base, op) => {
-  return parseInt(Math.random() * 10) % 2 ? add(base, op) : sub(base, op);
 }
 
 const genItemFromBidAskValue = (item) => {
@@ -52,11 +46,6 @@ const genDataFromLast = (last) => {
   };
 }
 
-const randTime = () => {
-  return (
-    new Date(Date.now() - (Math.floor(Math.random() * 3000)))
-  ).toString().slice(16,24);
-}
 
 const rowFromArr = (arr, isAsk) => {
   const components = [];
@@ -76,14 +65,6 @@ const rowFromArr = (arr, isAsk) => {
   }
 
   return components;
-}
-
-const lt = (a,b) => {
-  return a < b;
-}
-
-const gt = (a,b) => {
-  return a > b;
 }
 
 const sortBy = (value, desc) => {
@@ -109,15 +90,6 @@ const prepDisplayList = (transientList, perminateList, desc) => {
         .sort(sortBy('value', desc))
         .slice(0, 3)
         .reverse()
-}
-
-const prepNumbers = (obj) => {
-	for (let prop in obj) {
-		if (typeof obj[prop] === 'number') {
-			obj[prop] = obj[prop].toFixed(2);
-		}
-	}
-	return obj;
 }
 
 class RowView extends Component {

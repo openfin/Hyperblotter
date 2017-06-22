@@ -1,56 +1,60 @@
-var React = require('react'),
-	fin = require('../vendor/openfin.js'),
-	start = null,
-	add = function(a,b){
-    return a + b;
-  },
-  sub = function(a,b){
-    return a - b;
-  },
-	rndRange = function () {
-    return Math.floor(Math.random() * 10 % 5) / 10;
-  },
-  plusMinus = function(base, op){
-    return parseInt(Math.random() * 10) % 2 ? add(base, op) : sub(base, op);
-  };
+import React, { Component } from 'react';
+import fin from '../vendor/openfin';
+import Utils from './utils';
 
-var urlData = location.search.split('&').map((i)=>{return i.split('=')[1]});
+const {
+  add,
+  sub,
+  rndRange,
+  plusMinus,
+} = Utils;
 
-module.exports = React.createClass({
-	closeWindow: ()=>{
-		fin.desktop.main(()=>{
+let start = null;
+
+const urlData = location.search.split('&').map((i)=>{return i.split('=')[1]});
+
+class TradeView extends Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      class: 'tile',
+  		ticker: urlData[0],
+  		last: Number(urlData[1]),
+      animationEndCount: 0
+    }
+  }
+
+  closeWindow = () => {
+    fin.desktop.main(()=>{
 			fin.desktop.Window.getCurrent().close();
 		});
-	},
-  closeApp: function(){
-		fin.desktop.main(function(){
+  }
+
+  closeApp = () => {
+    fin.desktop.main(function(){
 		  fin.desktop.Application.getCurrent().close();
 		});
-	},
-	closeWindow: function(){
-		var finWindow = fin.desktop.Window.getCurrent();
-		finWindow.close();
-	},
-	//-- min app is not currently being used but remains here for possible future use.
-	minApp: function(){
-		fin.desktop.main(function(){
+  }
+
+  minApp = () => {
+    fin.desktop.main(function(){
 		  fin.desktop.Window.getCurrent().minimize();
 		});
-	},
+  }
 
-  onEnterFrame:function(){
+  onEnterFrame = () => {
     console.log("EnterFrame --- ");
-  },
+  }
 
-  getBackgroundColor:function(){
+  getBackgroundColor = () => {
     return Math.random() > .5 ? "#ff0000" : "#00DD00";
-  },
+  }
 
-  getTileStyle: function(){
+  getTileStyle = () => {
     return{ "backgroundColor": this.getBackgroundColor() }
-  },
+  }
 
-  step: function(timestamp){
+  step = (timestamp) => {
     if (!start) start = timestamp;
     //
     //var progress = timestamp - start;
@@ -61,24 +65,24 @@ module.exports = React.createClass({
     //    console.log("TOW SECNDS");
     //}
     //window.requestAnimationFrame(this.step);
-	},
+  }
 
-	openDetailedChartWindow: function(){
-		console.log("openDetailedChartWindow [" + this.state.ticker + "]");
+  openDetailedChartWindow = () => {
+    console.log("openDetailedChartWindow [" + this.state.ticker + "]");
 		
 		fin.desktop.InterApplicationBus.publish('tickerSelection', {
 			symbolName: this.state.ticker
 		});
-  },
+  }
 
-	showNotifications: function(data){
-    var notification = new fin.desktop.Notification({
+  showNotifications = (data) => {
+    const notification = new fin.desktop.Notification({
       url: 'purchaseNotification.html',
       message: data,
       timeout: -1,
       onMessage: (message) => {
-        var companyNodes = document.querySelectorAll('.company');
-        var priceNodes = document.querySelectorAll('.price');
+        const companyNodes = document.querySelectorAll('.company');
+        const priceNodes = document.querySelectorAll('.price');
 
         Array.prototype.forEach.call(companyNodes, (node)=>{
           node.innerHTML = message.company;
@@ -95,11 +99,11 @@ module.exports = React.createClass({
     },function(){
       console.log('closed');
     });
-	},
+  }
 
-togglePinWindow: function() {
-    var currentWindow = fin.desktop.Window.getCurrent();
-    var parentWindow = window.opener.window;
+  togglePinWindow = () => {
+    const currentWindow = fin.desktop.Window.getCurrent();
+    const parentWindow = window.opener.window;
     
     if(!parentWindow.pinnedWindows){
       parentWindow.pinnedWindows = {};
@@ -115,19 +119,10 @@ togglePinWindow: function() {
       //if this doesn't exist this must be the first time.
       parentWindow.pinnedWindows[currentWindow.name] = true;
     }
-  },
+  }
 
-  getInitialState: function () {
-  	return {
-  		class: 'tile',
-  		ticker: urlData[0],
-  		last: Number(urlData[1]),
-      animationEndCount: 0
-  	}
-  },
-
-  componentDidMount: function(){
-	  setTimeout(function(){
+  componentDidMount = () => {
+    setTimeout(function(){
 		  try{
 			  fin.desktop.Window.getCurrent().bringToFront();
 		  }catch(err){
@@ -143,33 +138,29 @@ togglePinWindow: function() {
   			last: Number(urlData[1])
   		});
   	}, 1000 + ( Math.floor(Math.random() * 1000) ) );
-  },
+  }
 
-  componentWillUnmount:function(){
-    console.log("componentWillUnmount ----- trade-view.js ");
-  },
-
-  countAnimations(){
+  countAnimations = () => {
     this.state.animationEndCount++;
     // there are 3 animations we want to remove the class after they all finish
     if(this.state.animationEndCount === 3){
       document.querySelector('.purchaseFeedback').classList.remove('slide-in-out');
       this.state.animationEndCount = 0;
     }
-  },
+  }
 
-  getPinnedWindowClass:function(){
-    var currentWindow = fin.desktop.Window.getCurrent();
-    var parentWindow = window.opener.window;
+  getPinnedWindowClass = () => {
+    const currentWindow = fin.desktop.Window.getCurrent();
+    const parentWindow = window.opener.window;
 
     if(parentWindow.pinnedWindows && parentWindow.pinnedWindows[currentWindow.name]){
       return {icon:"fa fa-lock"}
     } else {
       return {icon:"fa fa-unlock"};
     }
-  },
+  }
 
-	render: function(){
+  render = () => {
     console.log("RENDERING --- ", this.state.ticker);
 		return (
 			<div className="tile trade-cell" style={this.getTileStyle()} >
@@ -216,12 +207,7 @@ togglePinWindow: function() {
         </div>
 			</div>
 		);
-	}
-});
+  }
+}
 
-/*
-
- <i onClick={this.minApp} className="fa fa-minus"></i>
- <i onClick={this.closeWindow} className="fa fa-times"></i>
-
- */
+export default TradeView;
