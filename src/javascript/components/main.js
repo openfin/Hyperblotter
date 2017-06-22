@@ -293,6 +293,7 @@ module.exports = React.createClass({
     console.log("closeAnimationWindows -- called")
     this.toggleAnimateLoopStop();
     animationWindows.forEach((wnd)=>{
+      window.pinnedWindows = window.pinnedWindows || [];
       if(!window.pinnedWindows[wnd.name]){
         wnd.hide();
       }
