@@ -1,19 +1,19 @@
-var React = require('react'),
-		ChartIq = require('./chart-iq.js'),
-		HyperGrid = require('./hypergrid.js'),
-		Menu = require('./menu.js'),
-		TopBar = require('./top-bar.js');
+import React, { Component } from 'react';
+import HyperGrid from './hypergrid';
+import ChartIq from './chart-iq';
+import Menu from './menu';
+import TopBar from './top-bar';
 
-
-var OpenFin = React.createClass({
-  render: function() {
-    return <div>
-	    <div className="app">
-	    	<TopBar />
-	      <HyperGrid />
-	    </div>
-	  </div>;
+class OpenFin extends Component{
+  render(){
+    return (
+			<div>
+				<div className="app">
+					<TopBar />
+					<HyperGrid />
+				</div>
+	  	</div>);
   }
-});
+};
 
-module.exports = OpenFin;
+export default OpenFin;

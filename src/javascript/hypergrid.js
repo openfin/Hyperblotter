@@ -1,6 +1,5 @@
-var _ = require('underscore'),
-	React = require('react'),
-	ReactDOM = require('react-dom'),
-	OFApp = require('./components/openfin.js');
+import React from 'react';
+import { render } from 'react-dom';
+import OFApp from './components/openfin';
   
-ReactDOM.render(<OFApp />, document.getElementById('root'));
+render(<OFApp />, document.getElementById('root'));

@@ -1,32 +1,34 @@
 /*global Promise*/
+const fin = require('../vendor/openfin.js');
 
-var fin = require('../vendor/openfin.js');
-
-module.exports = {
-	createChildWindow: function(config){
-		return new Promise( (resolve,reject)=>{
-
+const childWindow = {
+	createChildWindow: (config) => {
+		return new Promise( (resolve,reject) => {
 			if (!fin.desktop.mock){
-				fin.desktop.main(()=>{
-					var win =  new fin.desktop.Window(config, ()=>{
+				fin.desktop.main(() => {
+					var win = new fin.desktop.Window(config,
+					() => {
 						resolve(win);
 					},
-					(reason)=>{
+					(reason) => {
 						reject(reason)
 					});	
 				});
 			}
 			else {
-				resolve(window.open(config.url, config.name, 
-					`width=400,
+				const options = `
+					width=400,
 					 height=400
 					 menubar=no,
 					 location=no,
 					 resizable=no,
 					 scrollbars=no,
-					 status=no`));
+					 status=no`;
+				resolve(window.open(config.url, config.name,options));
 			}
 		});
 	}
 };
+
+export default childWindow;
 

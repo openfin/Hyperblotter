@@ -1,9 +1,10 @@
-var React = require('react'),
-    fin = require('../vendor/openfin.js'),
-    createChildWindow = require('./child-window.js').createChildWindow,
-    _ = require('underscore');
+import React, { Component } from 'react';
+import { createChildWindow } from './child-window';
+import _ from 'underscore';
+import fin from '../vendor/openfin';
 
-var childWindowConfigBase = () => {
+
+const childWindowConfigBase = () => {
   return {
     autoShow: false,
     width: 350,
@@ -16,39 +17,77 @@ var childWindowConfigBase = () => {
   }
 };
 
-var TopBar = React.createClass({
-	getInitialState: function() {
-		return {};
-	},
+const processList = (list, item, animations) => {
+  showAsPromise(item)
+    .then(() => {
+      animateAsPromise(item, animations, {}, () => {
+        var nextIndex = list.indexOf(item) + 1
+        hasNext = nextIndex + 1 < list.length;
+        if (hasNext) {
+          setTimeout(()=>{
+            processList(list, list[nextIndex], animations);
+          },1000);
+        }
+      })
+    },
+    (reason)=>{
+      console.log('not shown because', reason);
+    })
+}
 
-	closeApp: function(){
-		fin.desktop.main(function(){
+const showAsPromise = (wnd) =>  {
+	return new Promise((resolve)=>{
+		fin.desktop.main(()=>{
+			wnd.show(()=>{
+				resolve();
+			},()=>{
+				reject();
+			});
+		})
+	})
+}
+
+const animateAsPromise = (wnd, animations ,opts) => {
+	return new Promise((resolve, reject)=>{
+		fin.desktop.main(()=>{
+			wnd.animate(animations, opts, ()=>{
+				resolve();	
+			},
+			(reason)=>{
+				reject(reason);
+			})
+		})
+	});
+}
+
+class TopBar extends Component {
+  closeApp = () => {
+    fin.desktop.main(function(){
 		  fin.desktop.Window.getCurrent().hide();
 		});
-	},
+  }
 
-	componentDidMount: function() {
+  componentDidMount = () => {
     if (!fin.desktop) {
       return;
     }
     fin.desktop.main(function() {
       try {
         fin.desktop.Window.getCurrent();
-      } catch (e) {
-
-      }
+      } catch (e) {}
     });
-  },
-  startWindowDemo: () => {
-    var childWindows = [];
+  }
+
+  startWindowDemo = () => {
+    const childWindows = [];
     fin.desktop.main(() => {
-      fin.desktop.System.getMonitorInfo(function(monitorInfo) {
+      fin.desktop.System.getMonitorInfo((monitorInfo) => {
         console.log("This object contains information about all monitors: ", monitorInfo);
-        var width = 30,//monitorInfo.primaryMonitor.availableRect.right / 10,
-            height = 30,//monitorInfo.primaryMonitor.availableRect.bottom / 10,
-            i = 3,
-            top = 0,
-            left = 0;
+        const width = 30; //monitorInfo.primaryMonitor.availableRect.right / 10
+        const height = 30; //monitorInfo.primaryMonitor.availableRect.bottom / 10
+        let i = 3;
+        let top = 0;
+        let left = 0;
 
         while (i--) {
           childWindows.push(createChildWindow({
@@ -97,65 +136,21 @@ var TopBar = React.createClass({
             //     }
             // })
           },
-
           (reason)=>{
             console.log('rejected', reason);
           });
         });
     });
-  },
+  }
 
-	render: function () {
-		return <div className="top-bar">
+  render = () => {
+    return <div className="top-bar">
 			<span className="title">Blotter</span>
 			<i onClick={this.closeApp} className="fa fa-times"></i>
 		</div>
-	}
-});
+  }
+}
 
 //<i onClick={this.startWindowDemo} className="fa fa-arrows"></i>
 
-module.exports = TopBar;
-
-function processList(list, item, animations) {
-  showAsPromise(item)
-    .then(() => {
-      animateAsPromise(item, animations, {}, () => {
-        var nextIndex = list.indexOf(item) + 1
-        hasNext = nextIndex + 1 < list.length;
-        if (hasNext) {
-          setTimeout(()=>{
-            processList(list, list[nextIndex], animations);
-          },1000);
-        }
-      })
-    },
-    (reason)=>{
-      console.log('not shown because', reason);
-    })
-}
-
-function showAsPromise (wnd) {
-	return new Promise((resolve)=>{
-		fin.desktop.main(()=>{
-			wnd.show(()=>{
-				resolve();
-			},()=>{
-				reject();
-			});
-		})
-	})
-}
-
-function animateAsPromise (wnd, animations ,opts) {
-	return new Promise((resolve, reject)=>{
-		fin.desktop.main(()=>{
-			wnd.animate(animations, opts, ()=>{
-				resolve();	
-			},
-			(reason)=>{
-				reject(reason);
-			})
-		})
-	});
-}
+export default TopBar;

@@ -34,7 +34,7 @@ var browserifyTask = function(devMode) {
 
     console.log('the browser bundle', bundleConfig);
     var b = browserify(bundleConfig);
-    b.transform('babelify', { presets: ["es2015", "react"] });
+    b.transform('babelify', { presets: ["es2015", "react"], plugins: ["transform-class-properties", "transform-object-rest-spread"] });
 
     var bundle = function() {
       // Log when bundling starts

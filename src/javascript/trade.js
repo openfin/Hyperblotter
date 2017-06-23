@@ -1,8 +1,6 @@
 // Browserify entry point for the bundle (yay JavaScript!)
+import React from 'react';
+import { render } from 'react-dom';
+import TradeView from './components/trade-view';
 
-var _ = require('underscore'),
-	React = require('react'),
-	ReactDOM = require('react-dom'),
-	TradeView = require('./components/trade-view.js');
-
-ReactDOM.render(<TradeView />, document.getElementById('root'));
+render(<TradeView />, document.getElementById('root'));
