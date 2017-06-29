@@ -470,6 +470,12 @@ class Main extends Component{
     return this.state.animationWindowsShowing ? "none" : "menuitem";
   }
 
+  openDetailedChartWindow = () => {
+    fin.desktop.InterApplicationBus.publish('tickerSelection', {
+			symbolName: "IBM"
+		});
+  }
+
   getAnimateClass = () => {
     if(this.state.animationWindowsShowing && this.state.tilesMaximised){
       var _class = this.state.inLoop ?  "fa fa-pause" : "fa fa-play";
@@ -553,6 +559,13 @@ class Main extends Component{
           <span onClick={this.openBlotter}>
             <ToolTip legend="Grid">
               <i className="fa fa-table"></i>
+            </ToolTip>
+          </span>
+        </div>
+        <div>
+          <span onClick={this.openDetailedChartWindow}>
+            <ToolTip legend="Chart">
+              <i className="fa fa-bar-chart" ></i>
             </ToolTip>
           </span>
         </div>
