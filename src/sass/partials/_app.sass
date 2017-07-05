@@ -1,476 +1,494 @@
 $app-height: 600px
 $app-width: 970px
 $transition-time: 1s
-/* $top-bar-color: #1976D2 */
-$top-bar-color: rgb(60,115,172)
-$footer-bar-color: #2196F3
-$actions-color: #FFEB3B
-$bid-color: #4CAF50
-$ask-color: #F44336
-$blue-50: #E3F2FD
+$top-bar-color: rgb(60, 115, 172)
+$footer-bar-color: #2196f3
+$actions-color: #ffeb3b
+$bid-color: #4caf50
+$ask-color: #f44336
+$blue-50: #e3f2fd
 $table-header-bg: #2d2d2d
 $close-icon-size: 1.1rem
 $child-top-bar-flex: .37
 $top-bar-flex: .08
 
-
-/* z-index orders */
+// z-index orders
 $front: 10
 $slider: 7
 $middle: 5
 $back: 1
 
 body
-	height: 100%
-	margin: 0
-	overflow: hidden
-	font-family: Verdana
-	color: #4C89BC
-	background-color: #000
+  background-color: #030a28
+  color: #4c89bc
+  font-family: Verdana
+  height: 100%
+  margin: 0
+  overflow: hidden
 
 .app
-	display: flex
-	position: fixed
-	top: 0
-	left: 0
-	flex-direction: column
-	height: $app-height
-	width: $app-width
-	padding: 0
+  display: flex
+  flex-direction: column
+  height: $app-height
+  left: 0
+  padding: 0
+  position: fixed
+  top: 0
+  width: $app-width
 
 .menu-contain
-	display: flex
-	flex: 0.7
-	flex-direction: column
+  display: flex
+  flex: .7
+  flex-direction: column
 
 .menu
-	flex: .1
-	z-index: $front
-	text-align: center
-	background-color: #242424
-	cursor: pointer
-	font-weight: bold
-	font-size: larger
-	color: white
+  background-color: #242424
+  color: #fff
+  cursor: pointer
+  flex: .1
+  font-size: larger
+  font-weight: bold
+  text-align: center
+  z-index: $front
 
 .menu-user
-	position: absolute
-	left: 0
-	margin-left: 9px
+  left: 0
+  margin-left: 9px
+  position: absolute
 
 .menu-page
-	height: $app-height
-	width: $app-width
-	background-color: #2D2D2D
-	position: absolute
-	top: -$app-height
-	transition-duration: $transition-time
-	z-index: $slider
-	display: flex
-	flex-flow: row wrap
+  background-color: #2d2d2d
+  display: flex
+  flex-flow: row wrap
+  height: $app-height
+  position: absolute
+  top: -$app-height
+  transition-duration: $transition-time
+  width: $app-width
+  z-index: $slider
 
-.menu-page.showing
-	transform:  translateY($app-height + 45) 
-	transition-duration: $transition-time
-
+  .showing
+    transform:  translateY($app-height + 45)
+    transition-duration: $transition-time
 
 .chart-iq
-	z-index: $middle
-	overflow: hidden
-	padding: 5px
+  overflow: hidden
+  padding: 5px
+  z-index: $middle
 
 
 .hyper-grid
-	flex: 7
-	z-index: $middle
-	overflow: hidden
-	border-top: 1px white solid
-	padding: 5px
+  border-top: 1px #fff solid
+  flex: 7
+  overflow: hidden
+  padding: 5px
+  z-index: $middle
 
 
-.login 
-	/* display: flex */
-	display: none
-	position: absolute
-	top: 0
-	left: 0
-	width: $app-width
-	height: $app-height
-	transition-duration: $transition-time
-	background-color: #242424
-	z-index: 11
+.login
+  // display: flex
+  background-color: #242424
+  display: none
+  height: $app-height
+  left: 0
+  position: absolute
+  top: 0
+  transition-duration: $transition-time
+  width: $app-width
+  z-index: 11
 
 .logged-in
-	transform: translateY(-$app-height)
+  transform: translateY(-$app-height)
 
 #chartContainer
-	width: $app-width
-	height: 260px
+  height: 260px
+  width: $app-width
 
 .false-menu
-	flex: 1 100%
+  flex: 1 100%
 
 .watchlist
-	flex: 1 50%
-	background-color: #242424
+  background-color: #242424
+  flex: 1 50%
 
 .watchlist-details
-	flex: 1 50%
-	background-color: #242424
+  background-color: #242424
+  flex: 1 50%
 
 .login-form
-	margin: auto
+  margin: auto
 
 .top-bar
-	display: flex
-	background-color: rgba(255,255,255,.2)
-	color: $actions-color
-	/* background: url('http://www.jackson-pollock.org/images/paintings/convergence.jpg') */
-	z-index: $front
-	height: 12px
-	justify-content: right
-	align-items: center
-	padding: 12px
-	-webkit-app-region: drag
-	i
-		flex: 1
-		font-size: $close-icon-size
-		color: grey
-		text-align: right
-		-webkit-app-region: no-drag
-    cursor: pointer
-  i:hover
-    color: white
-	.title
-		flex: 15
-		color: #FFF
-		font-size: 1rem
+  -webkit-app-region: drag
+  align-items: center
+  background-color: rgba(255, 255, 255, .2)
+  color: $actions-color
+  display: flex
+  // background: url('http://www.jackson-pollock.org/images/paintings/convergence.jpg')
+  height: 12px
+  justify-content: right
+  padding: 12px
+  z-index: $front
 
+  i
+    -webkit-app-region: no-drag
+    color: #808080
+    cursor: pointer
+    flex: 1
+    font-size: $close-icon-size
+    text-align: right
+
+    &:hover
+      color: #fff
+
+  .title
+    color: #fff
+    flex: 15
+    font-size: 1rem
 
 .grid-contain
-  padding: 0px
   overflow: hidden
+  padding: 0
 
 #stock-example
   display: block
-  width: $app-width
   height: 573px
   overflow: hidden
+  width: $app-width
 
 .button
-	padding: 5px
-	font-size: 12px
-	color: white
-	background-color: #2D2D2D
-	border: 1px solid #333434
-	margin-right: 0px
-	font-weight: bold
-	cursor: pointer
-	transition: all $transition-time ease-in
+  background-color: #2d2d2d
+  border: 1px solid #333434
+  color: #fff
+  cursor: pointer
+  font-size: 12px
+  font-weight: bold
+  margin-right: 0
+  padding: 5px
+  transition: all $transition-time ease-in
 
-.button:hover
-	background-color: #8D8D8D
-	border: 1px solid #333434
+  &:hover
+    background-color: #8d8d8d
+    border: 1px solid #333434
 
 .top-button
-	border-radius: 20px
-	margin: 0px
-	line-height: 10px
-	padding: 1px 4px 3px 4px
-	-webkit-app-region: no-drag
+  -webkit-app-region: no-drag
+  border-radius: 20px
+  line-height: 10px
+  margin: 0
+  padding: 1px 4px 3px
 
 .close-button
-	position: absolute
-	left: 930px
-	left: 935px
-	top: 3px
+  left: 935px
+  position: absolute
+  top: 3px
 
 .equities-list
-	margin: 0 0 0 10px
-	padding: 0
-.equities-list.team span
-	 margin-left: 5px
-.equities-list li
-	cursor: pointer
-	list-style: none
+  margin: 0 0 0 10px
+  padding: 0
 
-.equities-list .selected
-	color: #ADCFED
-	left: 930px
+  .team
+    span
+      margin-left: 5px
+
+  li
+    background-color: #2d2d2d
+    cursor: pointer
+    font-size: 20px
+    font-weight: bold
+    list-style: none
+    margin: 2px 10px 2px 0
+    padding: 8px 20px
+
+    &:hover
+      color: #fff
+
+  .selected
+    color: #adcfed
+    left: 930px
 
 .left-content
-	margin-left: 10px
-	border-bottom: #2D2D2D 2px solid
-	color: white
-
-
+  border-bottom: #2d2d2d 2px solid
+  color: #fff
+  margin-left: 10px
 
 #status-indicator
+  background-color: #2c2c2c
+  border-radius: 20px
   display: inline-block
   height: 10px
   width: 10px
-  background-color: #2C2C2C
-  border-radius: 20px
 
-#status-indicator.online
-	background-color: red
-
-.equities-list
-	li 
-		background-color: #2D2D2D
-		padding: 8px 20px
-		margin: 2px 10px 2px 0
-		font-size: 20px
-		font-weight: bold
-
-.equities-list li:hover
-		color: white
+  .online
+    background-color: #f00
 
 .story
-	overflow: hidden
-	height: 41px
-	text-overflow: ellipsis
-	color: white
-	width: 95%
+  color: #fff
+  height: 41px
+  overflow: hidden
+  text-overflow: ellipsis
+  width: 95%
 
-.story:hover 
-	color: #ADCFED
-	cursor: pointer
-
+  &:hover
+    color: #adcfed
+    cursor: pointer
 
 .item-logo
   height: 20px
   width: 20px
 
 .text-box
-	border: 0
-	color: #c6c8c8
-	background-color: #454646
-	font-size: 12px
-	margin-bottom: 10px
-	padding: 5px
-	border: 1px solid transparent
+  background-color: #454646
+  border: 1px solid transparent
+  color: #c6c8c8
+  font-size: 12px
+  margin-bottom: 10px
+  padding: 5px
 
 .logo
-	margin-left: 15px
+  margin-left: 15px
 
 .real-chart
-	visibility: visible
-	position: absolute!important
-	top: 50px
+  position: absolute !important
+  top: 50px
+  visibility: visible
 
 .hide-chart
-	visibility: hidden
+  visibility: hidden
 
 .is-chart
-		display: block
-		font-family: Arial, Helvetica, sans-serif
-		font-size: 12px
-		position: relative
-		width: 960px
-		height: 260px
+  display: block
+  font-family: Arial, Helvetica, sans-serif
+  font-size: 12px
+  height: 260px
+  position: relative
+  width: 960px
 
-
-/*child windows*/
+// child windows
 .child
-	display: flex
-	flex-direction: column
-	height: 100%
+  display: flex
+  flex-direction: column
+  height: 100%
 
-	.top-bar
-		display: flex
-		align-items: center
-		flex: $child-top-bar-flex
-		background-color: $top-bar-color
-		-webkit-app-region: drag
-		padding: 8px
-		i
-			-webkit-app-region: no-drag
-			flex: 1
-			font-size: $close-icon-size
-			color: white
-			text-align: right
-		i.unlocked
-			visibility: hidden
-		.title
-			flex: 8
-			color: white
-			font-size: 1rem
-	.contents
-		display: flex
-		flex: 8
-		
-		flex-direction: column
-		.bid-ask
-			display: flex
-			flex: 2
-			color: black
-			.last
-				flex: 1
-				display: flex
-				flex-direction: column
-				align-items: center
-				color: $top-bar-color
-				.tkr
-					flex: 1
-					font-size: 1.5rem
-				.transaction
-					flex: 3
-					font-size: 3.4rem
+  .top-bar
+    -webkit-app-region: drag
+    align-items: center
+    background-color: $top-bar-color
+    display: flex
+    flex: $child-top-bar-flex
+    padding: 8px
 
-			.bid
-				flex: 1
-			.ask
-				flex: 1
-			.bid, .ask
-				display: flex
-				flex-direction: column
-				align-items: center
-				justify-content: center
-				padding: 8px
-				font-size: 2rem
-				.label
-					flex: 1
-				input
-					flex: 1
-					width: 100%
-					text-align: right
-					padding: 1px
-					font-size: 12px
-			.order-book
-				flex: 1
-				display: flex
+    i
+      -webkit-app-region: no-drag
+      color: #fff
+      flex: 1
+      font-size: $close-icon-size
+      text-align: right
 
-		.quantity
-			flex: .5
+    .unlocked
+      visibility: hidden
 
-		.orders
-			flex: 2
-			display: flex
+    .title
+      color: #fff
+      flex: 8
+      font-size: 1rem
 
-			table
-				flex: 1
-				width: 159px
-				margin-right: 8px
-				margin-left: 8px
-				background-color: black
-				color: white
-				th
-					background-color: $table-header-bg
-				td, th
+  .contents
+    -webkit-app-region: drag
+    display: flex
+    flex: 8
+    flex-direction: column
 
-					padding: 4px
-					font-size: .7rem
-			ul
-				flex: 1
-				list-style: none
-				padding: 10px 8px 0 8px
-				margin: 0
-				li
-					border-bottom: 1px solid silver
-					margin: 4px
-					padding: 4px
-	
+    .bid-ask
+      color: #000
+      display: flex
+      flex: 2
 
-/*		.row-display */
-/*			table-layout: fixed */
-/*			caption */
-/*				text-align: left */
-/* */
-/*			th, td */
-/*				padding: 5px 8px */
-/*				border-bottom: 1px solid silver */
-/*			th */
-/*				text-align: left */
-/*			td */
-/*				text-align: right */
-/*			.buy */
-/*				color: #4CAF50 */
-/*			.sell */
-/*				color: #F44336 */
+      .last
+        align-items: center
+        color: $top-bar-color
+        display: flex
+        flex: 1
+        flex-direction: column
 
-				
-/*.footer */
-/*	display: flex */
-/*	flex: 2 */
-/*	background-color: $footer-bar-color */
-/*	.spacer */
-/*		background-color: black */
-/*		opacity: .12 */
-/*		flex: .2 */
-/*	.trade, .order */
-/*		cursor: pointer */
-/*		display: flex */
-/*		justify-content: center */
-/*		align-items: center */
-/*		flex: 20 */
-/*		background-color: #2196F3 */
-/*		.link */
-/*			color: #FBC02D */
-/*			font-size: 2rem# */
-/*	.trade:hover, .order:hover */
-/*		color: #E3F2FD!important */
+      .ticker
+        flex: 1
+        font-size: 1.5rem
+
+      .transaction
+        flex: 3
+        font-size: 3rem
+
+      .bid,
+      .ask
+        align-items: center
+        display: flex
+        flex: 1
+        flex-direction: column
+        font-size: 2rem
+        justify-content: center
+        padding: 8px
+
+        .label
+          flex: 1
+
+        input
+          flex: 1
+          font-size: 12px
+          padding: 1px
+          text-align: right
+          width: 100%
+
+      .order-book
+        display: flex
+        flex: 1
+
+    .quantity
+      flex: .5
+
+    .orders
+      display: flex
+      flex: 2
+
+      table
+        background-color: #000
+        color: #fff
+        flex: 1
+        margin-left: 8px
+        margin-right: 8px
+        text-align: center
+        width: 159px
+
+        th
+          background-color: $table-header-bg
+
+        td,
+        th
+          font-size: .7rem
+          padding: 4px
+
+      ul
+        flex: 1
+        list-style: none
+        margin: 0
+        padding: 10px 8px 0
+
+        li
+          border-bottom: 1px solid #c0c0c0
+          margin: 4px
+          padding: 4px
+
+// .row-display
+//   table-layout: fixed
+//
+//   caption
+//     text-align: left
+//
+//   th,
+//   td
+//     border-bottom: 1px solid #c0c0c0
+//     padding: 5px 8px
+//
+//   th
+//     text-align: left
+//
+//   td
+//     text-align: right
+//
+//   .buy
+//     color: #4caf50
+//
+//   .sell
+//     color: #f44336
+
+
+// .footer
+//   background-color: $footer-bar-color
+//   display: flex
+//   flex: 2
+//
+// 	.spacer
+// 		background-color: black
+// 		opacity: .12
+// 		flex: .2
+//
+// 	.trade, .order
+// 		cursor: pointer
+// 		display: flex
+// 		justify-content: center
+// 		align-items: center
+// 		flex: 20
+// 		background-color: #2196F3
+//
+// 		.link
+// 			color: #FBC02D
+// 			font-size: 2rem
+//
+// 	.trade:hover,
+//   .order:hover
+//     color: #E3F2FD !important
 
 
 .actions-bg
-	position: absolute
-	top: 90.5%
-	left: 88.5%
-	width: 86px
-	height: 48px
-	background-color: $top-bar-color
-	border-radius: 5px
-	opacity: .8
-	z-index: 49
+  border-radius: 5px
+  height: 48px
+  left: 88.5%
+  opacity: .8
+  position: absolute
+  top: 75%
+  width: 86px
+  z-index: 49
 
 .actions
-	position: absolute
-	top: 90.5%
-	left: 88.5%
-	
-	border-radius: 5px
-	z-index: 50
-	i
-		font-size: 2rem
-		color: $actions-color
-		padding: 8px
-		cursor: pointer
+  border-radius: 5px
+  left: 88.5%
+  position: absolute
+  top: 90.5%
+  z-index: 50
+
+  i
+    color: $actions-color
+    cursor: pointer
+    font-size: 2rem
+    padding: 8px
 
 .user-added
-	td
-		background-color: pink
+  td
+    background-color: #ffc0cb
 
 .order-table
-	width: 100%
-	font-size: .7rem
-	
-	th
-		background-color: $table-header-bg
-		padding: 4px
-	th, td
-		color: white
-	td, th
-		text-align: right
-		padding-right: 10px
-	td:first-child
-		text-align: center
-		color: red
+  font-size: .7rem
+  width: 100%
 
-body
-	background-color: #030a28
+  th
+    background-color: $table-header-bg
+    padding: 4px
 
-.openfinLogo
-  width: 85px
+  th,
+  td
+    color: #fff
+    padding-right: 10px
+    text-align: right
+
+  td
+    &:first-child
+      color: #f00
+      text-align: center
+
+.openfin-logo
+  left: 24px
   position: absolute
   top: 8px
-  left: 24px
+  width: 85px
 
 .copyright
-  padding: 20px 8px
+  color: #ccc
   font-size: 11px
-  color: #cccccc
+  padding: 20px 8px
+
   a
-    color: #4C89BC
+    color: #4c89bc
     text-decoration: none
+
     &:hover
-      color: #ffffff
+      color: #fff

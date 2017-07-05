@@ -28,6 +28,10 @@ const rndDecrement = (base, len) => {
   return list;
 }
 
+const plusMinus = (base, op) => {
+  return parseInt(Math.random() * 10) % 2 ? add(base, op) : sub(base, op);
+};
+
 const genItemFromBidAskValue = (item) => {
   return {
     value: item,
@@ -49,7 +53,7 @@ const genDataFromLast = (last) => {
 
 const rowFromArr = (arr, isAsk) => {
   const components = [];
-  const len = arr.length;
+  let len = arr.length;
   let shares, time;
 
   while(len--){
@@ -57,10 +61,10 @@ const rowFromArr = (arr, isAsk) => {
     time = arr[len].time || randTime();
 
     components.push(
-      <tr className={arr[len].userAdded ? 'user-added' : '' }>
-          <td>{ isAsk ? arr[len].value.toFixed(2) : shares }</td>
-          <td>{ isAsk ? shares : arr[len].value.toFixed(2) }</td>
-        </tr>
+      <tr className={arr[len].userAdded ? 'user-added' : '' } key={len}>
+        <td>{ isAsk ? arr[len].value.toFixed(2) : shares }</td>
+        <td>{ isAsk ? shares : arr[len].value.toFixed(2) }</td>
+      </tr>
     );
   }
 
@@ -68,14 +72,25 @@ const rowFromArr = (arr, isAsk) => {
 }
 
 const sortBy = (value, desc) => {
-  if(gt(a[value], b[value])){
-    return desc ? -1 : 1;
+  if(desc) {
+    return (a,b) => {
+      if(gt(a[value], b[value])){
+        return -1;
+      }
+      if(lt(a[value], b[value])){
+        return 1;
+      }
+    }
   }
-  if(lt(a[value], b[value])){
-    return desc ? 1 : -1;
-  }
-  else{
-    return 0;
+  else {
+    return (a,b) => {
+      if(lt(a[value], b[value])){
+        return -1;
+      }
+      if(gt(a[value], b[value])){
+        return 1;
+      }
+    }
   }
 }
 
@@ -85,11 +100,11 @@ const userAddedFilter = (item) => {
 
 const prepDisplayList = (transientList, perminateList, desc) => {
   return transientList
-        .filter(userAddedFilter)
-        .concat(perminateList)
-        .sort(sortBy('value', desc))
-        .slice(0, 3)
-        .reverse()
+          .filter(userAddedFilter)
+          .concat(perminateList)
+          .sort(sortBy('value', desc))
+          .slice(0, 3)
+          .reverse()
 }
 
 class RowView extends Component {
@@ -105,40 +120,34 @@ class RowView extends Component {
   }
 
   componentDidMount = () => {
-    const jsonGrid = window.opener.document.querySelector('#stock-example'),
+    const jsonGrid = window.opener.document.querySelector('#stock-example');
     const jsonModel = jsonGrid.getBehavior();
     rowInfo = jsonModel.getRow(location.search.split('=')[1]);
+    tmpState = genDataFromLast(rowInfo.Last);
+    tmpState.rowInfo = rowInfo;
+    tmpState.bid = prepDisplayList([
+      rowInfo.Bid - rndRange(),
+      rowInfo.Bid - rndRange() - .7,
+      rowInfo.Bid - rndRange() - 1.7,
+      ].map((item)=>{
+      return {
+        value : item,
+        shares: Math.floor(Math.random() * 10000)
+      }
+    }), [], true);
 
-    // Object.observe has been deprecated. this needs refactoring
-    Object.observe(rowInfo, _.throttle(() => {
-      /**
-       * @todo refactor this out
-       */
-      //rndDecrement
-      tmpState = genDataFromLast(rowInfo.Last);
-      tmpState.rowInfo = rowInfo;
-      tmpState.bid = prepDisplayList([
-        rowInfo.Bid - rndRange(),
-        rowInfo.Bid - rndRange() - .7,
-        rowInfo.Bid - rndRange() - 1.7,
-        ].map((item)=>{
-        return {
-          value : item,
-          shares: Math.floor(Math.random() * 10000)
-        }
-      }), [], true);
-      tmpState.ask = prepDisplayList([
-        rowInfo.Ask + rndRange(),
-        rowInfo.Ask + rndRange() + .7,
-        rowInfo.Ask + rndRange() + 1.7,
-        ].map((item)=>{
-        return {
-          value : item,
-          shares: Math.floor(Math.random() * 10000)
-        }
-      }), [])
-      this.setState(tmpState);
-    }, 2500));
+    tmpState.ask = prepDisplayList([
+      rowInfo.Ask + rndRange(),
+      rowInfo.Ask + rndRange() + .7,
+      rowInfo.Ask + rndRange() + 1.7,
+      ].map((item)=>{
+      return {
+        value : item,
+        shares: Math.floor(Math.random() * 10000)
+      }
+    }), []);
+
+    this.setState(tmpState);
   }
 
   closeWindow = () => {
@@ -165,7 +174,7 @@ class RowView extends Component {
         <div className="contents">
           <div className="bid-ask">
             <div className="last"> 
-              <div className="tkr">{this.state.rowInfo.TICKER}</div>
+              <div className="ticker">{this.state.rowInfo.TICKER}</div>
               <div className="transaction">{this.state.rowInfo.Last.toFixed(2)}</div>
             </div>
           </div>
@@ -178,7 +187,7 @@ class RowView extends Component {
                 </tr>
               </thead>
               <tbody>
-              { rowFromArr(this.state.bid)}
+                { rowFromArr(this.state.bid)}
               </tbody>
             </table>
             <table>

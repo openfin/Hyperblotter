@@ -11,10 +11,6 @@ export default {
         return a-b;
     },
 
-    plusMinus: (base, op) => {
-        return parseInt(Math.random() * 10) % 2 ? add(base, op) : sub(base, op);
-    },
-
     randTime: () => {
         return (
             new Date(Date.now() - (Math.floor(Math.random() * 3000)))

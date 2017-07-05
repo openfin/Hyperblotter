@@ -18,12 +18,12 @@ const childWindow = {
 			else {
 				const options = `
 					width=400,
-					 height=400
-					 menubar=no,
-					 location=no,
-					 resizable=no,
-					 scrollbars=no,
-					 status=no`;
+          height=400
+          menubar=no,
+          location=no,
+          resizable=no,
+          scrollbars=no,
+          status=no`;
 				resolve(window.open(config.url, config.name,options));
 			}
 		});
@@ -31,4 +31,3 @@ const childWindow = {
 };
 
 export default childWindow;
-

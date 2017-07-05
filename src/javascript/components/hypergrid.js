@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
-// import _ from 'lodash';
 import _ from 'underscore';
 import moment from 'moment';
 import excel from '../vendor/ExcelAPI';
 import ticker from '../griddata/data_ticker';
-import createChildWindow from './child-window';
+import childWindow from './child-window';
 
 let Excel, lastSelectedRow, _cachedGridSelectionData;
 let latestWorkBook = null;
@@ -86,11 +85,9 @@ const excelCallback = (o) => {
   }
 };
 
-const OnCellSelectionChanged = () => {};
-
 const splitFlatArray = (array, rows) => {
   const _array = array.slice(0)
-  const _returnArray = [];
+  let _returnArray = [];
   let _start = 0, _end, _rowLength;
   _rowLength = Math.ceil(_array.length / rows);
   for(let i = 0; i< _array.length; i+=_rowLength){
@@ -109,7 +106,7 @@ const createExcelCoordinates = (a, b) => {
   const _alphabet = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
   const _numberOfAlphabetsLength = Math.floor(a/_alphabet.length);
   if(_numberOfAlphabetsLength > _alphabet.length * _alphabet.length ){
-      throw new Error("There are too many columns to generate a coordinate.")
+    throw new Error("There are too many columns to generate a coordinate.")
   }
   const _alphabetLength = a % _alphabet.length;
   const _letterOne = _alphabet[_numberOfAlphabetsLength-1] ? _alphabet[_numberOfAlphabetsLength-1] : "";
@@ -119,20 +116,29 @@ const createExcelCoordinates = (a, b) => {
   return {x: _xCoord, y: b}
 };
 
-
-
 ///////////////////////////////////
 
 class HyperGrid extends Component {
+  openBidOffer = () => {
+    childWindow.createChildWindow({
+      name: 'orders',
+      url: 'order.html',
+      autoShow: true,
+      width: 960,
+      maxWidth: 960,
+      minWidth: 960,
+      height: 594 / 3,
+      maxHeight: 594 / 3,
+      minHeight: 594 / 3,
+      frame: false
+    });
+  }
+
   componentDidMount = () => {
     fin.desktop.main(() => {
       document.querySelector('fin-hypergrid-excel').unSubscribeToBus();
 
-      console.log("document.querySelector('fin-hypergrid-excel') ",document.querySelector('fin-hypergrid-excel'))
-
-      console.log("FIN IS INITIALISED IN THE GRID...")
       Excel = fin.desktop.Excel;
-      Excel.init();
       Excel.init();
       Excel.getConnectionStatus(excelCallback);
       Excel.addEventListener("workbookAdded", excelCallback);
@@ -181,8 +187,6 @@ class HyperGrid extends Component {
               ws.filter(function(dd,ii){
                 return dd.name === "Sheet1"
               }).map(function(ddd,iii){
-                //console.log("DATA SELECTION : ",data.selection[0].region);
-                //console.log("createExcelCoordinates", createExcelCoordinates(data.selection[0].region[2], data.selection[0].region[0]))
                 var _coords = createExcelCoordinates(data.selection[0].region[1], data.selection[0].region[0]);
 
                 if(_cachedGridSelectionData){
@@ -255,7 +259,7 @@ class HyperGrid extends Component {
       }
     }, 1000);
 
-    window.addEventListener('polymer-ready',function(){
+    window.addEventListener('polymer-ready', function(){
       const jsonGrid = document.querySelector('#stock-example');
       const jsonModel = jsonGrid.getBehavior();
 
@@ -267,7 +271,7 @@ class HyperGrid extends Component {
         //draw the thick blue line at the bottom of the header
         gc.beginPath();
         var fixedColumnsWidth = jsonModel.getFixedColumnsWidth();
-        var viewWidth = this.getBounds().width() - 200; // look in fin-hypergrid and initializtion of fin-canvas            
+        var viewWidth = this.getBounds().width() - 200; // look in fin-hypergrid and initializtion of fin-canvas
         var height = this.getFixedRowHeight(0);
         gc.strokeStyle = '#3D77FE';//61,119,254
         gc.lineWidth = 4;
@@ -284,15 +288,10 @@ class HyperGrid extends Component {
       jsonModel.setData(_arrayGen.getStocks());
 
       if(__trace){
-        // console.log(JSON.stringify(_arrayGen.getStocks()));
         __trace == false
       }
 
       jsonModel.setFixedColumnCount(1);
-
-      //jsonModel.setHeaders(['0 Symbol','1 Name','2 High','3 Low','Last','Today', 'Change','% Change','Volume','Bid Qty','Bid','Spread','Ask','Ask Qty','Country Code','Country','ICB','Industry','Super Sector','Sector','Sub Sector','Date','Time','Open','Cls','Previous Cls','Previous Cls Dt','Name']);
-      //jsonModel.setFields(['TICKER','NAME','High','Low','Last','Today', 'Change','PercentChange','Volume','BidQuantity','Bid','Spread','Ask','AskQuantity','countryCode', 'COUNTRY','ICB','INDUS','SUP_SEC','SEC','SUB_SEC','Date','Time','Open','Close','PreviousClose','PreviousCloseDate','NAME']);
-
       jsonModel.setHeaders(['Symbol','Name', 'Today', 'Last', 'Change','Volume','Bid Qty']);
       jsonModel.setFields(['TICKER','NAME', 'Today', 'Last', 'Change','Volume','BidQuantity']);
 
@@ -340,8 +339,23 @@ class HyperGrid extends Component {
       });
 
       jsonGrid.addFinEventListener('fin-selection-changed', function(event) {
-        console.log("+++++++++++++ The selection has changed ", event)
-        console.log("+++++++++++++ The selection has changed: this ", jsonGrid)
+        setTimeout(function() {
+          lastSelectedRow = jsonGrid.getMouseDown().y || 0;
+          const row = jsonModel.getRow(lastSelectedRow);
+
+          childWindow.createChildWindow({
+            name: row.NAME,
+            url: 'row-view.html?row=' + lastSelectedRow,
+            autoShow: true,
+            width: 350,
+            maxWidth: 350,
+            frame: false,
+            maximizable: false,
+            height: 600 / 3,
+            maxHeight: 600 / 3,
+            minHeight: 600 / 3
+          });
+        }, 100);
       });
 
       ticker.timerGenerator().start();
@@ -353,7 +367,7 @@ class HyperGrid extends Component {
       jsonModel.fixedColumnClicked = (grid, cellData) => {
         lastSelectedRow =  cellData.gridCell.y;
         const row = jsonModel.getRow(lastSelectedRow)
-        //require('./child-window.js').createChildWindow({
+        //childWindow.createChildWindow({
         //    name: row.NAME,
         //    url: 'chartiq/stx-advanced.html?row=' + lastSelectedRow,
         //    autoShow: true,git
@@ -432,110 +446,44 @@ class HyperGrid extends Component {
         return renderer;
       };
 
-      //jsonModel.setHeaders(['0 Symbol','1 Name','2 High','3 Low','4 Last','5 Today', '6 Change','7 % Change','8 Volume','9 Bid Qty','10 Bid','11 Spread','12 Ask','13 Ask Qty','14Country Code','Country','ICB','Industry','Super Sector','Sector','Sub Sector','Date','Time','Open','Cls','Previous Cls','Previous Cls Dt','Name']);
-
-      //var state = {"columnIndexes":[0,26,4,3,5,7,27,28, 8, 9],"fixedColumnIndexes":[],"hiddenColumns":[25,1,18,24,14,10,11,12,13,21,6,2,15,16,17,19,20,23,22],"columnWidths":[150,270,100,100,100,107.2890625,86.30078125,114.203125,95.01953125,95.01953125,64.50390625,95.01953125,79.76171875,92.306640625,86.5908203125,38.38671875,118.5322265625,167.72021484375,341.04296875,248.8876953125,266.775390625,177.84765625,49.4189453125,25.3046875,73.591796875,269.416015625,467.5234375,102.35546875,86.30078125],"fixedColumnWidths":[79.4453125],"rowHeights":{},"fixedRowHeights":{},"sorted":[]}
-      //var _columnIndexes = [0,26,4,3,5,7,27,28]
-      // original
-      /*
-      var _columnIndexes = [0,26,4,3,5,7,27,28]
-      var _hiddenColumns = [28,25,1,18,24,14,10,11,12,13,21,6,2,15,16,17,19,20,23,22]
-      */
-      //Modified
-
       const _columnIndexes = [0,1,2,3,4,5,6];
       const _hiddenColumns = [];
 
-      console.log("_columnIndexes ", _columnIndexes)
-      const state = {"columnIndexes":_columnIndexes,
-          "fixedColumnIndexes":[],
-          "hiddenColumns":_hiddenColumns,
-          "columnWidths":[150,358,210,100,100,107.2890625,86.30078125,114.203125,95.01953125,95.01953125,64.50390625,95.01953125,79.76171875,92.306640625,86.5908203125,38.38671875,118.5322265625,167.72021484375,341.04296875,248.8876953125,266.775390625,177.84765625,49.4189453125,25.3046875,73.591796875,269.416015625,467.5234375,102.35546875,86.30078125],
-          "fixedColumnWidths":[79.4453125],
-          "rowHeights":{},
-          "fixedRowHeights":{},
-          "sorted":[]};
+      const state = {
+        "columnIndexes":_columnIndexes,
+        "fixedColumnIndexes":[],
+        "hiddenColumns":_hiddenColumns,
+        "columnWidths":[150,358,210,100,100,107.2890625,86.30078125,114.203125,95.01953125,95.01953125,64.50390625,95.01953125,79.76171875,92.306640625,86.5908203125,38.38671875,118.5322265625,167.72021484375,341.04296875,248.8876953125,266.775390625,177.84765625,49.4189453125,25.3046875,73.591796875,269.416015625,467.5234375,102.35546875,86.30078125],
+        "fixedColumnWidths":[79.4453125],
+        "rowHeights":{},
+        "fixedRowHeights":{},
+        "sorted":[]
+      };
 
       jsonModel.setState(state);
       jsonModel.setImage('up-arrow', imageCache['up-arrow']);
       jsonModel.setImage('down-arrow', imageCache['down-arrow']);
-
-      //setTimeout(function() {
-      //    jsonGrid.resetTextWidthCache();
-      //    jsonModel.changed();
-      //}, 100);
-      //setTimeout(function() {
-      //    jsonGrid.resetTextWidthCache();
-      //    jsonModel.changed();
-      //}, 400);
-      //setTimeout(function() {
-      //    jsonGrid.resetTextWidthCache();
-      //    jsonModel.changed();
-      //}, 500);
-      //setTimeout(function() {
-      //    jsonGrid.resetTextWidthCache();
-      //    jsonModel.changed();
-      //}, 1000);
     });
   }
 
-  openBidOffer = () => {
-      require('./child-window.js').createChildWindow({
-        name: 'orders',
-        url: 'order.html',
-        autoShow: true,
-        width: 960,
-        maxWidth: 960,
-        minWidth: 960,
-        height: 594 / 3,
-        maxHeight: 594 / 3,
-        minHeight: 594 / 3,
-        frame: false
-      });
-    }
 
-    openOrders = () => {
-      const jsonGrid = document.querySelector('#stock-example');
-      const jsonModel = jsonGrid.getBehavior();
-
-      lastSelectedRow = lastSelectedRow || 0;
-      const row = jsonModel.getRow(lastSelectedRow);
-      console.log("OPEN ORDERS --  ", row);
-      createChildWindow({
-        name: row.NAME,
-        url: 'row-view.html?row=' + lastSelectedRow,
-        autoShow: true,
-        width: 350,
-        maxWidth: 350,
-        frame: false,
-        maximizable: false,
-        height: 594 / 3,
-        maxHeight: 594 / 3,
-        minHeight: 594 / 3
-      });
-    }
-
-    render =  () => {
-      return (
-        <div className="grid-contain">
-          <fin-hypergrid id="stock-example">
-            <fin-hypergrid-behavior-json></fin-hypergrid-behavior-json>
-            <fin-hypergrid-excel></fin-hypergrid-excel>
-          </fin-hypergrid>
+  render =  () => {
+    return (
+      <div className="grid-contain">
+        <div className="actions-bg">
+          <div className="actions">
+            {
+            <i onClick={this.openBidOffer} className="fa fa-file-text"></i>
+            }
+          </div>
         </div>
-      );
-    }
-  
+        <fin-hypergrid id="stock-example">
+          <fin-hypergrid-behavior-json></fin-hypergrid-behavior-json>
+          <fin-hypergrid-excel></fin-hypergrid-excel>
+        </fin-hypergrid>
+      </div>
+    );
+  }
 }
 
 export default HyperGrid;
-// module.exports = HyperGrid;
-
-/*
-Holding onto this code to be rolled in on a later release.
- <div className="actions-bg"></div>
- <div className="actions">
- <i onClick={this.openOrders} className="fa fa-plus-square"></i>
- <i onClick={this.openBidOffer} className="fa fa-file-text"></i>
- </div>
- */

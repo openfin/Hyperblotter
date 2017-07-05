@@ -32,7 +32,6 @@ var browserifyTask = function(devMode) {
       bundleConfig = _.omit(bundleConfig, ['external', 'require']);
     }
 
-    console.log('the browser bundle', bundleConfig);
     var b = browserify(bundleConfig);
     b.transform('babelify', { presets: ["es2015", "react"], plugins: ["transform-class-properties", "transform-object-rest-spread"] });
 

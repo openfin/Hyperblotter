@@ -7,7 +7,7 @@ const jsonModel = jsonGrid.getBehavior();
 const configureDisplayState = () => {
 	const book = window.opener.orderBook;
 	let len = book.length || 0;
-	const state = [];
+	let state = [];
 	let row;
 
 	while(len--){
@@ -47,15 +47,10 @@ class OrderView extends Component{
 	}
 
 	componentDidMount = () => {
-		/* Object.observe is deprecated
-		* this entire component is not in use
-		* at the moment but an alternative
-		* to Object.observe needs to be found
-		* when it is.
-		*/
-		Object.observe(window.opener.orderBook, (...args) => {
-          this.setState(window.opener.orderBook);
-      });
+    console.log("MOUNTED", window.opener);
+    this.setState({
+			orderBook: window.opener.orderBook
+		});
 	}
 
 	render = () => {

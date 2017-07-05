@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { createChildWindow } from './child-window';
+import childWindow from './child-window';
 import _ from 'underscore';
 import fin from '../vendor/openfin';
 
@@ -90,7 +90,7 @@ class TopBar extends Component {
         let left = 0;
 
         while (i--) {
-          childWindows.push(createChildWindow({
+          childWindows.push(childWindow.createChildWindow({
             defaultWidth: 1,
             //maxWidth: width,
             //minWidth: width,

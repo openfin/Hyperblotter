@@ -67,36 +67,6 @@ const getWorkSheet = (workBook, workSheet) => {
 
 let _ExcelSheetOpen = false;
 
-fin.desktop.main(()=>{
-  fin.desktop.InterApplicationBus.subscribe("*",
-    "inter_app_messaging",
-    function (message, senderUuid) {
-      console.log("This following message has been received from "
-        + senderUuid + ": ", message);
-      if(message.hyperblotterExists === 'true'){
-        console.log()
-      }
-    }
-  );
-
-  initBlotter().then(function(b){
-      // do nothing, if you want the blotter to show automatically blotter.show();
-  });
-
-  initAnimationWindows().then(function(val){
-    fin.desktop.System.addEventListener('monitor-info-changed', function (evnt) {
-      console.log("The monitor information has changed to: ", evnt);
-      document.dispatchEvent(new CustomEvent('monitor-changed', {'detail': evnt}));
-    }, function () {
-      console.log("The registration of 'monitor-info-changed' was successful");
-    },function (err) {
-      console.log("failure: registration of 'monitor-info-changed' " + err);
-    });
-  });
-	
-	initWpfChart();
-});
-
 /* Initialises all the floating 'trade' windows. */
 const initAnimationWindows = () => {
   console.log("initAnimationWindows called _tilesCreated == ",_tilesCreated);
@@ -179,15 +149,45 @@ const initWpfChart = () => {
 	fin.desktop.Application.getCurrent().getManifest(function (manifest) {
 		var version = manifest.runtime.version;
 		var appUuid = manifest.startup_app.uuid;
-		
+
 		var args = '--parentuuid=' + appUuid + ' --runtimeversion=' + version + ' --hidden=true';
-		
+
 		fin.desktop.System.launchExternalProcess({
 			alias: 'hyperblotter-chart',
 			arguments: args
 		});
 	});
 }
+
+fin.desktop.main(()=>{
+  fin.desktop.InterApplicationBus.subscribe("*",
+    "inter_app_messaging",
+    function (message, senderUuid) {
+      console.log("This following message has been received from "
+        + senderUuid + ": ", message);
+      if(message.hyperblotterExists === 'true'){
+        console.log()
+      }
+    }
+  );
+
+  initBlotter().then(function(b){
+      // do nothing, if you want the blotter to show automatically blotter.show();
+  });
+
+  initAnimationWindows().then(function(val){
+    fin.desktop.System.addEventListener('monitor-info-changed', function (evnt) {
+      console.log("The monitor information has changed to: ", evnt);
+      document.dispatchEvent(new CustomEvent('monitor-changed', {'detail': evnt}));
+    }, function () {
+      console.log("The registration of 'monitor-info-changed' was successful");
+    },function (err) {
+      console.log("failure: registration of 'monitor-info-changed' " + err);
+    });
+  });
+
+	initWpfChart();
+});
 
 const showAsPromise = (wnd) => {
   return new Promise((resolve)=>{
@@ -237,19 +237,16 @@ class Main extends Component{
   }
 
   minApp(){
-    console.log("MINIFYING APP.")
     fin.desktop.main(function(){
       fin.desktop.Window.getCurrent().minimize();
     });
   }
 
   showWindows = () => {
-    console.log("showWindows called");
     animationWindows.forEach((wnd)=>{
       try{
         wnd.show();
         wnd.bringToFront();
-
       }catch(err){
         //
       }
@@ -375,19 +372,17 @@ class Main extends Component{
   }
 
   openBlotter = () => {
-    console.log(this, "in open")
-      if(!blotter){
-          initBlotter().then(function(b){
-              blotter.show();
-          });
-      }else{
-          blotter.show();
-          blotter.bringToFront();
-      }
+    if(!blotter){
+      initBlotter().then(function(b){
+        blotter.show();
+      });
+    }else{
+      blotter.show();
+      blotter.bringToFront();
+    }
   }
 
   componentDidMount = () => {
-    console.log('Component did mount...', this);
     var _repositionWindows = function(){
       if(!this.state.inLoop &&  this.state.animationWindowsShowing){
         this.animateWindows.call(this, animationWindows, false);
@@ -529,7 +524,7 @@ class Main extends Component{
 
   render = () => {
     return <div className="main-bar">
-      <img className="openfinLogo" type="image/svg+xml" src="images/hyperblotter_text.svg" />
+      <img className="openfin-logo" type="image/svg+xml" src="images/hyperblotter_text.svg" />
       <div className="window-control">
         <i onClick={this.closeApp} className="fa fa-times"><div></div></i>
         <i onClick={this.minApp}  className="fa fa-minus"><div></div></i>
