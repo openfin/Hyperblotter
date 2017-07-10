@@ -1,28 +1,26 @@
 import React, { Component } from 'react';
 import _ from 'underscore';
-import numeral from 'numeral';
 import moment from 'moment';
 import excel from '../vendor/ExcelAPI';
+import ticker from '../griddata/data_ticker';
 import childWindow from './child-window';
-import ticker from '../components/ticker.js';
 
 let Excel, lastSelectedRow, _cachedGridSelectionData;
 let latestWorkBook = null;
 
-const countries = ['GR','DK','ZA','RU','CO','IT','IN','BR','AE','AF','AG','AI','AM','AO','AS','AR','AT','AU','AX','BA','BB','BD','BE','BF','BH','BI','BJ','BM','BN','BS','BT','BV','BY','CA','CC','CD','CG','CH','CK','CL','CM','CN','CO','CR','CU','CV','CX','CY','CZ','DE','DM','DO','DZ','EE','EH','ES','FI','FJ','FK','FM','FR','GB','GE','GI','GL','GM','GN','GP','GQ','GS','GT','GU','GW','GY','HK','HM','HN','HR','HU','ID','IE','IL','IO','IQ','IR','JO','JP','KE','KG','KH','KM','KY','KZ','LC','LI','LK','LR','LS','LT','LU','LV','LY','MD','MH','MK','MM','MO','MQ','MR','MS','MT','MU','MV','MW','MX','MY','MZ','NA','NC','NE','NF','NG','NI','NL','NO','NP','NR','NU','NZ','OM','PA','PE','PF','PH','PK','PL','PM','PN','PR','PS','PW','PY','QA','RE','RO','RS','SA','SB','SD','SE','SG','SH','SJ','SM','SN','SO','SR','ST','SV','TC','TD','TH','TJ','TK','TL','TN','TO','TR','TT','TV','TW','UM','UY','UZ','VA','VE','VI','VN','WS','ZA','ZW','KR'];
+const _arrayGen = ticker.arrayGenerator();
 
-let imageCache = {};
+const countries = ['GR','DK','ZA','RU','CO','IT','IN','BR','AE','AF','AG','AI','AM','AO','AS','AR','AT','AU','AX','BA','BB','BD','BE','BF','BH','BI','BJ','BM','BN','BS','BT','BV','BY','CA','CC','CD','CG','CH','CK','CL','CM','CN','CO','CR','CU','CV','CX','CY','CZ','DE','DM','DO','DZ','EE','EH','ES','FI','FJ','FK','FM','FR','GB','GE','GI','GL','GM','GN','GP','GQ','GS','GT','GU','GW','GY','HK','HM','HN','HR','HU','ID','IE','IL','IO','IQ','IR','JO','JP','KE','KG','KH','KM','KY','KZ','LC','LI','LK','LR','LS','LT','LU','LV','LY','MD','MH','MK','MM','MO','MQ','MR','MS','MT','MU','MV','MW','MX','MY','MZ','NA','NC','NE','NF','NG','NI','NL','NO','NP','NR','NU','NZ','OM','PA','PE','PF','PH','PK','PL','PM','PN','PR','PS','PW','PY','QA','RE','RO','RS','SA','SB','SD','SE','SG','SH','SJ','SM','SN','SO','SR','ST','SV','TC','TD','TH','TJ','TK','TL','TN','TO','TR','TT','TV','TW','UM','UY','UZ','VA','VE','VI','VN','WS','ZA','ZW','KR'];
+const imageCache = {};
 
 (function() {
   let each, img;
-
   for (let i = 0; i < countries.length; i++) {
     each = countries[i];
     img = new Image();
     img.src = 'images/famfamfam_flag_icons/png/' + each.toLowerCase() + '.png';
     imageCache[each] = img;
   }
-
   img = new Image();
   img.src = 'images/up-arrow.png';
   imageCache['up-arrow'] = img;
@@ -32,7 +30,7 @@ let imageCache = {};
   imageCache['down-arrow'] = img;
 })();
 
-let typeAlignmentMap = {
+const typeAlignmentMap = {
   j: 'right',
   s: 'left',
   t: 'center',
@@ -40,15 +38,15 @@ let typeAlignmentMap = {
   d: 'center'
 };
 
-let isInt = function(n){
-  return Number(n) === n && n%1 === 0;
+const isInt = function(n){
+  return Number(n)===n && n%1===0;
 };
 
-let isFloat = function(n){
-  return n === Number(n)  && n%1 !== 0;
+const isFloat = function(n){
+  return n===Number(n)  && n%1!==0
 };
 
-let format = (data) => {
+const format = (data) => {
   if (isInt(data)) {
     if (data > 1431446226436) { // this is a time
       return moment(data).format('HH:mm:ss.SSS');
@@ -56,31 +54,14 @@ let format = (data) => {
       return numeral(data).format('0,0');
     }
   } else if (isFloat(data)) {
-    return numeral(data).format('0,0.00');
+      return numeral(data).format('0,0.00');
   } else {
-    return data;
+      return data;
   }
-};
-
-
-//Excel functions
-const splitFlatArray = (array, rows) => {
-  const _array = array.slice(0)
-  let _returnArray = [];
-  let _start = 0, _end, _rowLength;
-  _rowLength = Math.ceil(_array.length / rows);
-
-  for(let i = 0; i< _array.length; i+=_rowLength){
-    _start =  i;
-    _end = _start + _rowLength;
-    let _temp = _array.slice(_start,_end);
-    _returnArray.push(_temp)
-    _start = _end +1
-  }
-  return _returnArray;
 };
 
 const excelCallback = (o) => {
+  console.log("EXCEL CALLBACK ", o );
   const _hyperBlotters = workbooks.filter(function(d, i){
     return d.name === "hyperblotter.xlsx"
   });
@@ -102,6 +83,21 @@ const excelCallback = (o) => {
     default :
       console.log("The default action in the switch statement.")
   }
+};
+
+const splitFlatArray = (array, rows) => {
+  const _array = array.slice(0)
+  let _returnArray = [];
+  let _start = 0, _end, _rowLength;
+  _rowLength = Math.ceil(_array.length / rows);
+  for(let i = 0; i< _array.length; i+=_rowLength){
+    _start =  i;
+    _end = _start + _rowLength;
+    let _temp = _array.slice(_start,_end);
+    _returnArray.push(_temp)
+    _start = _end +1
+  }
+  return _returnArray;
 };
 
 const createExcelCoordinates = (a, b) => {
@@ -138,7 +134,7 @@ class HyperGrid extends Component {
     });
   }
 
-  componentDidMount() {
+  componentDidMount = () => {
     fin.desktop.main(() => {
       document.querySelector('fin-hypergrid-excel').unSubscribeToBus();
 
@@ -263,7 +259,7 @@ class HyperGrid extends Component {
       }
     }, 1000);
 
-    window.addEventListener('polymer-ready',function(){
+    window.addEventListener('polymer-ready', function(){
       const jsonGrid = document.querySelector('#stock-example');
       const jsonModel = jsonGrid.getBehavior();
 
@@ -271,37 +267,33 @@ class HyperGrid extends Component {
         if (!this.grid) {
           return;
         }
-
         this.renderGrid(gc);
         //draw the thick blue line at the bottom of the header
         gc.beginPath();
-        let fixedColumnsWidth = jsonModel.getFixedColumnsWidth();
-        let viewWidth = this.getBounds().width() - 200; // look in fin-hypergrid and initializtion of fin-canvas
-        let height = this.getFixedRowHeight(0);
-
+        var fixedColumnsWidth = jsonModel.getFixedColumnsWidth();
+        var viewWidth = this.getBounds().width() - 200; // look in fin-hypergrid and initializtion of fin-canvas
+        var height = this.getFixedRowHeight(0);
         gc.strokeStyle = '#3D77FE';//61,119,254
         gc.lineWidth = 4;
         gc.moveTo(0, height + 0.5);
         gc.lineTo(viewWidth, height + 0.5);
         gc.stroke();
-
         this.getGrid().gridRenderedNotification();
       };
 
       jsonGrid.getRenderer().paint.bind(jsonGrid);
 
-      let cellProvider = jsonModel.getCellProvider();
+      var cellProvider = jsonModel.getCellProvider();
+      var __trace = true
+      jsonModel.setData(_arrayGen.getStocks());
 
-      jsonModel.setData(ticker.stocks);
-
-      setInterval(function() {
-        ticker.randomize();
-        jsonModel.dataModified();
-      }, 100);
+      if(__trace){
+        __trace == false
+      }
 
       jsonModel.setFixedColumnCount(1);
-      jsonModel.setHeaders(['Symbol','High','Low','Last','Today', 'Change','% Change','Volume','Bid Qty','Bid','Spread','Ask','Ask Qty','Country Code','Country','ICB','Industry','Super Sector','Sector','Sub Sector','Date','Time','Open','Cls','Previous Cls','Previous Cls Dt','Name']);
-      jsonModel.setFields(['TICKER','High','Low','Last','Today', 'Change','PercentChange','Volume','BidQuantity','Bid','Spread','Ask','AskQuantity','countryCode', 'COUNTRY','ICB','INDUS','SUP_SEC','SEC','SUB_SEC','Date','Time','Open','Close','PreviousClose','PreviousCloseDate','NAME']);
+      jsonModel.setHeaders(['Symbol','Name', 'Today', 'Last', 'Change','Volume','Bid Qty']);
+      jsonModel.setFields(['TICKER','NAME', 'Today', 'Last', 'Change','Volume','BidQuantity']);
 
       const bgColor = '#07071E';
       const fixedAreasBGColor = bgColor;
@@ -327,12 +319,11 @@ class HyperGrid extends Component {
         lineColor: '#131C23',
         gridLinesV: false,
         gridLinesH: true,
-
         fixedColumnFGSelColor: 'white',
         fixedColumnBGSelColor: '#3D77FE',
         fixedRowFGSelColor: 'white',
         fixedRowBGSelColor: '#3D77FE',
-
+        columnAutosizing: false,
         defaultFixedRowHeight: 40
       };
 
@@ -341,12 +332,16 @@ class HyperGrid extends Component {
       //to apply to a specific table
       jsonGrid.addProperties(lnfOverrides);
       jsonGrid.editAt = function(){};
+      jsonGrid.addFinEventListener('fin-click', function(event) {
+        setTimeout(function(){
+          _arrayGen.setSortArray(jsonGrid.getState().sorted);
+        }, 10);
+      });
 
       jsonGrid.addFinEventListener('fin-selection-changed', function(event) {
         setTimeout(function() {
           lastSelectedRow = jsonGrid.getMouseDown().y || 0;
           const row = jsonModel.getRow(lastSelectedRow);
-          window.orderBook.push({rowNum: row});
 
           childWindow.createChildWindow({
             name: row.NAME,
@@ -363,29 +358,34 @@ class HyperGrid extends Component {
         }, 100);
       });
 
+      ticker.timerGenerator().start();
+      document.addEventListener("frame-updated", function(e){
+        jsonModel.setData(_arrayGen.getDataWithRandomisation(jsonGrid.getVScrollValue(), jsonGrid.getVScrollValue()+11));
+        jsonModel.dataModified();
+      });
+
       jsonModel.fixedColumnClicked = (grid, cellData) => {
         lastSelectedRow =  cellData.gridCell.y;
-        let row = jsonModel.getRow(lastSelectedRow)
-
-        childWindow.createChildWindow({
-          name: row.NAME,
-          url: 'chartiq/stx-advanced.html?row=' + lastSelectedRow,
-          autoShow: true,
-          defaultWidth: 960,
-          maxWidth: 960,
-          minWidth: 960,
-          maxHeight: 594,
-          defaultHeight: 594,
-          minHeight: 594,
-          resizable:false,
-          frame: true,
-          maximizable: false,
-          saveWindowState: false
-        })
+        const row = jsonModel.getRow(lastSelectedRow)
+        //childWindow.createChildWindow({
+        //    name: row.NAME,
+        //    url: 'chartiq/stx-advanced.html?row=' + lastSelectedRow,
+        //    autoShow: true,git
+        //    defaultWidth: 960,
+        //    maxWidth: 960,
+        //    minWidth: 960,
+        //    maxHeight: 594,
+        //    defaultHeight: 594,
+        //    minHeight: 594,
+        //    resizable:false,
+        //    frame: true,
+        //    maximizable: false,
+        //    saveWindowState: false
+        //})
       };
 
       jsonModel.highlightCellOnHover= function(isColumnHovered, isRowHovered) {
-        return isRowHovered;
+          return isRowHovered;
       };
 
       const flashMap = {
@@ -401,10 +401,9 @@ class HyperGrid extends Component {
       cellProvider.getCell = function(config) {
         let renderer = cellProvider.cellCache.simpleCellRenderer;
         config.halign = 'right';
-        let x = config.x;
-        let y = config.y;
-
-        let row = jsonModel.getRow(y) || {
+        const x = config.x;
+        const y = config.y;
+        const row = jsonModel.getRow(y) || {
           flash: 0,
           flashColor: 'green'
         };
@@ -418,21 +417,20 @@ class HyperGrid extends Component {
           config.halign = 'right';
         };
 
-        if (x === 4 || x === 2) {
+        if (x === 2) {
           renderer = cellProvider.cellCache.sparklineCellRenderer;
-        } else if (x === 5 || x === 6) {
+        } else if (x === 4 || x === 6) {
           config.value = format(config.value);
           config.halign = 'center';
-
           if (config.value.indexOf('-') === 0) {
             config.value = '(' + config.value.substring(1) + ')';
             config.fgColor = 'red';
           } else {
             config.fgColor = 'green';
           }
+          //config.font = '24px Verdana';
         } else if (x === 3) {
           config.value = format(config.value);
-
           if (row.flash > 0) {
             config.bgColor = flashMap[row.flashColor](row.flash);
             config.fgColor = 'white';
@@ -443,17 +441,19 @@ class HyperGrid extends Component {
         } else {
           config.value = format(config.value);
         }
-
         row.lastViewedTime = Date.now();
         renderer.config = config;
         return renderer;
       };
 
-      let state = {
-        "columnIndexes":[0,26,4,3,5,7,27,28],
+      const _columnIndexes = [0,1,2,3,4,5,6];
+      const _hiddenColumns = [];
+
+      const state = {
+        "columnIndexes":_columnIndexes,
         "fixedColumnIndexes":[],
-        "hiddenColumns":[25,1,18,24,14,8,9,10,11,12,13,21,6,2,15,16,17,19,20,23,22],
-        "columnWidths":[null,115.80859375,95.01953125,103.9609375,160,107.2890625,86.30078125,114.203125,95.01953125,95.01953125,64.50390625,95.01953125,79.76171875,92.306640625,86.5908203125,38.38671875,118.5322265625,167.72021484375,341.04296875,248.8876953125,266.775390625,177.84765625,49.4189453125,25.3046875,73.591796875,269.416015625,467.5234375,102.35546875,86.30078125],
+        "hiddenColumns":_hiddenColumns,
+        "columnWidths":[150,358,210,100,100,107.2890625,86.30078125,114.203125,95.01953125,95.01953125,64.50390625,95.01953125,79.76171875,92.306640625,86.5908203125,38.38671875,118.5322265625,167.72021484375,341.04296875,248.8876953125,266.775390625,177.84765625,49.4189453125,25.3046875,73.591796875,269.416015625,467.5234375,102.35546875,86.30078125],
         "fixedColumnWidths":[79.4453125],
         "rowHeights":{},
         "fixedRowHeights":{},
@@ -466,23 +466,24 @@ class HyperGrid extends Component {
     });
   }
 
-  render() {
+
+  render =  () => {
     return (
       <div className="grid-contain">
-        {/*
         <div className="actions-bg">
           <div className="actions">
+            {/*
             <i onClick={this.openBidOffer} className="fa fa-file-text"></i>
+            */}
           </div>
         </div>
-        */}
         <fin-hypergrid id="stock-example">
           <fin-hypergrid-behavior-json></fin-hypergrid-behavior-json>
           <fin-hypergrid-excel></fin-hypergrid-excel>
         </fin-hypergrid>
       </div>
     );
-    }
+  }
 }
 
 export default HyperGrid;

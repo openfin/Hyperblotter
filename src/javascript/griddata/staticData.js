@@ -23268,11 +23268,10 @@ const data = {
 }
 
 let count = data.NAME.length;
-let i = 0;
 let stocks = [];
 window.CC = {};
-for (i = 0; i < count; i++) {
-  CC[data.COUNTRY[i]] = true;
+for (let i = 0; i < count; i++) {
+  window.CC[data.COUNTRY[i]] = true;
   stocks[i] = {
         NAME: data.NAME[i],
         TICKER: data.TICKER[i],
@@ -23305,6 +23304,12 @@ for (i = 0; i < count; i++) {
         countryCode: countryMap[data.COUNTRY[i]]
     }
 }
+
+stocks.sort(function(a, b) {
+  return a.TICKER < b.TICKER
+    ? -1
+    : 1;
+});
 
 export default {
   data,
