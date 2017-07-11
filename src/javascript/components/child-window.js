@@ -6,13 +6,13 @@ const childWindow = {
 		return new Promise( (resolve,reject) => {
 			if (!fin.desktop.mock){
 				fin.desktop.main(() => {
-					var win = new fin.desktop.Window(config,
+					let win = new fin.desktop.Window(config,
 					() => {
 						resolve(win);
 					},
 					(reason) => {
 						reject(reason)
-					});	
+					});
 				});
 			}
 			else {

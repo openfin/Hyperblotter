@@ -61,12 +61,15 @@ const format = (data) => {
 };
 
 const excelCallback = (o) => {
-  console.log("EXCEL CALLBACK ", o );
-  const _hyperBlotters = workbooks.filter(function(d, i){
-    return d.name === "hyperblotter.xlsx"
+  let _hyperBlotters;
+
+  fin.desktop.Excel.getWorkbooks(function(workbooks){
+    _hyperBlotters = workbooks.filter(function(d, i){
+      return d.name === "hyperblotter.xlsx";
+    });
   });
 
-  if(_hyperBlotters.length > 0){
+  if(_hyperBlotters && _hyperBlotters.length !== 0){
     fin.desktop.InterApplicationBus.publish("inter_app_messaging", {
       hyperblotterExists: true
     });
@@ -78,7 +81,7 @@ const excelCallback = (o) => {
       latestWorkBook = o.workbook;
     break;
     case "connected" :
-      console.log("There has been a connection event .. ", o)
+      console.log("There has been a connection event .. ")
     break;
     default :
       console.log("The default action in the switch statement.")
@@ -131,13 +134,13 @@ class HyperGrid extends Component {
       maxHeight: 594 / 3,
       minHeight: 594 / 3,
       frame: false
+    }).catch((err) => {
+      console.log(err);
     });
   }
 
   componentDidMount = () => {
     fin.desktop.main(() => {
-      document.querySelector('fin-hypergrid-excel').unSubscribeToBus();
-
       Excel = fin.desktop.Excel;
       Excel.init();
       Excel.getConnectionStatus(excelCallback);
@@ -145,30 +148,8 @@ class HyperGrid extends Component {
       Excel.addEventListener("workbookClosed", excelCallback);
       Excel.addEventListener("connected", excelCallback);
       Excel.addEventListener("workbookActivated", function(w){
-        console.log("THERE HAS BEEN A WORKBOOK workbookActivated");
+        console.log("WorkbookActivated");
       });
-
-      //console.log("Called Excel ", Excel)
-      //fin.desktop.InterApplicationBus.subscribe("*", "excelResult", function(data) {
-      //    console.log("excelResult ", data);
-      //});
-
-      fin.desktop.InterApplicationBus.subscribe("*", "excelEvent", function(data) {
-          console.log("excelEvent", data.workbookName);
-      });
-
-      //-- function tp split the data returned from the fin-hypergid selection venet into a 3d object
-      //function splitFlatArray(array, columns){
-      //    var _returnArray = [];
-      //
-      //    var _numArrays = Math.floor(array.length / columns );
-      //    var _arrayLength = array.length / _numArrays
-      //
-      //    for(var i = 0; i<=array.length; i+= _arrayLength) {
-      //        _returnArray.push(array.slice(i, i+(_arrayLength) ));
-      //    }
-      //    return _returnArray;
-      //}
 
       fin.desktop.InterApplicationBus.subscribe("*", "onSelect", function(data) {
         var clonedDataValues = data.selection[0].values.slice(0);
@@ -179,8 +160,6 @@ class HyperGrid extends Component {
           var _hyperBlotter = workbooks.filter(function(d, i){
             return d.name === "hyperblotter.xlsx"
           });
-
-          console.log("There are ", _hyperBlotter.length , " HyperBlotters");
 
           _hyperBlotter.map(function(d,i){
             var _worksheet = d.getWorksheets(function(ws){
@@ -208,52 +187,12 @@ class HyperGrid extends Component {
             });
           });
         });
-
-          /*
-          if(latestWorkBook){
-              latestWorkBook.getWorksheets(function(ws){
-                  // console.log("First Worksheet = ", ws[0]);
-                  // console.log(data.selection[0].region);
-
-                  var _coords = createExcelCoordinates(data.selection[0].region[1], data.selection[0].region[0]);
-                  //if(_cachedGridSelectionData){
-                  //    if(_cachedGridSelectionData.x !== _coords.x || _cachedGridSelectionData.y !== _coords.y ){
-                  //       ws[0].setCells(_cachedGridSelectionData.data, _cachedGridSelectionData.x + _cachedGridSelectionData.y);
-                  //    }
-                  //}
-                  console.log("_arrData --------------- x : ", data.selection[0].region[1]);
-                  console.log("_arrData --------------- y : ", data.selection[0].region[0]);
-                  console.log("_arrData --------------- width : ", data.selection[0].region[3]);
-                  console.log("_arrData --------------- height : ", data.selection[0].region[2]);
-                  //_arrData.map(function(d,i){
-                  //    console.log("Row ---- ")
-                  //    return d.map(function(dd,ii){
-                  //        console.log(ii,"------- ",dd)
-                  //    })
-                  //})
-                  console.log("_arrData = ",_arrData);
-                  console.log("_coords.x + _coords.y = ",_coords.x + _coords.y);
-
-                  ws[0].setCells(_arrData, _coords.x + _coords.y);
-                  // ws[0].setCells([["test", "test"], ["test", "test"]], _coords.x + _coords.y);
-
-                  //var _arrayClone = _arrData.slice(0);
-                  //_arrayClone.map(function(d,i){
-                  //    return d.map(function(dd,ii){
-                  //        return "";
-                  //    })
-                  //});
-                  //_cachedGridSelectionData = {data: _arrayClone, x: _coords.x , y: _coords.y};
-              })
-          }
-          */
-          });
+      });
     });
 
     setTimeout(function(){
       try {
         fin.desktop.Window.getCurrent().bringToFront();
-        console.log("Bringing HyperGrid to the front")
       }catch(err){
         console.log("Error with HyperGrid coming to the front ", err)
       }
@@ -268,11 +207,12 @@ class HyperGrid extends Component {
           return;
         }
         this.renderGrid(gc);
+
         //draw the thick blue line at the bottom of the header
         gc.beginPath();
-        var fixedColumnsWidth = jsonModel.getFixedColumnsWidth();
-        var viewWidth = this.getBounds().width() - 200; // look in fin-hypergrid and initializtion of fin-canvas
-        var height = this.getFixedRowHeight(0);
+        let fixedColumnsWidth = jsonModel.getFixedColumnsWidth();
+        let viewWidth = this.getBounds().width() - 200; // look in fin-hypergrid and initializtion of fin-canvas
+        let height = this.getFixedRowHeight(0);
         gc.strokeStyle = '#3D77FE';//61,119,254
         gc.lineWidth = 4;
         gc.moveTo(0, height + 0.5);
@@ -339,24 +279,28 @@ class HyperGrid extends Component {
       });
 
       jsonGrid.addFinEventListener('fin-selection-changed', function(event) {
-        setTimeout(function() {
-          lastSelectedRow = jsonGrid.getMouseDown().y || 0;
-          const row = jsonModel.getRow(lastSelectedRow);
-
-          childWindow.createChildWindow({
-            name: row.NAME,
-            url: 'row-view.html?row=' + lastSelectedRow,
-            autoShow: true,
-            width: 350,
-            maxWidth: 350,
-            frame: false,
-            maximizable: false,
-            height: 600 / 3,
-            maxHeight: 600 / 3,
-            minHeight: 600 / 3
-          });
-        }, 100);
+        console.log("selection changed");
       });
+
+      jsonModel.fixedColumnClicked = (grid, event) => {
+        lastSelectedRow =  event.gridCell.y;
+        let row = jsonModel.getRow(lastSelectedRow)
+
+        childWindow.createChildWindow({
+          name: row.NAME,
+          url: 'row-view.html?row=' + lastSelectedRow,
+          autoShow: true,
+          width: 350,
+          maxWidth: 350,
+          frame: false,
+          maximizable: false,
+          height: 600 / 3,
+          maxHeight: 600 / 3,
+          minHeight: 600 / 3
+        }).catch((err) => {
+          console.log(err);
+        })
+      };
 
       ticker.timerGenerator().start();
       document.addEventListener("frame-updated", function(e){
@@ -364,28 +308,8 @@ class HyperGrid extends Component {
         jsonModel.dataModified();
       });
 
-      jsonModel.fixedColumnClicked = (grid, cellData) => {
-        lastSelectedRow =  cellData.gridCell.y;
-        const row = jsonModel.getRow(lastSelectedRow)
-        //childWindow.createChildWindow({
-        //    name: row.NAME,
-        //    url: 'chartiq/stx-advanced.html?row=' + lastSelectedRow,
-        //    autoShow: true,git
-        //    defaultWidth: 960,
-        //    maxWidth: 960,
-        //    minWidth: 960,
-        //    maxHeight: 594,
-        //    defaultHeight: 594,
-        //    minHeight: 594,
-        //    resizable:false,
-        //    frame: true,
-        //    maximizable: false,
-        //    saveWindowState: false
-        //})
-      };
-
       jsonModel.highlightCellOnHover= function(isColumnHovered, isRowHovered) {
-          return isRowHovered;
+        return isRowHovered;
       };
 
       const flashMap = {
@@ -470,13 +394,6 @@ class HyperGrid extends Component {
   render =  () => {
     return (
       <div className="grid-contain">
-        <div className="actions-bg">
-          <div className="actions">
-            {/*
-            <i onClick={this.openBidOffer} className="fa fa-file-text"></i>
-            */}
-          </div>
-        </div>
         <fin-hypergrid id="stock-example">
           <fin-hypergrid-behavior-json></fin-hypergrid-behavior-json>
           <fin-hypergrid-excel></fin-hypergrid-excel>
