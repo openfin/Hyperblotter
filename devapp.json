@@ -25,7 +25,7 @@
   },
   "runtime": {
     "arguments": "",
-    "version": "stable"
+    "version": "6.49.20.22"
   },
   "appAssets": [{
       "src": "http://localhost:5001/assets/dist.zip",

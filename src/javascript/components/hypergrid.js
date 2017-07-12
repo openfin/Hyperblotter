@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import _ from 'underscore';
+const numeral = require('numeral');
 import moment from 'moment';
 import excel from '../vendor/ExcelAPI';
 import ticker from '../griddata/data_ticker';
