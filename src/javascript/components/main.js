@@ -100,6 +100,15 @@ fin.desktop.main(()=>{
 	initWpfChart();
 });
 
+const blotterWindowMoved = ({name, top, left}) => {
+  animationWindows.map((window, index) => {
+    if(window.name === name) {
+      locations[index] = Object.assign({}, locations[index], {top, left});
+      console.log(locations, `window ${name} moved to ${top}, ${left}`, index);
+    }
+  });
+}  
+
 /* Initialises all the floating 'trade' windows. */
 const initAnimationWindows = () => {
   console.log("initAnimationWindows called _tilesCreated == ",_tilesCreated);
@@ -144,6 +153,8 @@ const initAnimationWindows = () => {
           left: left,
           duration: 1000
         });
+
+        console.log(locations);
 
         left += cubeSize + tileMargin;
 
@@ -238,6 +249,8 @@ class Main extends Component{
       tilesMaximised: false,
       inLoop : false
     }
+
+    window.blotterWindowMoved = blotterWindowMoved;
   }
 
   closeApp(){

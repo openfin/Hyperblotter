@@ -31,6 +31,12 @@ class TradeView extends Component {
 		});
   }
 
+  windowMoved = ({name, top, left}) => {
+    if(window.opener.blotterWindowMoved){
+      window.opener.blotterWindowMoved({name, top, left});
+    }
+  }
+
   closeApp = () => {
     fin.desktop.main(function(){
 		  fin.desktop.Application.getCurrent().close();
@@ -151,7 +157,8 @@ class TradeView extends Component {
 
     fin.desktop.InterApplicationBus.subscribe('*', 'window-docked', this.onDock);
     fin.desktop.InterApplicationBus.subscribe('*', 'window-undocked', this.onUnDock);
-
+    const currentWindow = fin.desktop.Window.getCurrent();
+    currentWindow.addEventListener('bounds-changed', this.windowMoved);
   }
 
   onDock = () => {
