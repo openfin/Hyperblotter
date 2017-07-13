@@ -133,7 +133,7 @@ const initAnimationWindows = () => {
             devtools: true
           },
           icon: "http://demoappdirectory.openf.in/desktop/config/apps/OpenFin/HelloOpenFin/img/openfin.ico"
-        }, () => {
+        }, ()=> {
           dockingManager.register(newWindow);
         });
 
@@ -289,6 +289,31 @@ class Main extends Component{
     })
   }
 
+  pinwindow = (win) => {
+    console.log('call pin', window.pinnedWindows, win.name);
+    animationWindows.map(animWindow => {
+      if(animWindow.name === win.name){
+        window.pinnedWindows[win.name] = true;
+        console.log('window can now dock');
+      }
+    })
+  }
+
+  unPinwindow = (win) => {    
+    console.log('call un pin');
+    animationWindows.map(animWindow => {
+      if(animWindow.name === win.name && window.pinnedWindows[win.name]){
+        window.pinnedWindows[win.name] = false;
+        dockingManager.unregister(win);
+        if(!window.animationWindowsShowing){
+          win.hide();
+        }
+        console.log('window can no longer dock');
+        return;
+      }
+    })
+  }
+
   toggleShowAnimationWindows = () => {
     debugger;
     console.log("toggleShowAnimationWindows called this. this.state.animationWindowsShowing = ",this.state.animationWindowsShowing);
@@ -408,6 +433,11 @@ class Main extends Component{
     document.addEventListener('monitor-changed', function(e){
       _repositionWindows();
     })
+
+    window.pinWindow = this.pinwindow;
+    window.unPinwindow = this.unPinwindow;
+    window.pinnedWindows = {};
+    console.log(window.pinnedWindows, 'created');
   }
 
 

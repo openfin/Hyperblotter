@@ -21,7 +21,8 @@ class TradeView extends Component {
   		ticker: urlData[0],
   		last: Number(urlData[1]),
       animationEndCount: 0,
-      grouped: false
+      grouped: false,
+      pinned: false
     }
   }
 
@@ -114,20 +115,13 @@ class TradeView extends Component {
   togglePinWindow = () => {
     const currentWindow = fin.desktop.Window.getCurrent();
     const parentWindow = window.opener.window;
-    
-    if(!parentWindow.pinnedWindows){
-      parentWindow.pinnedWindows = {};
-    };
 
-    if(parentWindow.pinnedWindows[currentWindow.name]){
-      parentWindow.pinnedWindows[currentWindow.name] = !parentWindow.pinnedWindows[currentWindow.name];
-
-      if(!parentWindow.animationWindowsShowing) {
-        currentWindow.hide();
-      }
-    } else {
-      //if this doesn't exist this must be the first time.
-      parentWindow.pinnedWindows[currentWindow.name] = true;
+    if(this.state.pinned){
+      parentWindow.unPinwindow(currentWindow);
+      this.setState({pinned: false});
+    }else{
+      parentWindow.pinWindow(currentWindow)
+      this.setState({pinned: true});
     }
   }
 

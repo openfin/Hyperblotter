@@ -504,7 +504,7 @@ var DockingManager = (function() {
     };
 
     DockingManager.prototype.register = function(window, dockableToOthers) {
-        console.log('window registered', `window dockable ${dockableToOthers}`);
+        console.log(window, 'window registered', `window dockable ${dockableToOthers}`);
 
         window = new DockableWindow(window);
         window.dockableToOthers = (dockableToOthers === undefined || dockableToOthers !== false);
@@ -515,6 +515,7 @@ var DockingManager = (function() {
         }
 
         windows.push(window);
+        console.log(windows, 'pinned windows');
         window.onMove = this.onWindowMove;
         window.onMoveComplete = this.dockAllSnappedWindows;
         // window.onClose = this.onWindowClose;
@@ -614,6 +615,16 @@ var DockingManager = (function() {
 
             dWindow = windows[i];
 
+            console.log(currentWindow, 'moving win') 
+         console.log(dWindow, 'other win')
+         console.log( window.pinnedWindows)
+          console.log( window.pinnedWindows[currentWindow.name], 'current pinned')
+           console.log(window.pinnedWindows[dWindow.name], 'dWin pinned');
+
+        if(!window.pinnedWindows[dWindow.name] || !window.pinnedWindows[currentWindow.name]) return false;
+
+
+
             var snappingPosition = this.isSnapable(event.bounds, dWindow);
 
             if (!snappingPosition) {
@@ -677,27 +688,28 @@ var DockingManager = (function() {
         }
     };
 
-    DockingManager.prototype.isSnapable = function(currentWidow, window) {
+    DockingManager.prototype.isSnapable = function(currentWindow, win) {
 
-        var isInVerticalZone = this._isPointInVerticalZone(window.y, window.y + window.height, currentWidow.y, currentWidow.height);
 
-        if ((currentWidow.x > window.x + window.width - currentWidow.currentRange && currentWidow.x < window.x + window.width + currentWidow.currentRange) && isInVerticalZone) {
+        var isInVerticalZone = this._isPointInVerticalZone(win.y, win.y + win.height, currentWindow.y, currentWindow.height);
+
+        if ((currentWindow.x > win.x + win.width - currentWindow.currentRange && currentWindow.x < win.x + win.width + currentWindow.currentRange) && isInVerticalZone) {
 
             return 'right';
 
-        } else if ((currentWidow.x + currentWidow.width > window.x - currentWidow.currentRange && currentWidow.x + currentWidow.width < window.x + currentWidow.currentRange) && isInVerticalZone) {
+        } else if ((currentWindow.x + currentWindow.width > win.x - currentWindow.currentRange && currentWindow.x + currentWindow.width < win.x + currentWindow.currentRange) && isInVerticalZone) {
 
             return 'left';
 
         } else {
 
-            var isInHorizontalZone = this._isPointInHorizontalZone(window.x, window.x + window.width, currentWidow.x, currentWidow.width);
+            var isInHorizontalZone = this._isPointInHorizontalZone(win.x, win.x + win.width, currentWindow.x, currentWindow.width);
 
-            if ((currentWidow.y > window.y + window.height - currentWidow.currentRange && currentWidow.y < window.y + window.height + currentWidow.currentRange) && isInHorizontalZone) {
+            if ((currentWindow.y > win.y + win.height - currentWindow.currentRange && currentWindow.y < win.y + win.height + currentWindow.currentRange) && isInHorizontalZone) {
 
                 return 'bottom';
 
-            } else if ((currentWidow.y + currentWidow.height > window.y - currentWidow.currentRange && currentWidow.y + currentWidow.height < window.y + currentWidow.currentRange) && isInHorizontalZone) {
+            } else if ((currentWindow.y + currentWindow.height > win.y - currentWindow.currentRange && currentWindow.y + currentWindow.height < win.y + currentWindow.currentRange) && isInHorizontalZone) {
 
                 return 'top';
             } else {
