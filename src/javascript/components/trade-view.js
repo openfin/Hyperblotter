@@ -221,12 +221,14 @@ class TradeView extends Component {
           <div className="main">
             <span className="last" >{ (this.state.last - rndRange()).toFixed(2) }</span>
             <span className="percent-change" >+%{rndRange().toFixed(2)}</span>
-            <span className="purchase" onClick={() => this.showNotifications({ company: this.state.ticker, price: (this.state.last - rndRange()).toFixed(2)})}>
-              <i className="fa fa-usd" ></i>
-            </span>
-            <span className={this.getGroupClass()} onClick={() => this.undock() }>
-              <i className="fa fa-link" ></i>
-            </span>
+            <div className="icon-set-group">
+              <span className="purchase" onClick={() => this.showNotifications({ company: this.state.ticker, price: (this.state.last - rndRange()).toFixed(2)})}>
+                <i className="fa fa-usd" ></i>
+              </span>
+              <span className={this.getGroupClass()} onClick={() => this.undock() }>
+                <i className="fa fa-link" ></i>
+              </span>
+            </div>
           </div>
           <div className="pricing">
             <div className="price open">
