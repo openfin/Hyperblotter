@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import _ from 'underscore';
 import fin from '../vendor/openfin';
 import windowManager from "../windowsListSingleton";
+import { DockingManager } from '../dockingManger';
 import ToolTip from '../components/tooltip-decorator';
 import excel from '../vendor/ExcelAPI';
 
@@ -21,6 +22,8 @@ const demoTiles = {};
 const numTiles = numRows * numColumns + 1;
 
 /* Static data for the floating 'trade' animation windows */
+
+const dockingManager = DockingManager.getInstance();
 
 const rndData = [
     {ticker: "PCL", last: 21.251049070187836},
@@ -109,7 +112,7 @@ const initAnimationWindows = () => {
 
       var leftOffset = 105, topOffset = 50, top = topOffset, left = leftOffset, tileMargin = 8,  i = 1;
       for (; i < numTiles; i++){
-        animationWindows.push(new fin.desktop.Window({
+        let newWindow = new fin.desktop.Window({
           name: 'tile' + random(),
           url: 'trade.html?t=' + rndData[i].ticker + '&l=' + rndData[i].last,
           autoShow: false,
@@ -126,9 +129,16 @@ const initAnimationWindows = () => {
           defaultTop: top,
           defaultLeft: left,
           showTaskbarIcon: false,
+          accelerator: {
+            devtools: true
+          },
           icon: "http://demoappdirectory.openf.in/desktop/config/apps/OpenFin/HelloOpenFin/img/openfin.ico"
-        }));
+        }, () => {
+          dockingManager.register(newWindow);
+        });
 
+        animationWindows.push(newWindow);
+        
         locations.push({
           top: top,
           left: left,
@@ -280,6 +290,7 @@ class Main extends Component{
   }
 
   toggleShowAnimationWindows = () => {
+    debugger;
     console.log("toggleShowAnimationWindows called this. this.state.animationWindowsShowing = ",this.state.animationWindowsShowing);
     if(this.state.animationWindowsShowing){
       this.closeAnimationWindows();

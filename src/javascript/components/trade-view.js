@@ -20,7 +20,8 @@ class TradeView extends Component {
       class: 'tile',
   		ticker: urlData[0],
   		last: Number(urlData[1]),
-      animationEndCount: 0
+      animationEndCount: 0,
+      grouped: false
     }
   }
 
@@ -101,6 +102,15 @@ class TradeView extends Component {
     });
   }
 
+  undock = () => {
+    const windowName = fin.desktop.Window.getCurrent().name;
+
+    fin.desktop.InterApplicationBus.publish('undock-window', {windowName}, () => {
+      console.log('undocked');
+    });
+
+  }
+
   togglePinWindow = () => {
     const currentWindow = fin.desktop.Window.getCurrent();
     const parentWindow = window.opener.window;
@@ -138,6 +148,33 @@ class TradeView extends Component {
   			last: Number(urlData[1])
   		});
   	}, 1000 + ( Math.floor(Math.random() * 1000) ) );
+
+    fin.desktop.InterApplicationBus.subscribe('*', 'window-docked', this.onDock);
+    fin.desktop.InterApplicationBus.subscribe('*', 'window-undocked', this.onUnDock);
+
+  }
+
+  onDock = () => {
+    fin.desktop.Window.getCurrent().getGroup((windowGroup) => {
+      /* right now this call to .getGroup() returns undefined 
+       * if a window is in a group we want to handle that as well
+       */
+      if(!windowGroup || windowGroup.length > 0){
+        this.setState({
+          grouped: true
+        })
+      }
+    })
+  }
+
+  onUnDock = () => {
+    fin.desktop.Window.getCurrent().getGroup((windowGroup) => {
+      if(windowGroup && windowGroup.length === 0){
+        this.setState({
+          grouped: false
+        })
+      }
+    })
   }
 
   countAnimations = () => {
@@ -158,6 +195,10 @@ class TradeView extends Component {
     } else {
       return {icon:"fa fa-unlock"};
     }
+  }
+
+  getGroupClass = () => {
+    return this.state.grouped ? 'group' : 'group disabled';
   }
 
   render = () => {
@@ -182,6 +223,9 @@ class TradeView extends Component {
             <span className="percent-change" >+%{rndRange().toFixed(2)}</span>
             <span className="purchase" onClick={() => this.showNotifications({ company: this.state.ticker, price: (this.state.last - rndRange()).toFixed(2)})}>
               <i className="fa fa-usd" ></i>
+            </span>
+            <span className={this.getGroupClass()} onClick={() => this.undock() }>
+              <i className="fa fa-link" ></i>
             </span>
           </div>
           <div className="pricing">
