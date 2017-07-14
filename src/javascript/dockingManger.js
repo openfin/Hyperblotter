@@ -535,7 +535,9 @@ var DockingManager = (function() {
     DockingManager.prototype.removeFromGroup = function(window) {
         windows.map(win => {
             if(win.name === window.name){
-                win.leaveGroup();
+                if(win.group){
+                    win.leaveGroup();
+                }
                 return;
             }
         });

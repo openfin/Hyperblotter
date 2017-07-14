@@ -293,7 +293,7 @@ class Main extends Component{
 
   unPinwindow = (win) => { 
     animationWindows.map(animWindow => {
-      if(animWindow.name === win.name && window.pinnedWindows[win.name]){
+      if(animWindow.name === win.name){// && window.pinnedWindows[win.name]){
         window.pinnedWindows[win.name] = false;
         dockingManager.removeFromGroup(win);
         if(!window.animationWindowsShowing){
