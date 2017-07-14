@@ -344,7 +344,7 @@ class HyperGrid extends Component {
 
         if (x === 2) {
           renderer = cellProvider.cellCache.sparklineCellRenderer;
-        } else if (x === 4 || x === 6) {
+        } else if (x === 4) {
           config.value = format(config.value);
           config.halign = 'center';
           if (config.value.indexOf('-') === 0) {
@@ -356,13 +356,14 @@ class HyperGrid extends Component {
           //config.font = '24px Verdana';
         } else if (x === 3) {
           config.value = format(config.value);
+          config.halign = 'center';
           if (row.flash > 0) {
             config.bgColor = flashMap[row.flashColor](row.flash);
             config.fgColor = 'white';
             row.flash = row.flash - 1;
           }
-        } else if (x === 13) {
-          config.value = [imageCache[config.value],config.value,null];
+        } else if (x === 5) {
+          config.halign = 'center';
         } else {
           config.value = format(config.value);
         }
@@ -371,14 +372,14 @@ class HyperGrid extends Component {
         return renderer;
       };
 
-      const _columnIndexes = [0,1,2,3,4,5,6];
+      const _columnIndexes = [0, 2, 3, 4];
       const _hiddenColumns = [];
 
       const state = {
         "columnIndexes":_columnIndexes,
         "fixedColumnIndexes":[],
         "hiddenColumns":_hiddenColumns,
-        "columnWidths":[150,358,210,100,100,107.2890625,86.30078125,114.203125,95.01953125,95.01953125,64.50390625,95.01953125,79.76171875,92.306640625,86.5908203125,38.38671875,118.5322265625,167.72021484375,341.04296875,248.8876953125,266.775390625,177.84765625,49.4189453125,25.3046875,73.591796875,269.416015625,467.5234375,102.35546875,86.30078125],
+        "columnWidths":[150,358,210,108,108,112.2890625],
         "fixedColumnWidths":[79.4453125],
         "rowHeights":{},
         "fixedRowHeights":{},

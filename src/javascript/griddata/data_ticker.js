@@ -23,53 +23,14 @@ var arrayGeneratorProto = {
     if (_arrayGeneratorPrivate._staticArray && _arrayGeneratorPrivate._staticArray.length > 0) {
       return _arrayGeneratorPrivate._staticArray;
     } else {
-      var count = data.NAME.length;
+      var count = stocks.length;
       var i = 0;
-      _arrayGeneratorPrivate._staticArray = [];
+      _arrayGeneratorPrivate._staticArray = stocks;
       window.CC = {};
       for (i = 0; i < count; i++) {
         window.CC[data.COUNTRY[i]] = true;
-        _arrayGeneratorPrivate._staticArray[i] = {
-          NAME: data.NAME[i],
-          TICKER: data.TICKER[i],
-          COUNTRY: data.COUNTRY[i],
-          ICB: data.ICB[i],
-          INDUS: data.INDUS[i],
-          SUP_SEC: data.SUP_SEC[i],
-          SEC: data.SEC[i],
-          SUB_SEC: data.SUB_SEC[i],
-          Date: new Date(),
-          Time: Date.now(),
-          Open: data.Open[i],
-          Close: data.Close[i],
-          getClose: data.Close[i],
-          PreviousClose: data.PreviousClose[i],
-          PreviousCloseDate: new Date(Date.now() - 1000 * 60 * 60 * 24),
-          High: data.High[i],
-          Low: data.Low[i],
-          Last: data.Last[i],
-          Change: data.Change[i],
-          PercentChange: data.PercentChange[i],
-          Volume: Math.floor(data.Volume[i]),
-          BidQuantity: data.BidQuantity[i],
-          Bid: data.Bid[i],
-          Spread: data.Spread[i],
-          Ask: data.Ask[i],
-          AskQuantity: data.AskQuantity[i],
-          Today: this.createRandomSparkline(), //[0, 0, 0, 0,0, 0, 0, 0, 0, 0, 0, 0,0, 0, 0, 0],
-          flash: 0,
-          flashColor: 'green',
-          countryCode: countryMap[data.COUNTRY[i]]
-        }
+        _arrayGeneratorPrivate._staticArray[i].Today = this.createRandomSparkline();
       }
-      // sort it on TICKER to start with..
-      _arrayGeneratorPrivate
-        ._staticArray
-        .sort(function(a, b) {
-          return a.TICKER < b.TICKER
-            ? -1
-            : 1;
-        });
     }
     return _arrayGeneratorPrivate._staticArray
   },
@@ -330,8 +291,9 @@ var _getSparklineRandomValue = function() {
 };
 
 var randomizeTick = function(stock) {
-  stock.Bid = (stock.Bid * 0.99) + (stock.Bid * 0.017 * rnd());
-  stock.Spread = rnd() / 10;
+  let rand = Math.random()
+  stock.Bid = (stock.Bid * 0.99) + (stock.Bid * 0.02 * rand);
+  stock.Spread = rand / 10;
   stock.Ask = stock.Bid + stock.Spread;
   //trades don't always happen
   if (stock.Spread < 0.03) {
