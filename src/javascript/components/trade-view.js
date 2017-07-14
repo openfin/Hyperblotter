@@ -20,7 +20,9 @@ class TradeView extends Component {
       class: 'tile',
   		ticker: urlData[0],
   		last: Number(urlData[1]),
-      animationEndCount: 0
+      animationEndCount: 0,
+      grouped: false,
+      pinned: false
     }
   }
 
@@ -43,7 +45,7 @@ class TradeView extends Component {
   }
 
   onEnterFrame = () => {
-    console.log("EnterFrame --- ");
+    // console.log("EnterFrame --- ");
   }
 
   getBackgroundColor = () => {
@@ -67,9 +69,7 @@ class TradeView extends Component {
     //window.requestAnimationFrame(this.step);
   }
 
-  openDetailedChartWindow = () => {
-    console.log("openDetailedChartWindow [" + this.state.ticker + "]");
-		
+  openDetailedChartWindow = () => {		
 		fin.desktop.InterApplicationBus.publish('tickerSelection', {
 			symbolName: this.state.ticker
 		});
@@ -95,29 +95,31 @@ class TradeView extends Component {
         document.querySelector('.purchaseFeedback').classList.add('slide-in-out');
       }
     },function(){
-      console.log('created');
+      // console.log('created');
     },function(){
-      console.log('closed');
+      // console.log('closed');
     });
+  }
+
+  undock = () => {
+    const windowName = fin.desktop.Window.getCurrent().name;
+
+    fin.desktop.InterApplicationBus.publish('undock-window', {windowName}, () => {
+      console.log('undocked');
+    });
+
   }
 
   togglePinWindow = () => {
     const currentWindow = fin.desktop.Window.getCurrent();
     const parentWindow = window.opener.window;
-    
-    if(!parentWindow.pinnedWindows){
-      parentWindow.pinnedWindows = {};
-    };
 
-    if(parentWindow.pinnedWindows[currentWindow.name]){
-      parentWindow.pinnedWindows[currentWindow.name] = !parentWindow.pinnedWindows[currentWindow.name];
-
-      if(!parentWindow.animationWindowsShowing) {
-        currentWindow.hide();
-      }
-    } else {
-      //if this doesn't exist this must be the first time.
-      parentWindow.pinnedWindows[currentWindow.name] = true;
+    if(this.state.pinned){
+      parentWindow.unPinwindow(currentWindow);
+      this.setState({pinned: false});
+    }else{
+      parentWindow.pinWindow(currentWindow)
+      this.setState({pinned: true});
     }
   }
 
@@ -138,6 +140,33 @@ class TradeView extends Component {
   			last: Number(urlData[1])
   		});
   	}, 1000 + ( Math.floor(Math.random() * 1000) ) );
+
+    fin.desktop.InterApplicationBus.subscribe('*', 'window-docked', this.onDock);
+    fin.desktop.InterApplicationBus.subscribe('*', 'window-undocked', this.onUnDock);
+
+  }
+
+  onDock = () => {
+    fin.desktop.Window.getCurrent().getGroup((windowGroup) => {
+      /* right now this call to .getGroup() returns undefined 
+       * if a window is in a group we want to handle that as well
+       */
+      if(!windowGroup || windowGroup.length > 0){
+        this.setState({
+          grouped: true
+        })
+      }
+    })
+  }
+
+  onUnDock = () => {
+    fin.desktop.Window.getCurrent().getGroup((windowGroup) => {
+      if(windowGroup && windowGroup.length === 0){
+        this.setState({
+          grouped: false
+        })
+      }
+    })
   }
 
   countAnimations = () => {
@@ -160,8 +189,11 @@ class TradeView extends Component {
     }
   }
 
+  getGroupClass = () => {
+    return this.state.grouped ? 'group' : 'group disabled';
+  }
+
   render = () => {
-    console.log("RENDERING --- ", this.state.ticker);
 		return (
 			<div className="tile trade-cell" style={this.getTileStyle()} >
         <div className="window-control"></div>
@@ -180,9 +212,14 @@ class TradeView extends Component {
           <div className="main">
             <span className="last" >{ (this.state.last - rndRange()).toFixed(2) }</span>
             <span className="percent-change" >+%{rndRange().toFixed(2)}</span>
-            <span className="purchase" onClick={() => this.showNotifications({ company: this.state.ticker, price: (this.state.last - rndRange()).toFixed(2)})}>
-              <i className="fa fa-usd" ></i>
-            </span>
+            <div className="icon-set-group">
+              <span className="purchase" onClick={() => this.showNotifications({ company: this.state.ticker, price: (this.state.last - rndRange()).toFixed(2)})}>
+                <i className="fa fa-usd" ></i>
+              </span>
+              <span className={this.getGroupClass()} onClick={() => this.undock() }>
+                <i className="fa fa-link" ></i>
+              </span>
+            </div>
           </div>
           <div className="pricing">
             <div className="price open">

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import _ from 'underscore';
 import fin from '../vendor/openfin';
 import windowManager from "../windowsListSingleton";
+import { DockingManager, DockableWindow } from '../dockingManger';
 import ToolTip from '../components/tooltip-decorator';
 import excel from '../vendor/ExcelAPI';
 
@@ -21,6 +22,8 @@ const demoTiles = {};
 const numTiles = numRows * numColumns + 1;
 
 /* Static data for the floating 'trade' animation windows */
+
+const dockingManager = DockingManager.getInstance();
 
 const rndData = [
     {ticker: "PCL", last: 21.251049070187836},
@@ -56,7 +59,6 @@ const getWorkSheet = (workBook, workSheet) => {
         ws.filter(function(dd,ii){
           return dd.name === workSheet
         }).map(function(ddd,iii){
-          console.log("THE WORKSHEET IS ", ddd)
           ddd.setCells([["a", "b", "c"], [1, 2, 3]], "A1");
         })
       })
@@ -71,10 +73,10 @@ fin.desktop.main(()=>{
   fin.desktop.InterApplicationBus.subscribe("*",
     "inter_app_messaging",
     function (message, senderUuid) {
-      console.log("This following message has been received from "
-        + senderUuid + ": ", message);
+      // console.log("This following message has been received from "
+      //   + senderUuid + ": ", message);
       if(message.hyperblotterExists === 'true'){
-        console.log()
+        // console.log()
       }
     }
   );
@@ -85,12 +87,12 @@ fin.desktop.main(()=>{
 
   initAnimationWindows().then(function(val){
     fin.desktop.System.addEventListener('monitor-info-changed', function (evnt) {
-      console.log("The monitor information has changed to: ", evnt);
+      // console.log("The monitor information has changed to: ", evnt);
       document.dispatchEvent(new CustomEvent('monitor-changed', {'detail': evnt}));
     }, function () {
-      console.log("The registration of 'monitor-info-changed' was successful");
+      // console.log("The registration of 'monitor-info-changed' was successful");
     },function (err) {
-      console.log("failure: registration of 'monitor-info-changed' " + err);
+      // console.log("failure: registration of 'monitor-info-changed' " + err);
     });
   });
 	
@@ -99,8 +101,6 @@ fin.desktop.main(()=>{
 
 /* Initialises all the floating 'trade' windows. */
 const initAnimationWindows = () => {
-  console.log("initAnimationWindows called _tilesCreated == ",_tilesCreated);
-
   return new Promise(function(resolve, reject){
     if(_tilesCreated){
         resolve()
@@ -109,7 +109,7 @@ const initAnimationWindows = () => {
 
       var leftOffset = 105, topOffset = 50, top = topOffset, left = leftOffset, tileMargin = 8,  i = 1;
       for (; i < numTiles; i++){
-        animationWindows.push(new fin.desktop.Window({
+        let newWindow = new fin.desktop.Window({
           name: 'tile' + random(),
           url: 'trade.html?t=' + rndData[i].ticker + '&l=' + rndData[i].last,
           autoShow: false,
@@ -126,9 +126,16 @@ const initAnimationWindows = () => {
           defaultTop: top,
           defaultLeft: left,
           showTaskbarIcon: false,
+          accelerator: {
+            devtools: true
+          },
           icon: "http://demoappdirectory.openf.in/desktop/config/apps/OpenFin/HelloOpenFin/img/openfin.ico"
-        }));
+        }, ()=> {
+          dockingManager.register(newWindow);
+        });
 
+        animationWindows.push(newWindow);
+        
         locations.push({
           top: top,
           left: left,
@@ -142,7 +149,6 @@ const initAnimationWindows = () => {
           top += cubeSize + tileMargin;
         }
         if(i === numTiles-1){
-          console.log(" _tilesCreated === true");
           _tilesCreated = true;
           resolve();
         }
@@ -237,14 +243,12 @@ class Main extends Component{
   }
 
   minApp(){
-    console.log("MINIFYING APP.")
     fin.desktop.main(function(){
       fin.desktop.Window.getCurrent().minimize();
     });
   }
 
   showWindows = () => {
-    console.log("showWindows called");
     animationWindows.forEach((wnd)=>{
       try{
         wnd.show();
@@ -279,8 +283,28 @@ class Main extends Component{
     })
   }
 
+  pinwindow = (win) => {
+    animationWindows.map(animWindow => {
+      if(animWindow.name === win.name){
+        window.pinnedWindows[win.name] = true;
+      }
+    })
+  }
+
+  unPinwindow = (win) => { 
+    animationWindows.map(animWindow => {
+      if(animWindow.name === win.name){// && window.pinnedWindows[win.name]){
+        window.pinnedWindows[win.name] = false;
+        dockingManager.removeFromGroup(win);
+        if(!window.animationWindowsShowing){
+          win.hide();
+        }
+        return;
+      }
+    })
+  }
+
   toggleShowAnimationWindows = () => {
-    console.log("toggleShowAnimationWindows called this. this.state.animationWindowsShowing = ",this.state.animationWindowsShowing);
     if(this.state.animationWindowsShowing){
       this.closeAnimationWindows();
     } else {
@@ -289,15 +313,12 @@ class Main extends Component{
   }
 
   openAnimationWindows = () => {
-    console.log(" openAnimationWindows called ", this);
     initAnimationWindows().then(() => {
-      console.log(" initAnimationWindows resolved ");
       this.showWindows();
     });
   }
 
   closeAnimationWindows = () => {
-    console.log("closeAnimationWindows -- called")
     this.toggleAnimateLoopStop();
     animationWindows.forEach((wnd)=>{
       window.pinnedWindows = window.pinnedWindows || [];
@@ -375,7 +396,6 @@ class Main extends Component{
   }
 
   openBlotter = () => {
-    console.log(this, "in open")
       if(!blotter){
           initBlotter().then(function(b){
               blotter.show();
@@ -387,7 +407,6 @@ class Main extends Component{
   }
 
   componentDidMount = () => {
-    console.log('Component did mount...', this);
     var _repositionWindows = function(){
       if(!this.state.inLoop &&  this.state.animationWindowsShowing){
         this.animateWindows.call(this, animationWindows, false);
@@ -397,11 +416,15 @@ class Main extends Component{
     document.addEventListener('monitor-changed', function(e){
       _repositionWindows();
     })
+
+    window.pinWindow = this.pinwindow;
+    window.unPinwindow = this.unPinwindow;
+    window.pinnedWindows = {};
+    console.log(window.pinnedWindows, 'created');
   }
 
 
   openExcel = () => {
-    console.log("Open Excel called in main excel_plugin_installed = ", excel_plugin_installed)
     if(!excel_plugin_installed) {
       fin.desktop.main(function() {
         fin.desktop.System.launchExternalProcess({
@@ -411,9 +434,7 @@ class Main extends Component{
             // react to close event
             if(event.topic === "exited" && event.exitCode === MY_KNOWN_BAD_STATE) {
               // your desired logic here
-              console.log("Excited Excel")
             } else {
-              console.log("This is where I would like to open the new Excel...")
               // this.openNewExcel()
             }
           }
@@ -422,7 +443,7 @@ class Main extends Component{
       // excel_plugin_installed = true;
       // this.openNewExcel();
       var workbook = fin.desktop.Excel.addWorkbook(function(evt){
-        console.log(">>>> A NEW WORKBOOK ADDED -- THIS IS THE CALLBACK: ", evt)
+        // console.log(">>>> A NEW WORKBOOK ADDED -- THIS IS THE CALLBACK: ", evt)
       });
       // if(currentWorkbook == workbook) return;
     } else {
@@ -436,34 +457,34 @@ class Main extends Component{
       Excel.init();
 
       Excel.getConnectionStatus(function(evt){
-        console.log("ON CONNECTION STATUS -- ", evt)
+        // console.log("ON CONNECTION STATUS -- ", evt)
       });
 
       Excel.addEventListener("workbookAdded", this.onWorkbookAdded);
       Excel.addEventListener("workbookClosed", this.onWorkbookRemoved);
       Excel.addEventListener("connected", this.onExcelConnected);
-      console.log("Called Excel ", Excel)
+      // console.log("Called Excel ", Excel)
     });
   }
 
   workBookAddedCallback = (evt) => {
-    console.log("Wokbook added callback called... ", evt);
+    // console.log("Wokbook added callback called... ", evt);
   }
 
   onExcelConnected = () => {
-    console.log("EXCEL FUNCTION CALLED ")
+    // console.log("EXCEL FUNCTION CALLED ")
   }
 
   onWorkbookAdded = () => {
-    console.log("EXCEL FUNCTION CALLED -- onWorkbookAdded ")
+    // console.log("EXCEL FUNCTION CALLED -- onWorkbookAdded ")
   }
 
   onWorkbookRemoved = () => {
-    console.log("EXCEL FUNCTION CALLED ")
+    // console.log("EXCEL FUNCTION CALLED ")
   }
 
   onWorkbookActivateed = () => {
-    console.log("EXCEL ON WORKBOOK ACTIVATED CALLED ")
+    // console.log("EXCEL ON WORKBOOK ACTIVATED CALLED ")
   }
 
   getAnimationWindowsStyle = () => {
@@ -523,7 +544,7 @@ class Main extends Component{
   openGithub = () => {
     fin.desktop.System.openUrlWithBrowser("https://github.com/openfin/Hyperblotter/tree/master", function () {
     },function (err) {
-      console.log("Failed to open GitHub: " + err);
+      // console.log("Failed to open GitHub: " + err);
     });
   }
 

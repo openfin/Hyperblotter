@@ -126,16 +126,24 @@ body
         flex: 2
         display: flex
         padding-top: 10px
-      .purchase
+      .icon-set-group
         flex: 2
+        display: flex
+        flex-direction: row
+      .purchase
         width: 20px
         -webkit-app-region: no-drag
-        display: block
+        z-index: 4
+      .group
+        width: 20px
+        -webkit-app-region: no-drag
         z-index: 4
         &:hover
           cursor: pointer
         .fa-usd
           display: block
+      .disabled
+        display: none
     .pricing
       display: flex
       flex: 1
