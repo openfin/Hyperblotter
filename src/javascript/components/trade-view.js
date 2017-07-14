@@ -45,7 +45,7 @@ class TradeView extends Component {
   }
 
   onEnterFrame = () => {
-    console.log("EnterFrame --- ");
+    // console.log("EnterFrame --- ");
   }
 
   getBackgroundColor = () => {
@@ -69,9 +69,7 @@ class TradeView extends Component {
     //window.requestAnimationFrame(this.step);
   }
 
-  openDetailedChartWindow = () => {
-    console.log("openDetailedChartWindow [" + this.state.ticker + "]");
-		
+  openDetailedChartWindow = () => {		
 		fin.desktop.InterApplicationBus.publish('tickerSelection', {
 			symbolName: this.state.ticker
 		});
@@ -97,9 +95,9 @@ class TradeView extends Component {
         document.querySelector('.purchaseFeedback').classList.add('slide-in-out');
       }
     },function(){
-      console.log('created');
+      // console.log('created');
     },function(){
-      console.log('closed');
+      // console.log('closed');
     });
   }
 
@@ -196,7 +194,6 @@ class TradeView extends Component {
   }
 
   render = () => {
-    console.log("RENDERING --- ", this.state.ticker);
 		return (
 			<div className="tile trade-cell" style={this.getTileStyle()} >
         <div className="window-control"></div>
