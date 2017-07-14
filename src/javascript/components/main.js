@@ -128,9 +128,9 @@ const initBlotter = () => {
       name: 'blotter',
       url: 'hypergrid.html',
       autoShow: false,
-      defaultWidth: 880,
-      maxWidth: 880,
-      minWidth: 880,
+      defaultWidth: 970,
+      maxWidth: 970,
+      minWidth: 970,
       maxHeight: 594,
       defaultHeight: 594,
       minHeight: 594,
@@ -406,7 +406,7 @@ class Main extends Component{
             // react to close event
             if(event.topic === "exited" && event.exitCode === MY_KNOWN_BAD_STATE) {
               // your desired logic here
-              console.log("Excited Excel")
+              console.log("Exited Excel")
             } else {
               console.log("This is where I would like to open the new Excel...")
               // this.openNewExcel()
