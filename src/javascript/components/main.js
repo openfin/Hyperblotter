@@ -253,6 +253,12 @@ class Main extends Component{
       try{
         wnd.show();
         wnd.bringToFront();
+        // if window has been pinned it may be in a group
+        // attempt to unpin it
+        if(window.pinnedWindows && window.pinnedWindows[wnd.name]){
+          window.pinnedWindows[wnd.name] = false;
+          dockingManager.removeFromGroup(wnd);
+        }
       }catch(err){
         //
       }
