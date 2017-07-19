@@ -68,7 +68,7 @@ class TradeView extends Component {
     //window.requestAnimationFrame(this.step);
   }
 
-  openDetailedChartWindow = () => {		
+  openDetailedChartWindow = () => {
 		fin.desktop.InterApplicationBus.publish('tickerSelection', {
 			symbolName: this.state.ticker
 		});
@@ -147,7 +147,7 @@ class TradeView extends Component {
 
   onDock = () => {
     fin.desktop.Window.getCurrent().getGroup((windowGroup) => {
-      /* right now this call to .getGroup() returns undefined 
+      /* right now this call to .getGroup() returns undefined
        * if a window is in a group we want to handle that as well
        */
       if(!windowGroup || windowGroup.length > 0){
@@ -182,9 +182,9 @@ class TradeView extends Component {
     const parentWindow = window.opener.window;
 
     if(parentWindow.pinnedWindows && parentWindow.pinnedWindows[currentWindow.name]){
-      return {icon:"fa fa-lock"}
+      return {icon:"fa fa-thumb-tack"}
     } else {
-      return {icon:"fa fa-unlock"};
+      return {icon:"fa fa-thumb-tack grey"};
     }
   }
 
@@ -200,7 +200,7 @@ class TradeView extends Component {
           <div className="title">
             {this.state.ticker}
           </div>
-          <span className="lock" onClick={this.togglePinWindow}>
+          <span className="pinner" onClick={this.togglePinWindow}>
             <i className={ this.getPinnedWindowClass().icon } ></i>
           </span>
           <span className="chart" onClick={this.openDetailedChartWindow}>
