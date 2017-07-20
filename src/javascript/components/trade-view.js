@@ -5,7 +5,7 @@ import Utils from './utils';
 const {
   add,
   sub,
-  rndRange,
+  rndRange
 } = Utils;
 
 let start = null;
@@ -213,7 +213,7 @@ class TradeView extends Component {
             <span className="percent-change" >+%{rndRange().toFixed(2)}</span>
             <div className="icon-set-group">
               <span className="purchase" onClick={() => this.showNotifications({ company: this.state.ticker, price: (this.state.last - rndRange()).toFixed(2)})}>
-                <i className="fa fa-usd" ></i>
+                <p>BUY</p>
               </span>
               <span className={this.getGroupClass()} onClick={() => this.undock() }>
                 <i className="fa fa-link" ></i>
