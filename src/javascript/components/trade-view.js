@@ -8,6 +8,17 @@ const {
   rndRange
 } = Utils;
 
+const percentChange = (initPrice, newPrice) => {
+  let increase = newPrice - initPrice;
+  let change = ((increase / initPrice) * 100).toFixed(2);
+
+  if(change > 0) {
+    change = "+" + change;
+  }
+
+  return change;
+};
+
 let start = null;
 
 const urlData = location.search.split('&').map((i)=>{return i.split('=')[1]});
@@ -15,13 +26,20 @@ const urlData = location.search.split('&').map((i)=>{return i.split('=')[1]});
 class TradeView extends Component {
   constructor(props){
     super(props);
+    let last = Number(urlData[1]).toFixed(2);
+    let price = (last - rndRange() + rndRange()).toFixed(2);
+
     this.state = {
       class: 'tile',
   		ticker: urlData[0],
-  		last: Number(urlData[1]),
+  		last: last,
       animationEndCount: 0,
       grouped: false,
-      pinned: false
+      pinned: false,
+      high: ((Number(last) + rndRange()).toFixed(2)),
+      low: (last - rndRange()).toFixed(2),
+      price: price,
+      change: percentChange(last, price)
     }
   }
 
@@ -48,7 +66,8 @@ class TradeView extends Component {
   }
 
   getBackgroundColor = () => {
-    return Math.random() > .5 ? "#ff0000" : "#00DD00";
+    let negChange = this.state.price < this.state.last;
+    return negChange ? "#ff0000" : "#00DD00";
   }
 
   getTileStyle = () => {
@@ -134,10 +153,18 @@ class TradeView extends Component {
     window.requestAnimationFrame(this.step);
 
   	setInterval(()=>{
+      let last = Number(urlData[1]).toFixed(2);
+      let price = (last - rndRange() + rndRange()).toFixed(2);
+
   		this.setState({
   			ticker: urlData[0],
-  			last: Number(urlData[1])
+  			last: last,
+        high: (Number(last) + rndRange()).toFixed(2),
+        low: (last - rndRange()).toFixed(2),
+        price: price,
+        change: percentChange(last, price)
   		});
+
   	}, 1000 + ( Math.floor(Math.random() * 1000) ) );
 
     fin.desktop.InterApplicationBus.subscribe('*', 'window-docked', this.onDock);
@@ -209,10 +236,10 @@ class TradeView extends Component {
         </div>
         <div className="content">
           <div className="main">
-            <span className="last" >{ (this.state.last - rndRange()).toFixed(2) }</span>
-            <span className="percent-change" >+%{rndRange().toFixed(2)}</span>
+            <span className="present-price" >{ this.state.price }</span>
+            <span className="percent-change" >{ this.state.change }%</span>
             <div className="icon-set-group">
-              <span className="purchase" onClick={() => this.showNotifications({ company: this.state.ticker, price: (this.state.last - rndRange()).toFixed(2)})}>
+              <span className="purchase" onClick={() => this.showNotifications({ company: this.state.ticker, price: (this.state.price)})}>
                 <p>BUY</p>
               </span>
               <span className={this.getGroupClass()} onClick={() => this.undock() }>
@@ -223,15 +250,15 @@ class TradeView extends Component {
           <div className="pricing">
             <div className="price open">
               <div className="label">OPEN</div>
-              <span className="value">{this.state.last.toFixed(2)}</span>
+              <span className="value">{ this.state.last }</span>
             </div>
             <div className="price high">
               <div className="label">HIGH</div>
-              <span className="value">{ (this.state.last + rndRange()).toFixed(2) }</span>
+              <span className="value">{ this.state.high }</span>
             </div>
             <div className="price low">
               <div className="label">LOW</div>
-              <span className="value">{ (this.state.last - rndRange() - 1).toFixed(2)  }</span>
+              <span className="value">{ this.state.low }</span>
             </div>
           </div>
         </div>
