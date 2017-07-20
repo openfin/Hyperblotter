@@ -154,8 +154,15 @@ class HyperGrid extends Component {
 
       fin.desktop.InterApplicationBus.subscribe("*", "onSelect", function(data) {
         var clonedDataValues = data.selection[0].values.slice(0);
-        var _rowHeight = 1+(data.selection[0].region[2] - data.selection[0].region[0]);
+        let ystart = data.selection[0].region[0];
+        let ystop = data.selection[0].region[2];
+        var _rowHeight = 1+(ystop - ystart);
         var _arrData =  splitFlatArray(clonedDataValues, _rowHeight);
+
+        // Keep randomizing selected cells
+        let table = document.querySelector('#stock-example').getBehavior();
+        table.setData(_arrayGen.getDataWithRandomisation(ystart-1, ystop));
+        table.dataModified();
 
         fin.desktop.Excel.getWorkbooks(function(workbooks){
           var _hyperBlotter = workbooks.filter(function(d, i){
