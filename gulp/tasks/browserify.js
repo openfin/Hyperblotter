@@ -8,22 +8,22 @@
    See browserify.bundleConfigs in gulp/config.js
 */
 
-var browserify   = require('browserify');
-var browserSync  = require('browser-sync');
-var watchify     = require('watchify');
-var mergeStream  = require('merge-stream');
+var browserify = require('browserify');
+var browserSync = require('browser-sync');
+var watchify = require('watchify');
+var mergeStream = require('merge-stream');
 var bundleLogger = require('../util/bundleLogger');
-var gulp         = require('gulp');
+var gulp = require('gulp');
 var handleErrors = require('../util/handleErrors');
-var source       = require('vinyl-source-stream');
-var config       = require('../config').browserify;
-var _            = require('lodash');
+var source = require('vinyl-source-stream');
+var config = require('../config').browserify;
+var _ = require('lodash');
 
 var browserifyTask = function(devMode) {
 
   var browserifyThis = function(bundleConfig) {
 
-    if(devMode) {
+    if (devMode) {
       // Add watchify args and debug (sourcemaps) option
       _.extend(bundleConfig, watchify.args, { debug: true });
       // A watchify require/external bug that prevents proper recompiling,
@@ -32,9 +32,8 @@ var browserifyTask = function(devMode) {
       bundleConfig = _.omit(bundleConfig, ['external', 'require']);
     }
 
-    console.log('the browser bundle', bundleConfig);
     var b = browserify(bundleConfig);
-    b.transform('reactify', {es6: true});
+    b.transform('babelify', { presets: ["es2015", "react"], plugins: ["transform-class-properties", "transform-object-rest-spread"] });
 
     var bundle = function() {
       // Log when bundling starts
@@ -55,7 +54,7 @@ var browserifyTask = function(devMode) {
         }));
     };
 
-    if(devMode) {
+    if (devMode) {
       // Wrap with watchify and rebundle on changes
       b = watchify(b);
       // Rebundle on update
@@ -64,10 +63,10 @@ var browserifyTask = function(devMode) {
     } else {
       // Sort out shared dependencies.
       // b.require exposes modules externally
-      if(bundleConfig.require) b.require(bundleConfig.require);
+      if (bundleConfig.require) b.require(bundleConfig.require);
       // b.external excludes modules from the bundle, and expects
       // they'll be available externally
-      if(bundleConfig.external) b.external(bundleConfig.external);
+      if (bundleConfig.external) b.external(bundleConfig.external);
     }
 
     return bundle();

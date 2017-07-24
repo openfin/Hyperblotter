@@ -1,16 +1,11 @@
-var React = require('react');
-	
+import React, { Component } from 'react';
 
-var WatchList = React.createClass({
-	getInitialState: function() {
-		return {};
-	},
-
-	render: function () {
+class WatchList extends Component{
+	render(){
 		return <div className="watchlist">
 			<h3 className="left-content">upper left</h3>
 		</div>
 	}
-});
+}
 
-module.exports = WatchList;
+export default WatchList;

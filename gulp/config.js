@@ -33,6 +33,10 @@ module.exports = {
     src: "app.json",
     dest: dest
   },
+  devappjson: {
+    src: "devapp.json",
+    dest: dest
+  },
   markup: {
     src: src + "/htdocs/**",
     dest: dest
@@ -89,6 +93,16 @@ module.exports = {
       entries: src + '/javascript/order.js',
       dest: dest,
       outputName: 'order.js',
+      // list of externally available modules to exclude from the bundle
+      //external: ['underscore'],
+      browser:{
+        "node-hid": "null.js"
+      },
+      debug: true
+    }, {
+      entries: src + '/javascript/row-view.js',
+      dest: dest,
+      outputName: 'row-view.js',
       // list of externally available modules to exclude from the bundle
       //external: ['underscore'],
       browser:{

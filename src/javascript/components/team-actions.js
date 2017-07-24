@@ -1,16 +1,13 @@
-var React = require('react'),
-	teamStream = require('../streams/team.js'),
-	notifications = require('../streams/notifications.js');
+import React, { Component } from 'react';
+// import teamStream from '../streams/team';
+// import notificationStream from '../streams/notifications';
 
-var teamActions = React.createClass({
-	getInitialState: function() {
-		return {};
-	},
-	render: function () {
+class TeamAction extends Component {
+	render(){
 		return <div className="watchlist">
 			<h3 className="left-content">bottom right</h3>
 		</div>
 	}
-});
+}
 
-module.exports = teamActions;
+export default TeamAction;

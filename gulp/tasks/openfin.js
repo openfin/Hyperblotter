@@ -1,69 +1,54 @@
-var  gulp   = require('gulp')
-    ,gutil = require("gulp-util")
-    ,exec = require("gulp-exec")
-    ,q = require('q')
-    ,openfinLauncher = require('openfin-launcher')
-    //,openfinConfigBuilder = require('openfin-config-builder')
-    ,nodemon = require('nodemon')
-    ,src  = require('../config').js
-    ,path = require('path')
-    ,userName =   (process && process.env && process.env['USERPROFILE'] ? process.env['USERPROFILE'].split(path.sep)[2] : null)
-    ,rootDir =    (process && process.cwd()  ? process.cwd() : null);
- 
-//gulp.task('openfin', function() {
-//  openfinLauncher.launchOpenFin({
-//      configPath: 'file:/' + path.resolve('app.json')
-//  });
-//});
+var gulp = require('gulp'),
+  gutil = require("gulp-util"),
+  exec = require("gulp-exec"),
+  q = require('q'),
+  gls = require('gulp-live-server'),
+  openfinLauncher = require('openfin-launcher'),
+  src = require('../config').js,
+  path = require('path'),
+  userName = (process && process.env && process.env['USERPROFILE'] ? process.env['USERPROFILE'].split(path.sep)[2] : null),
+  rootDir = (process && process.cwd() ? process.cwd() : null),
+  server = gls('server.js', {env: {NODE_ENV: 'development'}}, false);
 
-/* Starts up theNode server - returning a promise so it may be chained in the 'openfin' task. */
-function startServerPromise(){
-    process.chdir(rootDir);
-    var defered = q.defer();
-    var _resolve = function(){
-            defered.resolve()
-    };
-    nodemon({
-        script: 'server.js'
-        , ext: 'js html'
-        , env: { 'NODE_ENV': 'development' }
-        , events: {
-            "start": _resolve()
-        }
-    });
-    return defered.promise;
+function getConfigPath() {
+  var node_env = process.env.NODE_ENV || 'development';
+
+  if(node_env !== 'development') {
+    return 'http://localhost:5001/app.json'
+  }
+
+  return 'http://localhost:5001/devapp.json'
 }
 
 function openfinLaunch() {
-    try {
-        var _dir = 'C:\\Users\\' + userName + '\\AppData\\Local\\OpenFin'
-        process.chdir(_dir);
-    }catch(err){
-        //--
-    }
+  try {
+    var _dir = 'C:\\Users\\' + userName + '\\AppData\\Local\\OpenFin'
+    process.chdir(_dir);
+  } catch (err) {
+    console.log("Unable to access OpenFin RVM on Windows, ignore if using another OS")
+  }
 
-    openfinLauncher.launchOpenFin({
-        // Launch a locally hosted Node application.
-        configPath: 'http://localhost:5001/app.json'
+  openfinLauncher.launchOpenFin({
+      // Launch a locally hosted Node application.
+      configPath: getConfigPath()
     })
-        .then(function () {
-            console.log('OpenFin launched!');
-        })
-        .fail(function (error) {
-            console.log('Error opening OpenFin!', error);
-        });
+    .then(function() {
+      console.log("Server closing...");
+      server.stop();
+    })
+    .fail(function(error) {
+      console.log('Error opening OpenFin!', error);
+    });
 }
 
-/* THIS IS THE MAIN CALL TO LAUNCH THE OPENFIN APP. */
-
+/* Task to run server */
 gulp.task('server', function() {
-    return startServerPromise()
-            .then(function(){console.log("Server now running - call 'gulp openfin'")});
+  server.start();
 });
 
-
+/* THIS IS THE MAIN CALL TO LAUNCH THE OPENFIN APP. */
 gulp.task('openfin', function() {
-            return openfinLaunch();
+  return openfinLaunch();
 });
 
-
+gulp.task('start', ['server', 'openfin']);

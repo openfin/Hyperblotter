@@ -1,7 +1,8 @@
-var _ = require('underscore'),
-		React = require('react'),
-		OFApp = require('./components/openfin.js');
+import React from 'react';
+import { render } from 'react-dom';
+import OFApp from './components/openfin';
 
+// Intialise orderBook in window object
+window.orderBook = [];
 
-
-React.render(<OFApp />, document.body);
+render(<OFApp />, document.getElementById('root'));

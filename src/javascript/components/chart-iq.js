@@ -1,22 +1,16 @@
-var React = require('react'),
-		EventEmitter = require('events').EventEmitter,
-		util = require('util'),
-		_ = require('underscore');
+import React, { Component } from 'react';
 
+//import { EventEmitter } from 'events';
+//const mounted = false;
 
-var mounted = false;
-
-
-var ChartIq = React.createClass({
-    getInitialState: function(){
-        return {}
-    },
-    componentDidMount: function() {
-    },
-    render: function() {
-
-        return <div className = "chart-iq" ></div>
-    }
-});
+class ChartIq extends Component {
+  constructor(props){
+    super(props);
+    this.state = {}
+  }
+  render(){
+     return <div className = "chart-iq" ></div>
+  }
+}
 
 module.exports = ChartIq;

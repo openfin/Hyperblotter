@@ -1,83 +1,92 @@
-var React = require('react'),
-    fin = require('../vendor/openfin.js'),
-    configureDisplayState = function() {
-        var book = window.opener.orderBook,
-            len = book.length || 0,
-            row, 
-            state = [];
+import React, { Component } from 'react';
+import fin from '../vendor/openfin';
 
-        while (len--) {
-            row = jsonModel.getRow(book[len].rowNum);
-            console.log(row);
-            state.push({
-                rowInfo: row,
-                bidAsk: book[len]
-            });
-        }
-        return state;
-    };
+const jsonGrid = window.opener.document.querySelector('#stock-example');
+const jsonModel = jsonGrid.getBehavior();
 
-var jsonGrid = window.opener.document.querySelector('#stock-example'),
-    jsonModel = jsonGrid.getBehavior();
+const configureDisplayState = () => {
+	const book = window.opener.orderBook;
+	let len = book.length || 0;
+	let state = [];
+	let row;
 
-module.exports = React.createClass({
-	getInitialState: function () {
-		return {
-			orderBook: window.opener.orderBook
-		};
-	},
-	closeWindow: ()=>{
-  	fin.desktop.main(()=>{
-  		fin.desktop.Window.getCurrent().close();
-  	});
-  },
-  removeBidOffer: function(item){
-  	//confirm('really dude?');
-  	console.log(item, opener.orderBook.indexOf(item));
-  	var book = window.opener.orderBook,
-		  	index = book.indexOf(item);
-  	if (index !== -1){
-  		book.splice(index, 1);
-  	}
-
-  },
-  randBool: ()=>{
-  	return parseInt(Math.random() * 10) % 2 ? true : false;
-  },
-
-  componentDidMount: function() {
-      Object.observe(window.opener.orderBook, (...args) => {
-          this.setState(window.opener.orderBook);
-      });
-  },
-	render: function(){
-		return <div className="child">
-			<div className="top-bar">
-				<span className="title">Orders </span>
-				<i className="fa fa-unlock-alt unlocked"></i>
-				<i onClick={this.closeWindow} className="fa fa-times-circle"></i>
-			</div>
-			<div className="contents">
-				<div className="order-book"><table className="order-table">
-	<thead>
-	<tr>
-			<th>Action</th>
-			<th>Side</th>
-			<th>Quantity</th>
-			<th>Symbol</th>
-			<th>Price</th>
-			<th>Account</th>
-			<th>Options</th>
-			<th>Status</th>
-			<th>Portfolio</th>
-		</tr>
-	</thead>
-	<tbody>
-	</tbody>
-</table></div>
-			</div>
-<div className="footer"></div>
-		</div>;
-
+	while(len--){
+		row = jsonModel.getRow(book[len].rowNum);
+		state.push({
+			rowInfo: row,
+			bidAsk: book[len]
+		});
 	}
-});
+	return state;
+}
+
+class OrderView extends Component{
+	constructor(props){
+		super(props);
+		this.state = {
+			orderBook: window.opener.orderBook
+		}
+	}
+
+	closeWindow = () => {
+		fin.desktop.main(()=>{
+			fin.desktop.Window.getCurrent().close();
+		});
+	}
+
+	removeBidOffer = () => {
+		const book = window.opener.orderBook;
+		const index = book.indexOf(item);
+		if (index !== -1){
+			book.splice(index, 1);
+		}
+	}
+
+	randBool = () => {
+		return parseInt(Math.random() * 10) % 2 ? true : false;
+	}
+
+	componentDidMount = () => {
+    console.log("MOUNTED", window.opener);
+    this.setState({
+			orderBook: window.opener.orderBook
+		});
+	}
+
+	render = () => {
+		return (
+			<div className="child">
+				<div className="top-bar">
+					<span className="title">Orders </span>
+					<i className="fa fa-unlock-alt unlocked"></i>
+					<i onClick={this.closeWindow} className="fa fa-times-circle"></i>
+				</div>
+				<div className="contents">
+					<div className="order-book">
+						<table className="order-table">
+							<thead>
+								<tr>
+									<th>Action</th>
+									<th>Side</th>
+									<th>Quantity</th>
+									<th>Symbol</th>
+									<th>Price</th>
+									<th>Account</th>
+									<th>Options</th>
+									<th>Status</th>
+									<th>Portfolio</th>
+								</tr>
+							</thead>
+							<tbody>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<div className="footer"></div>
+			</div>
+		);
+	}
+
+}
+
+export default OrderView;

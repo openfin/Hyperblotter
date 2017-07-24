@@ -3,3 +3,5 @@ Desktop.ini
 build
 node_modules
 bower_components
+.vscode
+yarn-error.log

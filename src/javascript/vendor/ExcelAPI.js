@@ -291,7 +291,7 @@ fin.desktop.Excel = (function(){
 
         fin.desktop.InterApplicationBus.subscribe("*", "excelResult", function(data) {
 
-            console.log(JSON.stringify(data));
+            // console.log(JSON.stringify(data));
 
             switch(data.action){
 
@@ -429,4 +429,3 @@ fin.desktop.Excel = (function(){
 
     return new Excel();
 })();
-

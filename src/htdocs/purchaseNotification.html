@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=<device-width>, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="css/styles.css" />
+    <title>Document</title>
+    <script>
+        function onNotificationMessage(message){
+            window.message = message
+            document.getElementById('message').innerHTML = `You are buying 100 units of ${message.company} stock at \$${message.price}`;
+        }
+
+        function closeNotification(){
+            close();
+        }
+
+        function acceptAndCloseNotification(){
+            const message = window.message;
+            console.log(message);
+            fin.desktop.Notification.getCurrent().sendMessageToApplication(message);
+            closeNotification();
+        }
+    </script>
+    <style>
+        .text-container{
+            font-size: 0.63em;
+            display: flex;
+            justify-content: center;
+            color: #4C89BC;
+        }
+        .text-container > p {
+            margin-bottom: 3%;
+        }
+        .button-container{
+            font-size: 0.7em;
+            color: #D0CBCB;
+            display: flex;
+            justify-content: center;
+        }
+        button{
+            border: solid 1px #4C89BC;
+            border-radius: 5%;
+            background-color: #4C89BC;
+            width: 25%;
+        }
+        button#confirm{
+            margin-left: 0.5%;
+        }
+        button#close{
+            margin-right: 0.5%;
+            background: transparent;
+        }
+    </style>
+</head>
+<body oncontextmenu="return false">
+    <div class="text-container">
+        <p id="message"></p>
+    </div>
+    <div class="button-container">
+        <button id="close" onClick="closeNotification()" >Cancel</button><button id="confirm" onClick="acceptAndCloseNotification()" >Confirm</button>
+    </div>
+</body>
+</html>

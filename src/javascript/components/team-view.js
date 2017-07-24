@@ -1,16 +1,12 @@
-var React = require('react'),
-	teamStream = require('../streams/team.js');
+import React, { Component } from 'react';
+// import teamStream from '../streams/team';
 
-var teamView = React.createClass({
-	getInitialState: function() {
-		return {};
-	},
-	render: function () {
-		var that = this;
+class TeamView extends Component {
+	render(){
 		return <div className="watchlist">
 			<h3 className="left-content">bottom left</h3>
 		</div>
 	}
-});
+}
 
-module.exports = teamView;
+export default TeamView;

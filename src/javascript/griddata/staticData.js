@@ -1,4 +1,4 @@
-var countryMap = {
+const countryMap = {
     "United Emirites":'AE',
     "Afghanistan":'AF',
     "Antigua":'AG',
@@ -189,7 +189,7 @@ var countryMap = {
     "":'UM'
 };
 
-var data = {
+const data = {
     "NAME":[
         "Exxon Mobil Corp.",
         "International Business Machines Corp.",
@@ -18688,7 +18688,7 @@ var data = {
         65.58,
         147.81,
         7.45,
-        221960,
+        2219.60,
         112.59,
         46.01,
         110.02,
@@ -23266,13 +23266,13 @@ var data = {
         1000
     ]
 }
-var count = data.NAME.length;
-var i = 0;
-var stocks = [];
+
+let count = data.NAME.length;
+let stocks = [];
 window.CC = {};
-for (i = 0; i < count; i++) {
-    CC[data.COUNTRY[i]] = true;
-    stocks[i] = {
+for (let i = 0; i < count; i++) {
+  window.CC[data.COUNTRY[i]] = true;
+  stocks[i] = {
         NAME: data.NAME[i],
         TICKER: data.TICKER[i],
         COUNTRY: data.COUNTRY[i],
@@ -23305,8 +23305,14 @@ for (i = 0; i < count; i++) {
     }
 }
 
+stocks.sort(function(a, b) {
+  return a.TICKER < b.TICKER
+    ? -1
+    : 1;
+});
 
-module.exports = {
-    data: data,
-    countryMap: countryMap
+export default {
+  data,
+  countryMap,
+  stocks
 }

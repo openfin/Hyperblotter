@@ -1,5 +1,5 @@
-var _ = require('underscore'),
-		React = require('react'),
-		OrderView = require('./components/order-view.js');
+import React from 'react';
+import { render } from 'react-dom';
+import OrderView from './components/order-view';
 
-React.render(<OrderView />, document.body);
+render(<OrderView />, document.getElementById('root'));

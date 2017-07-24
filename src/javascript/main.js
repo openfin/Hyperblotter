@@ -1,11 +1,6 @@
 // Browserify entry point for the bundle (yay JavaScript!)
+import React from 'react';
+import { render } from 'react-dom';
+import Main from './components/main';
 
-var _ = require('underscore'),
-		React = require('react'),
-		Main = require('./components/main.js');
-
-//require('./components/orders.js');
-
-React.render(<Main />, document.body);
-
-
+render(<Main />, document.getElementById('root'));
