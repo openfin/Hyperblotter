@@ -1,0 +1,60 @@
+.box
+  width: 110px
+  height: 115px
+  padding: 0
+  -webkit-app-region: drag
+
+.text
+  width: 90px
+  height: 90px
+  background-color: black
+  margin: auto
+  color: white
+  padding: auto
+  text-align: center
+
+.tip
+    width: 0
+    height: 0
+    border-left: 5px solid transparent
+    border-right: 5px solid transparent
+    border-bottom: 15px solid black
+    position: relative
+
+    &.top-left
+        top: 0
+        left: 15%
+
+    &.top-right
+        top: 0
+        left: 75%
+
+    &.right-top
+        top: 15%
+        left: 90%
+        transform: rotate(90deg)
+
+    &.right-bottom
+        top: 75%
+        left: 90%
+        transform: rotate(90deg)
+
+    &.bottom-right
+        top: 90%
+        left: 75%
+        transform: rotate(180deg)
+
+    &.bottom-left
+        top: 90%
+        left: 15%
+        transform: rotate(180deg)
+
+    &.left-bottom
+        top: 75%
+        left: 0%
+        transform: rotate(-90deg)
+
+    &.left-top
+        top: 15%
+        left: 0%
+        transform: rotate(-90deg)

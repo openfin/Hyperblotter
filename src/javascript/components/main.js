@@ -5,6 +5,7 @@ import windowManager from "../windowsListSingleton";
 import { DockingManager, DockableWindow } from '../dockingManger';
 import ToolTip from '../components/tooltip-decorator';
 import excel from '../vendor/ExcelAPI';
+import Shepherd from 'tether-shepherd';
 
 let excel_plugin_installed = false;
 let _windowManager = windowManager.getInstance();
@@ -225,6 +226,24 @@ const setTranspatentAsPromise = (arr, opacity) => {
   });
 }
 
+const sendLocation = (selector, callback) => {
+  const element = document.getElementById(selector);
+  if(element){
+    const currentWindow = fin.desktop.Window.getCurrent();
+    let newLocation = {};
+    currentWindow.getBounds(({top, left}) => {
+      console.log(element, selector, 'select here', element.offsetLeft, element.offsetTop, top, left);
+      const nextLocation = {
+        left: element.offsetLeft + left,
+        top: element.offsetTop + top
+      }
+      callback(nextLocation);
+    });
+  } else  {
+    return false;
+  }
+}
+
 class Main extends Component{
 
   constructor(props){
@@ -234,6 +253,7 @@ class Main extends Component{
       tilesMaximised: false,
       inLoop : false
     }
+    window.sendLocation = sendLocation;
   }
 
   closeApp(){
@@ -400,6 +420,18 @@ class Main extends Component{
     });
   }
 
+  startTour = () => {
+    const app = new fin.desktop.Window({
+				url: 'http://localhost:5001/tour.html',
+				name: 'tour-application',
+        defaultWidth: 800,
+        defaultHeight: 800,
+        defaultTop: 50,
+        defaultLeft: 50,
+        autoShow: true
+			});
+}
+
   openBlotter = () => {
     if(!blotter){
       initBlotter().then(function(b){
@@ -410,6 +442,7 @@ class Main extends Component{
       blotter.bringToFront();
     }
   }
+
 
   componentDidMount = () => {
     var _repositionWindows = function(){
@@ -566,47 +599,54 @@ class Main extends Component{
 
       <div className="content-area">
         <div>
-          <span style={ this.getAnimateParentClass() } onClick={this.openAnimationWindows}>
+          <span id="launch-blotters" style={ this.getAnimateParentClass() } onClick={this.openAnimationWindows}>
             <ToolTip legend="Launch">
               <i className='fa fa-th'></i>
             </ToolTip>
           </span>
-          <span style={this.getMinifyText().style} onClick={this.toggleShowAnimationWindows} >
+          <span id="close-blotters" style={this.getMinifyText().style} onClick={this.toggleShowAnimationWindows} >
             <ToolTip legend="Close">
               <i className={this.getMinifyText().icon} ></i>
             </ToolTip>
           </span>
-          <span onClick={this.toggleAnimateLoop} style={this.getAnimateClass().style} >
+          <span id="animate-blotters" onClick={this.toggleAnimateLoop} style={this.getAnimateClass().style} >
             <ToolTip legend="Animate">
               <i className={ this.getAnimateClass().class }></i>
             </ToolTip>
           </span>
         </div>
         <div>
-          <span onClick={this.openBlotter}>
+          <span id="show-table" onClick={this.openBlotter}>
             <ToolTip legend="Grid">
               <i className="fa fa-table"></i>
             </ToolTip>
           </span>
         </div>
         <div>
-          <span onClick={this.openDetailedChartWindow}>
+          <span id="show-chart" onClick={this.openDetailedChartWindow}>
             <ToolTip legend="Chart">
               <i className="fa fa-bar-chart" ></i>
             </ToolTip>
           </span>
         </div>
         <div>
-          <span onClick={this.openExcel} >
+          <span id="show-excel" onClick={this.openExcel} >
             <ToolTip legend="Excel">
               <i className="fa fa-file-excel-o"></i>
             </ToolTip>
           </span>
         </div>
-        <div>
+        {/*<div>
           <span onClick={this.openGithub}>
             <ToolTip legend="GitHub">
               <i className="fa fa-github-alt"></i>
+            </ToolTip>
+          </span>
+        </div> */}
+        <div>
+          <span onClick={this.startTour}>
+            <ToolTip legend="Tour">
+              <i className="fa fa-road"></i>
             </ToolTip>
           </span>
         </div>

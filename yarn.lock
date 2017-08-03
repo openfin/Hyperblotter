@@ -7728,6 +7728,16 @@ ternary@~1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/ternary/-/ternary-1.0.0.tgz#45702725608c9499d46a9610e9b0e49ff26f789e"
 
+tether-shepherd@^1.8.1:
+  version "1.8.1"
+  resolved "https://registry.yarnpkg.com/tether-shepherd/-/tether-shepherd-1.8.1.tgz#4fd9b2fdd9059f04b6c4249456d5ae145a3e9223"
+  dependencies:
+    tether "^1.0.1"
+
+tether@^1.0.1:
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/tether/-/tether-1.4.0.tgz#0f9fa171f75bf58485d8149e94799d7ae74d1c1a"
+
 text-encoding@0.6.4:
   version "0.6.4"
   resolved "https://registry.yarnpkg.com/text-encoding/-/text-encoding-0.6.4.tgz#e399a982257a276dae428bb92845cb71bdc26d19"

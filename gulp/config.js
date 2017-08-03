@@ -109,6 +109,26 @@ module.exports = {
         "node-hid": "null.js"
       },
       debug: true
+    },{
+      entries: src + '/javascript/tour.js',
+      dest: dest,
+      outputName: 'tour.js',
+      // list of externally available modules to exclude from the bundle
+      //external: ['underscore'],
+      browser:{
+        "node-hid": "null.js"
+      },
+      debug: true
+    },{
+      entries: src + '/javascript/tourInfo.js',
+      dest: dest,
+      outputName: 'tourInfo.js',
+      // list of externally available modules to exclude from the bundle
+      //external: ['underscore'],
+      browser:{
+        "node-hid": "null.js"
+      },
+      debug: true
     }]
   },
   production: {

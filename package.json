@@ -96,6 +96,7 @@
     "jquery": "^3.2.1",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
+    "tether-shepherd": "^1.8.1",
     "underscore": "^1.8.3",
     "webpack": "^2.6.1"
   }
