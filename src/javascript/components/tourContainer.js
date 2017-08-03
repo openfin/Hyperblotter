@@ -46,11 +46,10 @@ const showTooltip = () => {
 }
 
 const nextStep = () => {
-  window.opener.window.sendLocation(selectors[selectedIndex], ({top, left}) => {
-    console.log('clicked', top, left, window.opener.window.sendLocation);
+  console.log(selectors, selectedIndex, 'index');
+  window.opener.window.getElementLocation(selectors[selectedIndex], ({top, left}) => {
     if(top !== undefined && left !== undefined){
       const tooltipWindow = fin.desktop.Window.wrap(APP_UUID, TOOLTIP_WINDOW_NAME);
-      console.log(top, left, 'about to animate', tooltipWindow);
       tooltipWindow.animate({
         position: {
           top,
@@ -58,7 +57,7 @@ const nextStep = () => {
           duration: 500
         },
         tween: 'linear'
-      }, () => selectedIndex = (selectedIndex === selectors.length - 1) ? 0 : selectedIndex + 1, (e) => console.log(e));
+      }, null, () => selectedIndex = (selectedIndex === selectors.length - 1) ? 0 : selectedIndex + 1, (e) => console.log(e));
     };
   });
 }

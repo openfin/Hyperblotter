@@ -226,21 +226,17 @@ const setTranspatentAsPromise = (arr, opacity) => {
   });
 }
 
-const sendLocation = (selector, callback) => {
+const getElementLocation = (selector, callback) => {
   const element = document.getElementById(selector);
   if(element){
     const currentWindow = fin.desktop.Window.getCurrent();
-    let newLocation = {};
     currentWindow.getBounds(({top, left}) => {
-      console.log(element, selector, 'select here', element.offsetLeft, element.offsetTop, top, left);
       const nextLocation = {
         left: element.offsetLeft + left,
-        top: element.offsetTop + top
+        top: element.offsetTop + top + 50
       }
       callback(nextLocation);
     });
-  } else  {
-    return false;
   }
 }
 
@@ -253,7 +249,7 @@ class Main extends Component{
       tilesMaximised: false,
       inLoop : false
     }
-    window.sendLocation = sendLocation;
+    window.getElementLocation = getElementLocation;
   }
 
   closeApp(){
