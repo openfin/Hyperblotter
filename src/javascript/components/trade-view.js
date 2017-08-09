@@ -137,6 +137,7 @@ class TradeView extends Component {
       this.setState({pinned: false});
     }else{
       parentWindow.pinWindow(currentWindow)
+      console.log(this.state.pinned, parentWindow.pinnedWindows);
       this.setState({pinned: true});
     }
   }
@@ -207,6 +208,7 @@ class TradeView extends Component {
   getPinnedWindowClass = () => {
     const currentWindow = fin.desktop.Window.getCurrent();
     const parentWindow = window.opener.window;
+    console.log(parentWindow.pinnedWindows, parentWindow.pinWindow, parentWindow.unPinwindow, 'windows state');
 
     if(parentWindow.pinnedWindows && parentWindow.pinnedWindows[currentWindow.name]){
       return {icon:"fa fa-thumb-tack"}
@@ -227,7 +229,7 @@ class TradeView extends Component {
           <div className="title">
             {this.state.ticker}
           </div>
-          <span className="pinner" onClick={this.togglePinWindow}>
+          <span className="pinner" id="pin-window" onClick={this.togglePinWindow}>
             <i className={ this.getPinnedWindowClass().icon } ></i>
           </span>
           <span className="chart" onClick={this.openDetailedChartWindow}>

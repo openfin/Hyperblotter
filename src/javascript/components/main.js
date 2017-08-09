@@ -10,6 +10,7 @@ import Shepherd from 'tether-shepherd';
 let excel_plugin_installed = false;
 let _windowManager = windowManager.getInstance();
 let animationWindows = _windowManager.getWindows();
+const demoWindows = [];
 let blotter;
 let inLoop = false;
 let locations = [];
@@ -22,6 +23,10 @@ const numColumns = 6;
 const numRows = 3;
 const demoTiles = {};
 const numTiles = numRows * numColumns + 1;
+let inTour = false;
+const APP_UUID = 'hyperblotter';
+const TOOLTIP_WINDOW_NAME = 'tour-tooltip';
+let currentWindowSet = animationWindows;
 
 /* Static data for the floating 'trade' animation windows */
 const dockingManager = DockingManager.getInstance();
@@ -162,7 +167,7 @@ const initAnimationWindows = () => {
           }, () => {
             dockingManager.register(newWindow);
           });
-        animationWindows.push(newWindow);
+        currentWindowSet.push(newWindow);
         locations.push({top: top, left: left, duration: 1000});
         left += cubeSize + tileMargin;
         if (i && !(i % numColumns)) {
@@ -280,22 +285,129 @@ const setTranspatentAsPromise = (arr, opacity) => {
     });
   });
 }
-const getElementLocation = (selector, callback) => {
-  const element = document.getElementById(selector);
-  if (element) {
-    const currentWindow = fin
-      .desktop
-      .Window
-      .getCurrent();
-    currentWindow.getBounds(({top, left}) => {
-      const nextLocation = {
-        left: element.offsetLeft + left,
-        top: element.offsetTop + top + 50
-      }
-      callback(nextLocation);
+
+const moveToolTip = ({top, left}) => {
+  console.log(left, top, 'dimensions');
+  const tooltipWindow = fin
+    .desktop
+    .Window
+    .wrap(APP_UUID, TOOLTIP_WINDOW_NAME);
+  tooltipWindow.isShowing(showing => {
+    if(showing){
+      tooltipWindow.animate({
+        position: {
+          top,
+          left,
+          duration: 500
+        },
+        tween: 'linear'
+      });
+    }else{
+      tooltipWindow.showAt(left, top);
+    }
+  });
+}
+
+const createTooltip = () => {
+  new fin
+    .desktop
+    .Window({
+      url: 'http://localhost:5001/tourInfo.html',
+      name: TOOLTIP_WINDOW_NAME,
+      "defaultWidth": 110,
+      "maxWidth": 110,
+      "minWidth": 110,
+      "defaultHeight": 90,
+      "maxHeight": 90,
+      "minHeight": 90,
+      "defaultTop": 50,
+      "defaultLeft": 50,
+      "alwaysOnTop": true,
+      "autoShow": false,
+      "frame": false,
+      "resizable": false,
+      "maximizable": false
     });
+}
+
+const getElementLocation = (finWindowObject, nativeWindowObject, elementId, padding, callback) => {
+  const element = nativeWindowObject.document.getElementById(elementId);
+  if(element){
+    finWindowObject.getBounds(({top, left}) => {
+      const nextLocation = {
+        top: element.offsetTop + top + padding.top,
+        left: element.offsetLeft + left + padding.left
+      };
+      callback(nextLocation);
+    })
   }
 }
+
+const moveToolTipToSelector = (finWindowObject, nativeWindowObject, selector, padding) => {
+  getElementLocation(finWindowObject, nativeWindowObject, selector, padding, moveToolTip);
+}
+
+const step0 = (selector) => {
+  const currentWindow = fin.desktop.Window.getCurrent();
+  moveToolTipToSelector(currentWindow, window, selector, { top: 50, left: 0});
+  //do other stuff
+}
+
+const step1 = (selector) => {
+  const cubeSize = 185;
+  const numWindows = 9;
+  const numRows = 3;
+  const numColumns = 3;
+  const tileMargin = 8;
+  const leftOffset = 105;
+  const topOffset = 200;
+  let top = topOffset;
+  let left = leftOffset;
+  let toolTipReady = false;
+  for (let i = 1; i <= numWindows; i++) {
+    let newWindow = new fin
+      .desktop
+      .Window({
+        name: 'tile' + random(),
+        url: 'trade.html?t=' + rndData[i].ticker + '&l=' + rndData[i].last,
+        autoShow: true,
+        defaultHeight: cubeSize,
+        minHeight: cubeSize,
+        maxHeight: cubeSize,
+        defaultWidth: cubeSize,
+        minWidth: cubeSize,
+        maxWidth: cubeSize,
+        resizable: false,
+        frame: false,
+        maximizable: false,
+        saveWindowState: false,
+        defaultTop: top,
+        defaultLeft: left,
+        showTaskbarIcon: false,
+        accelerator: {
+          devtools: true
+        },
+        icon: "http://demoappdirectory.openf.in/desktop/config/apps/OpenFin/HelloOpenFin/img/openfin.ico"
+      }, () => {
+        dockingManager.register(newWindow);
+        if(!toolTipReady){
+          moveToolTipToSelector(newWindow, newWindow.getNativeWindow(), selector, { top: 30, left: -10 });
+          toolTipReady = true;
+        }
+      });
+    demoWindows.push(newWindow);
+    //clear stored locations
+    locations = [];
+    locations.push({top: top, left: left, duration: 1000});
+    left += cubeSize + tileMargin;
+    if(i >= numColumns && i % numColumns === 0){
+      left = leftOffset;
+      top += cubeSize + tileMargin;
+    }
+  }
+}
+
+
 class Main extends Component {
   constructor(props) {
     super(props);
@@ -304,7 +416,6 @@ class Main extends Component {
       tilesMaximised: false,
       inLoop: false
     }
-    window.getElementLocation = getElementLocation;
   }
   closeApp() {
     fin
@@ -329,7 +440,7 @@ class Main extends Component {
       });
   }
   showWindows = () => {
-    animationWindows.forEach((wnd) => {
+    currentWindowSet.forEach((wnd) => {
       try {
         wnd.show();
         wnd.bringToFront();
@@ -347,7 +458,7 @@ class Main extends Component {
         tilesMaximised: true
       }, () => {
         window.animationWindowsShowing = true;
-        this.animateWindows(animationWindows, false);
+        this.animateWindows(currentWindowSet, false);
       });
     });
   }
@@ -358,20 +469,27 @@ class Main extends Component {
   }
   minWindows = () => {
     this.toggleAnimateLoopStop();
-    animationWindows.forEach((wnd) => {
+    currentWindowSet.forEach((wnd) => {
       wnd.minimize();
     });
     this.setState({tilesMaximised: false})
   }
   pinwindow = (win) => {
-    animationWindows.map(animWindow => {
+    // should only run when not in tour
+    currentWindowSet.map(animWindow => {
       if (animWindow.name === win.name) {
         window.pinnedWindows[win.name] = true;
       }
-    })
+    });
+    // demoWindows.map(animWindow => {
+    //   if (animWindow.name === win.name) {
+    //     window.pinnedWindows[win.name] = true;
+    //   }
+    // });
+
   }
   unPinwindow = (win) => {
-    animationWindows.map(animWindow => {
+    currentWindowSet.map(animWindow => {
       if (animWindow.name === win.name) { // && window.pinnedWindows[win.name]){
         window.pinnedWindows[win.name] = false;
         dockingManager.removeFromGroup(win);
@@ -396,7 +514,7 @@ class Main extends Component {
   }
   closeAnimationWindows = () => {
     this.toggleAnimateLoopStop();
-    animationWindows.forEach((wnd) => {
+    currentWindowSet.forEach((wnd) => {
       window.pinnedWindows = window.pinnedWindows || [];
       if (!window.pinnedWindows[wnd.name]) {
         wnd.hide();
@@ -418,7 +536,7 @@ class Main extends Component {
     inLoop = true;
     this.setState({"inLoop": true});
     if (inLoop) {
-      this.animateWindows(animationWindows);
+      this.animateWindows(currentWindowSet);
     }
   }
   toggleAnimateLoopStop = () => {
@@ -427,11 +545,11 @@ class Main extends Component {
   }
   // Abstracted out the function for randomising
   randomiseAnimationWindows() {
-    return animationWindows.reduce(function(m, itm, idx, a) {
+    return currentWindowSet.reduce(function(m, itm, idx, a) {
       m[0].push(m[1].splice(floor((random() * m[1].length)), 1)[0]);
       return m
     }, [
-      [], animationWindows.slice()
+      [], currentWindowSet.slice()
     ])[0]
   }
   animateWindows = (animationWindows, randomise) => {
@@ -466,7 +584,22 @@ class Main extends Component {
       });
     });
   }
+
   startTour = () => {
+    inTour = true;
+    currentWindowSet = demoWindows;
+    console.log(currentWindowSet, 'should not be null');
+    createTooltip();
+    window.addEventListener('message', (message) => {
+      if(message.data.step !== undefined){
+        switch(message.data.step){
+          case 0: step0(message.data.selector)
+            break;
+          case 1: step1(message.data.selector)
+            break;
+        }
+      }
+    }, false);
     const app = new fin
       .desktop
       .Window({
@@ -500,7 +633,7 @@ class Main extends Component {
       if (!this.state.inLoop && this.state.animationWindowsShowing) {
         this
           .animateWindows
-          .call(this, animationWindows, false);
+          .call(this, currentWindowSet, false);
       }
     }.bind(this);
     document.addEventListener('monitor-changed', function(e) {
@@ -509,7 +642,6 @@ class Main extends Component {
     window.pinWindow = this.pinwindow;
     window.unPinwindow = this.unPinwindow;
     window.pinnedWindows = {};
-    console.log(window.pinnedWindows, 'created');
   }
   openExcel = () => {
     if (!excel_plugin_installed) {

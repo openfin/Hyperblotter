@@ -14,6 +14,11 @@ const selectors = [
     info: "Displays all Blotter Windows, Control and interact with child Windows from Parent"
   },
   {
+    id: "pin-window",
+    action: "Click here to pin a Window",
+    info: "You can click here to pin a Window. Pinned windows will not be hidden when other are"
+  },
+  {
     id: "animate-blotters",
     action: "Fully Animate windows around screen, click Animate",
     info: "Animations let you move windows and Apps around screen"
@@ -46,62 +51,27 @@ class TourContainer extends Component {
     }
   }
 
-  showTooltip = () => {
-    new fin
-      .desktop
-      .Window({
-        url: 'http://localhost:5001/tourInfo.html',
-        name: TOOLTIP_WINDOW_NAME,
-        "defaultWidth": 110,
-        "maxWidth": 110,
-        "minWidth": 110,
-        "defaultHeight": 90,
-        "maxHeight": 90,
-        "minHeight": 90,
-        "defaultTop": 50,
-        "defaultLeft": 50,
-        "alwaysOnTop": true,
-        "autoShow": true,
-        "frame": false,
-        "resizable": false,
-        "maximizable": false
-      }, () => this.setState({tourStarted: true}));
-  }
-
   nextStep = () => {
-    window
-      .opener
-      .window
-      .getElementLocation(selectors[this.state.selectedIndex].id, ({top, left}) => {
-        if (top !== undefined && left !== undefined) {
-          const tooltipWindow = fin
-            .desktop
-            .Window
-            .wrap(APP_UUID, TOOLTIP_WINDOW_NAME);
-          tooltipWindow.animate({
-            position: {
-              top,
-              left,
-              duration: 500
-            },
-            tween: 'linear'
-          },
-          null,
-          () => {
-            if (this.state.selectedIndex === selectors.length - 1) {
-              this.setState({selectedIndex: 0})
-            } else {
-              this.setState({selectedIndex: this.state.selectedIndex + 1})
-            }
-          });
-        }
-      })
-    this.setState({currentlySelected: selectors[this.state.selectedIndex]});
+    const mainWindow = window.opener.window;
+    const nextIndex = this.state.selectedIndex === selectors.length - 1 ? 0 : this.state.selectedIndex + 1;
+    console.log('clicked', nextIndex, this.state);
+    this.setState({
+      selectedIndex: nextIndex,
+      currentlySelected: selectors[nextIndex]
+    }, () => {
+      mainWindow.postMessage({
+        step: this.state.selectedIndex,
+        selector: selectors[this.state.selectedIndex].id
+      }, '*');
+    })
   }
 
   componentDidMount() {
-    console.log(this.state);
-    this.showTooltip();
+    const mainWindow = window.opener.window;
+    mainWindow.postMessage({
+      step: this.state.selectedIndex,
+      selector: selectors[this.state.selectedIndex].id
+    }, '*');
   }
 
   render() {
