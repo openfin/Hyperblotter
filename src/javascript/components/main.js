@@ -10,7 +10,7 @@ import Shepherd from 'tether-shepherd';
 let excel_plugin_installed = false;
 let _windowManager = windowManager.getInstance();
 let animationWindows = _windowManager.getWindows();
-const demoWindows = [];
+let demoWindows = [];
 let blotter;
 let inLoop = false;
 let locations = [];
@@ -287,7 +287,6 @@ const setTranspatentAsPromise = (arr, opacity) => {
 }
 
 const moveToolTip = ({top, left}) => {
-  console.log(left, top, 'dimensions');
   const tooltipWindow = fin
     .desktop
     .Window
@@ -347,30 +346,16 @@ const moveToolTipToSelector = (finWindowObject, nativeWindowObject, selector, pa
   getElementLocation(finWindowObject, nativeWindowObject, selector, padding, moveToolTip);
 }
 
-const step0 = (selector) => {
-  const currentWindow = fin.desktop.Window.getCurrent();
-  moveToolTipToSelector(currentWindow, window, selector, { top: 50, left: 0});
-  //do other stuff
-}
 
-const step1 = (selector) => {
-  const cubeSize = 185;
-  const numWindows = 9;
-  const numRows = 3;
-  const numColumns = 3;
-  const tileMargin = 8;
-  const leftOffset = 105;
-  const topOffset = 200;
-  let top = topOffset;
-  let left = leftOffset;
-  let toolTipReady = false;
-  for (let i = 1; i <= numWindows; i++) {
+const createDemoBlotterWindow = (top, left, index) => {
+  console.log(left, top, 'dimensions', index);
+  return new Promise((resolve) => {
     let newWindow = new fin
       .desktop
       .Window({
         name: 'tile' + random(),
-        url: 'trade.html?t=' + rndData[i].ticker + '&l=' + rndData[i].last,
-        autoShow: true,
+        url: 'trade.html?t=' + rndData[index].ticker + '&l=' + rndData[index].last,
+        autoShow: false,
         defaultHeight: cubeSize,
         minHeight: cubeSize,
         maxHeight: cubeSize,
@@ -390,21 +375,10 @@ const step1 = (selector) => {
         icon: "http://demoappdirectory.openf.in/desktop/config/apps/OpenFin/HelloOpenFin/img/openfin.ico"
       }, () => {
         dockingManager.register(newWindow);
-        if(!toolTipReady){
-          moveToolTipToSelector(newWindow, newWindow.getNativeWindow(), selector, { top: 30, left: -10 });
-          toolTipReady = true;
-        }
+        resolve(newWindow);
       });
-    demoWindows.push(newWindow);
-    //clear stored locations
-    locations = [];
-    locations.push({top: top, left: left, duration: 1000});
-    left += cubeSize + tileMargin;
-    if(i >= numColumns && i % numColumns === 0){
-      left = leftOffset;
-      top += cubeSize + tileMargin;
-    }
-  }
+      locations.push({top: top, left: left, duration: 1000});
+  })
 }
 
 
@@ -507,11 +481,13 @@ class Main extends Component {
       this.openAnimationWindows();
     }
   }
+
   openAnimationWindows = () => {
     initAnimationWindows().then(() => {
       this.showWindows();
     });
   }
+
   closeAnimationWindows = () => {
     this.toggleAnimateLoopStop();
     currentWindowSet.forEach((wnd) => {
@@ -593,9 +569,9 @@ class Main extends Component {
     window.addEventListener('message', (message) => {
       if(message.data.step !== undefined){
         switch(message.data.step){
-          case 0: step0(message.data.selector)
+          case 0: this.step0(message.data.selector)
             break;
-          case 1: step1(message.data.selector)
+          case 1: this.step1(message.data.selector)
             break;
         }
       }
@@ -617,6 +593,58 @@ class Main extends Component {
         }
       });
   }
+
+  step0 = (selector) => {
+    const currentWindow = fin.desktop.Window.getCurrent();
+    moveToolTipToSelector(currentWindow, window, selector, { top: 50, left: 0});
+    //do other stuff
+  }
+
+  step1 = (selector) => {
+    const windowPromises = [];
+    const cubeSize = 185;
+    const numWindows = 9;
+    const tileMargin = 8;
+    const topOffset = 200;
+    const leftOffset = 105;
+    const numColumns = 3;
+    const blotterWidth = cubeSize + tileMargin;
+    let top = topOffset;
+    let left = leftOffset;
+
+    //clear stored locations
+    locations = [];
+
+    for (let i = 1; i <= numWindows; i++) {
+      windowPromises.push(createDemoBlotterWindow(top, left, i));
+      left += blotterWidth;
+      if(i % numColumns === 0){
+        left = leftOffset;
+        top += blotterWidth;
+      }
+    }
+    Promise.all(windowPromises).then(blotterWindows => {
+      currentWindowSet = demoWindows = blotterWindows;
+      let nativeWindowObject = demoWindows[5].getNativeWindow();
+      this.showWindows();
+
+      moveToolTipToSelector(demoWindows[5], nativeWindowObject, selector, { top: 30, left: -10 });
+      let pinElement = nativeWindowObject.document.getElementById(selector);
+
+      const moveToNext = () => {
+        nativeWindowObject = demoWindows[8].getNativeWindow();
+        moveToolTipToSelector(demoWindows[8], nativeWindowObject, selector, { top: 30, left: -10 });
+        pinElement = nativeWindowObject.document.getElementById(selector);
+        pinElement.addEventListener('click', () => {
+            const currentWindow = fin.desktop.Window.getCurrent();
+            moveToolTipToSelector(currentWindow, window, 'launch-blotters', { top: 80, left: 10});
+        });
+      }
+
+      pinElement.addEventListener('click', moveToNext);
+    })
+  }
+
   openBlotter = () => {
     if (!blotter) {
       initBlotter()
