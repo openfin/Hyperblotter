@@ -286,6 +286,28 @@ const setTranspatentAsPromise = (arr, opacity) => {
   });
 }
 
+const createTooltip = () => {
+  new fin
+    .desktop
+    .Window({
+      url: 'http://localhost:5001/tourInfo.html',
+      name: TOOLTIP_WINDOW_NAME,
+      "defaultWidth": 110,
+      "maxWidth": 110,
+      "minWidth": 110,
+      "defaultHeight": 90,
+      "maxHeight": 90,
+      "minHeight": 90,
+      "defaultTop": 50,
+      "defaultLeft": 50,
+      "alwaysOnTop": true,
+      "autoShow": false,
+      "frame": false,
+      "resizable": false,
+      "maximizable": false
+    });
+}
+
 const moveToolTip = ({top, left}) => {
   const tooltipWindow = fin
     .desktop
@@ -307,26 +329,21 @@ const moveToolTip = ({top, left}) => {
   });
 }
 
-const createTooltip = () => {
-  new fin
+const hideTooltip = () => {
+   fin
     .desktop
-    .Window({
-      url: 'http://localhost:5001/tourInfo.html',
-      name: TOOLTIP_WINDOW_NAME,
-      "defaultWidth": 110,
-      "maxWidth": 110,
-      "minWidth": 110,
-      "defaultHeight": 90,
-      "maxHeight": 90,
-      "minHeight": 90,
-      "defaultTop": 50,
-      "defaultLeft": 50,
-      "alwaysOnTop": true,
-      "autoShow": false,
-      "frame": false,
-      "resizable": false,
-      "maximizable": false
-    });
+    .Window
+    .wrap(APP_UUID, TOOLTIP_WINDOW_NAME)
+    .hide();
+}
+
+const changeTooltipMessage = (message) => {
+   fin
+    .desktop
+    .Window
+    .wrap(APP_UUID, TOOLTIP_WINDOW_NAME)
+    .getNativeWindow()
+    .changeMessage(message);
 }
 
 const getElementLocation = (finWindowObject, nativeWindowObject, elementId, padding, callback) => {
@@ -379,6 +396,13 @@ const createDemoBlotterWindow = (top, left, index) => {
       });
       locations.push({top: top, left: left, duration: 1000});
   })
+}
+
+const closeOpenDemoWindows = () => {
+  if(currentWindowSet && currentWindowSet.length > 0){
+    currentWindowSet.forEach(wnd => wnd.close());
+    currentWindowSet.length;
+  }
 }
 
 
@@ -449,18 +473,11 @@ class Main extends Component {
     this.setState({tilesMaximised: false})
   }
   pinwindow = (win) => {
-    // should only run when not in tour
     currentWindowSet.map(animWindow => {
       if (animWindow.name === win.name) {
         window.pinnedWindows[win.name] = true;
       }
     });
-    // demoWindows.map(animWindow => {
-    //   if (animWindow.name === win.name) {
-    //     window.pinnedWindows[win.name] = true;
-    //   }
-    // });
-
   }
   unPinwindow = (win) => {
     currentWindowSet.map(animWindow => {
@@ -564,7 +581,6 @@ class Main extends Component {
   startTour = () => {
     inTour = true;
     currentWindowSet = demoWindows;
-    console.log(currentWindowSet, 'should not be null');
     createTooltip();
     window.addEventListener('message', (message) => {
       if(message.data.step !== undefined){
@@ -573,6 +589,9 @@ class Main extends Component {
             break;
           case 1: this.step1(message.data.selector)
             break;
+          case 2: this.step2(message.data.selector)
+            break;
+          case 'end': this.endTour();
         }
       }
     }, false);
@@ -595,12 +614,18 @@ class Main extends Component {
   }
 
   step0 = (selector) => {
+    closeOpenDemoWindows();
+    hideTooltip();
+
     const currentWindow = fin.desktop.Window.getCurrent();
     moveToolTipToSelector(currentWindow, window, selector, { top: 50, left: 0});
     //do other stuff
   }
 
   step1 = (selector) => {
+    closeOpenDemoWindows();
+    hideTooltip();
+
     const windowPromises = [];
     const cubeSize = 185;
     const numWindows = 9;
@@ -638,11 +663,76 @@ class Main extends Component {
         pinElement.addEventListener('click', () => {
             const currentWindow = fin.desktop.Window.getCurrent();
             moveToolTipToSelector(currentWindow, window, 'launch-blotters', { top: 80, left: 10});
+            console.log(window.document.getElementById('launch-blotters'));
+            window.document.getElementById('launch-blotters').addEventListener('click', () => hideTooltip());
         });
       }
 
       pinElement.addEventListener('click', moveToNext);
     })
+  }
+
+  step2 = (selector) => {
+    closeOpenDemoWindows();
+    hideTooltip();
+
+    const windowPromises = [];
+    const cubeSize = 185;
+    const numWindows = 2;
+    const tileMargin = 8;
+    const topOffset = 300;
+    const leftOffset = 105;
+    const numColumns = 3;
+    const blotterWidth = cubeSize + tileMargin;
+    let top = topOffset;
+    let left = leftOffset;
+
+    //clear stored locations
+    locations = [];
+
+    for (let i = 1; i <= numWindows; i++) {
+      windowPromises.push(createDemoBlotterWindow(top, left, i));
+      left += (blotterWidth * 2);
+    }
+
+    Promise.all(windowPromises).then(blotterWindows => {
+      currentWindowSet = demoWindows = blotterWindows;
+      let nativeWindowObject = demoWindows[0].getNativeWindow();
+      this.showWindows();
+
+      moveToolTipToSelector(demoWindows[0], nativeWindowObject, selector, { top: 30, left: -10 });
+      let pinElement = nativeWindowObject.document.getElementById(selector);
+
+      const moveToNext = () => {
+        nativeWindowObject = demoWindows[1].getNativeWindow();
+        moveToolTipToSelector(demoWindows[1], nativeWindowObject, selector, { top: 30, left: -10 });
+        pinElement = nativeWindowObject.document.getElementById(selector);
+        pinElement.addEventListener('click', () => {
+            const currentWindow = fin.desktop.Window.getCurrent();
+            const toolTipHidden = false;
+            moveToolTip({top: topOffset + (cubeSize / 4 ), left: leftOffset + cubeSize + (cubeSize / 4) });
+            changeTooltipMessage('drag together');
+            demoWindows.map(wnd => {
+              wnd.addEventListener('bounds-changing', () => {
+                if (!toolTipHidden) hideTooltip();
+              })
+              wnd.addEventListener('group-changed', () => {
+                changeTooltipMessage('drag group');
+                moveToolTip({top: topOffset - (cubeSize / 2) - 20, left: leftOffset + cubeSize + (cubeSize / 4) });
+              });
+            })
+            // window.document.getElementById('launch-blotters').addEventListener('click', () => hideTooltip());
+        });
+      }
+
+      pinElement.addEventListener('click', moveToNext);
+    })
+  }
+
+  endTour = () => {
+    console.log('end clicked');
+    closeOpenDemoWindows();
+    hideTooltip();
   }
 
   openBlotter = () => {

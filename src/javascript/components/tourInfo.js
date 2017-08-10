@@ -27,19 +27,22 @@ class TourInfo extends Component {
       tipPosition: index >= 0 ? index : 0
     }
     this.moveTip = this.moveTip.bind(this);
+    window.changeMessage = this.changeMessage;
   }
   
   moveTip = () => {
     this.setState(() =>{
       return {tipPosition: this.state.tipPosition === positions.length - 1 ? 0 : this.state.tipPosition + 1}});
   }
+  
+  changeMessage = (message) => this.setState({message}); 
 
   render() {
     return (
       <div>
         <Box>
           <Tip className={positions[this.state.tipPosition]}/>
-           <div className="text">{ this.props.message || 'Click Here'}</div>
+           <div className="text">{ this.props.message || this.state.message || 'Click Here'}</div>
         </Box>
       </div>
     );

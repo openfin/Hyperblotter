@@ -19,6 +19,11 @@ const selectors = [
     info: "You can click here to pin a Window. Pinned windows will not be hidden when other are"
   },
   {
+    id: "pin-window",
+    action: "Dragging Windows",
+    info: "You can click here to pin a Window. Pinned windows will not be hidden when other are"
+  },
+  {
     id: "animate-blotters",
     action: "Fully Animate windows around screen, click Animate",
     info: "Animations let you move windows and Apps around screen"
@@ -54,7 +59,7 @@ class TourContainer extends Component {
   nextStep = () => {
     const mainWindow = window.opener.window;
     const nextIndex = this.state.selectedIndex === selectors.length - 1 ? 0 : this.state.selectedIndex + 1;
-    console.log('clicked', nextIndex, this.state);
+
     this.setState({
       selectedIndex: nextIndex,
       currentlySelected: selectors[nextIndex]
@@ -64,6 +69,14 @@ class TourContainer extends Component {
         selector: selectors[this.state.selectedIndex].id
       }, '*');
     })
+  }
+
+  endTour = () => {
+    const mainWindow = window.opener.window;
+    mainWindow.postMessage({
+      step: 'end'
+    }, '*');
+    fin.desktop.Window.getCurrent().close();
   }
 
   componentDidMount() {
@@ -84,8 +97,8 @@ class TourContainer extends Component {
           <div className="tour-action"><p>{this.state.currentlySelected.action}</p></div>
           <div className="tour-info"><p>{this.state.currentlySelected.info}</p></div>
           <div className="tour-actions">
-            <button onClick={this.nextStep}>Move Tooltip</button>
-            <button>End Tour</button>
+            <button onClick={this.nextStep}>Next Tour Step</button>
+            <button onClick={this.endTour}>End Tour</button>
           </div>
         </div>
       </div>
