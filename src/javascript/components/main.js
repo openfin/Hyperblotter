@@ -365,7 +365,6 @@ const moveToolTipToSelector = (finWindowObject, nativeWindowObject, selector, pa
 
 
 const createDemoBlotterWindow = (top, left, index) => {
-  console.log(left, top, 'dimensions', index);
   return new Promise((resolve) => {
     let newWindow = new fin
       .desktop
@@ -591,6 +590,16 @@ class Main extends Component {
             break;
           case 2: this.step2(message.data.selector)
             break;
+          case 3: this.step3(message.data.selector)
+            break;
+          case 4: this.step4(message.data.selector)
+            break;
+          case 5: this.step5(message.data.selector)
+            break;
+          case 6: this.step6(message.data.selector)
+            break;
+          case 7: this.step7(message.data.selector)
+            break;
           case 'end': this.endTour();
         }
       }
@@ -660,11 +669,11 @@ class Main extends Component {
         nativeWindowObject = demoWindows[8].getNativeWindow();
         moveToolTipToSelector(demoWindows[8], nativeWindowObject, selector, { top: 30, left: -10 });
         pinElement = nativeWindowObject.document.getElementById(selector);
+        let clickCount = 0;
         pinElement.addEventListener('click', () => {
             const currentWindow = fin.desktop.Window.getCurrent();
             moveToolTipToSelector(currentWindow, window, 'launch-blotters', { top: 80, left: 10});
-            console.log(window.document.getElementById('launch-blotters'));
-            window.document.getElementById('launch-blotters').addEventListener('click', () => hideTooltip());
+            changeTooltipMessage(clickCount++ === 0 ? 'click here' : 'click again');
         });
       }
 
@@ -709,24 +718,180 @@ class Main extends Component {
         pinElement = nativeWindowObject.document.getElementById(selector);
         pinElement.addEventListener('click', () => {
             const currentWindow = fin.desktop.Window.getCurrent();
-            const toolTipHidden = false;
+            let toolTipHidden = false;
             moveToolTip({top: topOffset + (cubeSize / 4 ), left: leftOffset + cubeSize + (cubeSize / 4) });
             changeTooltipMessage('drag together');
             demoWindows.map(wnd => {
               wnd.addEventListener('bounds-changing', () => {
-                if (!toolTipHidden) hideTooltip();
+                if (!toolTipHidden) { 
+                  hideTooltip();
+                  toolTipHidden = true;
+                }
               })
               wnd.addEventListener('group-changed', () => {
                 changeTooltipMessage('drag group');
                 moveToolTip({top: topOffset - (cubeSize / 2) - 20, left: leftOffset + cubeSize + (cubeSize / 4) });
               });
             })
-            // window.document.getElementById('launch-blotters').addEventListener('click', () => hideTooltip());
         });
       }
 
       pinElement.addEventListener('click', moveToNext);
     })
+  }
+
+  step3 = (selector) => {
+    closeOpenDemoWindows();
+    hideTooltip();
+
+    const cubeSize = 185;
+    const numWindows = 2;
+    const tileMargin = 8;
+    const topOffset = 300;
+    const leftOffset = 105;
+    const numColumns = 3;
+    const blotterWidth = cubeSize + tileMargin;
+    let top = topOffset;
+    let left = leftOffset;
+
+    //clear stored locations
+    locations = [];
+
+    createDemoBlotterWindow(top, left, 1)
+    .then(finwindowObject => {
+      currentWindowSet = demoWindows = [finwindowObject];
+      this.showWindows();
+
+      const nativeWindowObject = demoWindows[0].getNativeWindow();
+      changeTooltipMessage('click here');
+      moveToolTipToSelector(demoWindows[0], nativeWindowObject, selector, { top: 30, left: -10 });
+      let pinElement = nativeWindowObject.document.getElementById(selector);
+
+      const moveToNext = () => {
+        //wait for notification to show
+        setTimeout(() => {
+          fin
+          .desktop
+          .Application
+          .getCurrent()
+          .getChildWindows((windows) => {
+            const notifications = windows.filter(wnd => wnd.name.indexOf('Notification') > 0);
+            notifications[0].getBounds(({top,left}) => {
+              changeTooltipMessage('click confirm');
+              moveToolTip({top: top - 100, left: left + 150});
+              const handlePostMessage = (message) => {
+                console.log('called', message);
+                if(message.data && message.data.type === 'notification'){
+                  if(message.data.status === 'confirmed'){
+                    window.removeEventListener('message', handlePostMessage);
+                    demoWindows[0].getBounds(({top, left}) => {
+                      changeTooltipMessage('purchase made');
+                      moveToolTip({top: top + 50, left: left + 200 });
+                    });
+                  }
+                }
+              }
+              window.addEventListener('message', handlePostMessage);
+            })
+          })
+        }, 1000);
+      }
+
+      pinElement.addEventListener('click', moveToNext);
+    })
+  }
+
+  step4 = (selector) => {
+    closeOpenDemoWindows();
+    hideTooltip();
+
+    const windowPromises = [];
+    const cubeSize = 185;
+    const numWindows = 9;
+    const tileMargin = 8;
+    const topOffset = 300;
+    const leftOffset = 105;
+    const numColumns = 3;
+    const blotterWidth = cubeSize + tileMargin;
+    let top = topOffset;
+    let left = leftOffset;
+
+    //clear stored locations
+    locations = [];
+
+    for (let i = 1; i <= numWindows; i++) {
+      windowPromises.push(createDemoBlotterWindow(top, left, i));
+      left += blotterWidth;
+      if(i % numColumns === 0){
+        left = leftOffset;
+        top += blotterWidth;
+      }
+    }
+
+    Promise.all(windowPromises).then(blotterWindows => {
+      currentWindowSet = demoWindows = blotterWindows;
+      this.showWindows();
+      const currentWindow = fin.desktop.Window.getCurrent();
+      moveToolTipToSelector(currentWindow, window, selector, { top: 50, left: 0});
+    });
+  }
+  
+  step5 = (selector) => {
+    closeOpenDemoWindows();
+    hideTooltip();
+
+    const windowPromises = [];
+    const cubeSize = 185;
+    const numWindows = 2;
+    const tileMargin = 8;
+    const topOffset = 300;
+    const leftOffset = 105;
+    const numColumns = 3;
+    const blotterWidth = cubeSize + tileMargin;
+    let top = topOffset;
+    let left = leftOffset;
+
+    //clear stored locations
+    locations = [];
+
+    for (let i = 1; i <= numWindows; i++) {
+      windowPromises.push(createDemoBlotterWindow(top, left, i));
+      left += blotterWidth;
+    }
+
+    Promise.all(windowPromises).then(blotterWindows => {
+      currentWindowSet = demoWindows = blotterWindows;
+      this.showWindows();
+      let nativeWindowObject = demoWindows[0].getNativeWindow();
+      moveToolTipToSelector(demoWindows[0], nativeWindowObject, selector, { top: 30, left: 0});
+      let pinElement = nativeWindowObject.document.getElementById(selector);
+
+      const moveToNext = () => {
+        nativeWindowObject = demoWindows[1].getNativeWindow();
+        moveToolTipToSelector(demoWindows[1], nativeWindowObject, selector, { top: 30, left: 0 });
+        pinElement2 = nativeWindowObject.document.getElementById(selector);
+        pinElement2.addEventListener('click', () => {
+            nativeWindowObject = demoWindows[0].getNativeWindow();
+            moveToolTipToSelector(demoWindows[0], nativeWindowObject, selector, { top: 30, left: 0 });
+        });
+      }
+
+      pinElement.addEventListener('click', moveToNext);
+    });
+}
+
+  step6 = (selector) => {
+    closeOpenDemoWindows();
+    hideTooltip();
+    const currentWindow = fin.desktop.Window.getCurrent();
+    moveToolTipToSelector(currentWindow, window, selector, { top: 50, left: 0});
+  }
+
+  step7 = (selector) => {
+    closeOpenDemoWindows();
+    hideTooltip();
+    const currentWindow = fin.desktop.Window.getCurrent();
+    moveToolTipToSelector(currentWindow, window, selector, { top: 50, left: 0});
   }
 
   endTour = () => {

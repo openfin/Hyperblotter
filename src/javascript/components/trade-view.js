@@ -232,7 +232,7 @@ class TradeView extends Component {
           <span className="pinner" id="pin-window" onClick={this.togglePinWindow}>
             <i className={ this.getPinnedWindowClass().icon } ></i>
           </span>
-          <span className="chart" onClick={this.openDetailedChartWindow}>
+          <span className="chart" id="chart-window" onClick={this.openDetailedChartWindow}>
             <i className="fa fa-bar-chart" ></i>
           </span>
         </div>
@@ -241,7 +241,7 @@ class TradeView extends Component {
             <span className="present-price" >{ this.state.price }</span>
             <span className="percent-change" >{ this.state.change }%</span>
             <div className="icon-set-group">
-              <span className="purchase" onClick={() => this.showNotifications({ company: this.state.ticker, price: (this.state.price)})}>
+              <span className="purchase" id="buy-button" onClick={() => this.showNotifications({ company: this.state.ticker, price: (this.state.price)})}>
                 <p>BUY</p>
               </span>
               <span className={this.getGroupClass()} onClick={() => this.undock() }>

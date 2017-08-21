@@ -24,12 +24,17 @@ const selectors = [
     info: "You can click here to pin a Window. Pinned windows will not be hidden when other are"
   },
   {
+    id: "buy-button",
+    action: "Using Notifications",
+    info: "Notification demo text goes here"
+  },
+  {
     id: "animate-blotters",
     action: "Fully Animate windows around screen, click Animate",
     info: "Animations let you move windows and Apps around screen"
   },
   {
-    id: "show-hypergrid",
+    id: "chart-window",
     action: "View live data on child window, click Hypergrid",
     info: "Displays Live data window as a child window of the main app"
   },

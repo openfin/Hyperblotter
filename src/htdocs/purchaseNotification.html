@@ -13,14 +13,26 @@
         }
 
         function closeNotification(){
+            const parentWindow = window.opener.window;
+            const mainWindow = parentWindow.opener.window;
+            mainWindow.postMessage({
+                type: 'notification',
+                status: 'canceled'
+            }, '*');
             close();
+            
         }
 
         function acceptAndCloseNotification(){
             const message = window.message;
-            console.log(message);
             fin.desktop.Notification.getCurrent().sendMessageToApplication(message);
-            closeNotification();
+            const parentWindow = window.opener.window;
+            const mainWindow = parentWindow.opener.window;
+            mainWindow.postMessage({
+                type: 'notification',
+                status: 'confirmed'
+            }, '*');
+            close()
         }
     </script>
     <style>
@@ -54,7 +66,7 @@
         }
     </style>
 </head>
-<body oncontextmenu="return false">
+ <body oncontextmenu="return false"> 
     <div class="text-container">
         <p id="message"></p>
     </div>
