@@ -9,7 +9,7 @@ Currently OpenFin applications only run in a Windows environment. Applications m
 
 On a Windows machine, you can install Hyperblotter via this installer:
 
-[Hyperblotter](https://dl.openfin.co/services/download?fileName=Hyperblotter&config=http://cdn.openfin.co/demos/hyperblotter/app.json)
+[Hyperblotter](https://install.openfin.co/download?fileName=Hyperblotter&config=http://cdn.openfin.co/demos/hyperblotter/app.json)
 
 On a Mac machine, you can install hyperblotter via a terminal command with these 2 steps:
 
