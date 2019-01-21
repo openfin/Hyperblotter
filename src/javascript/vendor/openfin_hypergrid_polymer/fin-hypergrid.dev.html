@@ -10326,8 +10326,10 @@ scope.styleResolver = styleResolver;
      */
     shadowFromTemplate: function(template) {
       if (template) {
-        // make a shadow root
-        var root = this.createShadowRoot();
+        var root = this.shadowRoot;
+        if (root === null)
+          // make a shadow root
+          root = this.createShadowRoot();
         // stamp template
         // which includes parsing and applying MDV bindings before being
         // inserted (to avoid {{}} in attribute values)
