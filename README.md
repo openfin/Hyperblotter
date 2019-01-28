@@ -71,3 +71,8 @@ $ yarn start
 `yarn start` starts the server and launches OpenFin.
 
 An executable should now be created and launched.
+
+## License 
+MIT
+
+The code in this repository is covered by the included license.  If you run this code, it may call on the OpenFin RVM or OpenFin Runtime, which are subject to OpenFin’s [Developer License](https://openfin.co/developer-agreement/). If you have questions, please contact support@openfin.co
