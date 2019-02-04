@@ -75,4 +75,10 @@ An executable should now be created and launched.
 ## License 
 MIT
 
-The code in this repository is covered by the included license.  If you run this code, it may call on the OpenFin RVM or OpenFin Runtime, which are subject to OpenFin’s [Developer License](https://openfin.co/developer-agreement/). If you have questions, please contact support@openfin.co
+
+The code in this repository is covered by the included license.
+
+However, if you run this code, it may call on the OpenFin RVM or OpenFin Runtime, which are covered by OpenFin’s Developer, Community, and Enterprise licenses. You can learn more about OpenFin licensing at the links listed below or just email us at support@openfin.co with questions.
+
+https://openfin.co/developer-agreement/ <br/>
+https://openfin.co/licensing/
